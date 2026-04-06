@@ -1,0 +1,44 @@
+{
+  "name": "@squaredr/formengine",
+  "private": true,
+  "version": "0.0.0",
+  "description": "FormEngine — Schema-driven, platform-agnostic form engine",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "typecheck": "turbo typecheck",
+    "clean": "turbo clean",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "changeset": "changeset",
+    "publish-packages": "turbo build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27",
+    "prettier": "^3.3",
+    "turbo": "^2.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "^19.2.4",
+      "react-dom": "^19.2.4",
+      "@types/react": "^19.2.14",
+      "@types/react-dom": "^19.2.3"
+    },
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@types/react",
+        "@types/react-dom"
+      ],
+      "allowedVersions": {
+        "react": "19",
+        "react-dom": "19"
+      }
+    }
+  },
+  "packageManager": "pnpm@9.12.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,33 @@
+@import "../../../../tooling/tailwind-config/theme.css";
+@import "tw-animate-css";
+
+@source "../components/**/*.tsx";
+@source "../components/**/*.ts";
+
+/*
+ * Component classes for patterns that cannot be expressed as pure Tailwind utilities.
+ * These use color-mix() for dynamic tinted backgrounds based on the current theme.
+ */
+@layer components {
+  /* Active selection option — used by SingleSelect, MultiSelect, Boolean, Scoring */
+  .fe-option-active {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+  }
+
+  /* Filled option — used by OpinionScale, Likert (solid primary background) */
+  .fe-option-filled {
+    @apply bg-primary border-primary text-primary-foreground font-semibold;
+  }
+
+  /* Error summary background tint */
+  .fe-error-bg {
+    background: color-mix(in srgb, var(--destructive) 6%, transparent);
+  }
+
+  /* Focus ring for native inputs (non-shadcn) like range, date, time */
+  .fe-focus-ring:focus {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 15%, transparent);
+  }
+}
