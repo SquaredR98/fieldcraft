@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Headless TypeScript form engine with zero UI dependencies. Define multi-section forms via JSON schemas with validation, conditional visibility, and computed fields.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
