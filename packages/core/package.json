@@ -49,13 +49,13 @@
   ],
   "license": "MIT",
   "author": "SquaredR",
-  "homepage": "https://github.com/squaredr/fieldcraft#readme",
+  "homepage": "https://github.com/SquaredR98/fieldcraft#readme",
   "bugs": {
-    "url": "https://github.com/squaredr/fieldcraft/issues"
+    "url": "https://github.com/SquaredR98/fieldcraft/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/squaredr/fieldcraft.git",
+    "url": "git+https://github.com/SquaredR98/fieldcraft.git",
     "directory": "packages/core"
   },
   "engines": {
