@@ -1,4 +1,4 @@
-import type { PaymentConfig } from "@squaredr/formengine-core";
+import type { PaymentConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 

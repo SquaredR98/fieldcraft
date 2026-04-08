@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { NumberField } from "../../components/fields/NumberField";
-import type { NumberConfig } from "@squaredr/formengine-core";
+import type { NumberConfig } from "@squaredr/fieldcraft-core";
 
 const meta: Meta<typeof NumberField> = {
   title: "Fields/NumberField",

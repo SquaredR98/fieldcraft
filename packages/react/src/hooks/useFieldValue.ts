@@ -1,5 +1,5 @@
 import { useSyncExternalStore, useCallback } from "react";
-import type { FormEngine } from "@squaredr/formengine-core";
+import type { FormEngine } from "@squaredr/fieldcraft-core";
 
 export function useFieldValue(engine: FormEngine, fieldId: string): unknown {
   return useSyncExternalStore(

@@ -1,4 +1,4 @@
-import type { Question, FormEngineTheme } from "@squaredr/formengine-core";
+import type { Question, FormEngineTheme } from "@squaredr/fieldcraft-core";
 import type { FieldRegistry } from "../registry/field-registry";
 import { cn } from "../utils/cn";
 

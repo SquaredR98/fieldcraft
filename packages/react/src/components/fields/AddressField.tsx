@@ -1,4 +1,4 @@
-import type { AddressConfig } from "@squaredr/formengine-core";
+import type { AddressConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Input } from "../ui/input";

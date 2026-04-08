@@ -1,4 +1,4 @@
-import type { DateConfig } from "@squaredr/formengine-core";
+import type { DateConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { createSupabaseAdapter } from "../src/supabase-adapter";
 import { createSupabaseDraftAdapter } from "../src/supabase-draft-adapter";
-import type { FormResponse, DraftData } from "@squaredr/formengine-core";
+import type { FormResponse, DraftData } from "@squaredr/fieldcraft-core";
 
 function createMockClient() {
   const mockFrom = vi.fn();

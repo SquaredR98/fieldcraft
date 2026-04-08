@@ -1,5 +1,5 @@
-// @squaredr/formengine-react
-// React renderer for FormEngine — hooks, components, theming, field registry
+// @squaredr/fieldcraft-react
+// React renderer for FieldCraft — hooks, components, theming, field registry
 
 // ---- Hooks ----
 export { useFormEngine, type UseFormEngineReturn } from "./hooks/useFormEngine";

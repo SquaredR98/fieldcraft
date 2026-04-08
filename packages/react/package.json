@@ -1,7 +1,7 @@
 {
-  "name": "@squaredr/formengine-react",
-  "version": "0.0.1",
-  "description": "FormEngine React renderer — shadcn/ui field components + hooks",
+  "name": "@squaredr/fieldcraft-react",
+  "version": "1.0.0",
+  "description": "React renderer for @squaredr/fieldcraft-core — 35+ pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -14,8 +14,10 @@
     "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "LICENSE"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts && npx @tailwindcss/cli -i src/styles/formengine.css -o dist/styles.css --minify",
     "build:css": "npx @tailwindcss/cli -i src/styles/formengine.css -o dist/styles.css --minify",
@@ -29,7 +31,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@squaredr/formengine-core": "workspace:*",
+    "@squaredr/fieldcraft-core": "workspace:*",
     "radix-ui": "^1.4.3"
   },
   "peerDependencies": {
@@ -82,5 +84,31 @@
     "typescript": "^5.5",
     "vitest": "^2.0"
   },
-  "license": "MIT"
+  "keywords": [
+    "fieldcraft",
+    "react-forms",
+    "form-components",
+    "shadcn-ui",
+    "radix-ui",
+    "tailwindcss",
+    "schema-driven",
+    "multi-step-forms",
+    "form-renderer",
+    "typescript",
+    "conditional-logic"
+  ],
+  "license": "MIT",
+  "author": "SquaredR",
+  "homepage": "https://github.com/squaredr/fieldcraft#readme",
+  "bugs": {
+    "url": "https://github.com/squaredr/fieldcraft/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/squaredr/fieldcraft.git",
+    "directory": "packages/react"
+  },
+  "engines": {
+    "node": ">=18"
+  }
 }

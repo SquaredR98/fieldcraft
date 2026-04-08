@@ -1,4 +1,4 @@
-import type { CompleteAction } from "@squaredr/formengine-core";
+import type { CompleteAction } from "@squaredr/fieldcraft-core";
 import { Button } from "./ui/button";
 import { cn } from "../utils/cn";
 

@@ -1,4 +1,4 @@
-import type { NpsConfig } from "@squaredr/formengine-core";
+import type { NpsConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";

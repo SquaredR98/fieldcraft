@@ -1,0 +1,30 @@
+@import "../../tooling/tailwind-config/theme.css";
+
+/* Scan demo app sources */
+@source "../**/*.tsx";
+@source "../**/*.ts";
+
+/* Scan FormEngine React component sources so their Tailwind classes are included */
+@source "../../packages/react/src/components/**/*.tsx";
+@source "../../packages/react/src/components/**/*.ts";
+
+/* ── FormEngine custom component classes ── */
+@layer components {
+  .fe-option-active {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 8%, transparent);
+  }
+
+  .fe-option-filled {
+    @apply bg-primary border-primary text-primary-foreground font-semibold;
+  }
+
+  .fe-error-bg {
+    background: color-mix(in srgb, var(--destructive) 6%, transparent);
+  }
+
+  .fe-focus-ring:focus {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 15%, transparent);
+  }
+}

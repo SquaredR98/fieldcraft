@@ -1,4 +1,4 @@
-import type { DraftAdapter, DraftData } from "@squaredr/formengine-core";
+import type { DraftAdapter, DraftData } from "@squaredr/fieldcraft-core";
 import type { SupabaseDraftAdapterConfig } from "./types";
 
 /** Create a Supabase draft adapter. */

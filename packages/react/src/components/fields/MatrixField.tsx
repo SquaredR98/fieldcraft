@@ -1,4 +1,4 @@
-import type { MatrixConfig } from "@squaredr/formengine-core";
+import type { MatrixConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 

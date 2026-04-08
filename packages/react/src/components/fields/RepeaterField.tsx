@@ -1,4 +1,4 @@
-import type { RepeaterConfig, Question } from "@squaredr/formengine-core";
+import type { RepeaterConfig, Question } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Input } from "../ui/input";

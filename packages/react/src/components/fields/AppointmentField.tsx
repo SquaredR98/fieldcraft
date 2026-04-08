@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AppointmentConfig } from "@squaredr/formengine-core";
+import type { AppointmentConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";

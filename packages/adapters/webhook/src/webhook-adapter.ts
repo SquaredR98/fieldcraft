@@ -1,4 +1,4 @@
-import type { SubmitAdapter, FormResponse } from "@squaredr/formengine-core";
+import type { SubmitAdapter, FormResponse } from "@squaredr/fieldcraft-core";
 import type { WebhookAdapterConfig } from "./types";
 import { signPayload } from "./signer";
 import { calculateDelay, sleep } from "./retry";

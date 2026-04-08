@@ -1,5 +1,5 @@
 {
-  "name": "@squaredr/formengine-postgres",
+  "name": "@squaredr/fieldcraft-postgres",
   "version": "0.0.1",
   "description": "FormEngine direct PostgreSQL storage adapter",
   "main": "./dist/index.js",
@@ -20,7 +20,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@squaredr/formengine-core": "workspace:*",
+    "@squaredr/fieldcraft-core": "workspace:*",
     "@paralleldrive/cuid2": "^2.2",
     "drizzle-orm": "^0.35",
     "postgres": "^3.4"

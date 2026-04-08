@@ -2,7 +2,7 @@ import type {
   Section,
   FormEngine,
   FormEngineTheme,
-} from "@squaredr/formengine-core";
+} from "@squaredr/fieldcraft-core";
 import type { FieldRegistry } from "../registry/field-registry";
 import { FieldRenderer } from "./FieldRenderer";
 import { cn } from "../utils/cn";

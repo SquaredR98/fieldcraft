@@ -1,4 +1,4 @@
-import type { SliderConfig } from "@squaredr/formengine-core";
+import type { SliderConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Slider } from "../ui/slider";

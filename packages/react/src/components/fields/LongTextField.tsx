@@ -1,4 +1,4 @@
-import type { LongTextConfig } from "@squaredr/formengine-core";
+import type { LongTextConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Textarea } from "../ui/textarea";

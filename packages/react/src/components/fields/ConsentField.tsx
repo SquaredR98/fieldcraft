@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ConsentConfig } from "@squaredr/formengine-core";
+import type { ConsentConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Checkbox } from "../ui/checkbox";

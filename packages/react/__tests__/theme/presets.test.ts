@@ -5,7 +5,7 @@ import { darkPreset } from "../../src/theme/presets/dark";
 import { highContrastPreset } from "../../src/theme/presets/high-contrast";
 import { clinicalPreset } from "../../src/theme/presets/clinical";
 import { playfulPreset } from "../../src/theme/presets/playful";
-import type { FormEngineTheme } from "@squaredr/formengine-core";
+import type { FormEngineTheme } from "@squaredr/fieldcraft-core";
 
 const presets: [string, FormEngineTheme][] = [
   ["clean", cleanPreset],

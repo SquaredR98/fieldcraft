@@ -1,5 +1,5 @@
-// @squaredr/formengine-core
-// Schema-driven form engine — pure TypeScript, zero UI dependencies
+// @squaredr/fieldcraft-core
+// Headless TypeScript form engine — zero UI dependencies
 
 // Types — Schema
 export type {

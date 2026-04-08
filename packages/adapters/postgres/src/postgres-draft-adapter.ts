@@ -2,7 +2,7 @@ import { drizzle } from "drizzle-orm/postgres-js";
 import pg from "postgres";
 import { eq, and, gt } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
-import type { DraftAdapter, DraftData } from "@squaredr/formengine-core";
+import type { DraftAdapter, DraftData } from "@squaredr/fieldcraft-core";
 import type { PostgresDraftAdapterConfig } from "./types";
 import { drafts } from "./schema";
 

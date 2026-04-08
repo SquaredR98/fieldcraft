@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ShortTextField } from "../../components/fields/ShortTextField";
-import type { ShortTextConfig } from "@squaredr/formengine-core";
+import type { ShortTextConfig } from "@squaredr/fieldcraft-core";
 
 const meta: Meta<typeof ShortTextField> = {
   title: "Fields/ShortTextField",

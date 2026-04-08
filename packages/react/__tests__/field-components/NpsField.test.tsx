@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { NpsField } from "../../src/components/fields/NpsField";
 import { cleanPreset } from "../../src/theme/presets/clean";
 import type { FieldProps } from "../../src/registry/field-registry";
-import type { Question } from "@squaredr/formengine-core";
+import type { Question } from "@squaredr/fieldcraft-core";
 
 function makeProps(overrides?: Partial<FieldProps>): FieldProps {
   return {

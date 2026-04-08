@@ -1,4 +1,4 @@
-import type { InfoBlockConfig } from "@squaredr/formengine-core";
+import type { InfoBlockConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { cn } from "../../utils/cn";

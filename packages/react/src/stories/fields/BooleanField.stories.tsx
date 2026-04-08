@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { BooleanField } from "../../components/fields/BooleanField";
-import type { BooleanConfig } from "@squaredr/formengine-core";
+import type { BooleanConfig } from "@squaredr/fieldcraft-core";
 
 const meta: Meta<typeof BooleanField> = {
   title: "Fields/BooleanField",

@@ -1,7 +1,7 @@
 {
-  "name": "@squaredr/formengine-core",
+  "name": "@squaredr/fieldcraft-core",
   "version": "1.0.0",
-  "description": "Schema-driven form engine with conditional logic, validation, calculated fields, and multi-section flows. Zero UI dependencies.",
+  "description": "Headless TypeScript form engine with zero UI dependencies. Define multi-section forms via JSON schemas with validation, conditional visibility, and computed fields.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -34,28 +34,28 @@
     "@squaredr/eslint-config": "workspace:*"
   },
   "keywords": [
+    "fieldcraft",
     "form-engine",
     "form-builder",
     "schema-driven",
     "conditional-logic",
     "multi-step-forms",
     "form-validation",
-    "calculated-fields",
-    "typeform-alternative",
-    "survey-engine",
+    "computed-fields",
+    "json-forms",
     "questionnaire",
     "typescript",
     "headless"
   ],
   "license": "MIT",
   "author": "SquaredR",
-  "homepage": "https://github.com/squaredr/formengine#readme",
+  "homepage": "https://github.com/squaredr/fieldcraft#readme",
   "bugs": {
-    "url": "https://github.com/squaredr/formengine/issues"
+    "url": "https://github.com/squaredr/fieldcraft/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/squaredr/formengine.git",
+    "url": "git+https://github.com/squaredr/fieldcraft.git",
     "directory": "packages/core"
   },
   "engines": {

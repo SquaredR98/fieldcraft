@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import type { FileUploadConfig } from "@squaredr/formengine-core";
+import type { FileUploadConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { formatFileSize } from "../../utils/format-helpers";

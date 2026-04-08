@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo } from "react";
-import type { FormEngineTheme } from "@squaredr/formengine-core";
+import type { FormEngineTheme } from "@squaredr/fieldcraft-core";
 import { themeToCssVars } from "./theme-to-css-vars";
 import { cleanPreset } from "./presets/clean";
 

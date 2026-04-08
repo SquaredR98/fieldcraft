@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { themeToCssVars } from "../../src/theme/theme-to-css-vars";
-import type { FormEngineTheme } from "@squaredr/formengine-core";
+import type { FormEngineTheme } from "@squaredr/fieldcraft-core";
 
 describe("themeToCssVars", () => {
   it("returns undefined for undefined theme", () => {

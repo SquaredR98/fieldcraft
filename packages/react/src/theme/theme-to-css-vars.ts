@@ -1,4 +1,4 @@
-import type { FormEngineTheme } from "@squaredr/formengine-core";
+import type { FormEngineTheme } from "@squaredr/fieldcraft-core";
 
 /** Convert a FormEngineTheme object into CSS custom properties for runtime theming. */
 export function themeToCssVars(

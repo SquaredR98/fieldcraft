@@ -1,4 +1,4 @@
-import type { Section } from "@squaredr/formengine-core";
+import type { Section } from "@squaredr/fieldcraft-core";
 import { cn } from "../utils/cn";
 
 export type SectionNavigationProps = {

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { FormRenderer } from "../../components/FormRenderer";
 import { useFormEngine } from "../../hooks/useFormEngine";
-import type { FormEngineSchema } from "@squaredr/formengine-core";
+import type { FormEngineSchema } from "@squaredr/fieldcraft-core";
 
 const contactFormSchema: FormEngineSchema = {
   id: "contact-form",

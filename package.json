@@ -1,8 +1,8 @@
 {
-  "name": "@squaredr/formengine",
+  "name": "@squaredr/fieldcraft",
   "private": true,
   "version": "0.0.0",
-  "description": "FormEngine — Schema-driven, platform-agnostic form engine",
+  "description": "FieldCraft — Headless TypeScript form engine with a pluggable React renderer",
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",

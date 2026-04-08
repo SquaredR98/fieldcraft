@@ -1,5 +1,5 @@
 {
-  "name": "@squaredr/formengine-webhook",
+  "name": "@squaredr/fieldcraft-webhook",
   "version": "0.0.1",
   "description": "FormEngine webhook delivery adapter with HMAC signing and retries",
   "main": "./dist/index.js",
@@ -20,7 +20,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@squaredr/formengine-core": "workspace:*"
+    "@squaredr/fieldcraft-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22",

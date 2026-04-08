@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { DropdownField } from "../../components/fields/DropdownField";
-import type { DropdownConfig } from "@squaredr/formengine-core";
+import type { DropdownConfig } from "@squaredr/fieldcraft-core";
 
 const meta: Meta<typeof DropdownField> = {
   title: "Fields/DropdownField",

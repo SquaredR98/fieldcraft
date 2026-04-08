@@ -1,6 +1,6 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import pg from "postgres";
-import type { SubmitAdapter, FormResponse } from "@squaredr/formengine-core";
+import type { SubmitAdapter, FormResponse } from "@squaredr/fieldcraft-core";
 import { createId } from "@paralleldrive/cuid2";
 import type { PostgresAdapterConfig } from "./types";
 import { encrypt } from "./encryption";

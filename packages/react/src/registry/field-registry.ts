@@ -1,4 +1,4 @@
-import type { Question, FormEngineTheme, QuestionType } from "@squaredr/formengine-core";
+import type { Question, FormEngineTheme, QuestionType } from "@squaredr/fieldcraft-core";
 
 /** Props passed to every field component. */
 export type FieldProps = {

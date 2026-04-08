@@ -1,5 +1,5 @@
 {
-  "name": "@squaredr/formengine-supabase",
+  "name": "@squaredr/fieldcraft-supabase",
   "version": "0.0.1",
   "description": "FormEngine Supabase storage adapter with field-level encryption",
   "main": "./dist/index.js",
@@ -20,7 +20,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@squaredr/formengine-core": "workspace:*"
+    "@squaredr/fieldcraft-core": "workspace:*"
   },
   "peerDependencies": {
     "@supabase/supabase-js": "^2.0"

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { EmailField } from "../../components/fields/EmailField";
-import type { EmailConfig } from "@squaredr/formengine-core";
+import type { EmailConfig } from "@squaredr/fieldcraft-core";
 
 const meta: Meta<typeof EmailField> = {
   title: "Fields/EmailField",

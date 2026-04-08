@@ -1,5 +1,5 @@
 import { useRef, useEffect, useCallback } from "react";
-import type { SignatureConfig } from "@squaredr/formengine-core";
+import type { SignatureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 

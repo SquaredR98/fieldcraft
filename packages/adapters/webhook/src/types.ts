@@ -1,4 +1,4 @@
-import type { FormResponse } from "@squaredr/formengine-core";
+import type { FormResponse } from "@squaredr/fieldcraft-core";
 
 export type WebhookAdapterConfig = {
   /** Webhook endpoint URL (HTTPS recommended) */

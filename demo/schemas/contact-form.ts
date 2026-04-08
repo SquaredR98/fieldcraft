@@ -1,4 +1,4 @@
-import type { FormEngineSchema } from "@squaredr/formengine-core";
+import type { FormEngineSchema } from "@squaredr/fieldcraft-core";
 
 export const contactFormSchema: FormEngineSchema = {
   id: "contact-form",
@@ -9,6 +9,7 @@ export const contactFormSchema: FormEngineSchema = {
     showProgress: true,
     progressStyle: "percentage",
   },
+  submitAction: { type: "callback" },
   sections: [
     {
       id: "personal-info",
@@ -81,9 +82,4 @@ export const contactFormSchema: FormEngineSchema = {
       ],
     },
   ],
-  submitAction: {
-    type: "http",
-    url: "http://localhost:4000/api/v1/responses",
-    method: "POST",
-  },
 };

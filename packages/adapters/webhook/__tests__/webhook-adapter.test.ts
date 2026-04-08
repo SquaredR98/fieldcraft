@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createWebhookAdapter } from "../src/webhook-adapter";
-import type { FormResponse } from "@squaredr/formengine-core";
+import type { FormResponse } from "@squaredr/fieldcraft-core";
 
 const mockResponse: FormResponse = {
   schemaId: "s1",

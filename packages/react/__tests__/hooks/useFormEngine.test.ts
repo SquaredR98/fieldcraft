@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useFormEngine } from "../../src/hooks/useFormEngine";
-import type { FormEngineSchema } from "@squaredr/formengine-core";
+import type { FormEngineSchema } from "@squaredr/fieldcraft-core";
 
 function makeSchema(): FormEngineSchema {
   return {

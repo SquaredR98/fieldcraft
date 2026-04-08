@@ -1,4 +1,4 @@
-import type { FormResponse } from "@squaredr/formengine-core";
+import type { FormResponse } from "@squaredr/fieldcraft-core";
 
 export type PostgresAdapterConfig = {
   /** PostgreSQL connection URL */

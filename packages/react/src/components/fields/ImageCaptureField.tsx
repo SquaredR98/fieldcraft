@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import type { ImageCaptureConfig } from "@squaredr/formengine-core";
+import type { ImageCaptureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Button } from "../ui/button";

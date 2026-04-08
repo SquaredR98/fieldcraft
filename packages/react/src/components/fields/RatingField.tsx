@@ -1,4 +1,4 @@
-import type { RatingConfig } from "@squaredr/formengine-core";
+import type { RatingConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";

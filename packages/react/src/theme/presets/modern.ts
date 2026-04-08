@@ -1,4 +1,4 @@
-import type { FormEngineTheme } from "@squaredr/formengine-core";
+import type { FormEngineTheme } from "@squaredr/fieldcraft-core";
 
 export const modernPreset: FormEngineTheme = {
   colors: {

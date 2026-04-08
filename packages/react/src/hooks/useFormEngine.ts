@@ -5,7 +5,7 @@ import {
   type EngineOptions,
   type FormEngineSchema,
   type FormState,
-} from "@squaredr/formengine-core";
+} from "@squaredr/fieldcraft-core";
 
 export type UseFormEngineReturn = FormEngine & { state: FormState };
 

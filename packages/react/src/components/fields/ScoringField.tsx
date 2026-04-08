@@ -1,4 +1,4 @@
-import type { ScoringConfig } from "@squaredr/formengine-core";
+import type { ScoringConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";

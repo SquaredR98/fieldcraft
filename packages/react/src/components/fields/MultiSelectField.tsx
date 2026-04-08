@@ -1,4 +1,4 @@
-import type { MultiSelectConfig } from "@squaredr/formengine-core";
+import type { MultiSelectConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";

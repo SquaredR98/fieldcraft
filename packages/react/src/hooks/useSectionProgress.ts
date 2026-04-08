@@ -1,5 +1,5 @@
 import { useSyncExternalStore, useCallback } from "react";
-import type { FormEngine } from "@squaredr/formengine-core";
+import type { FormEngine } from "@squaredr/fieldcraft-core";
 
 export type SectionProgress = {
   currentSectionId: string;

@@ -8,7 +8,7 @@ import type {
   CustomValidator,
   AsyncValidator,
   FormEngine,
-} from "@squaredr/formengine-core";
+} from "@squaredr/fieldcraft-core";
 import { useFormEngine } from "../hooks/useFormEngine";
 import { FormEngineThemeProvider, useTheme } from "../theme/ThemeProvider";
 import { defaultRegistry } from "../registry/default-registry";
@@ -216,7 +216,7 @@ function FormEngineRendererInner({
   engine,
   registry,
 }: {
-  section: import("@squaredr/formengine-core").Section;
+  section: import("@squaredr/fieldcraft-core").Section;
   engine: FormEngine;
   registry: FieldRegistry;
 }) {
