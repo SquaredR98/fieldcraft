@@ -1,7 +1,7 @@
 {
   "name": "@squaredr/fieldcraft-webhook",
-  "version": "0.0.1",
-  "description": "FormEngine webhook delivery adapter with HMAC signing and retries",
+  "version": "1.0.0",
+  "description": "FieldCraft webhook delivery adapter with HMAC-SHA256 signing and exponential backoff retries",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,8 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "LICENSE"],
+  "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "test": "vitest run",
@@ -20,7 +21,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@squaredr/fieldcraft-core": "workspace:*"
+    "@squaredr/fieldcraft-core": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^22",
@@ -28,5 +29,19 @@
     "tsup": "^8.0",
     "vitest": "^2.0"
   },
-  "license": "PROPRIETARY"
+  "license": "MIT",
+  "author": "SquaredR",
+  "homepage": "https://squaredr.tech/products/fieldcraft",
+  "bugs": {
+    "url": "https://github.com/SquaredR98/fieldcraft/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SquaredR98/fieldcraft.git",
+    "directory": "packages/adapters/webhook"
+  },
+  "keywords": ["fieldcraft", "form-engine", "webhook", "hmac", "adapter", "retry"],
+  "engines": {
+    "node": ">=18"
+  }
 }

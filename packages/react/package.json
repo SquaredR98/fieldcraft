@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-react",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "React renderer for @squaredr/fieldcraft-core — 35+ pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -99,7 +99,7 @@
   ],
   "license": "MIT",
   "author": "SquaredR",
-  "homepage": "https://github.com/SquaredR98/fieldcraft#readme",
+  "homepage": "https://squaredr.tech/products/fieldcraft",
   "bugs": {
     "url": "https://github.com/SquaredR98/fieldcraft/issues"
   },

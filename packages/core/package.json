@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Headless TypeScript form engine with zero UI dependencies. Define multi-section forms via JSON schemas with validation, conditional visibility, and computed fields.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -49,7 +49,7 @@
   ],
   "license": "MIT",
   "author": "SquaredR",
-  "homepage": "https://github.com/SquaredR98/fieldcraft#readme",
+  "homepage": "https://squaredr.tech/products/fieldcraft",
   "bugs": {
     "url": "https://github.com/SquaredR98/fieldcraft/issues"
   },
