@@ -1,4 +1,4 @@
-name: Publish to npm
+name: Release
 
 on:
   push:
@@ -6,11 +6,10 @@ on:
       - 'v*'
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
 
     steps:
       - name: Checkout code
@@ -26,7 +25,6 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -37,25 +35,38 @@ jobs:
       - name: Run tests
         run: pnpm turbo run test
 
-      - name: Publish @squaredr/fieldcraft-core
-        working-directory: packages/core
-        run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Create package source archives
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          mkdir -p release-assets
 
-      - name: Publish @squaredr/fieldcraft-react
-        working-directory: packages/react
-        run: npm publish --access public --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          tar -czf "release-assets/fieldcraft-core-${TAG}.tar.gz" \
+            -C packages/core src package.json tsconfig.json
+
+          tar -czf "release-assets/fieldcraft-react-${TAG}.tar.gz" \
+            -C packages/react src package.json tsconfig.json components.json
+
+          tar -czf "release-assets/fieldcraft-postgres-${TAG}.tar.gz" \
+            -C packages/adapters/postgres src package.json tsconfig.json
+
+          tar -czf "release-assets/fieldcraft-supabase-${TAG}.tar.gz" \
+            -C packages/adapters/supabase src package.json tsconfig.json
+
+          tar -czf "release-assets/fieldcraft-webhook-${TAG}.tar.gz" \
+            -C packages/adapters/webhook src package.json
+
+          tar -czf "release-assets/fieldcraft-templates-free-${TAG}.tar.gz" \
+            -C packages/templates-free src package.json tsconfig.json
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
           generateReleaseNotes: true
           makeLatest: true
+          artifacts: 'release-assets/*.tar.gz'
+          artifactContentType: application/gzip
 
 # Usage:
-#   1. Add NPM_TOKEN to GitHub Secrets (npmjs.com → Settings → Access Tokens → Automation)
-#   2. git tag v1.0.0 && git push origin v1.0.0
-#   3. GitHub Actions auto-publishes all packages + creates release
+#   1. Publish packages to npm manually: cd packages/<pkg> && npm publish --access public
+#   2. git tag v1.0.2 && git push origin v1.0.2
+#   3. GitHub Actions builds, tests, creates release with per-package source archives

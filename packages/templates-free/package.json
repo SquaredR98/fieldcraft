@@ -1,0 +1,57 @@
+{
+  "name": "@squaredr/fieldcraft-templates-free",
+  "version": "1.0.0",
+  "description": "5 free, production-ready form schemas for FieldCraft. Contact forms, surveys, NPS, newsletters, and bug reports.",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": ["dist", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@squaredr/fieldcraft-core": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@squaredr/fieldcraft-core": "workspace:*",
+    "typescript": "^5.5",
+    "tsup": "^8.0"
+  },
+  "keywords": [
+    "fieldcraft",
+    "form-engine",
+    "form-templates",
+    "schema-driven",
+    "contact-form",
+    "feedback-survey",
+    "nps",
+    "newsletter",
+    "bug-report",
+    "free"
+  ],
+  "license": "MIT",
+  "author": "SquaredR",
+  "homepage": "https://squaredr.tech/products/fieldcraft/templates",
+  "bugs": {
+    "url": "https://github.com/SquaredR98/fieldcraft/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SquaredR98/fieldcraft.git",
+    "directory": "packages/templates-free"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
