@@ -1,5 +1,13 @@
-import type { FormEngineSchema } from "@squaredr/fieldcraft-core";
+import type { FormEngineSchema, Option } from "@squaredr/fieldcraft-core";
 import type { Template } from "./types";
+
+const likertOptions: Option[] = [
+  { label: "Strongly Disagree", value: 1 },
+  { label: "Disagree", value: 2 },
+  { label: "Neutral", value: 3 },
+  { label: "Agree", value: 4 },
+  { label: "Strongly Agree", value: 5 },
+];
 
 export const feedbackSurveySchema: FormEngineSchema = {
   id: "feedback-survey",
@@ -54,18 +62,21 @@ export const feedbackSurveySchema: FormEngineSchema = {
           type: "likert",
           label: "The product is easy to use",
           required: true,
+          options: likertOptions,
         },
         {
           id: "reliability",
           type: "likert",
           label: "The product is reliable and stable",
           required: true,
+          options: likertOptions,
         },
         {
           id: "value_for_money",
           type: "likert",
           label: "The product provides good value for money",
           required: true,
+          options: likertOptions,
         },
         {
           id: "features_used",

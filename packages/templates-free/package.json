@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-templates-free",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "5 free, production-ready form schemas for FieldCraft. Contact forms, surveys, NPS, newsletters, and bug reports.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
