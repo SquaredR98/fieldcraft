@@ -15,29 +15,32 @@ export function useFormEngine(
 ): UseFormEngineReturn {
   const engineRef = useRef<FormEngine | null>(null);
 
-  // Create engine once (stable across renders)
+  // Create engine lazily. Re-creates if previous instance was destroyed
+  // (handles React Strict Mode double-mount in development).
   if (engineRef.current === null) {
     engineRef.current = createEngine(schema, options);
   }
 
   const engine = engineRef.current;
 
-  const state = useSyncExternalStore(
-    useCallback(
-      (onStoreChange: () => void) => engine.subscribe(onStoreChange),
-      [engine],
-    ),
-    useCallback(() => engine.getState(), [engine]),
-    useCallback(() => engine.getState(), [engine]),
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => engine.subscribe(onStoreChange),
+    [engine],
   );
 
-  // Cleanup on unmount
+  const getSnapshot = useCallback(() => engine.getState(), [engine]);
+
+  const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
+
+  // Cleanup on unmount — destroy engine so it can be re-created
+  // if the component remounts (React Strict Mode).
   useEffect(() => {
+    const currentEngine = engineRef.current;
     return () => {
-      engineRef.current?.destroy();
+      currentEngine?.destroy();
       engineRef.current = null;
     };
-  }, []);
+  }, [engine]);
 
   // Return merged object — engine methods + reactive state
   return {
