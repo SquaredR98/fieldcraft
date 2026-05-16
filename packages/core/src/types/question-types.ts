@@ -85,6 +85,8 @@ export type QuestionConfig =
   | ScoringConfig
   | ConsentConfig
   | InfoBlockConfig
+  | SectionHeaderConfig
+  | PageBreakConfig
   | PhoneInternationalConfig
   | LegalNameConfig;
 
@@ -342,6 +344,17 @@ export type InfoBlockConfig = {
   type: "info_block";
   content: string;
   variant?: "info" | "warning" | "success" | "error";
+};
+
+export type SectionHeaderConfig = {
+  type: "section_header";
+  level?: "h2" | "h3" | "h4";
+  showDivider?: boolean;
+};
+
+export type PageBreakConfig = {
+  type: "page_break";
+  label?: string;
 };
 
 // ---- Additional Text Types ----

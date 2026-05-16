@@ -48,6 +48,8 @@ import { ScoringField } from "../components/fields/ScoringField";
 // Structural fields
 import { ConsentField } from "../components/fields/ConsentField";
 import { InfoBlockField } from "../components/fields/InfoBlockField";
+import { SectionHeaderField } from "../components/fields/SectionHeaderField";
+import { PageBreakField } from "../components/fields/PageBreakField";
 
 export const defaultRegistry: FieldRegistry = {
   // Text
@@ -98,4 +100,6 @@ export const defaultRegistry: FieldRegistry = {
   // Structural
   consent: ConsentField,
   info_block: InfoBlockField,
+  section_header: SectionHeaderField,
+  page_break: PageBreakField,
 };

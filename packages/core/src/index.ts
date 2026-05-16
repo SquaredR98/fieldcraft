@@ -49,6 +49,8 @@ export type {
   ScoringConfig,
   ConsentConfig,
   InfoBlockConfig,
+  SectionHeaderConfig,
+  PageBreakConfig,
   PhoneInternationalConfig,
   LegalNameConfig,
 } from "./types/question-types";
