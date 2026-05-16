@@ -68,7 +68,16 @@ export type { FormSettings, PrefillConfig } from "./types/settings";
 export type { FormState } from "./types/state";
 
 // Types — Adapters
-export type { SubmitAdapter, DraftAdapter, DraftData, AnalyticsAdapter } from "./types/adapters";
+export type {
+  SubmitAdapter,
+  DraftAdapter,
+  DraftData,
+  AnalyticsAdapter,
+  SchemaAdapter,
+  SchemaListItem,
+  SchemaListParams,
+  SchemaListResult,
+} from "./types/adapters";
 
 // Types — Response
 export type { FormResponse, SubmitResult } from "./types/response";
@@ -83,6 +92,8 @@ export type { FormEngine, EngineOptions, ValidationResult } from "./engine/creat
 // Adapters
 export { createHttpAdapter } from "./adapters/http-adapter";
 export type { HttpAdapterConfig } from "./adapters/http-adapter";
+export { createHttpSchemaAdapter } from "./adapters/http-schema-adapter";
+export type { HttpSchemaAdapterConfig } from "./adapters/http-schema-adapter";
 
 // Schema Validation
 export { validateSchema, FormEngineSchemaError } from "./schema/schema-validator";
