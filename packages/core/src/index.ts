@@ -53,6 +53,13 @@ export type {
   PageBreakConfig,
   PhoneInternationalConfig,
   LegalNameConfig,
+  WelcomeScreenConfig,
+  ThankYouScreenConfig,
+  RichTextConfig,
+  ImageConfig,
+  VideoConfig,
+  DividerConfig,
+  SpacerConfig,
 } from "./types/question-types";
 
 // Types — Conditions

@@ -51,6 +51,15 @@ import { InfoBlockField } from "../components/fields/InfoBlockField";
 import { SectionHeaderField } from "../components/fields/SectionHeaderField";
 import { PageBreakField } from "../components/fields/PageBreakField";
 
+// Content & Visual fields
+import { WelcomeScreenField } from "../components/fields/WelcomeScreenField";
+import { ThankYouScreenField } from "../components/fields/ThankYouScreenField";
+import { RichTextField } from "../components/fields/RichTextField";
+import { ImageField } from "../components/fields/ImageField";
+import { VideoField } from "../components/fields/VideoField";
+import { DividerField } from "../components/fields/DividerField";
+import { SpacerField } from "../components/fields/SpacerField";
+
 export const defaultRegistry: FieldRegistry = {
   // Text
   short_text: ShortTextField,
@@ -102,4 +111,13 @@ export const defaultRegistry: FieldRegistry = {
   info_block: InfoBlockField,
   section_header: SectionHeaderField,
   page_break: PageBreakField,
+
+  // Content & Visual
+  "welcome-screen": WelcomeScreenField,
+  "thank-you-screen": ThankYouScreenField,
+  "rich-text": RichTextField,
+  image: ImageField,
+  video: VideoField,
+  divider: DividerField,
+  spacer: SpacerField,
 };

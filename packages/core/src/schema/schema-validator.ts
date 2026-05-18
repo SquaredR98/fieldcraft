@@ -1,6 +1,21 @@
 import { z } from "zod";
 import type { FormEngineSchema } from "../types/schema";
 
+// ---- Non-input types (content/visual blocks that don't collect user input) ----
+
+const NON_INPUT_TYPES = [
+  "info_block",
+  "section_header",
+  "page_break",
+  "welcome-screen",
+  "thank-you-screen",
+  "rich-text",
+  "image",
+  "video",
+  "divider",
+  "spacer",
+];
+
 // ---- Condition Expression (recursive) ----
 
 const conditionOperator = z.enum([
@@ -88,6 +103,7 @@ const questionSchema = z.object({
   config: questionConfig.optional(),
   options: z.array(optionSchema).optional(),
   layout: questionLayout.optional(),
+  customProps: z.record(z.unknown()).optional(),
 });
 
 // ---- Jump Rule + Section Exit ----
@@ -285,6 +301,44 @@ function validateCrossReferences(schema: FormEngineSchema): string[] {
             `questions[${question.id}]: config.type "${configType}" does not match question type "${question.type}"`
           );
         }
+      }
+
+      // Validate new content/visual types have required config fields
+      if (question.type === "image" && question.config) {
+        const cfg = question.config as Record<string, unknown>;
+        if (!cfg.src || typeof cfg.src !== "string") {
+          errors.push(`questions[${question.id}]: type "image" requires config.src`);
+        }
+        if (!cfg.alt || typeof cfg.alt !== "string") {
+          errors.push(`questions[${question.id}]: type "image" requires config.alt`);
+        }
+      }
+
+      if (question.type === "video" && question.config) {
+        const cfg = question.config as Record<string, unknown>;
+        if (!cfg.src || typeof cfg.src !== "string") {
+          errors.push(`questions[${question.id}]: type "video" requires config.src`);
+        }
+        if (!cfg.provider || typeof cfg.provider !== "string") {
+          errors.push(`questions[${question.id}]: type "video" requires config.provider`);
+        }
+      }
+
+      if (question.type === "rich-text" && question.config) {
+        const cfg = question.config as Record<string, unknown>;
+        if (!cfg.content || typeof cfg.content !== "string") {
+          errors.push(`questions[${question.id}]: type "rich-text" requires config.content`);
+        }
+        if (!cfg.format || (cfg.format !== "markdown" && cfg.format !== "html")) {
+          errors.push(`questions[${question.id}]: type "rich-text" requires config.format ("markdown" or "html")`);
+        }
+      }
+
+      // Warn if non-input type has 'required' field (doesn't make sense for content blocks)
+      if (NON_INPUT_TYPES.includes(question.type) && question.required !== undefined) {
+        errors.push(
+          `questions[${question.id}]: type "${question.type}" is a non-input field and should not have a 'required' property`
+        );
       }
     }
   }

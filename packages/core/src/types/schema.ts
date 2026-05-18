@@ -47,6 +47,7 @@ export type Question = {
   config?: QuestionConfig;
   options?: Option[];
   layout?: QuestionLayout;
+  customProps?: Record<string, unknown>; // Escape hatch for custom types
 };
 
 export type Option = {

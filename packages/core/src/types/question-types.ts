@@ -49,6 +49,14 @@ export type QuestionType =
   | "consent"
   | "info_block"
   | "page_break"
+  // Content & Visual (non-input — no values collected)
+  | "welcome-screen"
+  | "thank-you-screen"
+  | "rich-text"
+  | "image"
+  | "video"
+  | "divider"
+  | "spacer"
   // Extensible — vertical packs register custom types
   | (string & {});
 
@@ -88,7 +96,14 @@ export type QuestionConfig =
   | SectionHeaderConfig
   | PageBreakConfig
   | PhoneInternationalConfig
-  | LegalNameConfig;
+  | LegalNameConfig
+  | WelcomeScreenConfig
+  | ThankYouScreenConfig
+  | RichTextConfig
+  | ImageConfig
+  | VideoConfig
+  | DividerConfig
+  | SpacerConfig;
 
 // ---- Text ----
 
@@ -369,4 +384,68 @@ export type LegalNameConfig = {
   type: "legal_name";
   showMiddleName?: boolean;
   showSuffix?: boolean;
+};
+
+// ---- Content & Visual ----
+
+export type WelcomeScreenConfig = {
+  type: "welcome-screen";
+  heading: string;
+  description?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  buttonText?: string; // default: "Start"
+  alignment?: "left" | "center" | "right";
+};
+
+export type ThankYouScreenConfig = {
+  type: "thank-you-screen";
+  heading: string;
+  description?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  redirectUrl?: string;
+  redirectDelay?: number; // seconds, 0 = no redirect
+  showSummary?: boolean;
+};
+
+export type RichTextConfig = {
+  type: "rich-text";
+  content: string;
+  format: "markdown" | "html";
+};
+
+export type ImageConfig = {
+  type: "image";
+  src: string;
+  alt: string;
+  width?: string; // "100%", "300px", etc.
+  height?: string;
+  alignment?: "left" | "center" | "right";
+  caption?: string;
+  link?: string; // click opens this URL
+};
+
+export type VideoConfig = {
+  type: "video";
+  src: string;
+  provider: "youtube" | "vimeo" | "url";
+  autoplay?: boolean;
+  muted?: boolean;
+  poster?: string;
+  width?: string;
+  height?: string;
+};
+
+export type DividerConfig = {
+  type: "divider";
+  style?: "solid" | "dashed" | "dotted";
+  color?: string;
+  thickness?: number; // px, default 1
+  spacing?: number; // vertical margin in px, default 16
+};
+
+export type SpacerConfig = {
+  type: "spacer";
+  height: number; // px
 };
