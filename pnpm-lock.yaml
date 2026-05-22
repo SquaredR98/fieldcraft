@@ -104,8 +104,8 @@ importers:
   packages/adapters/supabase:
     dependencies:
       '@squaredr/fieldcraft-core':
-        specifier: ^1.0.0
-        version: 1.0.2
+        specifier: ^1.2.0
+        version: 1.2.0
       '@supabase/supabase-js':
         specifier: ^2.0
         version: 2.99.2
@@ -166,9 +166,6 @@ importers:
 
   packages/react:
     dependencies:
-      '@squaredr/fieldcraft-core':
-        specifier: workspace:^
-        version: link:../core
       dompurify:
         specifier: ^3.1
         version: 3.4.5
@@ -221,6 +218,9 @@ importers:
       '@squaredr/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
+      '@squaredr/fieldcraft-core':
+        specifier: workspace:^
+        version: link:../core
       '@squaredr/tailwind-config':
         specifier: workspace:*
         version: link:../../tooling/tailwind-config
@@ -2624,6 +2624,10 @@ packages:
 
   '@squaredr/fieldcraft-core@1.0.2':
     resolution: {integrity: sha512-Mh9gSNuvyv2KHjp3PdKHlWvAk0+dttaMFNvHmmASYZsIB5urvPx9S+pzbYh8NyqiipQ90T8w53PWO+u/zqJb8g==}
+    engines: {node: '>=18'}
+
+  '@squaredr/fieldcraft-core@1.2.0':
+    resolution: {integrity: sha512-+XXv59S6mvuk4WFFDWFt7ervmgVFr9naABgwv4BR/E4zq5laIKYlrlDyARkESe5YbKS94EL3z4TW0bxjeUZ+LQ==}
     engines: {node: '>=18'}
 
   '@storybook/addon-actions@8.6.14':
@@ -8722,6 +8726,10 @@ snapshots:
   '@sindresorhus/merge-streams@4.0.0': {}
 
   '@squaredr/fieldcraft-core@1.0.2':
+    dependencies:
+      zod: 3.25.76
+
+  '@squaredr/fieldcraft-core@1.2.0':
     dependencies:
       zod: 3.25.76
 

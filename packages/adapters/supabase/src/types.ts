@@ -39,9 +39,21 @@ type SupabaseQueryBuilder = {
   delete(): SupabaseFilterBuilder;
 };
 
+export type SupabaseSchemaAdapterConfig = {
+  /** Supabase client instance */
+  client: SupabaseClient;
+  /** Table name for schemas (default: "formengine_schemas") */
+  table?: string;
+  /** Called on error */
+  onError?: (error: Error) => void;
+};
+
 type SupabaseFilterBuilder = {
   eq(column: string, value: unknown): SupabaseFilterBuilder;
   gt(column: string, value: unknown): SupabaseFilterBuilder;
+  ilike(column: string, pattern: string): SupabaseFilterBuilder;
+  order(column: string, options?: { ascending?: boolean }): SupabaseFilterBuilder;
+  range(from: number, to: number): SupabaseFilterBuilder;
   single(): Promise<{ data: Record<string, unknown> | null; error: Error | null }>;
   then(
     resolve: (value: { data: unknown; error: Error | null }) => void,
