@@ -4,7 +4,10 @@ export type TemplateCategory =
   | "general"
   | "feedback"
   | "marketing"
-  | "support";
+  | "support"
+  | "hr"
+  | "ecommerce"
+  | "healthcare";
 
 export type TemplateMeta = {
   id: string;
