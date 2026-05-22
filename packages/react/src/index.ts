@@ -93,6 +93,33 @@ export { InfoBlockField } from "./components/fields/InfoBlockField";
 // ---- Shared ----
 export { FieldWrapper, fieldAria } from "./components/fields/FieldWrapper";
 
+// ---- UI Primitives (shadcn/Radix) ----
+export { Alert, AlertTitle, AlertDescription } from "./components/ui/alert";
+export { Badge, badgeVariants } from "./components/ui/badge";
+export { Button, buttonVariants } from "./components/ui/button";
+export { Card, CardHeader, CardFooter, CardTitle, CardAction, CardDescription, CardContent } from "./components/ui/card";
+export { Checkbox } from "./components/ui/checkbox";
+export { Collapsible, CollapsibleTrigger, CollapsibleContent } from "./components/ui/collapsible";
+export { Input } from "./components/ui/input";
+export { Label } from "./components/ui/label";
+export { Progress } from "./components/ui/progress";
+export { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
+export {
+  Select, SelectContent, SelectGroup, SelectItem, SelectLabel,
+  SelectScrollDownButton, SelectScrollUpButton, SelectSeparator,
+  SelectTrigger, SelectValue,
+} from "./components/ui/select";
+export { Separator } from "./components/ui/separator";
+export { Slider } from "./components/ui/slider";
+export { Switch } from "./components/ui/switch";
+export {
+  Table, TableHeader, TableBody, TableFooter,
+  TableRow, TableHead, TableCell, TableCaption,
+} from "./components/ui/table";
+export { Textarea } from "./components/ui/textarea";
+export { Toggle, toggleVariants } from "./components/ui/toggle";
+export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
+
 // ---- Utils ----
 export { cn } from "./utils/cn";
 export { formatPhone, formatCurrency, formatFileSize, truncate } from "./utils/format-helpers";
