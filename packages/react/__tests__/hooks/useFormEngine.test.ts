@@ -124,7 +124,7 @@ describe("useFormEngine", () => {
 
     unmount();
 
-    // After unmount, calling setValue should throw
-    expect(() => result.current.setValue("name", "test")).toThrow("destroyed");
+    // After unmount, calling setValue should throw (proxy detects null ref)
+    expect(() => result.current.setValue("name", "test")).toThrow("not available");
   });
 });

@@ -1,4 +1,4 @@
-import { useRef, useSyncExternalStore, useCallback, useEffect } from "react";
+import { useRef, useSyncExternalStore, useCallback, useEffect, useMemo } from "react";
 import {
   createEngine,
   type FormEngine,
@@ -42,9 +42,45 @@ export function useFormEngine(
     };
   }, [engine]);
 
-  // Return merged object — engine methods + reactive state
+  // Proxy methods through engineRef so callers never hold a stale reference
+  // to a destroyed engine. This prevents "FormEngine has been destroyed"
+  // errors caused by React Strict Mode double-mounting in development.
+  const proxy = useMemo<FormEngine>(() => {
+    function current(): FormEngine {
+      if (!engineRef.current) throw new Error("FormEngine is not available");
+      return engineRef.current;
+    }
+    return {
+      getState: () => current().getState(),
+      subscribe: (listener) => current().subscribe(listener),
+      nextSection: () => current().nextSection(),
+      prevSection: () => current().prevSection(),
+      jumpTo: (id) => current().jumpTo(id),
+      setValue: (id, val) => current().setValue(id, val),
+      setValues: (vals) => current().setValues(vals),
+      touchField: (id) => current().touchField(id),
+      clearField: (id) => current().clearField(id),
+      getVisibleSections: () => current().getVisibleSections(),
+      getVisibleFields: (id) => current().getVisibleFields(id),
+      isFieldRequired: (id) => current().isFieldRequired(id),
+      isFieldVisible: (id) => current().isFieldVisible(id),
+      isFieldDisabled: (id) => current().isFieldDisabled(id),
+      getFieldError: (id) => current().getFieldError(id),
+      saveDraft: () => current().saveDraft(),
+      loadDraft: () => current().loadDraft(),
+      clearDraft: () => current().clearDraft(),
+      validate: () => current().validate(),
+      validateSection: (id) => current().validateSection(id),
+      submit: () => current().submit(),
+      getSchema: () => current().getSchema(),
+      getSectionById: (id) => current().getSectionById(id),
+      getQuestionById: (id) => current().getQuestionById(id),
+      destroy: () => current().destroy(),
+    };
+  }, []);
+
   return {
-    ...engine,
+    ...proxy,
     state,
   };
 }
