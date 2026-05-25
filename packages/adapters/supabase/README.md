@@ -86,9 +86,9 @@ The adapter is compatible with Supabase RLS policies. Configure your table's RLS
 
 ## Community
 
-[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/YOUR_INVITE_LINK)
+[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/zMxdu5UVW)
 
-- [Discord](https://discord.gg/YOUR_INVITE_LINK) — Get help, share projects, request features
+- [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
 - [Docs](https://squaredr.tech/products/fieldcraft/docs/adapters) — Adapter documentation
 - [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
 

@@ -1,6 +1,6 @@
 // Dev console banner — runs once in development mode
 if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
-  const _fc_banner = `\n%c FieldCraft Supabase %c v1.1.1 \n\n%cField-level encryption · RLS · Schema CRUD\n\nDocs    → https://squaredr.tech/products/fieldcraft/docs/adapters\nDiscord → https://discord.gg/YOUR_INVITE_LINK\n`;
+  const _fc_banner = `\n%c FieldCraft Supabase %c v1.1.2 \n\n%cField-level encryption · RLS · Schema CRUD\n\nDocs    → https://squaredr.tech/products/fieldcraft/docs/adapters\nDiscord → https://discord.gg/zMxdu5UVW\n`;
   console.log(
     _fc_banner,
     "background:#2563eb;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px 0 0 3px",

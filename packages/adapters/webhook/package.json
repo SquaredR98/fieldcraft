@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-webhook",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "FieldCraft webhook delivery adapter with HMAC-SHA256 signing and exponential backoff retries",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

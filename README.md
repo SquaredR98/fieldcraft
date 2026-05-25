@@ -5,7 +5,7 @@ A headless, pure TypeScript form engine with a React renderer. Define forms as J
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)]()
 [![React](https://img.shields.io/badge/React-18%20%7C%2019-blue)]()
-[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/YOUR_INVITE_LINK)
+[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/zMxdu5UVW)
 
 ## Packages
 
@@ -151,7 +151,7 @@ fieldcraft/
 
 ## Community
 
-- **Discord** — [Join the FieldCraft community](https://discord.gg/YOUR_INVITE_LINK) for help, feature discussions, and showcasing your projects
+- **Discord** — [Join the FieldCraft community](https://discord.gg/zMxdu5UVW) for help, feature discussions, and showcasing your projects
 - **Docs** — [squaredr.tech/products/fieldcraft/docs](https://squaredr.tech/products/fieldcraft/docs)
 - **Feature requests** — Open an issue or post in our Discord #feature-requests channel
 - **Blog** — [squaredr.tech/blog](https://squaredr.tech/blog)
@@ -176,7 +176,7 @@ pnpm --filter @squaredr/fieldcraft-demo dev
 
 ## Contributing
 
-Contributions are welcome. Please open an issue first to discuss what you'd like to change. Join our [Discord](https://discord.gg/YOUR_INVITE_LINK) to chat with the team.
+Contributions are welcome. Please open an issue first to discuss what you'd like to change. Join our [Discord](https://discord.gg/zMxdu5UVW) to chat with the team.
 
 ## License
 
