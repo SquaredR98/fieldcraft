@@ -2,7 +2,8 @@
 // React renderer for FieldCraft — hooks, components, theming, field registry
 
 // Dev console banner — runs once in development mode
-if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+if (typeof globalThis !== "undefined" && typeof (globalThis as any).process !== "undefined" && (globalThis as any).process.env?.NODE_ENV !== "production") {
   const _fc_banner = `\n%c FieldCraft React %c v1.2.2 \n\n%c35+ field components · Tailwind/shadcn · WCAG accessible\n\nDocs      → https://squaredr.tech/products/fieldcraft/docs\nGitHub    → https://github.com/AkshayBandi027/formengine\nDiscord   → https://discord.gg/YOUR_INVITE_LINK\nPro Tools → https://squaredr.tech/products/fieldcraft/admin-pro\n`;
   console.log(
     _fc_banner,
