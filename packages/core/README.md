@@ -95,6 +95,15 @@ npm install @squaredr/fieldcraft-react
 
 The React package provides a ready-to-use `FormEngineRenderer` component with 35+ field components built on shadcn/ui and Tailwind CSS.
 
+## Community
+
+[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/YOUR_INVITE_LINK)
+
+- [Discord](https://discord.gg/YOUR_INVITE_LINK) — Get help, share projects, request features
+- [Docs](https://squaredr.tech/products/fieldcraft/docs) — Full documentation
+- [GitHub](https://github.com/AkshayBandi027/formengine) — Source code and issues
+- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
+
 ## License
 
 MIT

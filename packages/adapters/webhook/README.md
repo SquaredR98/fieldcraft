@@ -120,6 +120,14 @@ Every webhook request includes:
 | `X-FormEngine-Event` | `submit` |
 | `X-FormEngine-Timestamp` | ISO 8601 timestamp |
 
+## Community
+
+[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/YOUR_INVITE_LINK)
+
+- [Discord](https://discord.gg/YOUR_INVITE_LINK) — Get help, share projects, request features
+- [Docs](https://squaredr.tech/products/fieldcraft/docs/adapters) — Adapter documentation
+- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
+
 ## License
 
 MIT

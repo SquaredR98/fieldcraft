@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-supabase",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "FieldCraft Supabase storage adapter with field-level AES-256-GCM encryption",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

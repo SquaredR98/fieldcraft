@@ -5,6 +5,7 @@ A headless, pure TypeScript form engine with a React renderer. Define forms as J
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)]()
 [![React](https://img.shields.io/badge/React-18%20%7C%2019-blue)]()
+[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/YOUR_INVITE_LINK)
 
 ## Packages
 
@@ -12,6 +13,10 @@ A headless, pure TypeScript form engine with a React renderer. Define forms as J
 |---------|-------------|
 | [`@squaredr/fieldcraft-core`](packages/core) | Headless TypeScript engine — schema, validation, conditional visibility, state management |
 | [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 35+ field components, hooks, theming, pluggable field registry |
+| [`@squaredr/fieldcraft-postgres`](packages/adapters/postgres) | Postgres adapter — Drizzle ORM, AES-256-GCM encryption |
+| [`@squaredr/fieldcraft-supabase`](packages/adapters/supabase) | Supabase adapter — field-level encryption, RLS, schema CRUD |
+| [`@squaredr/fieldcraft-webhook`](packages/adapters/webhook) | Webhook adapter — HMAC-SHA256 signing, exponential backoff |
+| [`@squaredr/fieldcraft-templates-free`](packages/templates-free) | 16 free form templates — general, HR, and more |
 
 ## Install
 
@@ -91,16 +96,65 @@ function App() {
 | Advanced | `address` `payment` `matrix` `repeater` `calculated` `hidden` `scoring` |
 | Structural | `consent` `info_block` |
 
+## Storage Adapters
+
+Persist form submissions, drafts, and schemas to any backend:
+
+```bash
+# Postgres (Drizzle ORM, AES-256-GCM encryption)
+npm install @squaredr/fieldcraft-postgres
+
+# Supabase (field-level encryption, RLS, schema CRUD)
+npm install @squaredr/fieldcraft-supabase
+
+# Webhook (HMAC-SHA256 signing, retry with backoff)
+npm install @squaredr/fieldcraft-webhook
+```
+
+## Free Templates
+
+16 production-ready form schemas included in [`@squaredr/fieldcraft-templates-free`](packages/templates-free):
+
+```bash
+npm install @squaredr/fieldcraft-templates-free
+```
+
+Contact form, feedback survey, NPS, job application, event registration, bug report, employee onboarding, leave request, and more.
+
+## Pro Tools
+
+Visual admin tools for building, editing, and managing forms — available as separate packages with license keys:
+
+| Tool | What it does |
+|------|-------------|
+| **FormBuilder** | Visual drag-drop form creation with 45 field types, undo/redo, export/import |
+| **SchemaEditor** | Monaco code editor with live form preview and validation markers |
+| **ResponseViewer** | Table/card/detail views for form responses |
+| **ThemeEditor** | Visual theme editor with 35+ properties, 6 presets, live preview |
+
+[Learn more about Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro)
+
 ## Project Structure
 
 ```
 fieldcraft/
 ├── packages/
-│   ├── core/           # Form engine (pure TypeScript)
-│   └── react/          # React renderer + 35+ components
-├── demo/               # Next.js demo app with 10 example forms
-└── tooling/            # Shared configs (TypeScript, Tailwind, ESLint)
+│   ├── core/                  # Form engine (pure TypeScript)
+│   ├── react/                 # React renderer + 35+ components
+│   ├── adapters/postgres/     # Postgres adapter
+│   ├── adapters/supabase/     # Supabase adapter
+│   ├── adapters/webhook/      # Webhook adapter
+│   └── templates-free/        # 16 free form schemas
+├── demo/                      # Next.js demo app with 10 example forms
+└── tooling/                   # Shared configs (TypeScript, Tailwind, ESLint)
 ```
+
+## Community
+
+- **Discord** — [Join the FieldCraft community](https://discord.gg/YOUR_INVITE_LINK) for help, feature discussions, and showcasing your projects
+- **Docs** — [squaredr.tech/products/fieldcraft/docs](https://squaredr.tech/products/fieldcraft/docs)
+- **Feature requests** — Open an issue or post in our Discord #feature-requests channel
+- **Blog** — [squaredr.tech/blog](https://squaredr.tech/blog)
 
 ## Development
 
@@ -122,7 +176,7 @@ pnpm --filter @squaredr/fieldcraft-demo dev
 
 ## Contributing
 
-Contributions are welcome. Please open an issue first to discuss what you'd like to change.
+Contributions are welcome. Please open an issue first to discuss what you'd like to change. Join our [Discord](https://discord.gg/YOUR_INVITE_LINK) to chat with the team.
 
 ## License
 

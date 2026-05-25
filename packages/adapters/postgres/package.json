@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-postgres",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "FieldCraft PostgreSQL storage adapter with Drizzle ORM and AES-256-GCM encryption",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

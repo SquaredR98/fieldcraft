@@ -1,6 +1,17 @@
 // @squaredr/fieldcraft-core
 // Headless TypeScript form engine — zero UI dependencies
 
+// Dev console banner — runs once in development mode
+if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
+  const _fc_banner = `\n%c FieldCraft Core %c v1.2.1 \n\n%cDocs      → https://squaredr.tech/products/fieldcraft/docs\nGitHub    → https://github.com/AkshayBandi027/formengine\nDiscord   → https://discord.gg/YOUR_INVITE_LINK\nPro Tools → https://squaredr.tech/products/fieldcraft/admin-pro\n`;
+  console.log(
+    _fc_banner,
+    "background:#2563eb;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px 0 0 3px",
+    "background:#1e40af;color:#fff;padding:2px 6px;border-radius:0 3px 3px 0",
+    "color:#6b7280"
+  );
+}
+
 // Types — Schema
 export type {
   FormEngineSchema,

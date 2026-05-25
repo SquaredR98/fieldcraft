@@ -1,6 +1,17 @@
 // @squaredr/fieldcraft-react
 // React renderer for FieldCraft — hooks, components, theming, field registry
 
+// Dev console banner — runs once in development mode
+if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
+  const _fc_banner = `\n%c FieldCraft React %c v1.2.2 \n\n%c35+ field components · Tailwind/shadcn · WCAG accessible\n\nDocs      → https://squaredr.tech/products/fieldcraft/docs\nGitHub    → https://github.com/AkshayBandi027/formengine\nDiscord   → https://discord.gg/YOUR_INVITE_LINK\nPro Tools → https://squaredr.tech/products/fieldcraft/admin-pro\n`;
+  console.log(
+    _fc_banner,
+    "background:#2563eb;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px 0 0 3px",
+    "background:#1e40af;color:#fff;padding:2px 6px;border-radius:0 3px 3px 0",
+    "color:#6b7280"
+  );
+}
+
 // ---- Hooks ----
 export { useFormEngine, type UseFormEngineReturn } from "./hooks/useFormEngine";
 export { useFieldValue } from "./hooks/useFieldValue";
