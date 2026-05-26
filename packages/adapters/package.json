@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-adapters",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "FieldCraft storage and delivery adapters (Postgres, Supabase, Webhook)",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
