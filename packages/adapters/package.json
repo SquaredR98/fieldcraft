@@ -1,0 +1,86 @@
+{
+  "name": "@squaredr/fieldcraft-adapters",
+  "version": "1.0.0",
+  "description": "FieldCraft storage and delivery adapters (Postgres, Supabase, Webhook)",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./postgres": {
+      "types": "./dist/postgres/index.d.ts",
+      "import": "./dist/postgres/index.mjs",
+      "require": "./dist/postgres/index.js"
+    },
+    "./supabase": {
+      "types": "./dist/supabase/index.d.ts",
+      "import": "./dist/supabase/index.mjs",
+      "require": "./dist/supabase/index.js"
+    },
+    "./webhook": {
+      "types": "./dist/webhook/index.d.ts",
+      "import": "./dist/webhook/index.mjs",
+      "require": "./dist/webhook/index.js"
+    }
+  },
+  "files": ["dist", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@squaredr/fieldcraft-core": "^1.2.0"
+  },
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.0",
+    "@paralleldrive/cuid2": "^2.2",
+    "drizzle-orm": "^0.35",
+    "postgres": "^3.4"
+  },
+  "peerDependenciesMeta": {
+    "@supabase/supabase-js": {
+      "optional": true
+    },
+    "@paralleldrive/cuid2": {
+      "optional": true
+    },
+    "drizzle-orm": {
+      "optional": true
+    },
+    "postgres": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@paralleldrive/cuid2": "^2.2",
+    "@supabase/supabase-js": "^2.0",
+    "@types/node": "^22",
+    "drizzle-orm": "^0.35",
+    "postgres": "^3.4",
+    "typescript": "^5.5",
+    "tsup": "^8.0",
+    "vitest": "^2.0"
+  },
+  "license": "MIT",
+  "author": "SquaredR",
+  "homepage": "https://squaredr.tech/products/fieldcraft",
+  "bugs": {
+    "url": "https://github.com/SquaredR98/fieldcraft/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SquaredR98/fieldcraft.git",
+    "directory": "packages/adapters"
+  },
+  "keywords": ["fieldcraft", "form-engine", "postgres", "supabase", "webhook", "adapter", "storage", "encryption"],
+  "engines": {
+    "node": ">=18"
+  }
+}

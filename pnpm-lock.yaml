@@ -73,65 +73,27 @@ importers:
         specifier: ^5
         version: 5.9.3
 
-  packages/adapters/postgres:
+  packages/adapters:
     dependencies:
+      '@squaredr/fieldcraft-core':
+        specifier: ^1.2.0
+        version: 1.2.0
+    devDependencies:
       '@paralleldrive/cuid2':
         specifier: ^2.2
         version: 2.3.1
-      '@squaredr/fieldcraft-core':
-        specifier: ^1.0.0
-        version: 1.0.2
+      '@supabase/supabase-js':
+        specifier: ^2.0
+        version: 2.99.2
+      '@types/node':
+        specifier: ^22
+        version: 22.19.15
       drizzle-orm:
         specifier: ^0.35
         version: 0.35.3(@libsql/client-wasm@0.17.0)(@types/react@19.2.14)(pg@8.20.0)(postgres@3.4.8)(react@19.2.4)
       postgres:
         specifier: ^3.4
         version: 3.4.8
-    devDependencies:
-      '@types/node':
-        specifier: ^22
-        version: 22.19.15
-      tsup:
-        specifier: ^8.0
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(typescript@5.9.3)(yaml@2.8.2)
-      typescript:
-        specifier: ^5.5
-        version: 5.9.3
-      vitest:
-        specifier: ^2.0
-        version: 2.1.9(@types/node@22.19.15)(jsdom@29.0.0(@noble/hashes@1.8.0))(lightningcss@1.32.0)(msw@2.12.13(@types/node@22.19.15)(typescript@5.9.3))(terser@5.46.1)
-
-  packages/adapters/supabase:
-    dependencies:
-      '@squaredr/fieldcraft-core':
-        specifier: ^1.2.0
-        version: 1.2.0
-      '@supabase/supabase-js':
-        specifier: ^2.0
-        version: 2.99.2
-    devDependencies:
-      '@types/node':
-        specifier: ^22
-        version: 22.19.15
-      tsup:
-        specifier: ^8.0
-        version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(typescript@5.9.3)(yaml@2.8.2)
-      typescript:
-        specifier: ^5.5
-        version: 5.9.3
-      vitest:
-        specifier: ^2.0
-        version: 2.1.9(@types/node@22.19.15)(jsdom@29.0.0(@noble/hashes@1.8.0))(lightningcss@1.32.0)(msw@2.12.13(@types/node@22.19.15)(typescript@5.9.3))(terser@5.46.1)
-
-  packages/adapters/webhook:
-    dependencies:
-      '@squaredr/fieldcraft-core':
-        specifier: ^1.0.0
-        version: 1.0.2
-    devDependencies:
-      '@types/node':
-        specifier: ^22
-        version: 22.19.15
       tsup:
         specifier: ^8.0
         version: 8.5.1(jiti@2.6.1)(postcss@8.5.8)(typescript@5.9.3)(yaml@2.8.2)
@@ -2620,10 +2582,6 @@ packages:
 
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
-    engines: {node: '>=18'}
-
-  '@squaredr/fieldcraft-core@1.0.2':
-    resolution: {integrity: sha512-Mh9gSNuvyv2KHjp3PdKHlWvAk0+dttaMFNvHmmASYZsIB5urvPx9S+pzbYh8NyqiipQ90T8w53PWO+u/zqJb8g==}
     engines: {node: '>=18'}
 
   '@squaredr/fieldcraft-core@1.2.0':
@@ -8724,10 +8682,6 @@ snapshots:
   '@sec-ant/readable-stream@0.4.1': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
-
-  '@squaredr/fieldcraft-core@1.0.2':
-    dependencies:
-      zod: 3.25.76
 
   '@squaredr/fieldcraft-core@1.2.0':
     dependencies:
