@@ -204,7 +204,11 @@ function evaluatePostfix(postfix: Token[]): number {
         case "+": stack.push(a + b); break;
         case "-": stack.push(a - b); break;
         case "*": stack.push(a * b); break;
-        case "/": stack.push(b === 0 ? NaN : a / b); break;
+        case "/": {
+          if (b === 0) throw new Error("Division by zero");
+          stack.push(a / b);
+          break;
+        }
         case "^": stack.push(Math.pow(a, b)); break;
       }
       continue;

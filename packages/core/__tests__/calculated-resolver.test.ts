@@ -46,7 +46,7 @@ describe("evaluateExpression", () => {
 
   it("handles division by zero gracefully", () => {
     const result = evaluateExpression("{a} / {b}", { a: 5, b: 0 });
-    expect(result).toBeNaN();
+    expect(result).toBeNull();
   });
 
   it("handles no field references (pure math)", () => {

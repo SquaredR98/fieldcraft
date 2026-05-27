@@ -34,7 +34,9 @@ export function evaluateExpression(
   }
 
   try {
-    return evaluateMathExpression(substituted);
+    const result = evaluateMathExpression(substituted);
+    if (!isFinite(result)) return null;
+    return result;
   } catch {
     return null;
   }

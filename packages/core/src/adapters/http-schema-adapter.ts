@@ -5,6 +5,8 @@ export type HttpSchemaAdapterConfig = {
   baseUrl: string;
   headers?: Record<string, string>;
   timeout?: number;
+  /** Cache TTL in milliseconds for `load()` results. 0 disables caching. Default: 60000 (60s). */
+  cacheTtl?: number;
 };
 
 /**
@@ -12,6 +14,8 @@ export type HttpSchemaAdapterConfig = {
  */
 export function createHttpSchemaAdapter(config: HttpSchemaAdapterConfig): SchemaAdapter {
   const timeout = config.timeout ?? 30000;
+  const cacheTtl = config.cacheTtl ?? 60_000;
+  const cache = new Map<string, { data: FormEngineSchema; timestamp: number }>();
 
   async function request<T>(
     path: string,
@@ -49,11 +53,23 @@ export function createHttpSchemaAdapter(config: HttpSchemaAdapterConfig): Schema
         method: "PUT",
         body: JSON.stringify(schema),
       });
+      cache.delete(schema.id);
     },
 
     async load(schemaId: string): Promise<FormEngineSchema | null> {
+      if (cacheTtl > 0) {
+        const cached = cache.get(schemaId);
+        if (cached && Date.now() - cached.timestamp < cacheTtl) {
+          return cached.data;
+        }
+      }
+
       try {
-        return await request<FormEngineSchema>(`/schemas/${schemaId}`);
+        const data = await request<FormEngineSchema>(`/schemas/${schemaId}`);
+        if (cacheTtl > 0 && data) {
+          cache.set(schemaId, { data, timestamp: Date.now() });
+        }
+        return data;
       } catch {
         return null;
       }
@@ -61,6 +77,7 @@ export function createHttpSchemaAdapter(config: HttpSchemaAdapterConfig): Schema
 
     async delete(schemaId: string): Promise<void> {
       await request(`/schemas/${schemaId}`, { method: "DELETE" });
+      cache.delete(schemaId);
     },
 
     async list(params?: SchemaListParams): Promise<SchemaListResult> {

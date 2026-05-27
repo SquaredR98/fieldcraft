@@ -5,6 +5,9 @@ import { runBuiltInRule } from "../validators/built-in";
 import { evaluate } from "./condition-evaluator";
 import type { ValidatorRegistry } from "../validators/registry";
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+const __DEV__ = typeof globalThis !== "undefined" && typeof (globalThis as any).process !== "undefined" && (globalThis as any).process.env?.NODE_ENV !== "production";
+
 /**
  * Validate a single field's value against its validation rules.
  * Returns an array of error message strings (empty array = valid).
@@ -55,6 +58,8 @@ export function validateField(
             if (error) {
               errors.push(rule.message ?? error);
             }
+          } else if (__DEV__) {
+            console.warn(`[FieldCraft] Custom validator "${rule.name}" not found in registry. Skipping.`);
           }
         }
         continue;
@@ -98,6 +103,8 @@ export async function validateFieldAsync(
         if (error) {
           errors.push(rule.message ?? error);
         }
+      } else if (__DEV__) {
+        console.warn(`[FieldCraft] Async validator "${rule.endpoint}" not found in registry. Skipping.`);
       }
     }
   }
