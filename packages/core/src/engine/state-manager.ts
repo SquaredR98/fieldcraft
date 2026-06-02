@@ -316,6 +316,8 @@ export function createStateManager(config: StateManagerConfig) {
   // ---- Internal helpers ----
 
   function notify(): void {
+    // Create a new state reference so useSyncExternalStore detects the change
+    state = { ...state };
     for (const listener of listeners) {
       listener(state);
     }
@@ -449,6 +451,7 @@ export function createStateManager(config: StateManagerConfig) {
     setSubmitAttempted,
     setDraftState,
     restoreFromDraft,
+    notify,
     navigation,
   };
 }

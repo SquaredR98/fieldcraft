@@ -67,6 +67,16 @@ export type FormEngine = {
 
   setExternalValues?(values: Record<string, unknown>): void;
 
+  /**
+   * Merge additional props into a field's `customProps`.
+   * Useful for injecting runtime data (e.g. payment clientSecret) into a
+   * field after the engine has been created, without losing form state.
+   */
+  updateFieldCustomProps(
+    fieldId: string,
+    props: Record<string, unknown>,
+  ): void;
+
   getSchema(): FormEngineSchema;
   getSectionById(sectionId: string): Section | undefined;
   getQuestionById(questionId: string): Question | undefined;
@@ -334,6 +344,14 @@ export function createEngine(
       }
 
       return result;
+    },
+
+    updateFieldCustomProps(fieldId, props) {
+      const question = questionMap.get(fieldId);
+      if (!question) return;
+      question.customProps = { ...question.customProps, ...props };
+      // Notify subscribers so React re-renders with updated field data
+      stateManager.notify();
     },
 
     getSchema() {

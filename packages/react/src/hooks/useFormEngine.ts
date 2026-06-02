@@ -72,6 +72,7 @@ export function useFormEngine(
       validate: () => current().validate(),
       validateSection: (id) => current().validateSection(id),
       submit: () => current().submit(),
+      updateFieldCustomProps: (id, props) => current().updateFieldCustomProps(id, props),
       getSchema: () => current().getSchema(),
       getSectionById: (id) => current().getSectionById(id),
       getQuestionById: (id) => current().getQuestionById(id),
