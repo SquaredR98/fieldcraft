@@ -65,8 +65,6 @@ export type FormEngine = {
   validateSection(sectionId: string): ValidationResult;
   submit(): Promise<SubmitResult>;
 
-  setExternalValues?(values: Record<string, unknown>): void;
-
   /**
    * Merge additional props into a field's `customProps`.
    * Useful for injecting runtime data (e.g. payment clientSecret) into a

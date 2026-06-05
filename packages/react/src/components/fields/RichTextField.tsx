@@ -32,7 +32,7 @@ function markdownToHtml(markdown: string): string {
   return html;
 }
 
-export function RichTextField({ field }: FieldProps) {
+export function RichTextField({ field, theme }: FieldProps) {
   const config = field.config as RichTextConfig | undefined;
 
   const sanitizedHtml = useMemo(() => {
@@ -66,8 +66,22 @@ export function RichTextField({ field }: FieldProps) {
         "blockquote",
         "code",
         "pre",
+        "img",
+        "div",
+        "span",
+        "figure",
+        "figcaption",
+        "table",
+        "thead",
+        "tbody",
+        "tr",
+        "th",
+        "td",
+        "hr",
+        "sup",
+        "sub",
       ],
-      ALLOWED_ATTR: ["href", "target", "rel"],
+      ALLOWED_ATTR: ["href", "target", "rel", "src", "alt", "width", "height", "class", "style"],
     });
   }, [config?.content, config?.format]);
 
@@ -75,10 +89,13 @@ export function RichTextField({ field }: FieldProps) {
 
   return (
     <div
+      className={config.containerClassName}
       style={{
         padding: "1rem 0",
         lineHeight: "1.6",
-        color: "inherit",
+        fontFamily: theme.typography?.fontFamily ?? "inherit",
+        color: theme.colors?.text ?? "inherit",
+        ...((config.containerStyle as React.CSSProperties) ?? {}),
       }}
       dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
     />

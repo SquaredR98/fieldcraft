@@ -51,8 +51,8 @@ export function createNavigation(schema: FormEngineSchema) {
     const effectiveId = visibleIds[effectiveIndex] ?? schema.sections[0]?.id ?? "";
 
     const total = visibleIds.length;
-    const visitedCount = visitedSectionIds.filter((id) => visibleIds.includes(id)).length;
-    const progressPercent = total > 0 ? Math.round((visitedCount / total) * 100) : 0;
+    // Progress is step-based: synced with the step counter (currentStep / totalSteps)
+    const progressPercent = total > 0 ? Math.round(((effectiveIndex + 1) / total) * 100) : 0;
 
     return {
       currentSectionId: effectiveId,

@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { FileUploadConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
@@ -12,18 +12,41 @@ export function FileUploadField({ field, value, error, touched, disabled, onChan
   const config = field.config as FileUploadConfig | undefined;
   const files = (value as FileEntry[]) ?? [];
   const inputRef = useRef<HTMLInputElement>(null);
+  const [sizeError, setSizeError] = useState<string | null>(null);
   const maxFiles = config?.maxFiles ?? 1;
+  const maxBytes = config?.maxSizeMb ? config.maxSizeMb * 1024 * 1024 : Infinity;
   const accept = config?.accept?.join(",");
 
   const handleFiles = (fileList: FileList | null) => {
     if (!fileList) return;
-    const newFiles: FileEntry[] = Array.from(fileList).map((f) => ({
-      name: f.name,
-      size: f.size,
-      type: f.type,
+    const allFiles: { entry: FileEntry; file: File }[] = Array.from(fileList).map((f) => ({
+      entry: { name: f.name, size: f.size, type: f.type },
+      file: f,
     }));
-    const merged = [...files, ...newFiles].slice(0, maxFiles);
-    onChange(merged);
+
+    const accepted: FileEntry[] = [];
+    const rejected: string[] = [];
+
+    for (const { entry } of allFiles) {
+      if (entry.size > maxBytes) {
+        rejected.push(entry.name);
+      } else {
+        accepted.push(entry);
+      }
+    }
+
+    if (rejected.length > 0) {
+      setSizeError(
+        `${rejected.join(", ")} exceeded the ${config!.maxSizeMb}MB limit`,
+      );
+    } else {
+      setSizeError(null);
+    }
+
+    if (accepted.length > 0) {
+      const merged = [...files, ...accepted].slice(0, maxFiles);
+      onChange(merged);
+    }
     onBlur();
   };
 
@@ -70,6 +93,12 @@ export function FileUploadField({ field, value, error, touched, disabled, onChan
           {config?.maxSizeMb ? ` (max ${config.maxSizeMb}MB)` : ""}
         </p>
       </div>
+
+      {sizeError && (
+        <p role="alert" className="text-sm text-destructive mt-1">
+          {sizeError}
+        </p>
+      )}
 
       {files.length > 0 && (
         <ul className="flex flex-col gap-1 mt-2 list-none p-0 m-0">

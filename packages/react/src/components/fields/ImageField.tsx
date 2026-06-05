@@ -1,5 +1,6 @@
 import type { ImageConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
+import { cn } from "../../utils/cn";
 
 export function ImageField({ field }: FieldProps) {
   const config = field.config as ImageConfig | undefined;
@@ -7,35 +8,22 @@ export function ImageField({ field }: FieldProps) {
   if (!config?.src) return null;
 
   const alignment = config.alignment ?? "center";
-  const containerStyle: React.CSSProperties = {
-    display: "flex",
-    justifyContent:
-      alignment === "center" ? "center" : alignment === "right" ? "flex-end" : "flex-start",
-    padding: "1rem 0",
-  };
 
   const ImageElement = (
     <img
       src={config.src}
       alt={config.alt}
+      className="fc-image__img"
       style={{
-        maxWidth: "100%",
-        height: "auto",
         width: config.width ?? "100%",
         ...(config.height ? { height: config.height } : {}),
-        borderRadius: "4px",
       }}
       loading="lazy"
     />
   );
 
   const content = config.link ? (
-    <a
-      href={config.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{ display: "inline-block" }}
-    >
+    <a href={config.link} target="_blank" rel="noopener noreferrer" className="inline-block">
       {ImageElement}
     </a>
   ) : (
@@ -43,17 +31,24 @@ export function ImageField({ field }: FieldProps) {
   );
 
   return (
-    <figure style={containerStyle}>
+    <figure
+      className={cn(
+        "fc-image",
+        alignment === "center" && "fc-image--center",
+        alignment === "right" && "fc-image--right",
+        alignment === "left" && "fc-image--left",
+      )}
+    >
       <div style={{ maxWidth: config.width ?? "100%" }}>
         {content}
         {config.caption && (
           <figcaption
-            style={{
-              marginTop: "0.5rem",
-              fontSize: "0.875rem",
-              color: "rgba(0, 0, 0, 0.6)",
-              textAlign: alignment,
-            }}
+            className={cn(
+              "fc-image__caption",
+              alignment === "center" && "text-center",
+              alignment === "right" && "text-right",
+              alignment === "left" && "text-left",
+            )}
           >
             {config.caption}
           </figcaption>

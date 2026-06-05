@@ -1,5 +1,6 @@
 import type {
   Section,
+  Question,
   FormEngine,
   FormEngineTheme,
 } from "@squaredr/fieldcraft-core";
@@ -20,6 +21,34 @@ const sectionVariants: Record<string, string> = {
   flat: "p-0",
 };
 
+type FieldGroup =
+  | { kind: "single"; field: Question }
+  | { kind: "grid"; columns: number; fields: Question[] };
+
+/**
+ * Groups adjacent fields that share the same `layout.columns` value
+ * into grid groups. Fields without columns (or columns=1) render as singles.
+ */
+function groupFields(fields: Question[]): FieldGroup[] {
+  const groups: FieldGroup[] = [];
+
+  for (const field of fields) {
+    const cols = field.layout?.columns;
+    if (cols && cols > 1) {
+      const last = groups[groups.length - 1];
+      if (last && last.kind === "grid" && last.columns === cols) {
+        last.fields.push(field);
+      } else {
+        groups.push({ kind: "grid", columns: cols, fields: [field] });
+      }
+    } else {
+      groups.push({ kind: "single", field });
+    }
+  }
+
+  return groups;
+}
+
 export function SectionRenderer({
   section,
   engine,
@@ -30,6 +59,7 @@ export function SectionRenderer({
   const visibleFields = engine.getVisibleFields(section.id);
 
   const sectionLayout = theme.layout?.sectionLayout ?? "card";
+  const fieldGroups = groupFields(visibleFields);
 
   return (
     <section
@@ -37,11 +67,11 @@ export function SectionRenderer({
         "flex flex-col gap-6",
         sectionVariants[sectionLayout] ?? sectionVariants.card,
       )}
-      aria-labelledby={`fe-section-title-${section.id}`}
+      aria-labelledby={`fc-section-title-${section.id}`}
     >
       {section.title && (
         <h2
-          id={`fe-section-title-${section.id}`}
+          id={`fc-section-title-${section.id}`}
           className="text-lg font-semibold text-foreground"
         >
           {section.title}
@@ -52,20 +82,51 @@ export function SectionRenderer({
       )}
 
       <div className="flex flex-col gap-6">
-        {visibleFields.map((field) => (
-          <FieldRenderer
-            key={field.id}
-            field={field}
-            value={state.values[field.id]}
-            error={state.errors[field.id]}
-            touched={!!state.touched[field.id]}
-            disabled={engine.isFieldDisabled(field.id)}
-            onChange={(val) => engine.setValue(field.id, val)}
-            onBlur={() => engine.touchField(field.id)}
-            theme={theme}
-            registry={registry}
-          />
-        ))}
+        {fieldGroups.map((group, gi) => {
+          if (group.kind === "single") {
+            const field = group.field;
+            return (
+              <FieldRenderer
+                key={field.id}
+                field={field}
+                value={state.values[field.id]}
+                error={state.errors[field.id]}
+                touched={!!state.touched[field.id]}
+                disabled={engine.isFieldDisabled(field.id)}
+                onChange={(val) => engine.setValue(field.id, val)}
+                onBlur={() => engine.touchField(field.id)}
+                theme={theme}
+                registry={registry}
+              />
+            );
+          }
+
+          // Grid group — render side by side, collapse on mobile
+          return (
+            <div
+              key={`grid-${gi}`}
+              className="grid gap-4"
+              style={{
+                gridTemplateColumns: `repeat(${group.columns}, minmax(0, 1fr))`,
+              }}
+            >
+              {group.fields.map((field) => (
+                <FieldRenderer
+                  key={field.id}
+                  field={field}
+                  value={state.values[field.id]}
+                  error={state.errors[field.id]}
+                  touched={!!state.touched[field.id]}
+                  disabled={engine.isFieldDisabled(field.id)}
+                  onChange={(val) => engine.setValue(field.id, val)}
+                  onBlur={() => engine.touchField(field.id)}
+                  theme={theme}
+                  registry={registry}
+                />
+              ))}
+            </div>
+          );
+        })}
       </div>
     </section>
   );

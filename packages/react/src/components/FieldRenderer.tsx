@@ -46,7 +46,8 @@ export function FieldRenderer({
 
   return (
     <div
-      className={cn(widthClass)}
+      className={cn(widthClass, field.layout?.className)}
+      style={field.layout?.style as React.CSSProperties | undefined}
       data-field-id={field.id}
     >
       <Component
@@ -58,6 +59,7 @@ export function FieldRenderer({
         onChange={onChange}
         onBlur={onBlur}
         theme={theme}
+        customProps={field.customProps}
       />
     </div>
   );

@@ -27,7 +27,7 @@ export function AppointmentField({ field, value, error, touched, disabled, onCha
                 className={cn(
                   "px-3 py-2 rounded-md border text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                   selectedDate === slot.date
-                    ? "fe-option-active"
+                    ? "fc-option-active"
                     : "border-input hover:bg-accent",
                 )}
                 disabled={disabled}
@@ -55,7 +55,7 @@ export function AppointmentField({ field, value, error, touched, disabled, onCha
                   className={cn(
                     "px-3 py-2 rounded-md border text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                     selected?.time === time
-                      ? "fe-option-active"
+                      ? "fc-option-active"
                       : "border-input hover:bg-accent",
                   )}
                   disabled={disabled}

@@ -19,6 +19,8 @@ import { NavigationButtons } from "./NavigationButtons";
 import { ErrorSummary } from "./ErrorSummary";
 import { CompletionScreen } from "./CompletionScreen";
 import { DraftResumePrompt } from "./DraftResumePrompt";
+import { FormErrorBoundary } from "./FormErrorBoundary";
+import { FieldRegistryProvider } from "../registry/FieldRegistryContext";
 import { cn } from "../utils/cn";
 
 export type FormEngineRendererProps = {
@@ -185,13 +187,17 @@ export function FormEngineRenderer({
           />
         )}
 
-        {currentSection && (
-          <FormEngineRendererInner
-            section={currentSection}
-            engine={engine}
-            registry={registry}
-          />
-        )}
+        <FieldRegistryProvider registry={registry}>
+          <FormErrorBoundary>
+            {currentSection && (
+              <FormEngineRendererInner
+                section={currentSection}
+                engine={engine}
+                registry={registry}
+              />
+            )}
+          </FormErrorBoundary>
+        </FieldRegistryProvider>
 
         <NavigationButtons
           canGoPrev={state.canGoPrev}

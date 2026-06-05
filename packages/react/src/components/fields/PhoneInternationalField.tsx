@@ -2,6 +2,24 @@ import type { PhoneInternationalConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+const COUNTRY_CODES = [
+  { code: "US", dial: "+1", label: "+1 (US)" },
+  { code: "GB", dial: "+44", label: "+44 (UK)" },
+  { code: "CA", dial: "+1", label: "+1 (CA)" },
+  { code: "AU", dial: "+61", label: "+61 (AU)" },
+  { code: "DE", dial: "+49", label: "+49 (DE)" },
+  { code: "FR", dial: "+33", label: "+33 (FR)" },
+  { code: "IN", dial: "+91", label: "+91 (IN)" },
+  { code: "JP", dial: "+81", label: "+81 (JP)" },
+];
 
 export function PhoneInternationalField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
   const config = field.config as PhoneInternationalConfig | undefined;
@@ -11,24 +29,24 @@ export function PhoneInternationalField({ field, value, error, touched, disabled
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
       <div className="flex gap-2">
-        <select
-          className="flex h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 w-32 shrink-0"
+        <Select
           value={phoneValue.countryCode ?? config?.defaultCountry ?? "US"}
-          disabled={disabled}
-          onChange={(e) =>
-            onChange({ ...phoneValue, countryCode: e.target.value })
+          onValueChange={(val) =>
+            onChange({ ...phoneValue, countryCode: val })
           }
-          aria-label="Country code"
+          disabled={disabled}
         >
-          <option value="US">+1 (US)</option>
-          <option value="GB">+44 (UK)</option>
-          <option value="CA">+1 (CA)</option>
-          <option value="AU">+61 (AU)</option>
-          <option value="DE">+49 (DE)</option>
-          <option value="FR">+33 (FR)</option>
-          <option value="IN">+91 (IN)</option>
-          <option value="JP">+81 (JP)</option>
-        </select>
+          <SelectTrigger className="w-32 shrink-0" aria-label="Country code">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {COUNTRY_CODES.map((c) => (
+              <SelectItem key={c.code} value={c.code}>
+                {c.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Input
           {...fieldAria(field, hasError)}
           type="tel"

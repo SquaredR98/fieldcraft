@@ -21,7 +21,7 @@ export function BooleanField({ field, value, error, touched, disabled, onChange,
             className={cn(
               "flex-1 h-10 rounded-md border text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
               current === opt.value
-                ? "fe-option-active"
+                ? "fc-option-active"
                 : "border-input bg-transparent text-foreground hover:bg-accent",
             )}
             disabled={disabled}

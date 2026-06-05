@@ -1,42 +1,40 @@
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
 
 export function SingleSelectField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
   const options = field.options ?? [];
-  const current = value as string | number | boolean | undefined;
+  const current = value as string | undefined;
+  const hasError = touched && !!error?.length;
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label}>
+      <RadioGroup
+        value={current ?? ""}
+        onValueChange={(val) => { onChange(val); onBlur(); }}
+        disabled={disabled}
+        className="flex flex-col gap-2"
+        aria-label={field.label}
+        {...(hasError ? { "aria-invalid": true } : {})}
+      >
         {options.map((opt) => {
-          const isSelected = current === opt.value;
+          const optId = `${field.id}-${opt.value}`;
+          const isSelected = current === String(opt.value);
           return (
-            <label
+            <Label
               key={String(opt.value)}
+              htmlFor={optId}
               className={cn(
-                "flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors",
+                "flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors font-normal",
                 isSelected
-                  ? "fe-option-active"
+                  ? "fc-option-active"
                   : "border-input hover:bg-accent",
                 disabled && "cursor-not-allowed opacity-50",
               )}
             >
-              <input
-                type="radio"
-                name={field.id}
-                value={String(opt.value)}
-                checked={isSelected}
-                disabled={disabled}
-                onChange={() => { onChange(opt.value); onBlur(); }}
-                className="sr-only"
-              />
-              <div className={cn(
-                "flex h-4 w-4 shrink-0 items-center justify-center rounded-full border",
-                isSelected ? "border-primary" : "border-input",
-              )}>
-                {isSelected && <div className="h-2 w-2 rounded-full bg-primary" />}
-              </div>
+              <RadioGroupItem value={String(opt.value)} id={optId} />
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-2">
                   {opt.icon && <span>{opt.icon}</span>}
@@ -46,10 +44,10 @@ export function SingleSelectField({ field, value, error, touched, disabled, onCh
                   <span className="text-xs text-muted-foreground">{opt.helpText}</span>
                 )}
               </div>
-            </label>
+            </Label>
           );
         })}
-      </div>
+      </RadioGroup>
     </FieldWrapper>
   );
 }

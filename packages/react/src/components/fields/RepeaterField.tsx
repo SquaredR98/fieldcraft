@@ -1,9 +1,10 @@
 import type { RepeaterConfig, Question } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { Button } from "../ui/button";
+import { FieldRenderer } from "../FieldRenderer";
+import { useFieldRegistry } from "../../registry/FieldRegistryContext";
+import { useTheme } from "../../theme/ThemeProvider";
 
 type RepeaterEntry = Record<string, unknown>;
 
@@ -11,6 +12,8 @@ export function RepeaterField({ field, value, error, touched, disabled, onChange
   const config = field.config as RepeaterConfig | undefined;
   const entries = (value as RepeaterEntry[]) ?? [];
   const subFields = (config?.fields ?? []) as Question[];
+  const registry = useFieldRegistry();
+  const theme = useTheme();
   const minEntries = config?.minEntries ?? 0;
   const maxEntries = config?.maxEntries ?? Infinity;
 
@@ -53,16 +56,18 @@ export function RepeaterField({ field, value, error, touched, disabled, onChange
             </div>
             <div className="flex flex-col gap-3">
               {subFields.map((subField) => (
-                <div key={subField.id} className="flex flex-col gap-1.5">
-                  <Label className="text-xs">{subField.label}</Label>
-                  <Input
-                    type="text"
-                    value={(entry[subField.id] as string) ?? ""}
-                    disabled={disabled}
-                    onChange={(e) => updateEntry(index, subField.id, e.target.value)}
-                    placeholder={subField.placeholder}
-                  />
-                </div>
+                <FieldRenderer
+                  key={subField.id}
+                  field={subField}
+                  value={entry[subField.id] ?? undefined}
+                  error={undefined}
+                  touched={touched}
+                  disabled={disabled}
+                  onChange={(val) => updateEntry(index, subField.id, val)}
+                  onBlur={onBlur}
+                  theme={theme}
+                  registry={registry}
+                />
               ))}
             </div>
           </div>

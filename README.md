@@ -1,6 +1,6 @@
 # FieldCraft
 
-A headless, pure TypeScript form engine with a React renderer. Define forms as JSON schemas, render them with 35+ pre-built field components, and get multi-step flows, conditional visibility, validation, and computed fields out of the box.
+A headless, pure TypeScript form engine with a React renderer. Define forms as JSON schemas, render them with 44 pre-built field components, and get multi-step flows, conditional visibility, validation, and computed fields out of the box.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)]()
@@ -12,7 +12,7 @@ A headless, pure TypeScript form engine with a React renderer. Define forms as J
 | Package | Description |
 |---------|-------------|
 | [`@squaredr/fieldcraft-core`](packages/core) | Headless TypeScript engine — schema, validation, conditional visibility, state management |
-| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 35+ field components, hooks, theming, pluggable field registry |
+| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 44 field components, hooks, theming, pluggable field registry |
 | [`@squaredr/fieldcraft-postgres`](packages/adapters/postgres) | Postgres adapter — Drizzle ORM, AES-256-GCM encryption |
 | [`@squaredr/fieldcraft-supabase`](packages/adapters/supabase) | Supabase adapter — field-level encryption, RLS, schema CRUD |
 | [`@squaredr/fieldcraft-webhook`](packages/adapters/webhook) | Webhook adapter — HMAC-SHA256 signing, exponential backoff |
@@ -73,7 +73,7 @@ function App() {
 ## Features
 
 - **Headless core** -- pure TypeScript engine with zero UI dependencies; bring your own renderer or use the React package
-- **35+ field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
+- **44 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
 - **JSON schemas** -- define entire forms as plain objects in TypeScript or JSON
 - **Multi-step flows** -- wizard-style sections with progress tracking and back/next navigation
 - **Conditional visibility** -- show/hide fields based on answers, with AND/OR combinators
@@ -94,7 +94,8 @@ function App() {
 | Date/Time | `date` `date_range` `time` `appointment` |
 | Media | `file_upload` `signature` `image_capture` |
 | Advanced | `address` `payment` `matrix` `repeater` `calculated` `hidden` `scoring` |
-| Structural | `consent` `info_block` |
+| Structural | `consent` `info_block` `section_header` `page_break` |
+| Content | `welcome-screen` `thank-you-screen` `rich-text` `image` `video` `divider` `spacer` |
 
 ## Storage Adapters
 
@@ -127,10 +128,10 @@ Visual admin tools for building, editing, and managing forms — available as se
 
 | Tool | What it does |
 |------|-------------|
-| **FormBuilder** | Visual drag-drop form creation with 45 field types, undo/redo, export/import |
+| **FormBuilder** | Visual drag-drop form creation with 28 field types, undo/redo, export/import |
 | **SchemaEditor** | Monaco code editor with live form preview and validation markers |
 | **ResponseViewer** | Table/card/detail views for form responses |
-| **ThemeEditor** | Visual theme editor with 35+ properties, 6 presets, live preview |
+| **ThemeEditor** | Visual theme editor with 30+ properties, 6 presets, live preview |
 
 [Learn more about Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro)
 

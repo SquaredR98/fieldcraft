@@ -10,6 +10,7 @@ export type FieldProps = {
   onChange: (value: unknown) => void;
   onBlur: () => void;
   theme: FormEngineTheme;
+  customProps?: Record<string, unknown>;
 };
 
 /** A React component that renders a single field. */

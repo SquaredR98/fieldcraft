@@ -10,7 +10,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "FieldCraft — Demo Gallery",
   description:
-    "Interactive demos showcasing 35+ field types, conditional logic, multi-step wizards, and real-world form examples. Open source, schema-driven.",
+    "Interactive demos showcasing 44 field types, conditional logic, multi-step wizards, and real-world form examples. Open source, schema-driven.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} h-full`}>
+    <html lang="en" className={`dark ${inter.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans antialiased">
         {children}
       </body>

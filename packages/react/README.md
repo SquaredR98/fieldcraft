@@ -1,6 +1,6 @@
 # @squaredr/fieldcraft-react
 
-React renderer for `@squaredr/fieldcraft-core` — 35+ pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
+React renderer for `@squaredr/fieldcraft-core` — 44 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
 
 ## Install
 
@@ -12,6 +12,7 @@ npm install @squaredr/fieldcraft-core @squaredr/fieldcraft-react
 
 ```tsx
 import { FormEngineRenderer } from "@squaredr/fieldcraft-react";
+import "@squaredr/fieldcraft-react/styles.css";
 import type { FormEngineSchema, FormResponse } from "@squaredr/fieldcraft-core";
 
 const schema: FormEngineSchema = {
@@ -51,11 +52,22 @@ Import the pre-built stylesheet in your app entry point:
 import "@squaredr/fieldcraft-react/styles.css";
 ```
 
-Or if you use Tailwind CSS v4, import the shared theme and scan the component sources directly:
+Or if you use Tailwind CSS v4, import the stylesheet and let Tailwind scan the distributed component classes:
 
 ```css
-@import "@squaredr/fieldcraft-react/../tooling/tailwind-config/theme.css";
-@source "node_modules/@squaredr/fieldcraft-react/src/components/**/*.tsx";
+@import "@squaredr/fieldcraft-react/styles.css";
+```
+
+### CSS Architecture
+
+All field components use semantic `.fc-*` CSS classes (FieldCraft namespace) defined in the stylesheet. Visual styling flows through CSS custom properties set by `FormEngineThemeProvider`, so you can override any aspect with your own CSS:
+
+```css
+/* Override in your own stylesheet */
+.fc-option-active {
+  border-color: var(--primary);
+  background: var(--primary / 0.08);
+}
 ```
 
 ## Components
@@ -72,7 +84,7 @@ Or if you use Tailwind CSS v4, import the shared theme and scan the component so
 | `ErrorSummary` | Validation error list |
 | `CompletionScreen` | Post-submit confirmation |
 
-### Field Types (35+)
+### Field Types (44)
 
 **Text:** ShortTextField, LongTextField, EmailField, PhoneField, PhoneInternationalField, UrlField, LegalNameField
 
@@ -88,16 +100,40 @@ Or if you use Tailwind CSS v4, import the shared theme and scan the component so
 
 **Structural:** ConsentField, InfoBlockField
 
-## Hooks
+### UI Primitives (shadcn/ui)
+
+Re-exported for use in custom field components and pro packages:
+
+Alert, Badge, Button, Calendar, Card, Checkbox, Collapsible, Input, Label, Popover, Progress, RadioGroup, Select, Separator, Slider, Switch, Table, Textarea, Toggle, ToggleGroup
+
+## Engine & Hooks
+
+The react package re-exports `createEngine`, `FormEngine`, `EngineOptions`, and `ValidationResult` from `@squaredr/fieldcraft-core` for convenience — no need to import from core separately:
+
+```tsx
+import { useFormEngine, createEngine } from "@squaredr/fieldcraft-react";
+import type { FormEngine } from "@squaredr/fieldcraft-react";
+```
+
+### useFormEngine
 
 ```tsx
 import { useFormEngine } from "@squaredr/fieldcraft-react";
 
-function CustomForm() {
+function CustomForm({ schema }) {
   const engine = useFormEngine(schema);
-  // engine.state, engine.setValue, engine.validate, etc.
+
+  return (
+    <div>
+      <p>Current section: {engine.state.currentSectionId}</p>
+      <button onClick={() => engine.setValue("name", "Alice")}>Set name</button>
+      <button onClick={() => engine.nextSection()}>Next</button>
+    </div>
+  );
 }
 ```
+
+The hook returns a proxy that is resilient to React Strict Mode — it lazily re-creates the engine if it was destroyed during a Strict Mode remount cycle.
 
 | Hook | Description |
 |------|-------------|
@@ -109,8 +145,7 @@ function CustomForm() {
 ## Theme Presets
 
 ```tsx
-import { FormEngineRenderer } from "@squaredr/fieldcraft-react";
-import { darkPreset } from "@squaredr/fieldcraft-react";
+import { FormEngineRenderer, darkPreset } from "@squaredr/fieldcraft-react";
 
 <FormEngineRenderer schema={schema} onSubmit={handleSubmit} theme={darkPreset} />
 ```
@@ -128,17 +163,16 @@ const customRegistry = mergeRegistries(defaultRegistry, {
   short_text: MyCustomTextField,
 });
 
-<FormEngineRenderer schema={schema} onSubmit={handleSubmit} registry={customRegistry} />
+<FormEngineRenderer schema={schema} onSubmit={handleSubmit} components={customRegistry} />
 ```
 
 ## Peer Dependencies
 
 - `react` ^18 || ^19
 - `react-dom` ^18 || ^19
+- `@squaredr/fieldcraft-core` ^1.3.2
 
 ## Community
-
-[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/zMxdu5UVW)
 
 - [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
 - [Docs](https://squaredr.tech/products/fieldcraft/docs) — Full documentation

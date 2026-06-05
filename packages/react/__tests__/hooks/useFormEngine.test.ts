@@ -119,12 +119,13 @@ describe("useFormEngine", () => {
     expect(result.current.state.isSubmitted).toBe(true);
   });
 
-  it("destroys engine on unmount", () => {
+  it("proxy recovers after unmount (lazy re-creation)", () => {
     const { result, unmount } = renderHook(() => useFormEngine(makeSchema()));
 
     unmount();
 
-    // After unmount, calling setValue should throw (proxy detects null ref)
-    expect(() => result.current.setValue("name", "test")).toThrow("not available");
+    // After unmount, the proxy lazily re-creates the engine instead of
+    // throwing, so downstream code never sees "FormEngine is not available".
+    expect(() => result.current.setValue("name", "test")).not.toThrow();
   });
 });

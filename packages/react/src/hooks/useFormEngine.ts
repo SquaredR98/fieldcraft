@@ -1,4 +1,4 @@
-import { useRef, useSyncExternalStore, useCallback, useEffect, useMemo } from "react";
+import { useRef, useSyncExternalStore, useMemo } from "react";
 import {
   createEngine,
   type FormEngine,
@@ -9,76 +9,68 @@ import {
 
 export type UseFormEngineReturn = FormEngine & { state: FormState };
 
+/**
+ * React hook that creates and manages a FormEngine instance.
+ *
+ * Uses a single stable engine (never destroyed) to avoid stale-subscription
+ * bugs with React Strict Mode's double mount/unmount cycle.
+ * useSyncExternalStore drives re-renders when engine state changes.
+ */
 export function useFormEngine(
   schema: FormEngineSchema,
   options?: EngineOptions,
 ): UseFormEngineReturn {
+  // Create engine once and keep it for the lifetime of the hook.
+  // We intentionally do NOT destroy it on unmount — React Strict Mode
+  // would destroy it between the first unmount and second mount, leaving
+  // useSyncExternalStore subscribed to a dead engine.
   const engineRef = useRef<FormEngine | null>(null);
-
-  // Create engine lazily. Re-creates if previous instance was destroyed
-  // (handles React Strict Mode double-mount in development).
   if (engineRef.current === null) {
     engineRef.current = createEngine(schema, options);
   }
-
   const engine = engineRef.current;
 
-  const subscribe = useCallback(
-    (onStoreChange: () => void) => engine.subscribe(onStoreChange),
+  // Stable subscribe/getSnapshot that always reference the same engine.
+  const subscribe = useMemo(
+    () => (onStoreChange: () => void) => engine.subscribe(onStoreChange),
     [engine],
   );
-
-  const getSnapshot = useCallback(() => engine.getState(), [engine]);
+  const getSnapshot = useMemo(() => () => engine.getState(), [engine]);
 
   const state = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 
-  // Cleanup on unmount — destroy engine so it can be re-created
-  // if the component remounts (React Strict Mode).
-  useEffect(() => {
-    const currentEngine = engineRef.current;
-    return () => {
-      currentEngine?.destroy();
-      engineRef.current = null;
-    };
-  }, [engine]);
-
-  // Proxy methods through engineRef so callers never hold a stale reference
-  // to a destroyed engine. This prevents "FormEngine has been destroyed"
-  // errors caused by React Strict Mode double-mounting in development.
-  const proxy = useMemo<FormEngine>(() => {
-    function current(): FormEngine {
-      if (!engineRef.current) throw new Error("FormEngine is not available");
-      return engineRef.current;
-    }
-    return {
-      getState: () => current().getState(),
-      subscribe: (listener) => current().subscribe(listener),
-      nextSection: () => current().nextSection(),
-      prevSection: () => current().prevSection(),
-      jumpTo: (id) => current().jumpTo(id),
-      setValue: (id, val) => current().setValue(id, val),
-      setValues: (vals) => current().setValues(vals),
-      touchField: (id) => current().touchField(id),
-      clearField: (id) => current().clearField(id),
-      getVisibleSections: () => current().getVisibleSections(),
-      getVisibleFields: (id) => current().getVisibleFields(id),
-      isFieldRequired: (id) => current().isFieldRequired(id),
-      isFieldVisible: (id) => current().isFieldVisible(id),
-      isFieldDisabled: (id) => current().isFieldDisabled(id),
-      getFieldError: (id) => current().getFieldError(id),
-      saveDraft: () => current().saveDraft(),
-      loadDraft: () => current().loadDraft(),
-      clearDraft: () => current().clearDraft(),
-      validate: () => current().validate(),
-      validateSection: (id) => current().validateSection(id),
-      submit: () => current().submit(),
-      updateFieldCustomProps: (id, props) => current().updateFieldCustomProps(id, props),
-      getSchema: () => current().getSchema(),
-      getSectionById: (id) => current().getSectionById(id),
-      getQuestionById: (id) => current().getQuestionById(id),
-      destroy: () => current().destroy(),
-    };
-  }, []);
+  // Stable proxy so callers always get the same object identity
+  const proxy = useMemo<FormEngine>(
+    () => ({
+      getState: () => engine.getState(),
+      subscribe: (listener) => engine.subscribe(listener),
+      nextSection: () => engine.nextSection(),
+      prevSection: () => engine.prevSection(),
+      jumpTo: (id) => engine.jumpTo(id),
+      setValue: (id, val) => engine.setValue(id, val),
+      setValues: (vals) => engine.setValues(vals),
+      touchField: (id) => engine.touchField(id),
+      clearField: (id) => engine.clearField(id),
+      getVisibleSections: () => engine.getVisibleSections(),
+      getVisibleFields: (id) => engine.getVisibleFields(id),
+      isFieldRequired: (id) => engine.isFieldRequired(id),
+      isFieldVisible: (id) => engine.isFieldVisible(id),
+      isFieldDisabled: (id) => engine.isFieldDisabled(id),
+      getFieldError: (id) => engine.getFieldError(id),
+      saveDraft: () => engine.saveDraft(),
+      loadDraft: () => engine.loadDraft(),
+      clearDraft: () => engine.clearDraft(),
+      validate: () => engine.validate(),
+      validateSection: (id) => engine.validateSection(id),
+      submit: () => engine.submit(),
+      updateFieldCustomProps: (id, props) => engine.updateFieldCustomProps(id, props),
+      getSchema: () => engine.getSchema(),
+      getSectionById: (id) => engine.getSectionById(id),
+      getQuestionById: (id) => engine.getQuestionById(id),
+      destroy: () => engine.destroy(),
+    }),
+    [engine],
+  );
 
   return {
     ...proxy,

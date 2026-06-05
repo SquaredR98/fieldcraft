@@ -5,29 +5,188 @@
 @source "../components/**/*.ts";
 
 /*
- * Component classes for patterns that cannot be expressed as pure Tailwind utilities.
- * These use color-mix() for dynamic tinted backgrounds based on the current theme.
+ * FieldCraft CSS Component Classes
+ *
+ * All visual styling is driven by CSS custom properties (--fc-*, --primary, etc.)
+ * set by FormEngineThemeProvider. Users can override any .fc-* class in their
+ * own stylesheet to fully restyle the form engine.
+ *
+ * Naming convention: .fc-{component}-{element}
  */
 @layer components {
+
+  /* ─── Selection Options ──────────────────────────────────────── */
+
   /* Active selection option — used by SingleSelect, MultiSelect, Boolean, Scoring */
-  .fe-option-active {
+  .fc-option-active {
     border-color: var(--primary);
     background: color-mix(in srgb, var(--primary) 8%, transparent);
   }
 
   /* Filled option — used by OpinionScale, Likert (solid primary background) */
-  .fe-option-filled {
+  .fc-option-filled {
     @apply bg-primary border-primary text-primary-foreground font-semibold;
   }
 
+  /* ─── Error States ───────────────────────────────────────────── */
+
   /* Error summary background tint */
-  .fe-error-bg {
+  .fc-error-bg {
     background: color-mix(in srgb, var(--destructive) 6%, transparent);
   }
 
-  /* Focus ring for native inputs (non-shadcn) like range, date, time */
-  .fe-focus-ring:focus {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 15%, transparent);
+  /* ─── Welcome / Thank-You Screens ────────────────────────────── */
+
+  .fc-screen {
+    display: flex;
+    flex-direction: column;
+    padding: 3rem 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+    font-family: var(--fc-font-family, inherit);
   }
+
+  .fc-screen--center { align-items: center; text-align: center; }
+  .fc-screen--left   { align-items: flex-start; text-align: left; }
+  .fc-screen--right  { align-items: flex-end; text-align: right; }
+
+  .fc-screen__image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 2rem;
+    border-radius: var(--fc-radius-card, 8px);
+  }
+
+  .fc-screen__heading {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--foreground);
+    font-family: var(--fc-font-family, inherit);
+  }
+
+  .fc-screen__description {
+    font-size: 1.125rem;
+    color: var(--muted-foreground);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-family: var(--fc-font-family, inherit);
+  }
+
+  .fc-screen__redirect {
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+    opacity: 0.6;
+    margin-top: 1rem;
+  }
+
+  .fc-screen__summary {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--fc-radius-card, 8px);
+    width: 100%;
+    font-size: 0.875rem;
+    color: var(--muted-foreground);
+  }
+
+  /* ─── Media: Image ───────────────────────────────────────────── */
+
+  .fc-image {
+    padding: 1rem 0;
+  }
+
+  .fc-image--center { display: flex; justify-content: center; }
+  .fc-image--left   { display: flex; justify-content: flex-start; }
+  .fc-image--right  { display: flex; justify-content: flex-end; }
+
+  .fc-image__img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--fc-radius, 8px);
+  }
+
+  .fc-image__caption {
+    margin-top: 0.5rem;
+    font-size: var(--fc-font-help, 0.875rem);
+    color: var(--muted-foreground);
+  }
+
+  /* ─── Media: Video ───────────────────────────────────────────── */
+
+  .fc-video {
+    padding: 1rem 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .fc-video__aspect {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .fc-video__iframe,
+  .fc-video__player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: var(--fc-radius, 8px);
+  }
+
+  .fc-video__native {
+    width: 100%;
+    border-radius: var(--fc-radius, 8px);
+  }
+
+  /* ─── Section & Field Layout ─────────────────────────────────── */
+
+  /* ─── Page Break ────────────────────────────────────────────── */
+
+  .fc-page-break__rule {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .fc-page-break__label {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+
+  /* ─── Section Header ─────────────────────────────────────────── */
+
+  .fc-section-header__title {
+    font-size: var(--fc-font-question, 1.25rem);
+    font-weight: 600;
+    color: var(--foreground);
+  }
+
+  .fc-section-header__description {
+    font-size: var(--fc-font-help, 0.875rem);
+    color: var(--muted-foreground);
+    margin-top: 0.25rem;
+  }
+
+  .fc-section-header__divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin-top: 0.75rem;
+  }
+
+  /* ─── Progress Bar ───────────────────────────────────────────── */
+
+  .fc-progress__label {
+    font-size: 0.75rem;
+    color: var(--muted-foreground);
+  }
+
 }

@@ -1,6 +1,8 @@
 import type { MultiSelectConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Checkbox } from "../ui/checkbox";
+import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
 
 export function MultiSelectField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
@@ -31,34 +33,25 @@ export function MultiSelectField({ field, value, error, touched, disabled, onCha
       <div className="flex flex-col gap-2" role="group" aria-label={field.label}>
         {options.map((opt) => {
           const checked = selected.includes(opt.value);
+          const optId = `${field.id}-${opt.value}`;
           return (
-            <label
+            <Label
               key={String(opt.value)}
+              htmlFor={optId}
               className={cn(
-                "flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors",
+                "flex items-center gap-3 rounded-lg border px-4 py-3 cursor-pointer transition-colors font-normal",
                 checked
-                  ? "fe-option-active"
+                  ? "fc-option-active"
                   : "border-input hover:bg-accent",
                 disabled && "cursor-not-allowed opacity-50",
               )}
             >
-              <input
-                type="checkbox"
+              <Checkbox
+                id={optId}
                 checked={checked}
                 disabled={disabled}
-                onChange={() => toggle(opt.value, opt.exclusive)}
-                className="sr-only"
+                onCheckedChange={() => toggle(opt.value, opt.exclusive)}
               />
-              <div className={cn(
-                "flex h-4 w-4 shrink-0 items-center justify-center rounded-sm border",
-                checked ? "border-primary bg-primary" : "border-input",
-              )}>
-                {checked && (
-                  <svg width={10} height={10} viewBox="0 0 10 10" fill="none" stroke="white" strokeWidth={2}>
-                    <path d="M1.5 5L4 7.5L8.5 2.5" />
-                  </svg>
-                )}
-              </div>
               <div className="flex flex-col gap-0.5">
                 <div className="flex items-center gap-2">
                   {opt.icon && <span>{opt.icon}</span>}
@@ -68,7 +61,7 @@ export function MultiSelectField({ field, value, error, touched, disabled, onCha
                   <span className="text-xs text-muted-foreground">{opt.helpText}</span>
                 )}
               </div>
-            </label>
+            </Label>
           );
         })}
       </div>

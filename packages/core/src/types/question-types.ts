@@ -413,6 +413,8 @@ export type RichTextConfig = {
   type: "rich-text";
   content: string;
   format: "markdown" | "html";
+  containerClassName?: string;
+  containerStyle?: Record<string, string>;
 };
 
 export type ImageConfig = {

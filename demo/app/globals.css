@@ -8,23 +8,72 @@
 @source "../../packages/react/src/components/**/*.tsx";
 @source "../../packages/react/src/components/**/*.ts";
 
+/* =====================================================
+   SquaredR Dark Theme Override
+   Ink + Cyan · Dark-only · Matches squaredr.tech
+   ===================================================== */
+:root {
+  /* — INK palette · cool near-black to white — */
+  --sr-ink-950: #0a0a0b;
+  --sr-ink-900: #111113;
+  --sr-ink-850: #17171a;
+  --sr-ink-800: #1c1c20;
+  --sr-ink-700: #26262c;
+  --sr-ink-600: #34343c;
+  --sr-ink-500: #5a5a66;
+  --sr-ink-400: #8a8a95;
+  --sr-ink-300: #b4b4bc;
+  --sr-ink-200: #d4d4d9;
+  --sr-ink-100: #e8e8ea;
+  --sr-ink-50:  #f4f4f5;
+
+  /* — ACCENT · Cyan — */
+  --sr-accent: oklch(0.82 0.14 210);
+  --sr-accent-ink: var(--sr-ink-950);
+
+  /* — SEMANTIC — */
+  --sr-error: oklch(0.68 0.22 25);
+
+  /* — shadcn variable overrides — */
+  --background:             var(--sr-ink-950);
+  --foreground:             var(--sr-ink-100);
+  --card:                   var(--sr-ink-900);
+  --card-foreground:        var(--sr-ink-100);
+  --popover:                var(--sr-ink-900);
+  --popover-foreground:     var(--sr-ink-100);
+  --primary:                var(--sr-accent);
+  --primary-foreground:     var(--sr-ink-950);
+  --secondary:              var(--sr-ink-850);
+  --secondary-foreground:   var(--sr-ink-100);
+  --muted:                  var(--sr-ink-900);
+  --muted-foreground:       var(--sr-ink-400);
+  --accent:                 var(--sr-ink-850);
+  --accent-foreground:      var(--sr-ink-100);
+  --destructive:            var(--sr-error);
+  --destructive-foreground: var(--sr-ink-100);
+  --border:                 var(--sr-ink-800);
+  --input:                  var(--sr-ink-800);
+  --ring:                   var(--sr-accent);
+  --radius:                 6px;
+}
+
+::selection {
+  background: var(--sr-accent);
+  color: var(--sr-accent-ink);
+}
+
 /* ── FormEngine custom component classes ── */
 @layer components {
-  .fe-option-active {
+  .fc-option-active {
     border-color: var(--primary);
     background: color-mix(in srgb, var(--primary) 8%, transparent);
   }
 
-  .fe-option-filled {
+  .fc-option-filled {
     @apply bg-primary border-primary text-primary-foreground font-semibold;
   }
 
-  .fe-error-bg {
+  .fc-error-bg {
     background: color-mix(in srgb, var(--destructive) 6%, transparent);
-  }
-
-  .fe-focus-ring:focus {
-    border-color: var(--ring);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 15%, transparent);
   }
 }

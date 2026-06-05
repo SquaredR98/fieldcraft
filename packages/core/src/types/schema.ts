@@ -61,6 +61,8 @@ export type Option = {
 export type QuestionLayout = {
   width?: "full" | "half" | "third";
   columns?: number;
+  className?: string;
+  style?: Record<string, string>;
 };
 
 export type SubmitAction = {

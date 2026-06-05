@@ -85,8 +85,12 @@ export const advancedFieldsDemo: FormEngineSchema = {
           id: "info_block_example",
           type: "info_block",
           label: "Important Information",
-          required: false,
           helpText: "This is a read-only info block — used for instructions or notices that don't collect data.",
+        },
+        {
+          id: "divider_example",
+          type: "divider" as any,
+          label: "Divider",
         },
         {
           id: "consent_example",

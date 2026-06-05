@@ -23,7 +23,7 @@ export function ErrorSummary({
   return (
     <Alert
       variant="destructive"
-      className={cn("fe-error-bg", className)}
+      className={cn("fc-error-bg", className)}
       aria-label="Validation errors"
     >
       <AlertTitle>

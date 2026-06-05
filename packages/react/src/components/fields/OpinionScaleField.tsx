@@ -24,7 +24,7 @@ export function OpinionScaleField({ field, value, error, touched, disabled, onCh
               className={cn(
                 "flex-1 h-10 rounded-md border border-input text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                 current === n
-                  ? "fe-option-filled"
+                  ? "fc-option-filled"
                   : "bg-transparent text-foreground hover:bg-accent",
               )}
               disabled={disabled}

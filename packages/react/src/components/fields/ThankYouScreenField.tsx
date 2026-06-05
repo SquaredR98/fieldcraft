@@ -19,81 +19,34 @@ export function ThankYouScreenField({ field }: FieldProps) {
   }, [config.redirectUrl, config.redirectDelay]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-        padding: "3rem 1rem",
-        maxWidth: "600px",
-        margin: "0 auto",
-        width: "100%",
-      }}
-    >
+    <div className="fc-screen fc-screen--center">
       {config.imageUrl && (
         <img
           src={config.imageUrl}
           alt={config.imageAlt ?? ""}
-          style={{
-            maxWidth: "100%",
-            height: "auto",
-            marginBottom: "2rem",
-            borderRadius: "8px",
-          }}
+          className="fc-screen__image"
         />
       )}
 
-      <h2
-        style={{
-          fontSize: "2rem",
-          fontWeight: "bold",
-          marginBottom: "1rem",
-          color: "inherit",
-        }}
-      >
+      <h2 className="fc-screen__heading">
         {config.heading}
       </h2>
 
       {config.description && (
-        <p
-          style={{
-            fontSize: "1.125rem",
-            color: "rgba(0, 0, 0, 0.6)",
-            marginBottom: "2rem",
-            lineHeight: "1.6",
-          }}
-        >
+        <p className="fc-screen__description">
           {config.description}
         </p>
       )}
 
       {config.redirectUrl && config.redirectDelay && config.redirectDelay > 0 && (
-        <p
-          style={{
-            fontSize: "0.875rem",
-            color: "rgba(0, 0, 0, 0.5)",
-            marginTop: "1rem",
-          }}
-        >
+        <p className="fc-screen__redirect">
           Redirecting in {config.redirectDelay} seconds...
         </p>
       )}
 
-      {/* Optional: Show submission summary if configured */}
       {config.showSummary && (
-        <div
-          style={{
-            marginTop: "2rem",
-            padding: "1.5rem",
-            backgroundColor: "rgba(0, 0, 0, 0.02)",
-            borderRadius: "8px",
-            width: "100%",
-          }}
-        >
-          <p style={{ fontSize: "0.875rem", color: "rgba(0, 0, 0, 0.6)" }}>
-            Your response has been recorded.
-          </p>
+        <div className="fc-screen__summary">
+          <p>Your response has been recorded.</p>
         </div>
       )}
     </div>

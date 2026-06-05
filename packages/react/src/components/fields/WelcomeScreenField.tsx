@@ -1,5 +1,7 @@
 import type { WelcomeScreenConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
+import { Button } from "../ui/button";
+import { cn } from "../../utils/cn";
 
 export function WelcomeScreenField({ field }: FieldProps) {
   const config = field.config as WelcomeScreenConfig | undefined;
@@ -10,8 +12,6 @@ export function WelcomeScreenField({ field }: FieldProps) {
   const buttonText = config.buttonText ?? "Start";
 
   const handleStart = () => {
-    // Scroll to next question or trigger section navigation
-    // This would be wired up via the form engine context in a real implementation
     const nextElement = document.querySelector('[data-question-index="1"]');
     if (nextElement) {
       nextElement.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -20,77 +20,39 @@ export function WelcomeScreenField({ field }: FieldProps) {
 
   return (
     <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: alignment === "center" ? "center" : alignment === "right" ? "flex-end" : "flex-start",
-        textAlign: alignment,
-        padding: "3rem 1rem",
-        maxWidth: "600px",
-        margin: "0 auto",
-        width: "100%",
-      }}
+      className={cn(
+        "fc-screen",
+        alignment === "center" && "fc-screen--center",
+        alignment === "right" && "fc-screen--right",
+        alignment === "left" && "fc-screen--left",
+      )}
     >
       {config.imageUrl && (
         <img
           src={config.imageUrl}
           alt={config.imageAlt ?? ""}
-          style={{
-            maxWidth: "100%",
-            height: "auto",
-            marginBottom: "2rem",
-            borderRadius: "8px",
-          }}
+          className="fc-screen__image"
         />
       )}
 
-      <h2
-        style={{
-          fontSize: "2rem",
-          fontWeight: "bold",
-          marginBottom: "1rem",
-          color: "inherit",
-        }}
-      >
+      <h2 className="fc-screen__heading">
         {config.heading}
       </h2>
 
       {config.description && (
-        <p
-          style={{
-            fontSize: "1.125rem",
-            color: "rgba(0, 0, 0, 0.6)",
-            marginBottom: "2rem",
-            lineHeight: "1.6",
-          }}
-        >
+        <p className="fc-screen__description">
           {config.description}
         </p>
       )}
 
-      <button
+      <Button
         type="button"
+        size="lg"
         onClick={handleStart}
-        style={{
-          backgroundColor: "#0066cc",
-          color: "white",
-          padding: "0.75rem 2rem",
-          fontSize: "1rem",
-          fontWeight: "600",
-          borderRadius: "6px",
-          border: "none",
-          cursor: "pointer",
-          transition: "background-color 0.2s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = "#0052a3";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = "#0066cc";
-        }}
+        className="px-8 text-base font-semibold"
       >
         {buttonText}
-      </button>
+      </Button>
     </div>
   );
 }

@@ -8,11 +8,11 @@ export function themeToCssVars(
 
   const vars: Record<string, string> = {};
 
-  // Colors — emit both --fe-* (for backwards compat) and shadcn variable names
+  // Colors — emit both --fc-* (for backwards compat) and shadcn variable names
   if (theme.colors) {
     for (const [key, value] of Object.entries(theme.colors)) {
       if (value !== undefined) {
-        vars[`--fe-color-${camelToKebab(key)}`] = value;
+        vars[`--fc-color-${camelToKebab(key)}`] = value;
       }
     }
 
@@ -52,12 +52,12 @@ export function themeToCssVars(
   if (theme.typography) {
     const { fontFamily, scale, questionSize, labelSize, helpTextSize, bodySize } =
       theme.typography;
-    if (fontFamily) vars["--fe-font-family"] = fontFamily;
-    if (scale) vars["--fe-font-scale"] = scale;
-    if (questionSize) vars["--fe-font-question"] = questionSize;
-    if (labelSize) vars["--fe-font-label"] = labelSize;
-    if (helpTextSize) vars["--fe-font-help"] = helpTextSize;
-    if (bodySize) vars["--fe-font-body"] = bodySize;
+    if (fontFamily) vars["--fc-font-family"] = fontFamily;
+    if (scale) vars["--fc-font-scale"] = scale;
+    if (questionSize) vars["--fc-font-question"] = questionSize;
+    if (labelSize) vars["--fc-font-label"] = labelSize;
+    if (helpTextSize) vars["--fc-font-help"] = helpTextSize;
+    if (bodySize) vars["--fc-font-body"] = bodySize;
   }
 
   // Shape
@@ -65,19 +65,19 @@ export function themeToCssVars(
     const { radius, inputRadius, buttonRadius, cardRadius } = theme.shape;
     if (radius) {
       const r = radiusToValue(radius);
-      vars["--fe-radius"] = r;
+      vars["--fc-radius"] = r;
       vars["--radius"] = r;
     }
-    if (inputRadius) vars["--fe-radius-input"] = inputRadius;
-    if (buttonRadius) vars["--fe-radius-button"] = buttonRadius;
-    if (cardRadius) vars["--fe-radius-card"] = cardRadius;
+    if (inputRadius) vars["--fc-radius-input"] = inputRadius;
+    if (buttonRadius) vars["--fc-radius-button"] = buttonRadius;
+    if (cardRadius) vars["--fc-radius-card"] = cardRadius;
   }
 
   // Spacing
   if (theme.spacing) {
     for (const [key, value] of Object.entries(theme.spacing)) {
       if (value !== undefined) {
-        vars[`--fe-spacing-${camelToKebab(key)}`] = `${value}px`;
+        vars[`--fc-spacing-${camelToKebab(key)}`] = `${value}px`;
       }
     }
   }
@@ -85,10 +85,10 @@ export function themeToCssVars(
   // Layout
   if (theme.layout) {
     const { maxWidth, alignment, progressPosition, sectionLayout } = theme.layout;
-    if (maxWidth) vars["--fe-max-width"] = maxWidth;
-    if (alignment) vars["--fe-alignment"] = alignment;
-    if (progressPosition) vars["--fe-progress-position"] = progressPosition;
-    if (sectionLayout) vars["--fe-section-layout"] = sectionLayout;
+    if (maxWidth) vars["--fc-max-width"] = maxWidth;
+    if (alignment) vars["--fc-alignment"] = alignment;
+    if (progressPosition) vars["--fc-progress-position"] = progressPosition;
+    if (sectionLayout) vars["--fc-section-layout"] = sectionLayout;
   }
 
   return vars as React.CSSProperties;

@@ -19,8 +19,8 @@ describe("themeToCssVars", () => {
       },
     };
     const vars = themeToCssVars(theme) as Record<string, string>;
-    expect(vars["--fe-color-primary"]).toBe("#0D9488");
-    expect(vars["--fe-color-primary-foreground"]).toBe("#ffffff");
+    expect(vars["--fc-color-primary"]).toBe("#0D9488");
+    expect(vars["--fc-color-primary-foreground"]).toBe("#ffffff");
   });
 
   it("converts typography to CSS vars", () => {
@@ -32,9 +32,9 @@ describe("themeToCssVars", () => {
       },
     };
     const vars = themeToCssVars(theme) as Record<string, string>;
-    expect(vars["--fe-font-family"]).toBe("Inter");
-    expect(vars["--fe-font-scale"]).toBe("compact");
-    expect(vars["--fe-font-question"]).toBe("1.25rem");
+    expect(vars["--fc-font-family"]).toBe("Inter");
+    expect(vars["--fc-font-scale"]).toBe("compact");
+    expect(vars["--fc-font-question"]).toBe("1.25rem");
   });
 
   it("converts shape radius tokens to px values", () => {
@@ -45,8 +45,8 @@ describe("themeToCssVars", () => {
       },
     };
     const vars = themeToCssVars(theme) as Record<string, string>;
-    expect(vars["--fe-radius"]).toBe("12px");
-    expect(vars["--fe-radius-input"]).toBe("8px");
+    expect(vars["--fc-radius"]).toBe("12px");
+    expect(vars["--fc-radius-input"]).toBe("8px");
   });
 
   it("converts spacing values with px suffix", () => {
@@ -57,8 +57,8 @@ describe("themeToCssVars", () => {
       },
     };
     const vars = themeToCssVars(theme) as Record<string, string>;
-    expect(vars["--fe-spacing-base"]).toBe("16px");
-    expect(vars["--fe-spacing-section-gap"]).toBe("32px");
+    expect(vars["--fc-spacing-base"]).toBe("16px");
+    expect(vars["--fc-spacing-section-gap"]).toBe("32px");
   });
 
   it("converts layout properties", () => {
@@ -71,10 +71,10 @@ describe("themeToCssVars", () => {
       },
     };
     const vars = themeToCssVars(theme) as Record<string, string>;
-    expect(vars["--fe-max-width"]).toBe("640px");
-    expect(vars["--fe-alignment"]).toBe("center");
-    expect(vars["--fe-progress-position"]).toBe("top");
-    expect(vars["--fe-section-layout"]).toBe("card");
+    expect(vars["--fc-max-width"]).toBe("640px");
+    expect(vars["--fc-alignment"]).toBe("center");
+    expect(vars["--fc-progress-position"]).toBe("top");
+    expect(vars["--fc-section-layout"]).toBe("card");
   });
 
   it("skips undefined values", () => {
@@ -85,8 +85,8 @@ describe("themeToCssVars", () => {
       },
     };
     const vars = themeToCssVars(theme) as Record<string, string>;
-    expect(vars["--fe-color-primary"]).toBe("#0D9488");
-    expect(vars["--fe-color-secondary"]).toBeUndefined();
+    expect(vars["--fc-color-primary"]).toBe("#0D9488");
+    expect(vars["--fc-color-secondary"]).toBeUndefined();
   });
 
   it("handles all radius variants", () => {
@@ -100,7 +100,7 @@ describe("themeToCssVars", () => {
 
     for (const { input, expected } of variants) {
       const vars = themeToCssVars({ shape: { radius: input } }) as Record<string, string>;
-      expect(vars["--fe-radius"]).toBe(expected);
+      expect(vars["--fc-radius"]).toBe(expected);
     }
   });
 });

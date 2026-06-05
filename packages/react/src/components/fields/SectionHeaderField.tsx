@@ -9,10 +9,10 @@ export function SectionHeaderField({ field }: FieldProps) {
   const Tag = level;
 
   return (
-    <div className="fe-section-header" role="presentation">
+    <div className="fc-section-header" role="presentation">
       <Tag
         className={cn(
-          "fe-section-header__title",
+          "fc-section-header__title",
           level === "h2" && "text-xl font-semibold",
           level === "h3" && "text-lg font-semibold",
           level === "h4" && "text-base font-semibold",
@@ -21,12 +21,12 @@ export function SectionHeaderField({ field }: FieldProps) {
         {field.label}
       </Tag>
       {field.helpText && (
-        <p className="fe-section-header__description text-sm text-muted-foreground mt-1">
+        <p className="fc-section-header__description text-sm text-muted-foreground mt-1">
           {field.helpText}
         </p>
       )}
       {showDivider && (
-        <hr className="fe-section-header__divider border-border mt-3" />
+        <hr className="fc-section-header__divider border-border mt-3" />
       )}
     </div>
   );

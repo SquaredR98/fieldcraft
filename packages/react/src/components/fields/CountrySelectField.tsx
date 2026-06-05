@@ -1,5 +1,12 @@
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 // Common countries — the full list would be loaded asynchronously in production
 const COMMON_COUNTRIES = [
@@ -28,6 +35,7 @@ const COMMON_COUNTRIES = [
 export function CountrySelectField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
   const hasError = !!(touched && error?.length);
   const options = field.options;
+  const aria = fieldAria(field, hasError);
 
   const countries = options
     ? options.map((o) => ({ code: String(o.value), name: o.label }))
@@ -35,24 +43,29 @@ export function CountrySelectField({ field, value, error, touched, disabled, onC
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <select
-        {...fieldAria(field, hasError)}
-        className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive"
-        value={(value as string) ?? ""}
+      <Select
+        value={(value as string) || undefined}
+        onValueChange={(val) => onChange(val)}
         disabled={disabled}
-        onChange={(e) => {
-          const v = e.target.value;
-          onChange(v === "" ? undefined : v);
-        }}
-        onBlur={onBlur}
       >
-        <option value="">{field.placeholder ?? "Select country..."}</option>
-        {countries.map((c) => (
-          <option key={c.code} value={c.code}>
-            {c.name}
-          </option>
-        ))}
-      </select>
+        <SelectTrigger
+          id={aria.id}
+          aria-describedby={aria["aria-describedby"]}
+          aria-invalid={aria["aria-invalid"]}
+          aria-required={aria["aria-required"]}
+          className="w-full"
+          onBlur={onBlur}
+        >
+          <SelectValue placeholder={field.placeholder ?? "Select country..."} />
+        </SelectTrigger>
+        <SelectContent>
+          {countries.map((c) => (
+            <SelectItem key={c.code} value={c.code}>
+              {c.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </FieldWrapper>
   );
 }
