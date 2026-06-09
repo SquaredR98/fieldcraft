@@ -12,7 +12,7 @@ export function SingleSelectField({ field, value, error, touched, disabled, onCh
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
       <RadioGroup
-        value={current ?? ""}
+        value={current || undefined}
         onValueChange={(val) => { onChange(val); onBlur(); }}
         disabled={disabled}
         className="flex flex-col gap-2"
