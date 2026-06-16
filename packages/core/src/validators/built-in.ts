@@ -127,7 +127,7 @@ function validatePattern(
   return null;
 }
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function validateEmail(value: unknown, message?: string): string | null {
   if (isEmpty(value)) return null;

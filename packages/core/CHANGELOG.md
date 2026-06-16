@@ -5,6 +5,16 @@ All notable changes to `@squaredr/fieldcraft-core` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.6] - 2026-06-16
+
+### Fixed
+- H3: Email regex now requires minimum 2 characters after last dot (TLD check) — rejects `user@example.c` while accepting `user@example.co`
+- H8: Custom validator execution wrapped in try/catch — a throwing custom validator no longer crashes the form, instead produces error `"Custom validator '${name}' threw: ${message}"`
+
+### Added
+- 19 email validator test cases covering valid emails, invalid TLDs, edge cases
+- 5 custom validator error-handling test cases (throws Error, string, undefined, multi-validator resilience)
+
 ## [1.3.4] - 2026-06-05
 
 ### Added
@@ -86,6 +96,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schema validator for runtime schema structure checks
 - Full TypeScript type definitions for `FormSchema`, `FieldConfig`, `SectionConfig`, `ConditionGroup`, `ValidationRule`
 
+[1.3.6]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.6
 [1.3.4]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.4
 [1.3.3]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.3
 [1.3.2]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.2

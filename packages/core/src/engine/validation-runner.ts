@@ -54,9 +54,14 @@ export function validateField(
         if (registry) {
           const customFn = registry.getCustom(rule.name);
           if (customFn) {
-            const error = customFn(value, allValues, rule.params);
-            if (error) {
-              errors.push(rule.message ?? error);
+            try {
+              const error = customFn(value, allValues, rule.params);
+              if (error) {
+                errors.push(rule.message ?? error);
+              }
+            } catch (err) {
+              const errorMessage = err instanceof Error ? err.message : String(err);
+              errors.push(`Custom validator '${rule.name}' threw: ${errorMessage}`);
             }
           } else if (__DEV__) {
             console.warn(`[FieldCraft] Custom validator "${rule.name}" not found in registry. Skipping.`);

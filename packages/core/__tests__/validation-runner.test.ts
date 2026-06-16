@@ -212,6 +212,91 @@ describe("validateField", () => {
     const errors = validateField(field, "buy spam now", {}, registry);
     expect(errors[0]).toBe("Custom error");
   });
+
+  // ---- Custom validator try/catch (H8) ----
+
+  it("catches custom validator that throws Error", () => {
+    const registry = createValidatorRegistry({
+      broken: () => {
+        throw new Error("Something went wrong");
+      },
+    });
+    const field = makeField({
+      id: "q1", type: "short_text", label: "Input",
+      validation: [{ type: "custom", name: "broken" }],
+    });
+    const errors = validateField(field, "test", {}, registry);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toBe("Custom validator 'broken' threw: Something went wrong");
+  });
+
+  it("catches custom validator that throws a string", () => {
+    const registry = createValidatorRegistry({
+      throwsString: () => {
+        throw "raw string error";
+      },
+    });
+    const field = makeField({
+      id: "q1", type: "short_text", label: "Input",
+      validation: [{ type: "custom", name: "throwsString" }],
+    });
+    const errors = validateField(field, "test", {}, registry);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toBe("Custom validator 'throwsString' threw: raw string error");
+  });
+
+  it("catches custom validator that throws undefined", () => {
+    const registry = createValidatorRegistry({
+      throwsUndefined: () => {
+        throw undefined;
+      },
+    });
+    const field = makeField({
+      id: "q1", type: "short_text", label: "Input",
+      validation: [{ type: "custom", name: "throwsUndefined" }],
+    });
+    const errors = validateField(field, "test", {}, registry);
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toContain("Custom validator 'throwsUndefined' threw:");
+  });
+
+  it("does not crash the form when a custom validator throws", () => {
+    const registry = createValidatorRegistry({
+      broken: () => {
+        throw new Error("Kaboom");
+      },
+      working: (value) => {
+        if (String(value) === "bad") return "bad value";
+        return null;
+      },
+    });
+    const field = makeField({
+      id: "q1", type: "short_text", label: "Input",
+      validation: [
+        { type: "custom", name: "broken" },
+        { type: "custom", name: "working" },
+      ],
+    });
+    // Should not throw — both validators run, broken one caught
+    const errors = validateField(field, "bad", {}, registry);
+    expect(errors).toHaveLength(2);
+    expect(errors[0]).toContain("Custom validator 'broken' threw:");
+    expect(errors[1]).toBe("bad value");
+  });
+
+  it("custom validator returning undefined does not produce an error", () => {
+    const registry = createValidatorRegistry({
+      returnsUndefined: () => {
+        return undefined as unknown as null;
+      },
+    });
+    const field = makeField({
+      id: "q1", type: "short_text", label: "Input",
+      validation: [{ type: "custom", name: "returnsUndefined" }],
+    });
+    const errors = validateField(field, "test", {}, registry);
+    expect(errors).toEqual([]);
+  });
 });
 
 // ---- validateSection ----
