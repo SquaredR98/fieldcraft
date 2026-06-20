@@ -5,6 +5,13 @@ All notable changes to `@squaredr/fieldcraft-core` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.7] - 2026-06-20
+
+### Added
+- JSDoc documentation on all 78 exported types across 9 type files (`types/schema.ts`, `types/validation.ts`, `types/conditions.ts`, `types/settings.ts`, `types/state.ts`, `types/response.ts`, `types/adapters.ts`, `types/theme.ts`, `types/question-types.ts`)
+- `@description`, `@example`, `@since`, and `@param` tags on all major interfaces and type aliases
+- Inline property-level JSDoc on all type members (FormEngineSchema, Question, FormState, FormSettings, etc.)
+
 ## [1.3.6] - 2026-06-16
 
 ### Fixed
