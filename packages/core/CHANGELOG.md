@@ -5,6 +5,14 @@ All notable changes to `@squaredr/fieldcraft-core` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.8] - 2026-06-22
+
+### Added
+- JSDoc documentation on all public engine API methods in `engine/create-engine.ts`
+- `@description`, `@example`, `@param`, `@returns`, `@throws`, and `@since` tags on `FormEngine`, `EngineOptions`, `ValidationResult` types
+- Inline JSDoc on all 24 `FormEngine` methods (navigation, values, visibility, drafts, validation, submission, schema lookups, lifecycle)
+- JSDoc on the `createEngine` factory function
+
 ## [1.3.7] - 2026-06-20
 
 ### Added
@@ -103,6 +111,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schema validator for runtime schema structure checks
 - Full TypeScript type definitions for `FormSchema`, `FieldConfig`, `SectionConfig`, `ConditionGroup`, `ValidationRule`
 
+[1.3.8]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.8
+[1.3.7]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.7
 [1.3.6]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.6
 [1.3.4]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.4
 [1.3.3]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.3
