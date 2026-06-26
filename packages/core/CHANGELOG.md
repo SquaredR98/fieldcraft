@@ -5,6 +5,26 @@ All notable changes to `@squaredr/fieldcraft-core` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.11] - 2026-06-26
+
+### Added
+- 42 test cases for `expression-parser.ts` in `__tests__/expression-parser.test.ts`
+- Tests cover: basic arithmetic (+, -, *, /, ^), operator precedence, right-associative power, parentheses (nested, mismatched), unary minus, decimal numbers, whitespace handling, division by zero, all 6 math functions (floor, ceil, round, abs, min, max), Math.* prefix variants, function composition with arithmetic, complex formulas (BMI, compound interest), error cases (unknown function, unexpected char, invalid expression)
+
+## [1.3.10] - 2026-06-26
+
+### Added
+- 18 test cases for `draft-manager.ts` in `__tests__/draft-manager.test.ts`
+- Tests cover: save/load/clear lifecycle, TTL expiry, localStorage and server adapter modes, `"both"` storage mode, `hasDraft()`, multi-form isolation (different schemaIds and sessionTokens), SSR safety (no localStorage), data integrity through save/load cycles
+
+## [1.3.9] - 2026-06-26
+
+### Added
+- JSDoc documentation on all 12 built-in validators in `validators/built-in.ts`
+- `@description`, `@param`, `@since`, and schema usage examples on: `required`, `min`, `max`, `minLength`, `maxLength`, `pattern`, `email`, `phone`, `url`, `date`, `fileSize`, `fileType`
+- JSDoc on the `runBuiltInRule` dispatcher with `@example` block
+- JSDoc on the `isEmpty` helper and regex constants (`EMAIL_REGEX`, `PHONE_REGEX`)
+
 ## [1.3.8] - 2026-06-22
 
 ### Added
@@ -111,6 +131,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schema validator for runtime schema structure checks
 - Full TypeScript type definitions for `FormSchema`, `FieldConfig`, `SectionConfig`, `ConditionGroup`, `ValidationRule`
 
+[1.3.11]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.11
+[1.3.10]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.10
+[1.3.9]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.9
 [1.3.8]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.8
 [1.3.7]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.7
 [1.3.6]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.6
