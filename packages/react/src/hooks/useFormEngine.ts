@@ -14,7 +14,21 @@ export type UseFormEngineReturn = FormEngine & { state: FormState };
  *
  * Uses a single stable engine (never destroyed) to avoid stale-subscription
  * bugs with React Strict Mode's double mount/unmount cycle.
- * useSyncExternalStore drives re-renders when engine state changes.
+ * `useSyncExternalStore` drives re-renders when engine state changes.
+ *
+ * @param schema - The form schema defining sections, fields, and validation rules.
+ * @param options - Optional engine configuration (adapters, prefill values, callbacks, etc.).
+ * @returns A stable object containing every `FormEngine` method plus a reactive `state` snapshot.
+ *
+ * @example
+ * ```tsx
+ * const { state, setValue, submit } = useFormEngine(schema, {
+ *   onSubmit: (response) => console.log(response),
+ *   prefillValues: { name: "Jane" },
+ * });
+ *
+ * // state.values, state.errors, state.currentSectionId, etc. are reactive
+ * ```
  */
 export function useFormEngine(
   schema: FormEngineSchema,
