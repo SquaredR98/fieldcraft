@@ -27,7 +27,7 @@
       "require": "./dist/webhook/index.js"
     }
   },
-  "files": ["dist", "LICENSE"],
+  "files": ["dist", "LICENSE", "README.md"],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",

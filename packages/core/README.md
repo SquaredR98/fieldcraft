@@ -230,7 +230,7 @@ The React package provides a ready-to-use `FormEngineRenderer` component with 44
 
 - [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
 - [Docs](https://squaredr.tech/products/fieldcraft/docs) — Full documentation
-- [GitHub](https://github.com/AkshayBandi027/formengine) — Source code and issues
+- [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 - [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, ResponseViewer, ThemeEditor
 
 ## License

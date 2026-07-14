@@ -176,7 +176,7 @@ const customRegistry = mergeRegistries(defaultRegistry, {
 
 - [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
 - [Docs](https://squaredr.tech/products/fieldcraft/docs) — Full documentation
-- [GitHub](https://github.com/AkshayBandi027/formengine) — Source code and issues
+- [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 - [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
 
 ## License
