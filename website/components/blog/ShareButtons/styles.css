@@ -1,0 +1,15 @@
+@reference "../../../app/globals.css";
+
+/* --- Share Buttons --- */
+.fc-blog-share {
+  @apply flex gap-2;
+}
+
+.fc-blog-share__btn {
+  @apply font-mono uppercase bg-none cursor-pointer border border-fc-rule px-[11px] py-[7px] text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+  transition: border-color var(--motion-hover), color var(--motion-hover);
+}
+
+.fc-blog-share__btn:hover {
+  @apply border-fc-teal text-fc-teal;
+}

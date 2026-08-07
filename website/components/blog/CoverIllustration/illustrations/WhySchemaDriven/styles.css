@@ -1,0 +1,77 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Why Schema-Driven: Two layers --- */
+.fc-illus-schema {
+  @apply absolute inset-0 flex flex-col items-center justify-center gap-2 md:gap-3 px-8 md:px-20;
+}
+
+/* Each layer card */
+.fc-illus-schema__layer {
+  @apply flex items-start gap-2 md:gap-3 w-[10rem] md:w-[16rem] shrink-0 p-2 md:p-3;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+/* Tag label */
+.fc-illus-schema__tag {
+  @apply font-mono text-[0.5rem] md:text-xs uppercase tracking-wider shrink-0 leading-none mt-0.5;
+  color: var(--teal);
+  opacity: 0.6;
+}
+
+/* Rows container */
+.fc-illus-schema__rows {
+  @apply flex flex-col gap-1 md:gap-1.5 flex-1;
+}
+
+/* Schema key-value pairs */
+.fc-illus-schema__kv {
+  @apply flex items-center gap-1 md:gap-1.5;
+}
+
+.fc-illus-schema__key {
+  @apply w-1.5 md:w-2.5 h-[2px] md:h-[3px] rounded-full shrink-0;
+  background-color: var(--muted);
+  opacity: 0.4;
+}
+
+.fc-illus-schema__val {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-schema__val--teal {
+  background-color: var(--teal);
+  opacity: 0.35;
+}
+
+/* Dashed separator */
+.fc-illus-schema__sep {
+  @apply w-[8rem] md:w-[13rem];
+  border-top: 1px dashed color-mix(in srgb, var(--teal) 30%, transparent);
+}
+
+/* UI form fields */
+.fc-illus-schema__field {
+  @apply flex flex-col gap-0.5;
+}
+
+.fc-illus-schema__label {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.5;
+}
+
+.fc-illus-schema__input {
+  @apply h-2.5 md:h-4 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+}
+
+/* Submit button */
+.fc-illus-schema__btn {
+  @apply h-2 md:h-3 w-2/5 rounded-sm mt-0.5;
+  background-color: var(--teal);
+  opacity: 0.5;
+}

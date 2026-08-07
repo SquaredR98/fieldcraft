@@ -1,0 +1,149 @@
+@reference "../../../app/globals.css";
+
+/* --- Article Body --- */
+.fc-blog-post__content {
+  @apply mt-8 font-body text-fc-body leading-[1.78] text-fc-ink;
+}
+
+.fc-blog-post__content h2 {
+  @apply font-display font-semibold text-fc-h2 tracking-fc-heading text-fc-ink-strong;
+  margin: 48px 0 16px;
+}
+
+.fc-blog-post__content h3 {
+  @apply font-display font-semibold text-xl tracking-fc-h3 text-fc-ink-strong;
+  margin: 36px 0 12px;
+}
+
+.fc-blog-post__content h4 {
+  @apply font-display font-semibold text-fc-body text-fc-ink-strong;
+  margin: 28px 0 8px;
+}
+
+.fc-blog-post__content p {
+  @apply mt-0 mb-6;
+  text-wrap: pretty;
+}
+
+.fc-blog-post__content a {
+  @apply text-fc-teal underline underline-offset-2 decoration-fc-teal-border;
+  transition: text-decoration-color var(--motion-hover);
+}
+
+.fc-blog-post__content a:hover {
+  @apply decoration-fc-teal;
+}
+
+.fc-blog-post__content strong {
+  @apply font-semibold text-fc-ink-strong;
+}
+
+.fc-blog-post__content ul,
+.fc-blog-post__content ol {
+  @apply mt-0 mb-6 pl-6;
+}
+
+.fc-blog-post__content ul {
+  @apply list-disc;
+}
+
+.fc-blog-post__content ol {
+  @apply list-decimal;
+}
+
+.fc-blog-post__content li {
+  @apply mb-1.5;
+}
+
+.fc-blog-post__content li::marker {
+  @apply text-fc-muted;
+}
+
+/* --- Code — Inline (exclude fenced blocks inside <pre>) --- */
+.fc-blog-post__content code:not(pre code) {
+  @apply font-mono text-sm px-1.5 py-0.5 bg-fc-wash text-fc-teal border border-fc-wash-rule;
+}
+
+/* --- Code — Fenced blocks (Shiki via rehype-pretty-code) --- */
+.fc-blog-post__content pre {
+  @apply overflow-x-auto bg-fc-surface border border-fc-rule mt-0 mb-7;
+}
+
+.fc-blog-post__content pre code {
+  @apply block bg-transparent border-none p-[18px] text-fc-sm-code leading-[1.85];
+}
+
+/* Shiki dual-theme support (rehype-pretty-code).
+   rehype-pretty-code outputs <pre data-theme> (no .shiki class),
+   unlike fumadocs which adds class="shiki" to <pre>.
+   Each token <span> gets --shiki-light / --shiki-dark CSS custom properties.
+   We map them to `color` per active theme. */
+.fc-blog-post__content pre[data-theme] code span {
+  color: var(--shiki-light) !important;
+  background-color: transparent !important;
+}
+
+:root[data-theme="dark"] .fc-blog-post__content pre[data-theme] code span {
+  color: var(--shiki-dark) !important;
+}
+
+/* rehype-pretty-code wraps blocks in <figure>; strip its default margin */
+.fc-blog-post__content figure[data-rehype-pretty-code-figure] {
+  @apply m-0;
+}
+
+/* --- Blockquotes (Callout style from design) --- */
+.fc-blog-post__content blockquote {
+  @apply flex items-stretch border border-fc-teal-border bg-fc-wash p-0 mt-0 mb-7;
+}
+
+.fc-blog-post__content blockquote::before {
+  @apply w-0.5 shrink-0 bg-fc-teal;
+  content: '';
+}
+
+.fc-blog-post__content blockquote p {
+  @apply px-[18px] py-4 text-fc-callout leading-[1.65] text-fc-ink m-0;
+}
+
+/* --- Horizontal Rules --- */
+.fc-blog-post__content hr {
+  @apply my-12 border-0 h-px bg-fc-rule;
+}
+
+/* --- Tables --- */
+.fc-blog-post__content table {
+  @apply w-full border-separate border-spacing-0 border border-fc-rule mt-0 mb-7 text-fc-sm-body;
+}
+
+.fc-blog-post__content thead th {
+  @apply font-mono text-left uppercase bg-fc-wash border-b border-fc-rule px-4 py-3 text-fc-xs tracking-fc-mono-sm text-fc-teal;
+}
+
+.fc-blog-post__content tbody td {
+  @apply border-b border-fc-rule px-4 py-3 text-fc-muted;
+}
+
+.fc-blog-post__content tbody tr:last-child td {
+  @apply border-b-0;
+}
+
+.fc-blog-post__content tbody tr:hover {
+  @apply bg-fc-wash;
+}
+
+.fc-blog-post__content tbody td code {
+  @apply font-mono text-xs px-1.5 py-0.5 bg-fc-wash text-fc-teal border border-fc-wash-rule;
+}
+
+/* --- Images --- */
+.fc-blog-post__content img {
+  @apply w-full border border-fc-rule mt-0 mb-2;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-post__content {
+    @apply text-base;
+  }
+}

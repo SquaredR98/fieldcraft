@@ -1,0 +1,165 @@
+---
+title: "Build Forms Without Code: Introducing FieldCraft FormBuilder"
+slug: "build-forms-without-code"
+date: "2026-05-22"
+description: "Drag fields, set validation, add conditional logic, and export a production-ready JSON schema. No React knowledge needed."
+author: "ravi"
+category: "Release"
+tags: ["fieldcraft", "form-builder", "no-code", "open-source", "react"]
+---
+
+> **TL;DR** — FormBuilder is a visual drag-and-drop interface that outputs valid FieldCraft JSON schemas. Non-developers can create production-ready forms without writing code. Part of FieldCraft Pro.
+
+## The Gap Between Developers and Everyone Else
+
+FieldCraft solves a real problem for developers. Define a JSON schema, pass it to the renderer, get a working form. No useState, no validation wiring, no multi-step plumbing.
+
+But what about the product manager who needs a customer feedback form by Friday? Or the ops lead who wants to digitize the employee onboarding checklist? They shouldn't need to learn JSON schema syntax to create a form.
+
+That's what FormBuilder is for.
+
+## What FormBuilder Does
+
+FormBuilder is a visual, drag-and-drop interface for creating FieldCraft schemas. You drag field types onto a canvas, configure them through a properties panel, set up validation rules and conditional logic, and the tool outputs a valid `FormEngineSchema` JSON object. That schema works with `FormEngineRenderer` exactly the same way a hand-written one does.
+
+> The output isn't a proprietary format. It's the same JSON schema you'd write by hand. Check it into your repo, load it from a database, or paste it into the SchemaEditor to fine-tune. The builder is just a friendlier way to produce the same artifact.
+
+## How It Works
+
+### The Canvas
+
+The left side of the screen is a palette of all 44 field types. Short text, email, phone, dropdown, date picker, file upload, rating, signature pad, Likert scale, NPS. You drag a field type from the palette onto the canvas and it appears as a block you can reorder, duplicate, or delete.
+
+Fields live inside sections. You can have a single section or split your form into multiple steps. Sections can be reordered by dragging them, and you can duplicate an entire section with its fields if you need a similar structure repeated.
+
+### The Properties Panel
+
+Click any field on the canvas and the right panel shows its configuration. The basics are always there: label, placeholder, help text, required toggle. Beyond that, the panel adapts to the field type.
+
+A dropdown field shows an options editor where you can add, remove, and reorder choices. A number field shows min/max range inputs. A file upload field shows accepted file types and size limits. A rating field shows the scale range.
+
+Every one of the 44 field types has a dedicated configuration UI. This isn't a generic "enter JSON" fallback. The panel knows what each field type supports and shows exactly those options.
+
+### Validation Rules
+
+Each field can have multiple validation rules. The validation editor lets you add rules like minimum length, maximum length, regex pattern, numeric range, or custom error messages. Rules stack, so you can say "required, minimum 3 characters, must match this pattern" on a single field.
+
+The UI shows each rule as a row you can edit or remove. You pick the rule type from a dropdown, fill in the parameters, and optionally customize the error message. The default messages are sensible ("Must be at least 3 characters"), but sometimes you want something specific to your context.
+
+### Conditional Logic
+
+This is where FormBuilder saves the most time compared to writing schemas by hand.
+
+You click a field and open the conditions editor. You pick a source field ("When `inquiry_type`..."), pick an operator ("equals"), and pick a value ("enterprise"). Now that field only shows up when the user selects Enterprise as their inquiry type.
+
+Conditions can be grouped with AND/OR logic. "Show this field when inquiry type is Enterprise AND budget is above 10,000." The visual editor handles the nesting so you don't have to think about the JSON structure.
+
+### Preview
+
+FormBuilder includes a live preview toggle. Hit the preview button in the toolbar and the canvas switches from the builder view to a live, interactive form rendered by `FormEngineRenderer`. You can fill it out, see validation errors, navigate between sections, and verify the conditional logic works the way you intended.
+
+Switch back to builder mode and keep editing. The preview always reflects the current state of your schema.
+
+### Keyboard Shortcuts
+
+For power users, FormBuilder supports keyboard shortcuts:
+
+- **Ctrl+Z / Cmd+Z** to undo
+- **Ctrl+Shift+Z / Cmd+Shift+Z** to redo
+- **Delete/Backspace** to remove the selected field
+- **Ctrl+D / Cmd+D** to duplicate
+
+The undo/redo stack tracks every change, so you can experiment freely and roll back if something doesn't work.
+
+## What You Get Out
+
+When you're done, FormBuilder exports a `FormEngineSchema` object. It's the same format documented in the [schema reference](/docs/core-concepts/schema-anatomy). You can:
+
+- **Save to a database** using the HTTP schema adapter and render forms dynamically
+- **Copy the JSON** and paste it into your codebase as a TypeScript constant
+- **Load it in SchemaEditor** for manual fine-tuning with Monaco's syntax highlighting and validation
+
+> **The schema is the single source of truth.** FormBuilder is just one way to produce it.
+
+## Integration
+
+FormBuilder is a React component. You drop it into your app and it handles everything internally.
+
+> **Note:** FormBuilder is part of FieldCraft Pro, which is not yet published. The code examples below show the planned API.
+
+```tsx
+import { FormBuilder } from '@squaredr/fieldcraft-pro/form-builder'
+
+function AdminPage() {
+  return (
+    <FormBuilder
+      onSave={(schema) => {
+        // Save to your database, API, or local state
+        console.log(schema)
+      }}
+    />
+  )
+}
+```
+
+The `onSave` callback receives the complete schema whenever the user saves. What you do with it is up to you. POST it to an API, store it in Supabase, write it to a file.
+
+If you want to load an existing schema for editing:
+
+```tsx
+<FormBuilder
+  initialSchema={existingSchema}
+  onSave={(schema) => updateSchema(schema)}
+/>
+```
+
+### The Preview Pattern
+
+FormBuilder exposes a `toolbarExtra` prop that lets you inject custom buttons into its toolbar. The most common use is a Builder/Preview toggle:
+
+```tsx
+// Pro API preview — @squaredr/fieldcraft-pro is not yet published
+import { FormBuilder } from '@squaredr/fieldcraft-pro/form-builder'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
+
+function AdminPage() {
+  const [mode, setMode] = useState<'build' | 'preview'>('build')
+  const [schema, setSchema] = useState(null)
+
+  if (mode === 'preview' && schema) {
+    return (
+      <>
+        <button onClick={() => setMode('build')}>Back to Builder</button>
+        <FormEngineRenderer schema={schema} onSubmit={console.log} />
+      </>
+    )
+  }
+
+  return (
+    <FormBuilder
+      onSave={setSchema}
+      toolbarExtra={
+        <button onClick={() => setMode('preview')}>Preview</button>
+      }
+    />
+  )
+}
+```
+
+This pattern gives you a complete build-preview-iterate loop inside a single page.
+
+## Who It's For
+
+FormBuilder is built for two audiences:
+
+**Non-developers** who need to create forms without touching code. Product managers, HR leads, operations teams. They get a visual tool that produces the same quality output a developer would write.
+
+**Developers** who want to prototype quickly. Instead of writing a 200-line schema by hand, you can drag-and-drop a rough version in a few minutes, export the JSON, and refine it in your editor. It's faster than writing from scratch, especially for forms with complex conditional logic.
+
+## Part of FieldCraft Pro (Coming Soon)
+
+FormBuilder will be part of the FieldCraft Pro toolkit alongside SchemaEditor and ResponseViewer. Pro is currently in development — star the [GitHub repo](https://github.com/SquaredR98/fieldcraft) to get notified when it ships.
+
+---
+
+*FormBuilder produces schemas that work with the same engine described in [Why Schema-Driven?](/blog/why-schema-driven). The schema format is documented in the [core concepts](/docs/core-concepts/schema-anatomy) section of the docs.*

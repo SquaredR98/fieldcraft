@@ -1,0 +1,62 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Build Without Code: Sidebar + Canvas --- */
+.fc-illus-nocode {
+  @apply absolute inset-0 flex items-center justify-center gap-2 md:gap-3 px-6 md:px-14;
+}
+
+/* Sidebar */
+.fc-illus-nocode__sidebar {
+  @apply flex flex-col gap-1 md:gap-1.5 p-1.5 md:p-2.5 w-[4rem] md:w-[6rem] shrink-0;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+/* Palette item */
+.fc-illus-nocode__item {
+  @apply flex items-center gap-1 md:gap-1.5;
+}
+
+.fc-illus-nocode__item-icon {
+  @apply w-1.5 md:w-2 h-1.5 md:h-2 shrink-0 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--teal) 40%, transparent);
+}
+
+/* Canvas */
+.fc-illus-nocode__canvas {
+  @apply flex flex-col gap-1.5 md:gap-2 p-2 md:p-3 w-[7rem] md:w-[11rem];
+  background-color: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--teal) 30%, transparent);
+  border-radius: 4px;
+}
+
+/* Field */
+.fc-illus-nocode__field {
+  @apply flex flex-col gap-0.5;
+}
+
+.fc-illus-nocode__label {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.5;
+}
+
+.fc-illus-nocode__input {
+  @apply h-2.5 md:h-4 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+}
+
+/* Bars */
+.fc-illus-nocode__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+/* Button */
+.fc-illus-nocode__btn {
+  @apply h-2 md:h-3 w-2/5 rounded-sm;
+  background-color: var(--teal);
+  opacity: 0.5;
+}

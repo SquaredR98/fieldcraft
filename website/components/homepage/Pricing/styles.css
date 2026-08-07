@@ -1,0 +1,247 @@
+@reference "../../../app/globals.css";
+
+/* ── Pricing section ── */
+
+.fc-pricing {
+  @apply bg-fc-surface border-b border-fc-rule;
+}
+
+.fc-pricing__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-pricing__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-pricing__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 text-fc-ink-strong;
+}
+
+.fc-pricing__sub {
+  @apply text-base leading-[1.65] text-fc-muted;
+  @apply mt-4 mb-10 max-w-[560px];
+}
+
+/* ── Main cards grid ── */
+
+.fc-pricing__grid {
+  @apply bg-fc-rule border border-fc-rule grid gap-px;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ── Card base ── */
+
+.fc-pricing__card {
+  @apply px-8 py-8.5;
+}
+
+.fc-pricing__card--engine {
+  @apply bg-fc-bg;
+}
+
+.fc-pricing__card--pro {
+  @apply bg-fc-wash;
+}
+
+/* ── Card eyebrow ── */
+
+.fc-pricing__card-eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase;
+}
+
+.fc-pricing__card-eyebrow--teal {
+  @apply text-fc-teal;
+}
+
+.fc-pricing__card-eyebrow--amber {
+  @apply text-fc-amber-ink;
+}
+
+/* ── Pro header row ── */
+
+.fc-pricing__pro-header {
+  @apply flex justify-between items-center mb-4;
+}
+
+.fc-pricing__badge {
+  @apply font-mono text-[9.5px] text-fc-amber-ink;
+  @apply border border-fc-amber-border bg-fc-amber-bg;
+  @apply px-2.25 py-1;
+}
+
+/* ── Card title ── */
+
+.fc-pricing__card-title {
+  @apply font-display text-[26px] font-semibold;
+  @apply m-0 text-fc-ink-strong;
+}
+
+/* ── Price line ── */
+
+.fc-pricing__price-line {
+  @apply flex items-baseline gap-2;
+  @apply mt-4.5 mb-5.5;
+}
+
+.fc-pricing__price {
+  @apply font-display text-[44px] font-semibold;
+  @apply tracking-[-0.03em] text-fc-ink-strong;
+}
+
+.fc-pricing__price-note {
+  @apply text-[13px] text-fc-muted;
+}
+
+/* ── Bullet list ── */
+
+.fc-pricing__bullets {
+  @apply list-none m-0 p-0;
+  @apply flex flex-col gap-2.5;
+}
+
+.fc-pricing__bullet {
+  @apply flex items-baseline text-[14px] text-fc-ink gap-2.5;
+}
+
+.fc-pricing__bullet-dot {
+  @apply text-fc-teal font-semibold;
+}
+
+/* ── CTA buttons ── */
+
+.fc-pricing__cta {
+  @apply inline-block mt-7;
+  @apply font-display text-[14px] font-medium;
+  @apply cursor-pointer no-underline;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.fc-pricing__cta--outline {
+  @apply bg-transparent text-fc-ink border-fc-btn-line;
+  border-width: 1.5px;
+  @apply px-5.5 py-3;
+}
+
+.fc-pricing__cta--outline:hover {
+  @apply bg-fc-ink text-fc-bg;
+}
+
+.fc-pricing__cta--primary {
+  @apply bg-fc-teal text-fc-teal-on border-0;
+  @apply px-6 py-3.25;
+}
+
+.fc-pricing__cta--primary:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+/* ── Secondary row ── */
+
+.fc-pricing__secondary {
+  @apply bg-fc-rule border border-fc-rule border-t-0 grid gap-px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.fc-pricing__addon {
+  @apply bg-fc-surface flex items-start justify-between;
+  @apply px-8 py-6.5 gap-6;
+}
+
+.fc-pricing__addon-left {
+  @apply flex-1;
+}
+
+.fc-pricing__addon-title-row {
+  @apply flex items-baseline gap-3;
+}
+
+.fc-pricing__addon-title {
+  @apply font-display text-[19px] font-semibold;
+  @apply m-0 text-fc-ink-strong;
+}
+
+.fc-pricing__addon-price {
+  @apply font-mono text-[13px] text-fc-muted;
+}
+
+.fc-pricing__addon-desc {
+  @apply text-[13.5px] leading-[1.6] text-fc-muted;
+  @apply mt-2 max-w-[340px];
+}
+
+.fc-pricing__addon-right {
+  @apply flex-shrink-0;
+}
+
+.fc-pricing__addon-link {
+  @apply font-display text-[13.5px] font-medium text-fc-teal;
+  @apply no-underline whitespace-nowrap;
+  @apply border-b border-current;
+}
+
+.fc-pricing__addon-badge {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+  @apply border border-fc-rule whitespace-nowrap;
+  @apply px-2.25 py-1.25;
+}
+
+/* ── Legal footnote ── */
+
+.fc-pricing__legal {
+  @apply text-[12px] leading-[1.7] text-fc-muted;
+  @apply mt-5 max-w-[900px];
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-pricing__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-pricing__h2 {
+    @apply text-[30px];
+  }
+
+  .fc-pricing__price {
+    @apply text-[36px];
+  }
+
+  .fc-pricing__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-pricing__secondary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-pricing__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-pricing__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-pricing__price {
+    @apply text-[32px];
+  }
+
+  .fc-pricing__card {
+    @apply px-5 py-6;
+  }
+
+  .fc-pricing__addon {
+    @apply px-5 py-5 flex-col gap-3;
+  }
+}

@@ -1,0 +1,22 @@
+@reference "../../../app/globals.css";
+
+.fc-theme-toggle {
+  @apply flex items-center justify-center cursor-pointer;
+  @apply border-0 bg-transparent p-1.5;
+  @apply outline-none;
+  transition: opacity var(--motion-hover);
+}
+
+.fc-theme-toggle:hover {
+  @apply opacity-70;
+}
+
+.fc-theme-toggle:focus-visible {
+  @apply rounded-sm;
+  box-shadow: 0 0 0 1.5px var(--teal), 0 0 0 3px rgba(31, 107, 110, 0.14);
+}
+
+.fc-theme-toggle__icon {
+  @apply text-fc-muted;
+  transition: color var(--motion-theme);
+}

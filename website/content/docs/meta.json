@@ -1,0 +1,16 @@
+{
+  "title": "Docs",
+  "pages": [
+    "---Getting started---",
+    "index",
+    "getting-started/...",
+    "---Core concepts---",
+    "core-concepts/...",
+    "---React---",
+    "react/...",
+    "---Submission---",
+    "submission/...",
+    "---Pro---",
+    "pro/..."
+  ]
+}

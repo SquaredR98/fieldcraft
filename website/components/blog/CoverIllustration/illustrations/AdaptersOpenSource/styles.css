@@ -1,0 +1,77 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Adapters Open Source: Hub + Spokes --- */
+.fc-illus-adapt {
+  @apply absolute inset-0 flex items-center justify-center;
+}
+
+/* Central hub */
+.fc-illus-adapt__hub {
+  @apply w-6 md:w-10 h-6 md:h-10 rounded-full flex items-center justify-center z-10;
+  border: 1px solid color-mix(in srgb, var(--teal) 40%, transparent);
+  background-color: var(--surface);
+}
+
+.fc-illus-adapt__hub-inner {
+  @apply w-2 md:w-3 h-2 md:h-3 rounded-full;
+  background-color: var(--teal);
+  opacity: 0.5;
+}
+
+/* Spokes container — overlaid on hub center */
+.fc-illus-adapt__spokes {
+  @apply absolute inset-0 flex items-center justify-center;
+}
+
+/* Individual spoke */
+.fc-illus-adapt__spoke {
+  @apply absolute flex items-center justify-center;
+}
+
+.fc-illus-adapt__spoke--top {
+  @apply flex-col-reverse;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fc-illus-adapt__spoke--bottom {
+  @apply flex-col;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fc-illus-adapt__spoke--right {
+  @apply flex-row;
+  top: 50%;
+  right: 18%;
+  transform: translateY(-50%);
+}
+
+.fc-illus-adapt__spoke--left {
+  @apply flex-row-reverse;
+  top: 50%;
+  left: 18%;
+  transform: translateY(-50%);
+}
+
+/* Spoke lines */
+.fc-illus-adapt__spoke-line--v {
+  @apply w-px h-4 md:h-7;
+  background-color: var(--teal);
+  opacity: 0.25;
+}
+
+.fc-illus-adapt__spoke-line--h {
+  @apply w-4 md:w-7 h-px;
+  background-color: var(--teal);
+  opacity: 0.25;
+}
+
+/* Endpoint node */
+.fc-illus-adapt__node {
+  @apply w-2 md:w-3 h-2 md:h-3 rounded-full;
+  border: 1px solid color-mix(in srgb, var(--teal) 35%, transparent);
+  background-color: var(--surface);
+}

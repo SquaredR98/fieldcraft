@@ -1,0 +1,65 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Form UX Lessons: 2x3 vignette grid --- */
+.fc-illus-ux {
+  @apply absolute inset-0 flex items-center justify-center px-6 md:px-14;
+}
+
+.fc-illus-ux__grid {
+  @apply grid grid-cols-3 gap-1.5 md:gap-2.5;
+}
+
+/* Each vignette cell */
+.fc-illus-ux__cell {
+  @apply flex flex-col items-start justify-center gap-0.5 md:gap-1 p-1.5 md:p-2.5 w-[3rem] md:w-[5rem] h-[2rem] md:h-[3rem];
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+}
+
+.fc-illus-ux__cell--row {
+  @apply flex-row items-center;
+}
+
+/* Bars */
+.fc-illus-ux__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-ux__bar--teal {
+  background-color: var(--teal);
+  opacity: 0.35;
+}
+
+/* Input outline */
+.fc-illus-ux__input {
+  @apply w-full h-2 md:h-3 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+}
+
+/* Dots */
+.fc-illus-ux__dot {
+  @apply w-1 md:w-1.5 h-1 md:h-1.5 rounded-full;
+  background-color: var(--muted);
+  opacity: 0.25;
+}
+
+.fc-illus-ux__dot--active {
+  background-color: var(--teal);
+  opacity: 0.5;
+}
+
+/* Checkbox */
+.fc-illus-ux__checkbox {
+  @apply w-1.5 md:w-2 h-1.5 md:h-2 shrink-0 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--teal) 40%, transparent);
+}
+
+/* Button */
+.fc-illus-ux__btn {
+  @apply w-3/5 h-2 md:h-2.5 rounded-sm;
+  background-color: var(--teal);
+  opacity: 0.4;
+}

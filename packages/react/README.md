@@ -2,6 +2,12 @@
 
 React renderer for `@squaredr/fieldcraft-core` — 44 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
 
+[![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
+[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+
+> **Website:** [fieldcraft.squaredr.tech](https://fieldcraft.squaredr.tech) · **Docs:** [fieldcraft.squaredr.tech/docs](https://fieldcraft.squaredr.tech/docs) · **GitHub:** [github.com/SquaredR98/fieldcraft](https://github.com/SquaredR98/fieldcraft)
+
 ## Install
 
 ```bash
@@ -102,7 +108,7 @@ All field components use semantic `.fc-*` CSS classes (FieldCraft namespace) def
 
 ### UI Primitives (shadcn/ui)
 
-Re-exported for use in custom field components and pro packages:
+Re-exported for use in custom field components:
 
 Alert, Badge, Button, Calendar, Card, Checkbox, Collapsible, Input, Label, Popover, Progress, RadioGroup, Select, Separator, Slider, Switch, Table, Textarea, Toggle, ToggleGroup
 
@@ -174,10 +180,9 @@ const customRegistry = mergeRegistries(defaultRegistry, {
 
 ## Community
 
-- [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
-- [Docs](https://squaredr.tech/products/fieldcraft/docs) — Full documentation
+- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
+- [Docs](https://fieldcraft.squaredr.tech/docs) — Full documentation
 - [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
-- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
 
 ## License
 

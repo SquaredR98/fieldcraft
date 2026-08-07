@@ -1,0 +1,69 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Validation Pipeline: Three layers --- */
+.fc-illus-valid {
+  @apply absolute inset-0 flex flex-col items-center justify-center gap-0 px-8 md:px-20;
+}
+
+/* Layer card */
+.fc-illus-valid__layer {
+  @apply flex items-center gap-2 md:gap-3 w-[10rem] md:w-[16rem] shrink-0 p-1.5 md:p-2.5;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+.fc-illus-valid__layer--active {
+  border-color: color-mix(in srgb, var(--teal) 40%, transparent);
+}
+
+/* Tag label */
+.fc-illus-valid__tag {
+  @apply font-mono text-[0.45rem] md:text-[0.65rem] uppercase tracking-wider shrink-0 leading-none;
+  color: var(--teal);
+  opacity: 0.6;
+}
+
+/* Bars container */
+.fc-illus-valid__bars {
+  @apply flex flex-col gap-0.5 md:gap-1 flex-1;
+}
+
+/* Content bars */
+.fc-illus-valid__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-valid__bar--teal {
+  background-color: var(--teal);
+  opacity: 0.35;
+}
+
+/* Down arrow */
+.fc-illus-valid__arrow {
+  @apply flex flex-col items-center shrink-0;
+}
+
+.fc-illus-valid__arrow-line {
+  @apply w-px h-2 md:h-3;
+  background-color: var(--teal);
+  opacity: 0.4;
+}
+
+.fc-illus-valid__arrow-head {
+  @apply w-0 h-0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 4px solid var(--teal);
+  opacity: 0.4;
+}
+
+@media (min-width: 768px) {
+  .fc-illus-valid__arrow-head {
+    border-left-width: 4px;
+    border-right-width: 4px;
+    border-top-width: 5px;
+  }
+}

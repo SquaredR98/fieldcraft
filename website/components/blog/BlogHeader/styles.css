@@ -1,0 +1,38 @@
+@reference "../../../app/globals.css";
+
+/* --- Masthead --- */
+.fc-blog-masthead {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-blog-masthead__inner {
+  @apply max-w-[1280px] mx-auto px-10 pt-14 pb-10 flex items-end justify-between gap-12;
+}
+
+.fc-blog-masthead__left {
+  @apply max-w-[620px];
+}
+
+.fc-blog-masthead__eyebrow {
+  @apply font-mono uppercase mb-4 text-fc-xs tracking-fc-mono-lg text-fc-muted;
+}
+
+.fc-blog-masthead__heading {
+  @apply font-display font-semibold m-0 text-fc-hero tracking-fc-tight leading-[1.02] text-fc-ink-strong;
+}
+
+.fc-blog-masthead__subtitle {
+  @apply text-fc-body leading-[1.65] text-fc-muted mt-[18px] mb-0;
+  text-wrap: pretty;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-masthead__inner {
+    @apply flex-col items-start gap-8 px-5 pt-10 pb-8;
+  }
+
+  .fc-blog-masthead__heading {
+    @apply text-4xl;
+  }
+}

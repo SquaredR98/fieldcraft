@@ -1,0 +1,59 @@
+---
+title: "FieldCraft Storage Adapters Are Now Open Source"
+slug: "fieldcraft-adapters-now-open-source"
+date: "2026-05-10"
+description: "We've flipped our Postgres, Supabase, and Webhook adapters from proprietary to MIT. Here's why — and what it means for your projects."
+author: "ravi"
+category: "Release"
+tags: ["fieldcraft", "open-source", "adapters"]
+---
+
+## The Short Version
+
+All three adapters are now MIT — shipped in a single package:
+
+```bash
+npm install @squaredr/fieldcraft-adapters
+```
+
+## Why We Made Them Free
+
+> FieldCraft's whole point is **own your data**. Keeping the storage layer proprietary while preaching data ownership felt contradictory.
+
+The core engine and React renderer have been MIT from day one. The adapters should be too.
+
+## What Each Adapter Does
+
+### Postgres Adapter
+
+Built on Drizzle ORM. Handles form response storage with optional **field-level AES-256-GCM encryption**. You choose which fields get encrypted — a name field can be encrypted while a "how did you hear about us" field stays queryable in plain text.
+
+```typescript
+import { createPostgresAdapter } from '@squaredr/fieldcraft-adapters/postgres'
+
+const adapter = createPostgresAdapter({
+  db: drizzleInstance,
+  encryptionKey: process.env.ENCRYPTION_KEY, // optional
+  encryptedFields: ['email', 'phone', 'ssn'],
+})
+```
+
+### Supabase Adapter
+
+Works with your existing Supabase project. Same encryption support. If you're already using Supabase, this is the fastest path to storing form responses.
+
+### Webhook Adapter
+
+POSTs form data to any endpoint. Payloads are signed with HMAC-SHA256 so you can verify they came from your app. Built-in exponential backoff for failed deliveries.
+
+## What's Next
+
+MongoDB and a generic REST adapter are planned. If you have a preference on what we should build next, [open an issue](https://github.com/SquaredR98/fieldcraft/issues).
+
+All FieldCraft packages are on npm:
+
+- [@squaredr/fieldcraft-core](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
+- [@squaredr/fieldcraft-react](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
+- [@squaredr/fieldcraft-adapters](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters) — Postgres, Supabase, and Webhook in one package
+
+MIT licensed. Use them however you want.

@@ -1,0 +1,194 @@
+---
+title: "Why Schema-Driven? The Architecture Behind FieldCraft"
+slug: "why-schema-driven"
+date: "2026-05-22"
+description: "Most form libraries tie your data to your UI. FieldCraft separates them completely. Here's why that matters and how the engine actually works."
+author: "ravi"
+category: "Engineering"
+tags: ["fieldcraft", "architecture", "forms", "open-source", "typescript"]
+---
+
+> **TL;DR** — FieldCraft separates form definition (JSON schema) from form rendering (React components). The core engine is pure TypeScript with zero UI dependencies. The schema is portable — store it in a database, generate it from a builder, or hard-code it. The renderer is interchangeable.
+
+## The Usual Way
+
+You've probably built forms like this before. A React component with `useState` for each field, an `onChange` handler that updates state, a validation function that runs on submit, and some conditional rendering sprinkled in.
+
+It works. For one form.
+
+Then you need a second form. You copy the component, change the fields, tweak the validation. A third form. More copying. By the fifth form you realize every single one has the same skeleton: state management, validation, error display, progress tracking, draft saving. The only thing that changes between them is _what_ the form asks.
+
+That observation is the entire motivation behind FieldCraft. If the structure is always the same, why are you writing it every time?
+
+## Schemas as the Source of Truth
+
+In FieldCraft, a form is a JSON object. It describes what fields exist, what types they are, what validation they need, how they relate to each other, and how they're grouped into sections. It says nothing about how to render them.
+
+```typescript
+const schema = {
+  id: 'employee-onboarding',
+  version: '1.0.0',
+  title: 'New Employee Onboarding',
+  settings: {
+    showProgress: true,
+    progressStyle: 'percentage',
+  },
+  sections: [
+    {
+      id: 'personal',
+      title: 'Personal Info',
+      questions: [
+        { id: 'name', type: 'short_text', label: 'Full Name', required: true },
+        { id: 'email', type: 'email', label: 'Work Email', required: true },
+        { id: 'department', type: 'dropdown', label: 'Department', options: [
+          { label: 'Engineering', value: 'engineering' },
+          { label: 'Design', value: 'design' },
+          { label: 'Marketing', value: 'marketing' },
+        ]},
+      ],
+    },
+    {
+      id: 'equipment',
+      title: 'Equipment Setup',
+      questions: [
+        { id: 'laptop', type: 'single_select', label: 'Laptop Preference', options: [
+          { label: 'MacBook Pro', value: 'mac' },
+          { label: 'Windows', value: 'windows' },
+          { label: 'Linux', value: 'linux' },
+        ]},
+        { id: 'tools', type: 'multi_select', label: 'Tools Needed', options: [
+          { label: 'GitHub', value: 'github' },
+          { label: 'Figma', value: 'figma' },
+          { label: 'Jira', value: 'jira' },
+        ]},
+      ],
+    },
+  ],
+}
+```
+
+That's a two-step onboarding form with 5 fields, a progress bar, and section navigation. You can store it in a database, version it, generate it from a visual builder, or share it between a web app and a mobile app. The schema doesn't care where it ends up.
+
+## How the Engine Works
+
+FieldCraft has two layers that never touch each other directly.
+
+**The core** (`@squaredr/fieldcraft-core`) is a headless state machine. It takes a schema, manages form state, runs validation, evaluates conditional logic, handles section navigation, and manages draft persistence. It has no React dependency. It has no DOM dependency. It's pure TypeScript logic.
+
+**The renderer** (`@squaredr/fieldcraft-react`) reads the state from the core and renders the appropriate component for each field type. It handles focus management, keyboard navigation, error display, and accessibility attributes. When a user types into an input, the renderer tells the core. The core updates its state. The renderer re-reads the state and re-renders.
+
+| Layer | Package | Responsibilities |
+|-------|---------|-----------------|
+| **Schema** | JSON object | Defines fields, types, validation, conditions, sections |
+| **Core Engine** | `@squaredr/fieldcraft-core` | Validates fields, evaluates `showIf`, manages navigation, handles draft persistence |
+| **React Renderer** | `@squaredr/fieldcraft-react` | Renders 44 field types, manages focus and keyboard nav, displays errors and progress |
+
+> **The core doesn't know about React. The renderer doesn't know about validation rules.** They communicate through a well-defined state interface — and that separation is the whole point.
+
+## Why This Matters in Practice
+
+### 1. Your forms are portable
+
+A schema is JSON. You can store it in Postgres, load it from an API, or hard-code it in your source. If you build a form in a visual builder today and decide to edit it by hand tomorrow, the schema is the same either way.
+
+We ship a `createHttpSchemaAdapter` that lets you load schemas from any REST endpoint:
+
+```typescript
+import { createHttpSchemaAdapter } from '@squaredr/fieldcraft-core'
+
+const adapter = createHttpSchemaAdapter({
+  baseUrl: '/api/forms',
+})
+
+// Load a form by ID
+const schema = await adapter.load('employee-onboarding')
+```
+
+The adapter pattern means your forms aren't locked into any particular storage backend.
+
+### 2. Validation happens once
+
+Every form needs validation. Required fields, email format, min/max length, regex patterns, numeric ranges. In a typical React app, you write these rules per component or wire up a validation library.
+
+In FieldCraft, validation rules live in the schema. The core engine runs them. You don't write validation logic in your components at all.
+
+```json
+{
+  "id": "phone",
+  "type": "phone",
+  "label": "Phone Number",
+  "required": true,
+  "validation": [
+    { "type": "pattern", "regex": "^\\+?[1-9]\\d{1,14}$", "message": "Enter a valid phone number" }
+  ]
+}
+```
+
+The engine validates on blur by default. It collects all errors for a field at once (not one at a time). It knows which fields have been touched and only shows errors for those. All of this is handled by the core, not the renderer.
+
+### 3. Conditional logic is declarative
+
+"Show the company name field only when the user selects Enterprise." In imperative React, that's a ternary in your JSX. In FieldCraft, it's a property on the field:
+
+```json
+{
+  "id": "company",
+  "type": "short_text",
+  "label": "Company Name",
+  "showIf": {
+    "field": "inquiry_type",
+    "operator": "eq",
+    "value": "enterprise"
+  }
+}
+```
+
+The core engine evaluates `showIf` conditions on every state change. When a field becomes hidden, the engine clears its value so you don't submit stale data from a field the user can't see. Conditions can be nested with AND/OR groups for complex branching.
+
+> This is readable by non-developers. A product manager can look at the schema and understand the form's branching logic without reading React code.
+
+### 4. Multi-step forms are just sections
+
+Breaking a long form into steps isn't a separate feature in FieldCraft. It's just how sections work. Each section renders as a step. The engine tracks which section is active, validates on section boundaries, and handles forward/back navigation.
+
+No route changes. No page reloads. No state management code. You define sections in the schema and the engine handles the rest.
+
+### 5. Draft persistence is built in
+
+FieldCraft auto-saves form progress to localStorage on every field change (debounced). When a user returns, the engine checks for a matching draft and restores it silently. Drafts expire after 72 hours by default.
+
+> This isn't a plugin or an add-on. It's part of the core engine. Every form gets it for free.
+
+## The Tradeoff
+
+Schema-driven forms are not the right choice for everything. If you have a single, highly custom form with non-standard interactions (like a drag-and-drop ranking interface or a canvas-based signature with custom gesture recognition), you'll want to build that by hand.
+
+FieldCraft works best when you have multiple forms that share common patterns. Contact forms, surveys, onboarding flows, intake forms, feedback forms, checkout forms. The forms that make up 90% of what most web apps need.
+
+The engine supports 44 field types out of the box. For the remaining edge cases, you can register custom field types through the field registry and they'll work with all the same validation, conditional logic, and persistence features.
+
+## Try It
+
+```bash
+npm install @squaredr/fieldcraft-core @squaredr/fieldcraft-react
+```
+
+We also ship 16 free production-ready templates if you want to see what a real schema looks like:
+
+```bash
+npm install @squaredr/fieldcraft-templates-free
+```
+
+```typescript
+import { contactForm, feedbackSurvey, jobApplication } from '@squaredr/fieldcraft-templates-free'
+
+// Each template includes the schema and metadata
+console.log(contactForm.schema)       // FormEngineSchema
+console.log(contactForm.meta.name)    // "Contact Form"
+```
+
+Everything is MIT licensed. The [docs](/docs) cover installation, schema format, field types, validation, theming, and storage adapters.
+
+---
+
+*This is the first in a series of posts about how FieldCraft works internally. Next up: how the validation pipeline processes rules, handles async validators, and decides when to show errors.*

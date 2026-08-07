@@ -1,0 +1,617 @@
+@reference "../../../app/globals.css";
+
+/* ── Live Demos section ── */
+
+.fc-demos {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-demos__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-demos__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-demos__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 max-w-160 text-fc-ink-strong;
+}
+
+.fc-demos__sub {
+  @apply text-base leading-[1.65] text-fc-muted;
+  @apply mt-4 mb-11 max-w-140;
+}
+
+/* ── Tab strip ── */
+
+.fc-demos__tabs {
+  @apply flex;
+  @apply border-t border-l border-r border-fc-rule;
+}
+
+.fc-demos__tab {
+  @apply font-mono text-[11px] tracking-[0.1em] uppercase;
+  @apply px-5 py-3.25 cursor-pointer text-fc-muted;
+  transition: color var(--motion-hover), background var(--motion-hover);
+}
+
+.fc-demos__tab--active {
+  @apply bg-fc-wash text-fc-teal;
+  box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.fc-demos__tab:not(.fc-demos__tab--active):hover {
+  @apply text-fc-ink;
+}
+
+/* ── Body: two-column grid ── */
+
+.fc-demos__body {
+  @apply grid border border-fc-rule;
+  grid-template-columns: 1fr 1.1fr;
+}
+
+/* ── Left column: explanation panel ── */
+
+.fc-demos__explain {
+  @apply border-r border-fc-rule px-7.5 py-8;
+}
+
+.fc-demos__explain-title {
+  @apply font-display text-[22px] font-semibold;
+  @apply tracking-[-0.02em] text-fc-ink-strong;
+}
+
+.fc-demos__explain-body {
+  @apply text-[14.5px] leading-[1.7] text-fc-muted;
+  @apply mt-3;
+}
+
+.fc-demos__explain-code {
+  @apply font-mono text-[11.5px] leading-[1.9] text-fc-muted;
+  @apply border-l border-fc-rule pl-3.5 mt-5;
+}
+
+/* ── Right column: interactive demo ── */
+
+.fc-demos__panel {
+  @apply bg-fc-bg px-7.5 py-8;
+}
+
+/* ── Shared demo card ── */
+
+.fc-demos__card {
+  @apply border border-fc-rule bg-fc-surface;
+}
+
+.fc-demos__card-header {
+  @apply flex items-center justify-between;
+  @apply px-5 py-3.5;
+  @apply border-b border-fc-rule;
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-demos__card-body {
+  @apply px-5 py-5;
+}
+
+.fc-demos__card-body--tall {
+  @apply min-h-[250px];
+}
+
+.fc-demos__card-footer {
+  @apply flex items-center justify-end gap-2.5;
+  @apply px-5 py-3.5;
+  @apply border-t border-fc-rule;
+}
+
+/* ── Shared input styling ── */
+
+.fc-demos__input-label {
+  @apply text-[12.5px] font-semibold text-fc-ink;
+  @apply mb-1.5;
+}
+
+.fc-demos__input-required {
+  @apply text-fc-danger;
+}
+
+.fc-demos__input {
+  @apply w-full border border-fc-rule bg-fc-surface;
+  @apply px-3 py-2.75 text-sm text-fc-ink rounded-none;
+  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
+}
+
+.fc-demos__input::placeholder {
+  @apply text-fc-muted;
+}
+
+.fc-demos__input:focus {
+  @apply outline-none border-fc-teal;
+  box-shadow: var(--focus-ring);
+}
+
+.fc-demos__select {
+  @apply w-full border border-fc-rule bg-fc-surface;
+  @apply px-3 py-2.75 text-sm text-fc-ink;
+  @apply appearance-none cursor-pointer rounded-none;
+  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%236A7B85' stroke-width='1.2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+}
+
+.fc-demos__select:focus {
+  @apply outline-none border-fc-teal;
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Buttons ── */
+
+.fc-demos__btn-outline {
+  @apply border border-fc-btn-line;
+  @apply px-4.5 py-2.5 text-[13.5px] text-fc-muted;
+  @apply cursor-pointer bg-transparent;
+  @apply font-display font-medium;
+  transition: color var(--motion-hover), border-color var(--motion-hover);
+}
+
+.fc-demos__btn-outline:hover {
+  @apply text-fc-ink;
+}
+
+.fc-demos__btn-primary {
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply px-4.5 py-2.5 text-[13.5px];
+  @apply font-display font-medium;
+  @apply cursor-pointer border-0;
+  transition: background var(--motion-hover);
+}
+
+.fc-demos__btn-primary:hover {
+  @apply bg-fc-teal-hover;
+}
+
+/* ── Multi-step: progress dots ── */
+
+.fc-demos__dot {
+  @apply w-1.5 h-1.5 rounded-full;
+  @apply border border-fc-rule;
+}
+
+.fc-demos__dot--filled {
+  @apply bg-fc-teal border-fc-teal;
+}
+
+/* ── Multi-step: review table ── */
+
+.fc-demos__review-table {
+  @apply w-full text-sm;
+  border-collapse: collapse;
+}
+
+.fc-demos__review-table td {
+  @apply py-2 align-top;
+  @apply border-b border-fc-rule;
+}
+
+.fc-demos__review-table td:first-child {
+  @apply font-mono text-[11px] tracking-[0.08em];
+  @apply uppercase text-fc-muted pr-4;
+  @apply whitespace-nowrap;
+}
+
+.fc-demos__review-table td:last-child {
+  @apply text-fc-ink;
+}
+
+/* ── Multi-step: step title ── */
+
+.fc-demos__step-title {
+  @apply font-display text-base font-semibold;
+  @apply text-fc-ink-strong mb-1;
+}
+
+.fc-demos__step-hint {
+  @apply text-[13px] text-fc-muted mb-4;
+}
+
+/* ── Conditional: checkbox row ── */
+
+.fc-demos__checkbox-row {
+  @apply flex items-center gap-2.5 cursor-pointer;
+}
+
+.fc-demos__checkbox {
+  @apply flex items-center justify-center shrink-0;
+  @apply w-4 h-4 text-[11px] leading-none;
+  @apply border border-fc-rule rounded-none;
+  transition: background var(--motion-hover), border-color var(--motion-hover);
+}
+
+.fc-demos__checkbox--checked {
+  @apply bg-fc-teal border-fc-teal text-fc-teal-on;
+}
+
+/* ── Conditional: revealed block ── */
+
+.fc-demos__conditional {
+  @apply pl-3.5 mt-3 border-l-2 border-fc-teal;
+}
+
+.fc-demos__conditional--amber {
+  @apply border-fc-amber;
+}
+
+.fc-demos__conditional-tag {
+  @apply font-mono text-[9.5px] tracking-[0.12em];
+  @apply uppercase text-fc-teal mb-2;
+}
+
+.fc-demos__conditional-tag--amber {
+  @apply text-fc-amber-ink;
+}
+
+/* ── Conditional: field counter ── */
+
+.fc-demos__field-counter {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+  @apply mt-5 pt-3 border-t border-fc-rule;
+}
+
+/* ── Validation: state classes ── */
+
+.fc-demos__input--valid {
+  @apply border-fc-teal;
+}
+
+.fc-demos__input--invalid {
+  @apply border-fc-danger;
+}
+
+.fc-demos__validation-msg {
+  @apply text-[12px] mt-1.5;
+}
+
+.fc-demos__validation-msg--valid {
+  @apply text-fc-teal;
+}
+
+.fc-demos__validation-msg--invalid {
+  @apply text-fc-danger;
+}
+
+.fc-demos__validation-code {
+  @apply font-mono text-[11px] leading-[1.8] text-fc-muted;
+  @apply border border-fc-rule bg-fc-surface2;
+  @apply px-3.5 py-3 mt-4;
+  @apply overflow-x-auto;
+}
+
+.fc-demos__validation-code-key {
+  @apply text-fc-teal;
+}
+
+.fc-demos__validation-code-string {
+  @apply text-fc-amber-ink;
+}
+
+/* ── Computed: stepper ── */
+
+.fc-demos__stepper {
+  @apply flex items-center gap-0;
+}
+
+.fc-demos__stepper-btn {
+  @apply flex items-center justify-center;
+  @apply w-9 h-9 border border-fc-rule;
+  @apply bg-fc-surface text-fc-ink;
+  @apply text-base font-mono cursor-pointer;
+  transition: background var(--motion-hover);
+}
+
+.fc-demos__stepper-btn:hover {
+  @apply bg-fc-wash;
+}
+
+.fc-demos__stepper-btn:first-child {
+  @apply rounded-none;
+}
+
+.fc-demos__stepper-btn:last-child {
+  @apply rounded-none;
+}
+
+.fc-demos__stepper-value {
+  @apply flex items-center justify-center;
+  @apply w-12 h-9 border-t border-b border-fc-rule;
+  @apply bg-fc-surface font-mono text-sm text-fc-ink;
+}
+
+/* ── Computed: summary box ── */
+
+.fc-demos__summary {
+  @apply border border-fc-wash-rule bg-fc-wash;
+  @apply px-4 py-3.5 mt-4;
+}
+
+.fc-demos__summary-row {
+  @apply flex items-center justify-between;
+  @apply text-sm text-fc-muted py-1;
+}
+
+.fc-demos__summary-total {
+  @apply flex items-center justify-between;
+  @apply pt-2.5 mt-2 border-t border-fc-wash-rule;
+}
+
+.fc-demos__summary-total-label {
+  @apply text-sm font-semibold text-fc-ink-strong;
+}
+
+.fc-demos__summary-total-value {
+  @apply font-display text-[22px] font-semibold;
+  @apply tracking-[-0.02em] text-fc-teal;
+}
+
+.fc-demos__expression {
+  @apply font-mono text-[11px] text-fc-muted;
+  @apply mt-3 pt-2.5 border-t border-fc-rule;
+}
+
+/* ── Field group spacing ── */
+
+.fc-demos__field-group {
+  @apply flex flex-col gap-4;
+}
+
+/* ── Live form wrapper (real FormEngineRenderer) ──
+   The FormEngineThemeProvider (via themeToCssVars) sets all shadcn
+   CSS variables as inline styles on its wrapper div. We only need
+   layout/typography tweaks here — colors flow from the theme prop. */
+
+.fc-demos__live-form {
+  @apply w-full;
+}
+
+/* Kill ALL border-radius inside the live form */
+.fc-demos__live-form * {
+  border-radius: 0 !important;
+}
+
+/* Root flex container — tighten gap */
+.fc-demos__live-form .flex.flex-col.gap-8 {
+  gap: 20px;
+}
+
+/* Section — flat, no card chrome */
+.fc-demos__live-form section {
+  @apply bg-transparent p-0;
+  box-shadow: none;
+  gap: 16px;
+}
+
+/* Section titles — Drafting Teal typography */
+.fc-demos__live-form section h2 {
+  @apply font-display font-semibold;
+  font-size: 14px;
+  color: var(--fc-color-text, var(--foreground));
+}
+
+/* Section descriptions */
+.fc-demos__live-form section > p {
+  font-size: 13px;
+  color: var(--fc-color-text-muted, var(--muted-foreground));
+  margin-top: 0;
+}
+
+/* Field gap inside sections */
+.fc-demos__live-form .flex.flex-col.gap-6 {
+  gap: 16px;
+}
+
+/* Field labels */
+.fc-demos__live-form label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fc-color-text, var(--foreground));
+}
+
+/* Help text */
+.fc-demos__live-form p[id$="-help"] {
+  font-size: 12px;
+  color: var(--fc-color-text-muted, var(--muted-foreground));
+}
+
+/* Error messages */
+.fc-demos__live-form div[role="alert"] {
+  font-size: 12px;
+}
+
+/* Input fields — height + font size tweaks only; colors flow from CSS vars */
+.fc-demos__live-form input:not([type="checkbox"]):not([type="radio"]),
+.fc-demos__live-form select,
+.fc-demos__live-form textarea {
+  height: 38px;
+  font-size: 14px;
+}
+
+/* Radix Select trigger — match input height */
+.fc-demos__live-form [data-slot="select-trigger"] {
+  height: 38px;
+  font-size: 14px;
+}
+
+.fc-demos__live-form input::placeholder,
+.fc-demos__live-form textarea::placeholder {
+  opacity: 1;
+}
+
+/* Number input — hide spinners */
+.fc-demos__live-form input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ── Calculated field display ── */
+
+.fc-demos__live-form div[aria-live="polite"] {
+  background-color: var(--wash) !important;
+  border: 1px solid var(--wash-rule) !important;
+  @apply px-4 py-2;
+}
+
+.fc-demos__live-form div[aria-live="polite"] span {
+  @apply font-display text-lg font-semibold;
+  color: var(--teal) !important;
+}
+
+/* ── Navigation buttons ── */
+
+.fc-demos__live-form .flex.justify-between {
+  @apply pt-0;
+}
+
+/* All buttons — font + shadow override */
+.fc-demos__live-form button[data-slot="button"] {
+  @apply font-display font-medium;
+  font-size: 13.5px;
+  box-shadow: none !important;
+}
+
+/* Primary button (Next / Submit) — explicit teal bg + white text */
+.fc-demos__live-form button[data-slot="button"][data-variant="default"] {
+  background-color: var(--teal) !important;
+  color: var(--teal-on) !important;
+}
+
+.fc-demos__live-form button[data-slot="button"][data-variant="default"]:hover:not(:disabled) {
+  background-color: var(--teal-hover) !important;
+}
+
+/* Outline button (Back) — transparent bg, ink border, visible text */
+.fc-demos__live-form button[data-slot="button"][data-variant="outline"] {
+  background: transparent !important;
+  border: 1px solid var(--btn-line) !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+}
+
+.fc-demos__live-form button[data-slot="button"][data-variant="outline"]:hover:not(:disabled) {
+  background: transparent !important;
+  color: var(--ink-strong) !important;
+}
+
+/* Disabled buttons — reduced opacity, visually distinct from active */
+.fc-demos__live-form button[data-slot="button"]:disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Option buttons (boolean, single_select) */
+.fc-demos__live-form button[role="radio"],
+.fc-demos__live-form button[role="checkbox"] {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Active option */
+.fc-demos__live-form .fc-option-active {
+  border-color: var(--teal) !important;
+  background: color-mix(in srgb, var(--teal) 8%, transparent) !important;
+}
+
+/* Progress bar — thin 3px track */
+.fc-demos__live-form div[role="progressbar"] > div:first-child {
+  height: 3px !important;
+  background: var(--rule) !important;
+}
+
+.fc-demos__live-form div[role="progressbar"] > div:first-child > div {
+  height: 100% !important;
+  background: var(--teal) !important;
+}
+
+/* Progress label — step counter */
+.fc-demos__live-form div[role="progressbar"] > span {
+  @apply font-mono text-[10px] tracking-[0.12em] uppercase;
+  color: var(--fc-color-text-muted, var(--muted-foreground));
+}
+
+/* ── Submission result display ── */
+
+.fc-demos__result {
+  @apply flex flex-col items-center gap-4;
+  @apply py-8;
+}
+
+.fc-demos__result-label {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-teal;
+}
+
+.fc-demos__result-json {
+  @apply font-mono text-[11.5px] leading-[1.8] text-fc-muted;
+  @apply border border-fc-rule bg-fc-surface2;
+  @apply px-4 py-3 w-full overflow-x-auto;
+  @apply m-0;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-demos__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-demos__h2 {
+    @apply text-[30px];
+  }
+
+  .fc-demos__body {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-demos__explain {
+    @apply border-r-0 border-b border-fc-rule;
+  }
+
+  .fc-demos__tabs {
+    @apply overflow-x-auto;
+  }
+
+  .fc-demos__tab {
+    @apply whitespace-nowrap;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-demos__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-demos__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-demos__explain {
+    @apply px-5 py-6;
+  }
+
+  .fc-demos__panel {
+    @apply px-5 py-6;
+  }
+
+  .fc-demos__tab {
+    @apply px-3.5 text-[10px];
+  }
+}

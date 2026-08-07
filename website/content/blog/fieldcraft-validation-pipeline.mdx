@@ -1,0 +1,288 @@
+---
+title: "How FieldCraft's Validation Pipeline Works Under the Hood"
+slug: "fieldcraft-validation-pipeline"
+date: "2026-06-26"
+description: "A technical deep-dive into FieldCraft's three-layer validation pipeline: field-level sync, cross-field custom validators, and the submit guard that prevents bad data from reaching your backend."
+author: "ravi"
+category: "Engineering"
+tags: ["fieldcraft", "validation", "architecture", "typescript", "deep-dive"]
+---
+
+> **TL;DR** — FieldCraft validates through three layers: built-in schema rules, your custom validators (wrapped in try/catch), and a submit guard that sweeps all visible fields. Validation is incremental during editing (one field at a time) but comprehensive at submission (full sweep). Hidden fields are never validated.
+
+## Why Validation Matters in Schema-Driven Forms
+
+In code-driven forms, validation logic lives right next to the field. You control when it runs, what it checks, and how errors surface. In schema-driven systems, that logic has to be expressed declaratively and executed by the engine at the right times.
+
+FieldCraft's validation pipeline solves three problems:
+
+1. **When** does validation run? (on change, on blur, on submit?)
+2. **What** gets validated? (visible fields only? hidden ones too?)
+3. **How** do custom rules integrate without breaking the pipeline?
+
+Let's walk through the architecture.
+
+## The Three Layers
+
+Every value passes through three validation layers before it can reach your backend:
+
+| Layer | Name | What It Does |
+|-------|------|-------------|
+| **1** | **Schema Rules** (built-in) | `required`, `min/max`, `email`, `pattern`, `phone`, `url/date`, `fileSize`, `fileType` |
+| **2** | **Custom Validators** (your code) | `customFn()` — wrapped in `try/catch`, executed per field |
+| **3** | **Submit Guard** (engine-level) | `validateAll()` — sweeps every visible field across all sections. Returns false? Submit blocked. Errors surfaced. |
+
+The flow is always **Layer 1 → Layer 2 → Layer 3**. Each layer can produce errors, and errors from any layer block submission.
+
+### Layer 1: Built-in Rules
+
+FieldCraft ships 12 built-in validators that cover the most common cases:
+
+| Rule | What It Checks |
+|------|---------------|
+| `required` | Non-empty (rejects `undefined`, `null`, `""`, `[]`) |
+| `min` / `max` | Numeric bounds (inclusive) |
+| `minLength` / `maxLength` | String character count |
+| `pattern` | Regex match with optional flags |
+| `email` | Format check with 2+ char TLD requirement |
+| `phone` | 7-20 chars of digits, spaces, dashes, parens, `+` |
+| `url` | Valid URL via native `URL()` constructor |
+| `date` | Parseable date with optional min/max range |
+| `fileSize` | File size under a max MB threshold |
+| `fileType` | MIME type matching with wildcard support |
+
+In your schema, rules are arrays on each field:
+
+```json
+{
+  "id": "age",
+  "type": "number",
+  "label": "Your Age",
+  "required": true,
+  "validation": [
+    { "type": "min", "value": 13, "message": "Must be 13 or older" },
+    { "type": "max", "value": 120 }
+  ]
+}
+```
+
+> **Key design decision:** all validators except `required` pass empty values. If a field is optional, an empty value is always valid. The `required` rule is the only one that treats emptiness as an error. This means you don't get spurious "invalid email" errors on a field the user hasn't touched yet.
+
+### Layer 2: Custom Validators
+
+When built-in rules aren't enough, register named validators at engine creation:
+
+```typescript
+const engine = createEngine(schema, {
+  validators: {
+    noProfanity: (value, allValues) => {
+      const bad = ["spam", "scam"];
+      if (bad.some(w => String(value).toLowerCase().includes(w))) {
+        return "Please keep it professional";
+      }
+      return null; // no error
+    },
+    matchesConfirm: (value, allValues) => {
+      if (value !== allValues.password) {
+        return "Passwords do not match";
+      }
+      return null;
+    },
+  },
+});
+```
+
+Reference them in your schema:
+
+```json
+{
+  "id": "bio",
+  "type": "long_text",
+  "label": "About You",
+  "validation": [
+    { "type": "maxLength", "value": 500 },
+    { "type": "custom", "name": "noProfanity" }
+  ]
+}
+```
+
+**Error isolation:** every custom validator call is wrapped in `try/catch`. If your validator throws, the pipeline doesn't crash. Instead, the field gets an error message like `"Custom validator 'noProfanity' threw: Cannot read property 'x' of undefined"`. The rest of the form keeps working.
+
+**Missing validators:** if a schema references a validator name that wasn't registered, it's silently skipped in production. In development mode (`NODE_ENV !== "production"`), a console warning is logged.
+
+### Layer 3: The Submit Guard
+
+When the user clicks submit, the engine runs `validateAll()` — a full sweep of every visible field across every visible section. This is the gatekeeper.
+
+**`engine.submit()` → `validateAll(schema, values)`:**
+
+1. For each **visible section**:
+   1. For each **visible field**:
+      1. Skip structural fields (`info_block`, `divider`, etc.)
+      2. Run required check (boolean or conditional)
+      3. If required fails → stop, return error
+      4. If empty and not required → skip remaining rules
+      5. Run all validation rules in order
+   2. Collect errors with `firstErrorFieldId`
+2. Return `ValidationResult`
+
+| Result | What Happens |
+|--------|-------------|
+| `valid: true` | Build `FormResponse` → run adapters |
+| `valid: false` | Return errors, block submission |
+
+If validation fails, `submit()` returns immediately with:
+```typescript
+{
+  success: false,
+  adapterResults: [{
+    adapterName: "validation",
+    success: false,
+    error: "Validation failed: 3 field(s) with errors"
+  }]
+}
+```
+
+> **No network requests. No adapter calls.** If validation fails, the submission never leaves the client.
+
+## When Validation Runs
+
+FieldCraft validates at three different moments, each serving a different purpose:
+
+### 1. On Value Change (`setValue`)
+
+When a field value changes, the engine immediately validates that single field. The sequence:
+
+1. `setValue("email", "bad")`
+2. `validateField(emailQuestion, "bad", allValues)`
+3. Errors: `["Please enter a valid email address"]`
+4. `state.errors.email` updated
+5. Subscribers notified
+
+This gives instant feedback as the user types. But there's a catch:
+
+> Errors only appear if the field has been **touched** — the user has interacted with it. This prevents showing errors on pristine fields that the user hasn't reached yet.
+
+### 2. On Touch/Blur (`touchField`)
+
+When a field loses focus, it's marked as touched and validated:
+
+1. `touchField("email")`
+2. `state.touched.email = true`
+3. `validateField(emailQuestion, currentValue, allValues)`
+4. Errors surfaced in UI
+
+This is the "validate on blur" pattern. The field shows clean until the user interacts and moves away.
+
+### 3. On Submit Attempt
+
+When `submit()` is called or `setSubmitAttempted()` fires, **all** visible fields are revalidated at once via `revalidateAllVisibleFields()`. This catches fields the user may have skipped. After this point, all errors are visible regardless of touch state.
+
+## Visibility-Aware Validation
+
+A critical detail: **hidden fields are never validated.** If a field has a `showIf` condition that evaluates to `false`, the validation pipeline skips it entirely.
+
+```json
+{
+  "id": "other_reason",
+  "type": "short_text",
+  "label": "Please specify",
+  "required": true,
+  "showIf": {
+    "field": "reason",
+    "operator": "eq",
+    "value": "other"
+  }
+}
+```
+
+If `reason` is not `"other"`, this field is invisible and its `required` rule is ignored.
+
+> **Validation and conditional logic always agree** — you never get an error on a field the user can't see. This applies at the section level too: if an entire section is hidden by a `showIf` condition, all its fields are skipped during `validateAll()`.
+
+## Conditional Required
+
+The `required` property supports more than `true`/`false`. It can be a full condition expression:
+
+```json
+{
+  "id": "company_name",
+  "type": "short_text",
+  "label": "Company Name",
+  "required": {
+    "field": "employment_status",
+    "operator": "eq",
+    "value": "employed"
+  }
+}
+```
+
+The engine evaluates this condition against current form values on every validation pass. The field is only required when the condition matches. This is evaluated by the same condition evaluator that handles `showIf`, so all 16 operators are available.
+
+## Structural Fields Are Exempt
+
+Non-input field types — `section_header`, `info_block`, `page_break`, `divider`, `spacer`, `welcome-screen`, `thank-you-screen`, `rich-text`, `image`, `video` — are explicitly skipped by the validation pipeline. They don't hold values, so they can't have errors.
+
+If your schema accidentally includes `required: true` on an `info_block`, the schema validator catches this at engine creation time and throws a `FormEngineSchemaError` before the form ever renders.
+
+## The ValidationResult Shape
+
+Every validation method returns the same structure:
+
+```typescript
+type ValidationResult = {
+  valid: boolean;
+  errors: Record<string, string[]>;
+  firstErrorFieldId?: string;
+  firstErrorSectionId?: string;
+};
+```
+
+- `errors` is a map of field ID to error messages. A field can have multiple errors (e.g., too short AND wrong format).
+- `firstErrorFieldId` is useful for auto-scrolling or focusing the first problem field.
+- `firstErrorSectionId` tells multi-step forms which section to navigate to.
+
+## Putting It All Together
+
+Here's the full lifecycle of a form value from input to submission:
+
+**Step 1 — User types:** `setValue("email", "j@x.c")`
+
+1. Update `state.values`
+2. Mark `state.touched.email = true`
+3. `validateField` → `["Please enter a valid email address"]`
+4. Update `state.errors.email`
+5. Recompute calculated fields (if dependent)
+6. Recompute scores (if scoring field)
+7. Recompute derived state (navigation, progress)
+8. Notify all subscribers
+
+**Step 2 — User fixes:** `setValue("email", "jane@example.com")`
+
+- Same pipeline runs → `state.errors.email = []` (cleared)
+
+The error disappears as soon as the value becomes valid. No "submit to clear errors" pattern — feedback is instant.
+
+**Step 3 — User clicks Submit:** `engine.submit()`
+
+1. `setSubmitAttempted()` → revalidate ALL visible fields
+2. `validateAll()` → `{ valid: true, errors: {} }`
+3. Build `FormResponse`
+4. Run submission pipeline (adapters or `onSubmit`)
+5. Clear draft on success
+6. Return `SubmitResult`
+
+> **The key insight:** validation is **incremental** during editing (one field at a time for performance) but **comprehensive** at submission (full sweep for correctness).
+
+---
+
+## What's Next
+
+This covers synchronous validation. Async validators (for server-side checks like "is this email already registered?") are registered separately and run outside the synchronous pipeline. We'll cover that in a future post.
+
+If you want to explore the source, the relevant files are:
+
+- `validation-runner.ts` — the pipeline orchestrator
+- `built-in.ts` — all 12 built-in validators
+- `registry.ts` — custom and async validator registry
+- `create-engine.ts` — where validation integrates with the engine lifecycle

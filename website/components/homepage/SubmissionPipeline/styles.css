@@ -1,0 +1,83 @@
+@reference "../../../app/globals.css";
+
+.fc-pipeline {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-pipeline__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-pipeline__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-pipeline__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 max-w-155 text-fc-ink-strong;
+}
+
+.fc-pipeline__sub {
+  @apply text-base leading-[1.65] text-fc-muted;
+  @apply mt-4 mb-11 max-w-140;
+}
+
+.fc-pipeline__grid {
+  @apply grid gap-px bg-fc-rule border border-fc-rule;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.fc-pipeline__card {
+  @apply bg-fc-bg p-5.5;
+}
+
+.fc-pipeline__card-name {
+  @apply font-mono text-[13.5px] text-fc-teal mb-3;
+}
+
+.fc-pipeline__card-body {
+  @apply text-[13.5px] leading-[1.6] text-fc-muted mb-4;
+}
+
+.fc-pipeline__card-licence {
+  @apply font-mono text-[9.5px] tracking-widest;
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pipeline__install {
+  @apply mt-5 font-mono text-[11.5px] text-fc-muted;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-pipeline__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-pipeline__h2 {
+    @apply text-[30px];
+  }
+
+  .fc-pipeline__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-pipeline__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-pipeline__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-pipeline__grid {
+    grid-template-columns: 1fr;
+  }
+}

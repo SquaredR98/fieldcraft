@@ -1,0 +1,58 @@
+@reference "../../../app/globals.css";
+
+.fc-showcase {
+  @apply bg-fc-surface border-b border-fc-rule;
+}
+
+.fc-showcase__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-showcase__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+}
+
+.fc-showcase__h2 {
+  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 max-w-160 text-fc-ink-strong mb-4;
+}
+
+.fc-showcase__sub {
+  @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0 mb-11;
+}
+
+.fc-showcase__grid {
+  @apply grid grid-cols-1 md:grid-cols-3 gap-4 mb-10;
+}
+
+.fc-showcase__cta {
+  @apply inline-flex items-center font-mono text-[11px] tracking-[0.1em] uppercase text-fc-teal no-underline;
+  transition: opacity var(--motion-hover);
+}
+
+.fc-showcase__cta:hover {
+  @apply opacity-80;
+}
+
+@media (max-width: 1023px) {
+  .fc-showcase__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-showcase__h2 {
+    @apply text-[30px];
+  }
+}
+
+@media (max-width: 639px) {
+  .fc-showcase__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-showcase__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-showcase__grid {
+    @apply grid-cols-1;
+  }
+}

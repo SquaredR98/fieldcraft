@@ -1,0 +1,917 @@
+@reference "../../app/globals.css";
+
+/* =============================================
+   FieldCraft Docs — Layout & Typography
+   BEM: .fc-docs__*
+   Design reference: FieldCraft Docs.dc.html
+   ============================================= */
+
+/* --- Top Bar --- */
+
+.fc-docs-topbar {
+  @apply sticky top-0 z-60 border-b border-fc-rule;
+  background: var(--surface);
+}
+
+.fc-docs-topbar__inner {
+  @apply mx-auto flex items-center gap-5 max-w-310 px-10;
+  height: 60px;
+}
+
+.fc-docs-topbar__logo {
+  @apply flex items-center gap-[11px] shrink-0 no-underline;
+  color: var(--ink);
+}
+
+.fc-docs-topbar__logo:hover {
+  color: var(--ink);
+}
+
+.fc-docs-topbar__logo-mark {
+  @apply flex flex-col gap-0.5;
+}
+
+.fc-docs-topbar__logo-bar {
+  @apply w-[18px] h-[5px];
+}
+
+.fc-docs-topbar__logo-bar--outline {
+  border: 1px solid var(--ink);
+}
+
+.fc-docs-topbar__logo-bar--filled {
+  background: var(--ink);
+}
+
+.fc-docs-topbar__logo-bar--amber {
+  border: 1px solid var(--amber);
+}
+
+.fc-docs-topbar__logo-text {
+  @apply flex flex-col gap-px;
+}
+
+.fc-docs-topbar__logo-name {
+  @apply font-display text-[16px] font-semibold leading-none;
+  letter-spacing: -0.02em;
+}
+
+.fc-docs-topbar__logo-sub {
+  @apply font-mono text-[8.5px] uppercase leading-none text-fc-muted;
+  letter-spacing: 0.2em;
+}
+
+.fc-docs-topbar__badge {
+  @apply font-mono text-[9.5px] uppercase text-fc-teal border border-fc-teal-border shrink-0;
+  letter-spacing: 0.14em;
+  background: var(--wash);
+  padding: 4px 8px;
+}
+
+.fc-docs-topbar__search {
+  @apply flex items-center gap-2.5 border border-fc-rule;
+  flex: 1;
+  max-width: 400px;
+  background: var(--bg);
+  padding: 8px 12px;
+}
+
+.fc-docs-topbar__search-slash {
+  @apply font-mono text-[12px] text-fc-muted;
+}
+
+.fc-docs-topbar__search-placeholder {
+  @apply text-[13.5px] text-fc-muted;
+}
+
+.fc-docs-topbar__search-kbd {
+  @apply ml-auto font-mono text-[9.5px] text-fc-muted border border-fc-rule;
+  letter-spacing: 0.1em;
+  padding: 2px 5px;
+}
+
+.fc-docs-topbar__actions {
+  @apply ml-auto flex items-center gap-[22px] text-[13.5px] text-fc-muted;
+}
+
+.fc-docs-topbar__version {
+  @apply flex items-center gap-[7px] font-mono text-[11px] text-fc-muted border border-fc-rule;
+  padding: 6px 9px;
+}
+
+.fc-docs-topbar__version-caret {
+  @apply text-[8px] text-fc-teal;
+}
+
+.fc-docs-topbar__link {
+  @apply text-fc-muted no-underline;
+}
+
+.fc-docs-topbar__link:hover {
+  color: var(--ink);
+}
+
+/* --- 3-Column Shell --- */
+
+.fc-docs {
+  @apply mx-auto items-start max-w-310 px-10;
+  display: grid;
+  grid-template-columns: 246px minmax(0, 1fr) 210px;
+}
+
+/* --- Sidebar --- */
+
+.fc-docs__sidebar {
+  @apply sticky border-r border-fc-rule;
+  top: 60px;
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  padding: 32px 28px 64px 0;
+}
+
+.fc-docs__sidebar-group {
+  @apply mb-[30px];
+}
+
+.fc-docs__sidebar-group:last-child {
+  @apply mb-0;
+}
+
+.fc-docs__sidebar-group-label {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted mb-3;
+  letter-spacing: 0.14em;
+}
+
+.fc-docs__sidebar-links {
+  @apply flex flex-col;
+}
+
+.fc-docs__sidebar-link {
+  @apply text-[13.5px] text-fc-muted no-underline cursor-pointer;
+  padding: 7px 0 7px 12px;
+  border-left: 2px solid transparent;
+  line-height: 1.4;
+  transition: color 120ms linear;
+}
+
+.fc-docs__sidebar-link:hover {
+  color: var(--ink);
+}
+
+.fc-docs__sidebar-link--active {
+  @apply text-fc-teal font-medium;
+  border-left-color: var(--teal);
+  background: var(--wash);
+}
+
+.fc-docs__sidebar-badge {
+  @apply font-mono text-[9px] uppercase border ml-2;
+  letter-spacing: 0.1em;
+  color: var(--amber-ink);
+  border-color: var(--amber-border);
+  background: var(--amber-bg);
+  padding: 1px 5px;
+}
+
+/* --- Article --- */
+
+.fc-docs__article {
+  @apply min-w-0;
+  padding: 32px 56px 96px;
+}
+
+/* --- Breadcrumb --- */
+
+.fc-docs__breadcrumb {
+  @apply font-mono text-[10px] uppercase text-fc-muted mb-[18px];
+  letter-spacing: 0.14em;
+}
+
+/* --- Page Title --- */
+
+.fc-docs__h1 {
+  @apply font-display text-[40px] font-semibold m-0;
+  color: var(--ink-strong);
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.fc-docs__h1-badge {
+  @apply inline-block font-mono text-[9.5px] uppercase text-fc-teal border border-fc-teal-border ml-3 align-middle;
+  letter-spacing: 0.12em;
+  background: var(--wash);
+  padding: 4px 8px;
+}
+
+/* --- Page Description --- */
+
+.fc-docs__description {
+  @apply text-[17px] text-fc-muted m-0;
+  line-height: 1.65;
+  margin-top: 18px;
+  max-width: 660px;
+  text-wrap: pretty;
+}
+
+/* --- Body Prose --- */
+
+.fc-docs__body {
+  @apply mt-8;
+}
+
+.fc-docs__body h2 {
+  @apply font-display text-[24px] font-semibold border-t border-fc-rule;
+  letter-spacing: -0.02em;
+  margin: 52px 0 14px;
+  padding-top: 24px;
+}
+
+.fc-docs__body h3 {
+  @apply font-display text-[18px] font-semibold;
+  margin: 36px 0 12px;
+}
+
+.fc-docs__body p {
+  @apply text-[15px] text-fc-muted;
+  line-height: 1.75;
+  margin: 0 0 20px;
+  max-width: 660px;
+}
+
+.fc-docs__body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.fc-docs__body a {
+  @apply text-fc-teal underline;
+  text-underline-offset: 3px;
+}
+
+.fc-docs__body a:hover {
+  @apply text-fc-teal-hover;
+}
+
+.fc-docs__body ul {
+  @apply ml-5 list-disc;
+}
+
+.fc-docs__body ol {
+  @apply ml-5 list-decimal;
+}
+
+.fc-docs__body li {
+  @apply text-[15px] text-fc-muted mb-2;
+  line-height: 1.75;
+}
+
+.fc-docs__body > hr {
+  @apply border-t border-fc-rule my-12;
+}
+
+/* --- Inline Code --- */
+
+.fc-docs__body code {
+  @apply font-mono text-[13px] text-fc-teal;
+  background: var(--wash);
+  padding: 2px 6px;
+  border: 1px solid var(--wash-rule);
+}
+
+/* Override for code inside pre (code blocks) */
+.fc-docs__body pre code {
+  @apply bg-transparent border-none p-0;
+  color: inherit;
+}
+
+/* --- Code Block --- */
+
+.fc-docs__code-block {
+  @apply border border-fc-rule my-5;
+  background: var(--surface);
+}
+
+.fc-docs__code-block-header {
+  @apply flex items-center justify-between border-b border-fc-rule;
+  padding: 9px 14px;
+  background: var(--surface2);
+}
+
+.fc-docs__code-block-file {
+  @apply font-mono text-[10px] uppercase text-fc-muted;
+  letter-spacing: 0.1em;
+}
+
+.fc-docs__code-block-copy {
+  @apply font-mono text-[9.5px] uppercase text-fc-teal cursor-pointer;
+  letter-spacing: 0.12em;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.fc-docs__code-block-copy:hover {
+  @apply text-fc-teal-hover;
+}
+
+.fc-docs__code-block pre {
+  @apply font-mono text-[12.5px] overflow-x-auto m-0;
+  padding: 14px 16px;
+  line-height: 1.85;
+}
+
+.fc-docs__code-block-content {
+  @apply overflow-x-auto;
+}
+
+.fc-docs__code-block-content pre {
+  @apply font-mono text-[12.5px] m-0 bg-transparent;
+  padding: 14px 16px;
+  line-height: 1.85;
+}
+
+.fc-docs__code-block-content code {
+  @apply font-mono text-[12.5px];
+  line-height: 1.85;
+  counter-reset: line;
+}
+
+.fc-docs__code-block-content code > .line::before {
+  counter-increment: line;
+  content: counter(line);
+  @apply inline-block text-right mr-4 text-fc-muted select-none;
+  width: 2ch;
+  font-size: 11px;
+}
+
+/* Shiki dual-theme support for docs code blocks */
+.fc-docs__code-block-content .shiki,
+.fc-docs__code-block-content .shiki span {
+  background-color: transparent !important;
+  @apply font-mono;
+}
+
+:root[data-theme="dark"] .fc-docs__code-block-content .shiki,
+:root[data-theme="dark"] .fc-docs__code-block-content .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
+:root[data-theme="dark"] .fc-docs__code-block-content .shiki {
+  background-color: transparent !important;
+}
+
+/* --- Package Manager Tabs (Install) --- */
+
+.fc-docs__pm-tabs {
+  @apply border border-fc-rule max-w-[660px];
+  background: var(--surface);
+}
+
+.fc-docs__pm-tab-strip {
+  @apply flex border-b border-fc-rule;
+  background: var(--surface2);
+}
+
+.fc-docs__pm-tab {
+  @apply font-mono text-[11.5px] text-fc-muted cursor-pointer;
+  padding: 11px 16px;
+  line-height: 1;
+  background: none;
+  border: none;
+  transition: color 120ms linear;
+}
+
+.fc-docs__pm-tab:hover {
+  color: var(--ink);
+}
+
+.fc-docs__pm-tab--active {
+  @apply text-fc-teal;
+  background: var(--wash);
+  box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.fc-docs__pm-cmd {
+  @apply font-mono text-[13px];
+  padding: 16px 18px;
+  color: var(--ink);
+}
+
+/* --- Import Statement Box --- */
+
+.fc-docs__import-box {
+  @apply font-mono text-[12.5px] text-fc-muted border border-fc-rule max-w-[660px];
+  background: var(--surface2);
+  padding: 12px 16px;
+  margin-top: 26px;
+}
+
+/* --- Callout --- */
+
+.fc-docs__callout {
+  @apply flex items-stretch my-8 max-w-[660px];
+  border: 1px solid var(--teal-border);
+  background: var(--wash);
+}
+
+.fc-docs__callout-bar {
+  @apply shrink-0;
+  width: 2px;
+  background: var(--teal);
+}
+
+.fc-docs__callout-content {
+  padding: 16px 18px;
+}
+
+.fc-docs__callout-label {
+  @apply font-mono text-[9.5px] uppercase text-fc-teal mb-[7px];
+  letter-spacing: 0.12em;
+}
+
+.fc-docs__callout-text {
+  @apply text-[14.5px];
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+/* Amber variant */
+.fc-docs__callout--amber {
+  border-color: var(--amber-border);
+  background: var(--amber-bg);
+}
+
+.fc-docs__callout--amber .fc-docs__callout-bar {
+  background: var(--amber);
+}
+
+.fc-docs__callout--amber .fc-docs__callout-label {
+  color: var(--amber-ink);
+}
+
+/* --- Data Table --- */
+
+.fc-docs__table {
+  @apply border border-fc-rule w-full;
+}
+
+.fc-docs__table-head {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted border-b border-fc-rule;
+  letter-spacing: 0.12em;
+  background: var(--wash);
+}
+
+.fc-docs__table-head th {
+  @apply text-left font-normal;
+  padding: 10px 16px;
+  border-right: 1px solid var(--rule);
+}
+
+.fc-docs__table-head th:last-child {
+  border-right: none;
+}
+
+.fc-docs__table-body td {
+  @apply text-[13.5px];
+  padding: 12px 16px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.fc-docs__table-body td:last-child {
+  border-right: none;
+}
+
+.fc-docs__table-body tr:last-child td {
+  border-bottom: none;
+}
+
+.fc-docs__table-body td code {
+  @apply font-mono text-[12.5px] text-fc-teal;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.fc-docs__table-body td .fc-docs__required {
+  color: var(--danger);
+}
+
+/* --- Layer Cards (3-col hairline grid) --- */
+
+.fc-docs__layer-cards {
+  @apply grid gap-px border border-fc-rule;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--rule);
+}
+
+.fc-docs__layer-card {
+  @apply bg-fc-surface;
+  padding: 22px 20px;
+}
+
+.fc-docs__layer-card-eyebrow {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted mb-3;
+  letter-spacing: 0.12em;
+}
+
+.fc-docs__layer-card-name {
+  @apply font-mono text-[13px] text-fc-teal mb-2.5;
+}
+
+.fc-docs__layer-card-desc {
+  @apply text-[13.5px] text-fc-muted;
+  line-height: 1.65;
+}
+
+/* --- Feature Grid (2x2) --- */
+
+.fc-docs__feature-grid {
+  @apply grid gap-px border border-fc-rule mt-5;
+  grid-template-columns: 1fr 1fr;
+  background: var(--rule);
+}
+
+.fc-docs__feature-cell {
+  @apply bg-fc-surface;
+  padding: 18px 20px;
+}
+
+.fc-docs__feature-title {
+  @apply font-display text-[15px] font-semibold mb-1.5;
+  letter-spacing: -0.01em;
+}
+
+.fc-docs__feature-desc {
+  @apply text-[13.5px] text-fc-muted;
+  line-height: 1.6;
+}
+
+/* --- Field Types Grid (3x2) --- */
+
+.fc-docs__field-grid {
+  @apply grid gap-px border border-fc-rule;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--rule);
+}
+
+.fc-docs__field-cell {
+  @apply bg-fc-surface;
+  padding: 18px 18px 20px;
+}
+
+.fc-docs__field-cell-label {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted mb-[11px];
+  letter-spacing: 0.12em;
+}
+
+.fc-docs__field-cell-types {
+  @apply font-mono text-[12px];
+  line-height: 1.9;
+  color: var(--ink);
+}
+
+/* --- Requirements Table --- */
+
+.fc-docs__req-table {
+  @apply border border-fc-rule max-w-[660px] mt-[18px];
+}
+
+.fc-docs__req-row {
+  @apply grid border-b border-fc-rule text-[13.5px];
+  grid-template-columns: 1fr 1fr;
+}
+
+.fc-docs__req-row:last-child {
+  border-bottom: none;
+}
+
+.fc-docs__req-row--head {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted;
+  letter-spacing: 0.12em;
+  background: var(--wash);
+}
+
+.fc-docs__req-row--head > div {
+  padding: 10px 16px;
+}
+
+.fc-docs__req-row > div {
+  padding: 12px 16px;
+}
+
+.fc-docs__req-row > div:first-child {
+  border-right: 1px solid var(--rule);
+  color: var(--ink);
+}
+
+.fc-docs__req-row > div:last-child {
+  @apply font-mono text-[12.5px] text-fc-muted;
+}
+
+/* --- Optional Packages List --- */
+
+.fc-docs__opt-list {
+  @apply flex flex-col border border-fc-rule max-w-[660px] mt-[18px];
+}
+
+.fc-docs__opt-item {
+  @apply flex items-baseline justify-between gap-4 border-b border-fc-rule;
+  padding: 14px 16px;
+}
+
+.fc-docs__opt-item:last-child {
+  border-bottom: none;
+}
+
+.fc-docs__opt-name {
+  @apply font-mono text-[12.5px] text-fc-teal;
+}
+
+.fc-docs__opt-desc {
+  @apply text-[13px] text-fc-muted mt-[5px];
+  line-height: 1.6;
+}
+
+.fc-docs__opt-license {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted shrink-0;
+  letter-spacing: 0.1em;
+}
+
+/* --- Prev / Next Navigation --- */
+
+.fc-docs__prev-next {
+  @apply grid gap-4;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 56px;
+}
+
+.fc-docs__prev-next-card {
+  @apply border border-fc-rule bg-fc-surface no-underline cursor-pointer;
+  padding: 16px 18px;
+  transition: border-color 120ms linear;
+}
+
+.fc-docs__prev-next-card:hover {
+  border-color: var(--teal);
+}
+
+.fc-docs__prev-next-card--next {
+  @apply text-right;
+}
+
+.fc-docs__prev-next-label {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted mb-[7px];
+  letter-spacing: 0.12em;
+}
+
+.fc-docs__prev-next-title {
+  @apply font-display text-[15px] font-medium text-fc-teal;
+}
+
+/* --- Footer Line --- */
+
+.fc-docs__footer-line {
+  @apply flex items-center justify-between gap-5 font-mono text-[10px] uppercase text-fc-muted;
+  letter-spacing: 0.1em;
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+}
+
+.fc-docs__footer-line a {
+  @apply text-fc-muted no-underline;
+}
+
+.fc-docs__footer-line a:hover {
+  color: var(--ink);
+}
+
+/* --- TOC (On This Page) --- */
+
+.fc-docs__toc {
+  @apply sticky border-l border-fc-rule;
+  top: 60px;
+  padding: 32px 0 64px 24px;
+}
+
+.fc-docs__toc-label {
+  @apply font-mono text-[9.5px] uppercase text-fc-muted mb-[14px];
+  letter-spacing: 0.14em;
+}
+
+.fc-docs__toc-list {
+  @apply flex flex-col;
+}
+
+.fc-docs__toc-link {
+  @apply text-[12.5px] text-fc-muted no-underline cursor-pointer;
+  padding: 6px 0 6px 12px;
+  border-left: 1px solid var(--rule);
+  line-height: 1.5;
+  transition: color 120ms linear, border-color 120ms linear;
+}
+
+.fc-docs__toc-link:hover {
+  color: var(--ink);
+}
+
+.fc-docs__toc-link--active {
+  @apply text-fc-teal;
+  border-left-color: var(--teal);
+}
+
+.fc-docs__toc-extras {
+  @apply flex flex-col gap-2.5 mt-8 pt-[18px] border-t border-fc-rule;
+}
+
+.fc-docs__toc-extras a {
+  @apply text-[12.5px] text-fc-muted no-underline;
+}
+
+.fc-docs__toc-extras a:hover {
+  color: var(--ink);
+}
+
+/* --- Form Preview Mock --- */
+
+.fc-docs__preview {
+  @apply border border-fc-rule;
+  background: var(--bg);
+}
+
+.fc-docs__preview-bar {
+  @apply flex items-center gap-2 font-mono text-[9.5px] uppercase text-fc-muted border-b border-fc-rule;
+  letter-spacing: 0.12em;
+  padding: 9px 14px;
+  background: var(--surface2);
+}
+
+.fc-docs__preview-dot {
+  @apply w-1.5 h-1.5 bg-fc-teal;
+}
+
+.fc-docs__preview-body {
+  @apply flex flex-col gap-[18px] max-w-[520px];
+  padding: 26px 24px;
+}
+
+/* --- Mobile Sidebar --- */
+
+.fc-docs__mobile-toggle {
+  @apply hidden items-center gap-2 font-mono text-[11px] uppercase text-fc-muted border border-fc-rule cursor-pointer;
+  letter-spacing: 0.1em;
+  background: var(--surface);
+  padding: 8px 12px;
+  margin-bottom: 20px;
+}
+
+.fc-docs__mobile-overlay {
+  @apply fixed inset-0 z-40;
+  background: color-mix(in srgb, var(--bg), transparent 10%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-out;
+}
+
+.fc-docs__mobile-overlay--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.fc-docs__mobile-drawer {
+  @apply h-full overflow-y-auto p-6;
+  width: 280px;
+  background: var(--bg);
+  border-right: 1px solid var(--rule);
+}
+
+.fc-docs__mobile-drawer-header {
+  @apply flex items-center justify-between mb-6;
+}
+
+.fc-docs__mobile-drawer-label {
+  @apply font-mono text-[10px] uppercase text-fc-muted;
+  letter-spacing: 0.14em;
+}
+
+.fc-docs__mobile-drawer-close {
+  @apply p-1 text-fc-muted cursor-pointer;
+  background: none;
+  border: none;
+}
+
+/* =============================================
+   Responsive Overrides
+   ============================================= */
+
+/* Tablet: hide TOC, 2-col grid */
+@media (max-width: 1023px) {
+  .fc-docs {
+    @apply px-6;
+    grid-template-columns: 246px minmax(0, 1fr);
+  }
+
+  .fc-docs__toc {
+    @apply hidden;
+  }
+
+  .fc-docs__article {
+    padding: 28px 32px 64px;
+  }
+
+  .fc-docs-topbar__inner {
+    @apply px-6;
+  }
+
+  .fc-docs-topbar__search {
+    @apply hidden;
+  }
+
+  .fc-docs__layer-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-docs__field-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile: hide sidebar, show mobile toggle, 1-col */
+@media (max-width: 639px) {
+  .fc-docs {
+    @apply px-5;
+    grid-template-columns: 1fr;
+  }
+
+  .fc-docs__sidebar {
+    @apply hidden;
+  }
+
+  .fc-docs__mobile-toggle {
+    @apply flex;
+  }
+
+  .fc-docs__article {
+    padding: 20px 0 48px;
+  }
+
+  .fc-docs__h1 {
+    @apply text-[28px];
+  }
+
+  .fc-docs__description {
+    @apply text-[15px];
+  }
+
+  .fc-docs__body h2 {
+    @apply text-[20px];
+    margin: 36px 0 12px;
+    padding-top: 18px;
+  }
+
+  .fc-docs__prev-next {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-docs__feature-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-docs__field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-docs__req-table {
+    max-width: 100%;
+  }
+
+  .fc-docs__opt-list {
+    max-width: 100%;
+  }
+
+  .fc-docs__footer-line {
+    @apply flex-col items-start gap-2 text-[9px];
+  }
+
+  .fc-docs-topbar__inner {
+    @apply px-5;
+    gap: 12px;
+  }
+
+  .fc-docs-topbar__badge {
+    @apply hidden;
+  }
+
+  .fc-docs-topbar__version {
+    @apply hidden;
+  }
+
+  .fc-docs-topbar__link {
+    @apply hidden;
+  }
+}

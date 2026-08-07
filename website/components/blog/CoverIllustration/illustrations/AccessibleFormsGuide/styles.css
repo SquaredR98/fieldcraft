@@ -1,0 +1,66 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Accessible Forms Guide: Form + Callouts --- */
+.fc-illus-a11y {
+  @apply absolute inset-0 flex items-center justify-center gap-3 md:gap-5 px-6 md:px-14;
+}
+
+/* Form card */
+.fc-illus-a11y__form {
+  @apply flex flex-col gap-1.5 md:gap-2.5 p-2 md:p-3 w-[6rem] md:w-[10rem] shrink-0;
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+/* Field group */
+.fc-illus-a11y__field {
+  @apply flex flex-col gap-0.5;
+}
+
+.fc-illus-a11y__label {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.5;
+}
+
+.fc-illus-a11y__input {
+  @apply h-2.5 md:h-4 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+}
+
+/* Callouts column */
+.fc-illus-a11y__callouts {
+  @apply flex flex-col gap-2 md:gap-3.5 shrink-0 pt-0.5;
+}
+
+/* Single callout row */
+.fc-illus-a11y__callout {
+  @apply flex items-center gap-1 md:gap-1.5;
+}
+
+/* Horizontal connector line */
+.fc-illus-a11y__line {
+  @apply w-3 md:w-5 h-px;
+  background-color: var(--teal);
+  opacity: 0.3;
+}
+
+/* Badge pill */
+.fc-illus-a11y__badge {
+  @apply flex items-center gap-0.5 md:gap-1 px-1 md:px-1.5 py-0.5;
+  border: 1px solid color-mix(in srgb, var(--teal) 30%, transparent);
+  border-radius: 3px;
+}
+
+.fc-illus-a11y__check {
+  @apply text-[0.4rem] md:text-[0.6rem] leading-none;
+  color: var(--teal);
+  opacity: 0.7;
+}
+
+.fc-illus-a11y__text {
+  @apply font-mono text-[0.4rem] md:text-[0.6rem] uppercase tracking-wider leading-none;
+  color: var(--teal);
+  opacity: 0.5;
+}

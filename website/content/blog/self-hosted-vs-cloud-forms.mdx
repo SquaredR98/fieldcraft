@@ -1,0 +1,207 @@
+---
+title: "Self-Hosted Forms vs Cloud Forms: A Developer's Guide"
+slug: "self-hosted-vs-cloud-forms"
+date: "2026-07-12"
+description: "The trade-offs between SaaS form platforms and self-hosted form engines. Data ownership, pricing, customization, and when each approach makes sense."
+author: "ravi"
+category: "Guide"
+tags: ["fieldcraft", "forms", "engineering", "architecture"]
+---
+
+> **TL;DR** — Cloud form platforms are fast to start but expensive to scale, lock you into their ecosystem, and store your users' data on their servers. Self-hosted form engines give you full control over data, zero per-response costs, and deep customization — at the cost of initial setup. Here's how to decide.
+
+## Two Approaches to Forms
+
+Every team building a product with forms faces the same choice: use a cloud platform or host it yourself.
+
+**Cloud form platforms** give you a visual builder, hosting, submission storage, and analytics out of the box. You embed an iframe or paste a link. It works in minutes. You pay per month, usually with response limits.
+
+**Self-hosted form engines** are libraries you install into your own codebase. You define forms in code or JSON, render them with your own components, and store submissions in your own database. You pay nothing per response, but you do the setup yourself.
+
+Neither approach is universally better. The right choice depends on what you're building, how much control you need, and what your data requirements look like.
+
+## The Comparison
+
+| Factor | Cloud Platform | Self-Hosted Engine |
+|--------|---------------|-------------------|
+| Setup time | Minutes | Hours (one-time) |
+| Monthly cost | $25–$200+/mo | $0 (MIT license) |
+| Per-response cost | Often limited (100–10,000/mo) | Unlimited |
+| Data storage | Their servers | Your database |
+| Customization | Theme editor, limited | Full source access |
+| Embedding | iframe / popup | Native React components |
+| Offline support | No | Yes (with service worker) |
+| HIPAA / GDPR | Depends on their compliance | You control the stack |
+| Vendor lock-in | High (proprietary formats) | None (JSON schema) |
+| Analytics | Built-in | Build or integrate your own |
+
+## Where Cloud Platforms Win
+
+Cloud platforms are genuinely better for certain use cases:
+
+**Speed of deployment.** If you need a feedback form on your marketing site by tomorrow, a cloud platform gets it done. No build step, no deployment, no database setup. Paste an embed code and you're live.
+
+**Non-technical users.** If the people creating forms aren't developers — marketing teams, HR departments, operations managers — a visual drag-and-drop builder with no code requirement is the right tool. Expecting them to write JSON schemas or React components isn't realistic.
+
+**Built-in analytics.** Cloud platforms track completion rates, drop-off points, field-level timing, and response trends automatically. Building equivalent analytics from scratch is a significant engineering investment.
+
+> **If your forms are standalone (not deeply embedded in your product UI) and you don't process sensitive data, cloud platforms are likely the right call.** The setup speed and built-in features justify the subscription cost.
+
+## Where Self-Hosted Engines Win
+
+Self-hosted engines pull ahead when forms are part of your core product, not a bolt-on.
+
+### Data Ownership and Compliance
+
+Cloud platforms store your users' submissions on their infrastructure. For most use cases, this is fine. For healthcare, finance, government, and any application handling PII, it can be a dealbreaker.
+
+With a self-hosted engine, form responses go directly to your database. No third-party ever sees the data. HIPAA compliance becomes a matter of your own infrastructure rather than auditing someone else's.
+
+```typescript
+// Responses go to YOUR database, not a third party
+const schema = {
+  id: "patient-intake",
+  version: "1.0.0",
+  title: "Patient Intake",
+  sections: [{
+    id: "demographics",
+    title: "Patient Information",
+    questions: [
+      { id: "name", type: "short_text", label: "Full Name", required: true },
+      { id: "dob", type: "date", label: "Date of Birth", required: true },
+      { id: "ssn", type: "short_text", label: "SSN (last 4)",
+        validation: [{ type: "pattern", regex: "^\\d{4}$" }] },
+    ]
+  }],
+  submitAction: { type: "http", url: "/api/intake" }
+}
+```
+
+That submission goes to `/api/intake` — your server, your encryption, your retention policy.
+
+### Zero Per-Response Cost
+
+Cloud platforms charge per response or cap responses per pricing tier. A typical growth plan might allow 1,000 responses/month for $50. At 10,000 responses, you're looking at $150–$300/month. At 100,000, enterprise pricing kicks in.
+
+Self-hosted engines have no per-response cost. Whether you receive 10 or 10 million submissions, the library cost is the same: zero. Your only scaling cost is database storage and server capacity — which you're already paying for.
+
+> **The math is simple.** If you collect more than a few thousand responses per month, the annual subscription to a cloud platform exceeds the one-time engineering cost of integrating a self-hosted engine.
+
+### Native Integration
+
+Cloud forms are typically embedded via iframe. The form lives in a separate document, with its own styles, its own domain, and a visible border between your product and the form.
+
+Self-hosted engines render native components inside your application. The form IS your UI — same styles, same routing, same state management, same accessibility tree.
+
+```tsx
+// This is a React component in your app, not an iframe
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
+import '@squaredr/fieldcraft-react/styles.css'
+
+function OnboardingPage() {
+  return (
+    <div className="onboarding-layout">
+      <Sidebar />
+      <main>
+        <h1>Welcome — let's set up your account</h1>
+        <FormEngineRenderer
+          schema={onboardingSchema}
+          onSubmit={handleOnboarding}
+        />
+      </main>
+    </div>
+  )
+}
+```
+
+No iframe. No postMessage hacks. No style leaking. No CORS issues. The form is a first-class citizen of your application.
+
+### Deep Customization
+
+Cloud platforms offer theming — colors, fonts, logo placement. Some offer custom CSS. But they don't let you change how fields render, add custom field types, or modify validation behavior.
+
+Self-hosted engines give you full control:
+
+- **Custom field types**: Need a body diagram for medical intake? A signature pad? A payment field? Register them in the field registry.
+- **Custom validators**: Business-specific validation rules (check against your database, validate against an external API) run alongside built-in validators.
+- **Custom submission handlers**: Route different forms to different backends, transform data before storage, trigger webhooks.
+- **Custom themes**: Full CSS control, not just color pickers.
+
+### Portability
+
+Cloud platform schemas are proprietary. If you need to migrate to a different platform, you're exporting and re-building every form manually. Your form definitions are locked in their format.
+
+Self-hosted engines that use JSON schemas give you portability. The schema is a JSON file you own. You can version-control it, generate it from code, load it from an API, or migrate it to a different rendering engine.
+
+```json
+{
+  "id": "feedback",
+  "version": "1.0.0",
+  "title": "Product Feedback",
+  "sections": [{
+    "id": "main",
+    "title": "Your Feedback",
+    "questions": [
+      { "id": "rating", "type": "rating", "label": "How would you rate your experience?" },
+      { "id": "comments", "type": "long_text", "label": "Any additional thoughts?" }
+    ]
+  }],
+  "submitAction": { "type": "callback" }
+}
+```
+
+This schema works with FieldCraft today. If you switch engines tomorrow, the data structure is transparent JSON that maps to any form renderer.
+
+## The Hybrid Approach
+
+Some teams use both. Cloud platforms for external, standalone forms (event registrations, newsletter signups, contact forms) and self-hosted engines for internal, product-integrated forms (onboarding flows, checkout, intake).
+
+This makes sense when:
+
+- Marketing needs to iterate on lead capture forms without developer involvement
+- Product forms need deep integration with your application state and database
+- Compliance requirements differ between public-facing and internal forms
+
+## When to Choose Which
+
+**Choose a cloud platform when:**
+- You need a form live today, not next week
+- Non-technical team members create and manage forms
+- You collect fewer than 1,000 responses/month
+- Data sensitivity isn't a concern
+- Forms are standalone (not embedded in product UI)
+
+**Choose a self-hosted engine when:**
+- Forms are part of your product's core experience
+- You need full control over data storage and compliance
+- You collect thousands of responses monthly (cost savings)
+- You need custom field types or validation logic
+- You want native rendering, not iframes
+- You're building for healthcare, finance, or government
+
+**Choose both when:**
+- You have marketing forms AND product-embedded forms
+- Different teams own different form types
+- Compliance requirements vary by form context
+
+## FieldCraft as a Self-Hosted Engine
+
+FieldCraft is an open-source (MIT) schema-driven form engine. It ships 44 field types, conditional logic with 16 operators, multi-step navigation, validation pipeline, draft persistence, and theming — all rendered as native React components.
+
+```bash
+npm install @squaredr/fieldcraft-core @squaredr/fieldcraft-react
+```
+
+Define a JSON schema. Render it. Submissions go to your backend. No subscription, no response limits, no iframes.
+
+- [Documentation](/docs)
+- [GitHub](https://github.com/SquaredR98/fieldcraft)
+- [Quick Start](/docs/getting-started/installation)
+
+---
+
+## Further Reading
+
+- [The Real Cost of Building Forms From Scratch](/blog/real-cost-building-forms) — what it takes to build form infrastructure
+- [Why Schema-Driven Forms Beat Code-Driven Ones](/blog/why-schema-driven) — the architecture behind FieldCraft
+- [Build a Multi-Step Survey in 5 Minutes](/blog/build-multi-step-survey) — hands-on tutorial

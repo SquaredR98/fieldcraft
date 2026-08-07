@@ -1,0 +1,137 @@
+---
+title: "6 Hard-Won UX Lessons from Building a Form Engine"
+slug: "form-ux-lessons"
+date: "2026-05-17"
+description: "After building 44 field types and hundreds of test forms, these are the UX decisions that actually moved completion rates."
+author: "ravi"
+category: "Patterns"
+tags: ["ux", "forms", "fieldcraft", "frontend"]
+---
+
+> **TL;DR** — Validate on blur, show all errors at once, use sections to reduce perceived effort, hide (don't disable) conditional fields, auto-save drafts silently, and never disable the submit button.
+
+## 1. Validate on Blur, Never on Change
+
+The instinct is to show errors immediately. The user types "j" into an email field and you flash "Invalid email address." They haven't finished typing. You've just punished them for starting.
+
+Validate on blur. Let people finish their thought before telling them it's wrong. The only exception: character counters and password strength indicators, which are informational rather than punitive.
+
+In FieldCraft, every field validates when the user leaves it. Not before. The `touched` state tracks whether a field has been visited, and errors only render after `touched` is `true`.
+
+```typescript
+// The engine tracks this automatically
+{
+  touched: true,   // user has visited and left the field
+  error: ['Email is required'],  // only shown when touched
+}
+```
+
+We tried showing errors on submit-only (no inline feedback). Completion rates dropped. People would fill out 15 fields, hit submit, see 4 errors, and leave. On-blur validation catches mistakes early without being hostile.
+
+## 2. Show All Errors, Not Just the First
+
+Most form libraries show one error per field. "This field is required." You fill it in. Now it says "Must be at least 3 characters." You fix that. Now "Must contain a number."
+
+This is a guessing game. Show every applicable error at once. Let the user fix them all in one pass.
+
+```typescript
+// Bad: one error at a time
+error: "Must be at least 8 characters"
+
+// Good: all errors at once
+errors: [
+  "Must be at least 8 characters",
+  "Must contain an uppercase letter",
+  "Must contain a number"
+]
+```
+
+Yes, it looks like more red on the screen. But it's honest. Users fix everything once instead of playing whack-a-mole with validation messages. Our test forms saw fewer round-trips between field and submit button when all errors were visible.
+
+## 3. Section Boundaries Reduce Abandonment
+
+A 20-field form on a single page feels like a wall. The same 20 fields split across 4 sections of 5 fields each feels manageable.
+
+The content hasn't changed. The perceived effort has.
+
+Multi-step forms with a progress indicator ("Step 2 of 4") give people a sense of forward motion. They've already invested effort in Step 1 — the sunk cost keeps them going. A single scrolling page doesn't create those micro-commitments.
+
+But there's a catch: section navigation has to be instant. If clicking "Next" triggers a full-page reload or a visible spinner, you've introduced friction that wasn't there before. In FieldCraft, section transitions are client-side state changes — no network requests, no layout shift.
+
+```json
+{
+  "sections": [
+    { "id": "contact", "title": "Contact Info", "questions": [...] },
+    { "id": "details", "title": "Project Details", "questions": [...] },
+    { "id": "budget",  "title": "Budget & Timeline", "questions": [...] }
+  ]
+}
+```
+
+Another thing: let users go back. A form that won't let you return to a previous section feels like a trap. "Previous" buttons should be just as prominent as "Next."
+
+## 4. Conditional Fields Should Be Invisible, Not Disabled
+
+When a field doesn't apply, hide it. Don't grey it out with a "N/A" label.
+
+Disabled fields create noise. Users see them, wonder if they should be filling them in, and question whether something is broken. A field that simply isn't there raises no questions.
+
+```json
+{
+  "id": "company_size",
+  "type": "dropdown",
+  "label": "Company Size",
+  "showIf": {
+    "field": "inquiry_type",
+    "operator": "eq",
+    "value": "enterprise"
+  }
+}
+```
+
+When `inquiry_type` isn't "enterprise", the company size field doesn't exist in the DOM. Not disabled. Not collapsed. Gone.
+
+The conditional logic engine also cleans up. If a user selects "enterprise," fills in company size, then changes back to "personal" — the company size value gets cleared. Stale data from hidden fields is a real bug source.
+
+## 5. Draft Saving Should Be Automatic and Silent
+
+If your form has more than 5 fields, save progress automatically. Don't make people click a "Save Draft" button. Don't show a "Your progress has been saved" toast every 30 seconds.
+
+Save silently. Restore silently. The user closes the browser tab, comes back next week, and their half-completed form is exactly where they left it. That's it.
+
+FieldCraft saves to `localStorage` on every field change with a debounce. When the form loads, if a matching draft exists and isn't expired, the user sees a lightweight prompt: "Resume where you left off?" with Resume and Discard options. One click and they're back in context — no re-filling, no lost work.
+
+The key is that saving is silent and automatic. The user never has to think about saving. The restore prompt is minimal and non-blocking — it's a single question, not a modal dialog.
+
+One important detail: drafts need an expiration. A 6-month-old draft of a form that's since been redesigned will cause confusing validation errors. We default to 72 hours. Long enough to survive a weekend, short enough to avoid stale data.
+
+## 6. The Submit Button Should Never Be Disabled
+
+Disabling the submit button until all required fields are filled teaches users nothing. They see a greyed-out button, can't figure out what's missing, and leave.
+
+Keep the submit button always active. When someone clicks it with errors, scroll to the first error and set focus on that field. Now they know exactly what's wrong and where.
+
+```typescript
+// On submit with validation errors:
+// 1. Run validation on all fields
+// 2. Find the first field with an error
+// 3. Scroll it into view
+// 4. Focus it
+// 5. Show all error messages
+```
+
+A disabled button with no explanation is a dead end. An active button that tells you what's wrong is a guide.
+
+---
+
+## The Common Thread
+
+All six of these come down to one principle:
+
+> **Respect the user's time and attention.** Don't interrupt them while they're typing. Don't make them guess at errors. Don't overwhelm them with a field wall. Don't show them things that don't matter. Don't make them re-do work. Don't leave them stuck at a dead end.
+
+Forms are where users give you their information. The least you can do is not make it painful.
+
+---
+
+*FieldCraft ships with all six of these patterns built in. Check the [templates on npm](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free) to see them in action, or read the [docs](/docs) to build your first form.*

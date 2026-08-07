@@ -1,0 +1,19 @@
+@reference "../../../app/globals.css";
+
+/* --- Table of Contents --- */
+.fc-blog-toc__heading {
+  @apply font-mono uppercase mb-3.5 text-fc-2xs tracking-fc-mono-md text-fc-muted;
+}
+
+.fc-blog-toc__link {
+  @apply block no-underline border-l border-fc-rule text-fc-sm-code leading-normal py-1.5 pr-0 pl-3 text-fc-muted;
+  transition: color var(--motion-hover), border-color var(--motion-hover);
+}
+
+.fc-blog-toc__link:hover {
+  @apply text-fc-ink;
+}
+
+.fc-blog-toc__link--active {
+  @apply text-fc-teal border-l-fc-teal;
+}

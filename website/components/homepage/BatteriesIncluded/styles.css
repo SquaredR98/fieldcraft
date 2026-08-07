@@ -1,0 +1,76 @@
+@reference "../../../app/globals.css";
+
+.fc-batteries {
+  @apply border-b border-fc-rule;
+}
+
+.fc-batteries__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-batteries__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-batteries__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 mb-11 max-w-160 text-fc-ink-strong;
+}
+
+.fc-batteries__grid {
+  @apply grid gap-px bg-fc-rule border border-fc-rule;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.fc-batteries__card {
+  @apply bg-fc-surface p-7.5;
+}
+
+.fc-batteries__card-header {
+  @apply flex items-baseline justify-between mb-3;
+}
+
+.fc-batteries__card-title {
+  @apply font-display text-xl font-semibold tracking-[-0.02em];
+}
+
+.fc-batteries__badge {
+  @apply font-mono text-[9.5px] tracking-widest;
+  @apply uppercase text-fc-teal;
+  @apply border border-fc-teal-border;
+  @apply px-1.75 py-0.75;
+}
+
+.fc-batteries__card-body {
+  @apply text-[14.5px] leading-[1.65] text-fc-muted;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-batteries__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-batteries__h2 {
+    @apply text-[30px];
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-batteries__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-batteries__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-batteries__grid {
+    grid-template-columns: 1fr;
+  }
+}

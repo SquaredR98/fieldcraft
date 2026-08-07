@@ -1,0 +1,82 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Self-Hosted vs Cloud --- */
+.fc-illus-host {
+  @apply absolute inset-0 flex items-center justify-center gap-2.5 md:gap-4 px-6 md:px-14;
+}
+
+/* Column */
+.fc-illus-host__col {
+  @apply flex flex-col items-center gap-1 md:gap-1.5;
+}
+
+/* Tag */
+.fc-illus-host__tag {
+  @apply font-mono text-[0.4rem] md:text-[0.55rem] uppercase tracking-wider leading-none;
+  color: var(--teal);
+  opacity: 0.5;
+}
+
+/* Card */
+.fc-illus-host__card {
+  @apply flex flex-col gap-1 md:gap-1.5 p-2 md:p-3 w-[5rem] md:w-[8rem];
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+/* Server rack */
+.fc-illus-host__rack {
+  @apply flex flex-col gap-0.5 md:gap-1;
+}
+
+.fc-illus-host__rack-row {
+  @apply flex items-center gap-1 md:gap-1.5;
+}
+
+.fc-illus-host__rack-dot {
+  @apply w-1 md:w-1.5 h-1 md:h-1.5 rounded-full shrink-0;
+  background-color: var(--muted);
+  opacity: 0.25;
+}
+
+.fc-illus-host__rack-dot--teal {
+  background-color: var(--teal);
+  opacity: 0.5;
+}
+
+/* Bars */
+.fc-illus-host__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-host__bar--teal {
+  background-color: var(--teal);
+  opacity: 0.35;
+}
+
+/* Cloud shape — rounded rectangle to suggest cloud */
+.fc-illus-host__cloud-shape {
+  @apply w-3/5 h-2 md:h-3 self-center;
+  border: 1px solid color-mix(in srgb, var(--muted) 30%, transparent);
+  border-radius: 999px;
+}
+
+/* Divider */
+.fc-illus-host__divider {
+  @apply flex flex-col items-center gap-1 md:gap-1.5 shrink-0;
+}
+
+.fc-illus-host__divider-line {
+  @apply w-px h-4 md:h-6;
+  background-color: var(--muted);
+  opacity: 0.15;
+}
+
+.fc-illus-host__divider-text {
+  @apply font-mono text-[0.45rem] md:text-[0.6rem] italic leading-none;
+  color: var(--muted);
+  opacity: 0.4;
+}

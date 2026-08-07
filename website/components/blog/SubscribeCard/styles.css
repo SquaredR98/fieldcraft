@@ -1,0 +1,55 @@
+@reference "../../../app/globals.css";
+
+/* --- Subscribe Card --- */
+.fc-blog-subscribe {
+  @apply border border-fc-rule bg-fc-bg p-5 w-[300px] shrink-0;
+}
+
+.fc-blog-subscribe__eyebrow {
+  @apply font-mono uppercase mb-2.5 text-fc-2xs tracking-fc-mono text-fc-muted;
+}
+
+.fc-blog-subscribe__desc {
+  @apply text-fc-sm-body leading-[1.6] text-fc-ink mt-0 mb-3.5;
+}
+
+.fc-blog-subscribe__form {
+  @apply flex border border-fc-rule bg-fc-surface;
+}
+
+.fc-blog-subscribe__input {
+  @apply flex-1 bg-transparent border-none outline-none px-[11px] py-[9px] text-fc-sm text-fc-ink;
+}
+
+.fc-blog-subscribe__input::placeholder {
+  @apply text-fc-muted;
+}
+
+.fc-blog-subscribe__join {
+  @apply font-display font-medium border-none cursor-pointer bg-fc-teal text-fc-teal-on text-fc-sm px-3.5 py-[9px];
+  transition: background var(--motion-hover);
+}
+
+.fc-blog-subscribe__join:hover {
+  @apply bg-fc-teal-hover;
+}
+
+.fc-blog-subscribe__links {
+  @apply flex gap-3.5 mt-3 font-mono uppercase text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+}
+
+.fc-blog-subscribe__links a {
+  @apply no-underline text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-blog-subscribe__links a:hover {
+  @apply text-fc-ink;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-subscribe {
+    @apply w-full;
+  }
+}

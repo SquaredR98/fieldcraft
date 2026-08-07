@@ -1,0 +1,116 @@
+@reference "../../../app/globals.css";
+
+/* ── ComparisonTable section ── */
+
+.fc-compare {
+  @apply border-b border-fc-rule;
+}
+
+.fc-compare__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-compare__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-compare__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 mb-11 max-w-160 text-fc-ink-strong;
+}
+
+/* ── Table grid ── */
+
+.fc-compare__table {
+  @apply border border-fc-rule bg-fc-surface;
+}
+
+.fc-compare__row {
+  @apply grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1.15fr;
+}
+
+.fc-compare__row--header {
+  @apply bg-fc-wash;
+}
+
+.fc-compare__row + .fc-compare__row {
+  @apply border-t border-fc-rule;
+}
+
+/* ── Header cells ── */
+
+.fc-compare__header {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+  @apply px-5.5 py-4;
+}
+
+.fc-compare__header:not(:first-child) {
+  @apply border-l border-fc-rule;
+}
+
+.fc-compare__header--fc {
+  @apply text-fc-teal;
+}
+
+/* ── Data cells ── */
+
+.fc-compare__cell {
+  @apply text-[13.5px] leading-[1.55];
+  @apply px-5.5 py-3.75;
+}
+
+.fc-compare__cell:not(:first-child) {
+  @apply border-l border-fc-rule;
+}
+
+.fc-compare__cell--label {
+  @apply font-semibold text-fc-ink;
+}
+
+.fc-compare__cell--muted {
+  @apply text-fc-muted;
+}
+
+.fc-compare__cell--fc {
+  @apply bg-fc-wash text-fc-ink;
+}
+
+.fc-compare__cell--danger {
+  @apply text-fc-danger;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-compare__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-compare__h2 {
+    @apply text-[30px];
+  }
+
+  .fc-compare__table {
+    @apply overflow-x-auto;
+  }
+
+  .fc-compare__row {
+    @apply min-w-[700px];
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-compare__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-compare__h2 {
+    @apply text-[26px];
+  }
+}

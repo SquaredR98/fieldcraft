@@ -1,0 +1,27 @@
+@reference "../../../app/globals.css";
+
+/* --- Post Grid --- */
+.fc-blog-grid-wrap {
+  @apply max-w-[1280px] mx-auto p-10;
+}
+
+.fc-blog-grid {
+  @apply grid grid-cols-3 gap-px bg-fc-rule border border-fc-rule;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .fc-blog-grid {
+    @apply grid-cols-2;
+  }
+}
+
+@media (max-width: 768px) {
+  .fc-blog-grid-wrap {
+    @apply px-5 py-6;
+  }
+
+  .fc-blog-grid {
+    @apply grid-cols-1;
+  }
+}

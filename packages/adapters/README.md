@@ -1,6 +1,12 @@
 # @squaredr/fieldcraft-adapters
 
-Storage and delivery adapters for [FieldCraft](https://squaredr.tech/products/fieldcraft). Postgres, Supabase, and Webhook in a single package with subpath imports.
+Storage and delivery adapters for [FieldCraft](https://fieldcraft.squaredr.tech). Postgres, Supabase, and Webhook in a single package with subpath imports.
+
+[![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-adapters)](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters)
+[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-adapters)](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+
+> **Website:** [fieldcraft.squaredr.tech](https://fieldcraft.squaredr.tech) · **Docs:** [fieldcraft.squaredr.tech/docs/submission/adapters-overview](https://fieldcraft.squaredr.tech/docs/submission/adapters-overview) · **GitHub:** [github.com/SquaredR98/fieldcraft](https://github.com/SquaredR98/fieldcraft)
 
 ## Install
 
@@ -124,9 +130,9 @@ This package replaces the individual adapter packages:
 
 ## Community
 
-- [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
-- [Docs](https://squaredr.tech/products/fieldcraft/docs/adapters) — Adapter documentation
-- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, ResponseViewer
+- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
+- [Docs](https://fieldcraft.squaredr.tech/docs/submission/adapters-overview) — Adapter documentation
+- [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 
 ## License
 

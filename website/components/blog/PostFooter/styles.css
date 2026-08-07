@@ -1,0 +1,95 @@
+@reference "../../../app/globals.css";
+
+/* --- Post Footer --- */
+.fc-blog-post__footer {
+  @apply mt-12;
+}
+
+.fc-blog-post__footer-tags {
+  @apply flex items-center justify-between gap-5 pt-5.5 border-t border-fc-rule;
+}
+
+.fc-blog-post__tag-list {
+  @apply flex gap-2;
+}
+
+.fc-blog-post__tag {
+  @apply font-mono uppercase border border-fc-rule text-fc-2xs tracking-fc-mono-sm text-fc-muted px-2 py-1;
+}
+
+.fc-blog-post__discuss {
+  @apply font-mono uppercase no-underline text-fc-xs tracking-fc-mono-sm text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-blog-post__discuss:hover {
+  @apply text-fc-ink;
+}
+
+/* --- Docs CTA --- */
+.fc-blog-post__cta {
+  @apply flex items-center justify-between gap-6 mt-8 p-6 border border-fc-teal-border bg-fc-wash;
+}
+
+.fc-blog-post__cta-eyebrow {
+  @apply font-mono uppercase mb-2 text-fc-2xs tracking-fc-mono text-fc-teal;
+}
+
+.fc-blog-post__cta-heading {
+  @apply font-display font-semibold text-fc-lead tracking-fc-subhead text-fc-ink-strong;
+}
+
+.fc-blog-post__cta-btn {
+  @apply font-display font-medium shrink-0 no-underline bg-fc-teal text-fc-teal-on text-sm px-[18px] py-[11px];
+  transition: background var(--motion-hover);
+}
+
+.fc-blog-post__cta-btn:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+/* --- Keep Reading --- */
+.fc-blog-post__keep-reading {
+  @apply mt-16;
+}
+
+.fc-blog-post__keep-reading-label {
+  @apply font-mono uppercase mb-4 text-fc-xs tracking-fc-mono-md text-fc-muted;
+}
+
+.fc-blog-post__keep-reading-grid {
+  @apply grid grid-cols-2 gap-px bg-fc-rule border border-fc-rule;
+}
+
+.fc-blog-post__keep-reading-card {
+  @apply bg-fc-surface no-underline text-inherit px-[22px] py-5;
+  transition: background var(--motion-hover);
+}
+
+.fc-blog-post__keep-reading-card:hover {
+  @apply bg-fc-surface2;
+}
+
+.fc-blog-post__keep-reading-meta {
+  @apply font-mono uppercase mb-[11px] text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+}
+
+.fc-blog-post__keep-reading-title {
+  @apply font-display font-semibold text-fc-body tracking-fc-subhead leading-[1.25] text-fc-ink-strong;
+  text-wrap: pretty;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-post__cta {
+    @apply flex-col items-start;
+  }
+
+  .fc-blog-post__keep-reading-grid {
+    @apply grid-cols-1;
+  }
+
+  .fc-blog-post__footer-tags {
+    @apply flex-col items-start gap-3;
+  }
+}

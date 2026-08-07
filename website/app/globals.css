@@ -1,0 +1,376 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+/* Scan sources */
+@source "../**/*.tsx";
+@source "../**/*.ts";
+@source "../**/*.css";
+@source "../../packages/react/src/components/**/*.tsx";
+@source "../../packages/react/src/components/**/*.ts";
+
+/* =====================================================
+   Drafting Teal — Tailwind theme extension
+   Maps our CSS custom properties into Tailwind utilities
+   so we can write @apply bg-fc-surface text-fc-ink etc.
+   ===================================================== */
+
+@theme inline {
+  /* Drafting Teal design tokens */
+  --color-fc-bg: var(--bg);
+  --color-fc-surface: var(--surface);
+  --color-fc-surface2: var(--surface2);
+  --color-fc-ink: var(--ink);
+  --color-fc-ink-strong: var(--ink-strong);
+  --color-fc-muted: var(--muted);
+  --color-fc-rule: var(--rule);
+  --color-fc-grid: var(--grid);
+  --color-fc-teal: var(--teal);
+  --color-fc-teal-hover: var(--teal-hover);
+  --color-fc-teal-on: var(--teal-on);
+  --color-fc-teal-border: var(--teal-border);
+  --color-fc-amber: var(--amber);
+  --color-fc-amber-ink: var(--amber-ink);
+  --color-fc-amber-bg: var(--amber-bg);
+  --color-fc-amber-border: var(--amber-border);
+  --color-fc-wash: var(--wash);
+  --color-fc-wash-rule: var(--wash-rule);
+  --color-fc-danger: var(--danger);
+  --color-fc-btn-line: var(--btn-line);
+
+  /* shadcn/ui bridge — needed for FormEngineRenderer Tailwind classes */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Fonts */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  /* Drafting Teal — Typography scale
+     Named sizes for the blog/editorial design system.
+     Usage: text-fc-xs, text-fc-sm, text-fc-body, etc. */
+  --text-fc-2xs: 9.5px;       /* mono labels, tags, eyebrows */
+  --text-fc-xs: 10px;         /* mono back links, dates, meta */
+  --text-fc-xs-tab: 10.5px;   /* filter rail tabs */
+  --text-fc-sm-code: 12.5px;  /* TOC links, pre code blocks */
+  --text-fc-sm: 13px;         /* subscribe input/join, small UI */
+  --text-fc-sm-body: 13.5px;  /* card excerpt, table body, desc */
+  --text-fc-callout: 15px;    /* blockquote body */
+  --text-fc-body-lg: 15.5px;  /* featured post description */
+  --text-fc-body: 17px;       /* article body, subtitles, h4 */
+  --text-fc-lead: 19px;       /* post description, CTA heading */
+  --text-fc-h2: 26px;         /* article h2 */
+  --text-fc-h1-card: 31px;    /* featured post title */
+  --text-fc-h1: 44px;         /* article page title */
+  --text-fc-hero: 50px;       /* masthead heading */
+
+  /* Drafting Teal — Tracking scale */
+  --tracking-fc-tight: -0.038em;   /* hero, article title */
+  --tracking-fc-snug: -0.03em;     /* featured post title */
+  --tracking-fc-heading: -0.025em; /* h2 */
+  --tracking-fc-subhead: -0.02em;  /* card title, CTA heading, keep-reading */
+  --tracking-fc-h3: -0.015em;     /* h3 headings */
+  --tracking-fc-mono-sm: 0.1em;    /* mono labels (compact) */
+  --tracking-fc-mono: 0.12em;      /* mono tags, eyebrows */
+  --tracking-fc-mono-md: 0.14em;   /* back links, TOC heading */
+  --tracking-fc-mono-lg: 0.16em;   /* masthead eyebrow */
+}
+
+/* =====================================================
+   Drafting Teal — CSS custom property definitions
+   Hue is constant across modes; only lightness moves.
+   ===================================================== */
+
+:root {
+  --bg: #F4F7F8;
+  --surface: #FFFFFF;
+  --surface2: #FAFCFC;
+  --ink: #12222A;
+  --ink-strong: #12222A;
+  --muted: #6A7B85;
+  --rule: #DCE4E8;
+  --grid: #E3EAEC;
+  --teal: #1F6B6E;
+  --teal-hover: #17575A;
+  --teal-on: #FFFFFF;
+  --teal-border: #B9D1CF;
+  --amber: #C98A2E;
+  --amber-ink: #A06D22;
+  --amber-bg: #FBF5EA;
+  --amber-border: #E2C795;
+  --wash: #EDF3F2;
+  --wash-rule: #D5E2DF;
+  --danger: #B04A3C;
+  --btn-line: #12222A;
+  --focus-ring: 0 0 0 3px rgba(31, 107, 110, 0.14);
+  --placeholder: #96A5AD;
+
+  --font-display: var(--font-space-grotesk), system-ui, sans-serif;
+  --font-body: var(--font-ibm-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
+
+  --motion-hover: 120ms linear;
+  --motion-enter: 200ms ease-out;
+  --motion-theme: 160ms ease;
+
+  /* shadcn/ui variable bridge (consumed by FormEngineRenderer) */
+  --radius: 0px;
+  --background: #F4F7F8;
+  --foreground: #12222A;
+  --card: #FFFFFF;
+  --card-foreground: #12222A;
+  --primary: #1F6B6E;
+  --primary-foreground: #FFFFFF;
+  --secondary: #EDF3F2;
+  --secondary-foreground: #12222A;
+  --muted-foreground: #6A7B85;
+  --accent: #EDF3F2;
+  --accent-foreground: #12222A;
+  --destructive: #B04A3C;
+  --destructive-foreground: #FFFFFF;
+  --border: #DCE4E8;
+  --input: #DCE4E8;
+  --ring: #1F6B6E;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0F1A1F;
+  --surface: #16242A;
+  --surface2: #132026;
+  --ink: #E8EFF1;
+  --ink-strong: #F0F5F6;
+  --muted: #8CA1A9;
+  --rule: #2A3B42;
+  --grid: #1A2B32;
+  --teal: #63BDB4;
+  --teal-hover: #7FCEC6;
+  --teal-on: #0F1A1F;
+  --teal-border: #2F4F4C;
+  --amber: #E0A94F;
+  --amber-ink: #E0A94F;
+  --amber-bg: #241F13;
+  --amber-border: #4D3F22;
+  --wash: #182F31;
+  --wash-rule: #24413F;
+  --danger: #E08072;
+  --btn-line: #3D5259;
+  --focus-ring: 0 0 0 3px rgba(99, 189, 180, 0.18);
+  --placeholder: #5E7680;
+
+  /* shadcn/ui variable bridge (dark) */
+  --background: #0F1A1F;
+  --foreground: #E8EFF1;
+  --card: #16242A;
+  --card-foreground: #E8EFF1;
+  --primary: #63BDB4;
+  --primary-foreground: #0F1A1F;
+  --secondary: #182F31;
+  --secondary-foreground: #E8EFF1;
+  --muted-foreground: #8CA1A9;
+  --accent: #182F31;
+  --accent-foreground: #E8EFF1;
+  --destructive: #E08072;
+  --destructive-foreground: #0F1A1F;
+  --border: #2A3B42;
+  --input: #2A3B42;
+  --ring: #63BDB4;
+}
+
+/* ── Base reset ── */
+
+html, body {
+  @apply m-0 bg-fc-bg text-fc-ink antialiased;
+}
+
+body {
+  @apply font-body text-[15px] leading-[1.65];
+}
+
+:where(a) {
+  @apply text-fc-teal no-underline;
+}
+
+:where(a):hover {
+  @apply text-fc-teal-hover;
+}
+
+::selection {
+  @apply bg-fc-teal text-fc-teal-on;
+}
+
+/* ── FormEngineRenderer placeholder override ── */
+[data-slot="input"]::placeholder,
+textarea::placeholder {
+  color: var(--placeholder) !important;
+}
+
+/* ── Scrollbar — Drafting Teal ── */
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background-color: var(--rule);
+  border-radius: 0;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted);
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Ensure all elements inherit scrollbar styling */
+*, *::before, *::after {
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+
+/* ── Focus ── */
+
+:where(input, select, textarea, button):focus-visible {
+  @apply outline-none border-fc-teal;
+  box-shadow: var(--focus-ring);
+}
+
+/* ── Utility classes ── */
+
+/* Drafting grid background (24px squares) — needs raw CSS for the gradient pattern */
+.fc-grid-bg {
+  @apply bg-fc-bg;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Horizontal-only drafting grid variant */
+.fc-grid-bg--rows {
+  @apply bg-fc-bg;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px);
+  background-size: 100% 24px;
+}
+
+/* Hairline grid: 1px gap trick with --rule background */
+.fc-hairline-grid {
+  @apply grid gap-px bg-fc-rule border border-fc-rule;
+}
+
+.fc-hairline-grid > * {
+  @apply bg-fc-surface;
+}
+
+/* Mono eyebrow label */
+.fc-eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted;
+}
+
+/* Section separator */
+.fc-section {
+  @apply border-b border-fc-rule;
+}
+
+/* Content container */
+.fc-container {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+/* ── Radix portal content (Select dropdown, Popover) ──
+   These render at <body> level, outside ThemeProvider and .fc-demos__live-form.
+   They inherit :root CSS vars, so shadcn colors from :root apply correctly.
+   We just need to kill border-radius and ensure Drafting Teal visual alignment. */
+
+[data-slot="select-content"] {
+  border-radius: 0 !important;
+  border-color: var(--rule);
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-slot="select-content"] * {
+  border-radius: 0 !important;
+}
+
+[data-slot="select-item"] {
+  color: var(--ink);
+  font-size: 14px;
+}
+
+[data-slot="select-item"]:focus {
+  background: var(--wash);
+  color: var(--ink-strong);
+}
+
+/* ── FormEngine custom component classes (for demo routes) ── */
+
+.fc-option-active {
+  @apply border-fc-teal;
+  background: color-mix(in srgb, var(--teal) 8%, transparent);
+}
+
+.fc-option-filled {
+  @apply bg-fc-teal border-fc-teal text-fc-teal-on font-semibold;
+}
+
+.fc-error-bg {
+  background: color-mix(in srgb, var(--danger) 6%, transparent);
+}
+
+/* ── Tab panel enter animation ── */
+
+.fc-tab-panel-enter {
+  animation: fc-tab-enter var(--motion-enter) forwards;
+}
+
+@keyframes fc-tab-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,37 @@
+@reference "../../../app/globals.css";
+
+.fc-logo {
+  @apply flex items-center gap-2.75 no-underline text-fc-ink;
+}
+
+.fc-logo-bars {
+  @apply flex flex-col gap-0.5;
+}
+
+.fc-logo-bar {
+  @apply w-4.5 h-1.25;
+}
+
+.fc-logo-bar--outlined {
+  @apply border border-solid border-fc-ink;
+}
+
+.fc-logo-bar--filled {
+  @apply bg-fc-ink;
+}
+
+.fc-logo-bar--amber {
+  @apply border border-solid border-fc-amber;
+}
+
+.fc-logo-text {
+  @apply flex flex-col gap-px;
+}
+
+.fc-logo-wordmark {
+  @apply font-display text-[16px] font-semibold tracking-[-0.02em] leading-none;
+}
+
+.fc-logo-endorsement {
+  @apply font-mono text-[8.5px] tracking-[0.2em] uppercase text-fc-muted leading-none;
+}

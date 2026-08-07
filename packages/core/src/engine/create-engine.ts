@@ -13,6 +13,7 @@ import { resolvePrefill } from "./prefill-resolver";
 import { createDraftManager } from "./draft-manager";
 import { runSubmission } from "./submission-pipeline";
 import { generateSessionToken } from "../utils/session-token";
+import { isTelemetryEnabled, collectTelemetryData, sendTelemetryEvent } from "./telemetry";
 
 /**
  * Configuration options for creating a form engine instance via {@link createEngine}.
@@ -62,6 +63,14 @@ export type EngineOptions = {
   asyncValidators?: Record<string, AsyncValidator>;
   /** Explicit session token for draft storage. Auto-generated if omitted. */
   sessionToken?: string;
+  /**
+   * Override the telemetry opt-in setting. `true` enables anonymous telemetry,
+   * `false` disables it. When omitted, falls back to the `FIELDCRAFT_TELEMETRY_ENABLED`
+   * environment variable. Telemetry is **off by default**.
+   *
+   * @see https://fieldcraft.squaredr.tech/docs/core-concepts/telemetry
+   */
+  telemetry?: boolean;
 };
 
 /**
@@ -604,6 +613,12 @@ export function createEngine(
       // Allow GC
     },
   };
+
+  // Telemetry (opt-in, non-blocking, fire-and-forget)
+  if (isTelemetryEnabled(options?.telemetry)) {
+    const telemetryData = collectTelemetryData(schema, options);
+    sendTelemetryEvent(telemetryData);
+  }
 
   return engine;
 }

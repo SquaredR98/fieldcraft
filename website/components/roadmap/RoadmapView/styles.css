@@ -1,0 +1,108 @@
+@reference "../../../app/globals.css";
+
+/* ── Roadmap page ── */
+
+.fc-roadmap {
+  @apply bg-fc-bg;
+}
+
+.fc-roadmap__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+/* ── Header ── */
+.fc-roadmap__header {
+  @apply mb-14;
+}
+
+.fc-roadmap__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+}
+
+.fc-roadmap__h1 {
+  @apply font-display text-[42px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 text-fc-ink-strong mb-4;
+}
+
+.fc-roadmap__sub {
+  @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0;
+}
+
+.fc-roadmap__link {
+  @apply text-fc-teal no-underline;
+  transition: opacity var(--motion-hover);
+}
+
+.fc-roadmap__link:hover {
+  @apply opacity-70;
+}
+
+/* ── Timeline ── */
+.fc-roadmap__timeline {
+  @apply grid gap-12;
+}
+
+/* ── Group (one month) ── */
+.fc-roadmap__group {
+  @apply border-t border-fc-rule pt-6;
+}
+
+.fc-roadmap__period {
+  @apply font-mono text-[11px] tracking-[0.14em] uppercase text-fc-muted mb-5;
+}
+
+/* ── Item list ── */
+.fc-roadmap__list {
+  @apply list-none m-0 p-0 grid gap-0;
+}
+
+.fc-roadmap__item {
+  @apply flex items-center justify-between gap-4 py-2.5;
+  @apply border-b border-fc-rule;
+}
+
+.fc-roadmap__item:last-child {
+  @apply border-b-0;
+}
+
+.fc-roadmap__item-title {
+  @apply text-fc-body leading-[1.5] text-fc-ink;
+}
+
+/* ── Status tags ── */
+.fc-roadmap__tag {
+  @apply font-mono text-[9px] tracking-fc-mono uppercase px-2 py-0.5 shrink-0;
+}
+
+.fc-roadmap__tag--shipped {
+  background: color-mix(in oklch, var(--teal) 12%, transparent);
+  color: var(--teal);
+}
+
+.fc-roadmap__tag--planned {
+  @apply bg-fc-rule text-fc-muted;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .fc-roadmap__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-roadmap__h1 {
+    @apply text-[34px];
+  }
+}
+
+@media (max-width: 639px) {
+  .fc-roadmap__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-roadmap__h1 {
+    @apply text-[28px];
+  }
+
+  .fc-roadmap__item {
+    @apply flex-col items-start gap-1;
+  }
+}

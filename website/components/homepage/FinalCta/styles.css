@@ -1,0 +1,130 @@
+@reference "../../../app/globals.css";
+
+/* ── Final CTA section ── */
+
+.fc-cta {
+  @apply border-b border-fc-rule;
+  /* Drafting grid — no Tailwind equivalent for this pattern */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fc-cta__inner {
+  @apply grid items-start mx-auto max-w-310;
+  @apply px-10 py-22 gap-14;
+  grid-template-columns: 1.1fr 1fr;
+}
+
+/* ── Left column ── */
+
+.fc-cta__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-teal mb-4.5;
+}
+
+.fc-cta__h2 {
+  @apply font-display text-[44px] font-semibold;
+  @apply tracking-[-0.035em] leading-[1.05];
+  @apply m-0 text-fc-ink-strong;
+}
+
+.fc-cta__sub {
+  @apply text-base leading-[1.65] text-fc-muted;
+  @apply mt-4.5 mb-7.5 max-w-[460px];
+}
+
+.fc-cta__actions {
+  @apply flex flex-wrap gap-3;
+}
+
+.fc-cta__btn-primary {
+  @apply inline-block no-underline whitespace-nowrap;
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply font-display text-[15px] font-medium;
+  @apply px-6 py-3.5;
+  transition: background-color var(--motion-hover);
+}
+
+.fc-cta__btn-primary:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+.fc-cta__btn-outline {
+  @apply inline-block no-underline whitespace-nowrap;
+  @apply bg-transparent text-fc-ink;
+  @apply font-display text-[15px] font-medium;
+  @apply border-fc-btn-line px-6 py-3.25;
+  border-width: 1.5px;
+  transition: background-color var(--motion-hover), color var(--motion-hover);
+}
+
+.fc-cta__btn-outline:hover {
+  @apply bg-fc-ink text-fc-bg;
+}
+
+/* ── Right column: packages card ── */
+
+.fc-cta__card {
+  @apply border border-fc-rule bg-fc-surface;
+}
+
+.fc-cta__card-header {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+  @apply border-b border-fc-rule;
+  @apply px-4.5 py-3.5;
+}
+
+.fc-cta__pkg {
+  @apply flex justify-between items-baseline gap-4;
+  @apply px-4.5 py-4;
+}
+
+.fc-cta__pkg + .fc-cta__pkg {
+  @apply border-t border-fc-rule;
+}
+
+.fc-cta__pkg-info {
+  @apply min-w-0;
+}
+
+.fc-cta__pkg-name {
+  @apply font-mono text-[13px] text-fc-teal;
+}
+
+.fc-cta__pkg-desc {
+  @apply text-[12.5px] text-fc-muted mt-1;
+}
+
+.fc-cta__pkg-badge {
+  @apply font-mono text-[9.5px] tracking-[0.1em];
+  @apply uppercase text-fc-muted whitespace-nowrap;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-cta__inner {
+    @apply px-6 py-16 gap-10;
+    grid-template-columns: 1fr;
+  }
+
+  .fc-cta__h2 {
+    @apply text-[34px];
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-cta__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-cta__h2 {
+    @apply text-[28px];
+  }
+}

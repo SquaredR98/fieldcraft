@@ -1,0 +1,173 @@
+@reference "../../../app/globals.css";
+
+/* ── Architecture section ── */
+
+.fc-arch {
+  @apply border-b border-fc-rule;
+  /* Drafting grid — no Tailwind equivalent for this pattern */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fc-arch__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-arch__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-arch__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 max-w-160 text-fc-ink-strong;
+}
+
+.fc-arch__sub {
+  @apply text-base leading-[1.65] text-fc-muted;
+  @apply mt-4 mb-11 max-w-140;
+}
+
+.fc-arch__grid {
+  @apply grid gap-10;
+  grid-template-columns: 1.15fr 1fr;
+}
+
+/* ── Left column: nested layer boxes ── */
+
+.fc-arch__layer {
+  @apply border p-5;
+}
+
+.fc-arch__layer--pro {
+  @apply border-fc-amber-border bg-fc-amber-bg;
+}
+
+.fc-arch__layer--react {
+  @apply border-fc-teal-border bg-fc-wash;
+  @apply mt-4;
+}
+
+.fc-arch__layer--core {
+  @apply border-fc-rule bg-fc-surface;
+  @apply mt-4;
+}
+
+.fc-arch__layer-header {
+  @apply flex items-center justify-between mb-2;
+}
+
+.fc-arch__layer-label {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-arch__layer-badge {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase px-2 py-0.75;
+}
+
+.fc-arch__layer-badge--amber {
+  @apply border border-fc-amber-border text-fc-amber-ink;
+}
+
+.fc-arch__layer-badge--teal {
+  @apply border border-fc-teal-border text-fc-teal;
+}
+
+.fc-arch__layer-badge--muted {
+  @apply border border-fc-rule text-fc-muted;
+}
+
+.fc-arch__layer-title {
+  @apply font-display text-lg font-semibold;
+  @apply tracking-[-0.02em] text-fc-ink-strong;
+}
+
+.fc-arch__layer-pkg {
+  @apply font-mono text-xs text-fc-teal mt-0.5;
+}
+
+.fc-arch__layer-desc {
+  @apply text-sm leading-[1.65] text-fc-muted mt-2;
+}
+
+/* ── Right column: hairline-stacked list ── */
+
+.fc-arch__sidebar {
+  @apply grid gap-px bg-fc-rule;
+}
+
+.fc-arch__sidebar-item {
+  @apply bg-fc-surface px-6 py-5.5;
+}
+
+.fc-arch__sidebar-title {
+  @apply font-display text-[15px] font-semibold;
+  @apply tracking-[-0.01em] text-fc-ink-strong mb-2;
+}
+
+.fc-arch__sidebar-text {
+  @apply text-sm leading-[1.65] text-fc-muted;
+}
+
+.fc-arch__sidebar-pkg {
+  @apply font-mono text-xs text-fc-teal mb-1.5;
+}
+
+/* ── Entry point table ── */
+
+.fc-arch__entry-table {
+  @apply w-full mt-2;
+  border-collapse: collapse;
+}
+
+.fc-arch__entry-table td {
+  @apply py-1.5 align-top text-sm leading-[1.65];
+}
+
+.fc-arch__entry-table td:first-child {
+  @apply font-mono text-[11px] tracking-[0.08em];
+  @apply uppercase text-fc-ink-strong pr-4;
+  @apply whitespace-nowrap pt-2;
+}
+
+.fc-arch__entry-table td:last-child {
+  @apply text-fc-muted;
+}
+
+.fc-arch__entry-row + .fc-arch__entry-row td {
+  @apply border-t border-fc-rule;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-arch__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-arch__h2 {
+    @apply text-[30px];
+  }
+
+  .fc-arch__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-arch__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-arch__h2 {
+    @apply text-[26px];
+  }
+}

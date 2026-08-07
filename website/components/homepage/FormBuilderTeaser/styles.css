@@ -1,0 +1,65 @@
+@reference "../../../app/globals.css";
+
+.fc-builder-teaser {
+  @apply bg-fc-surface border-b border-fc-rule;
+}
+
+.fc-builder-teaser__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+/* ── Header ── */
+.fc-builder-teaser__header {
+  @apply mb-10;
+}
+
+.fc-builder-teaser__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+}
+
+.fc-builder-teaser__h2 {
+  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 max-w-120 text-fc-ink-strong mb-4;
+}
+
+.fc-builder-teaser__sub {
+  @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0 mb-6 max-w-160;
+}
+
+.fc-builder-teaser__cta {
+  @apply inline-flex items-center font-mono text-[11px] tracking-[0.1em] uppercase text-fc-teal no-underline;
+  transition: opacity var(--motion-hover);
+}
+
+.fc-builder-teaser__cta:hover {
+  @apply opacity-80;
+}
+
+.fc-builder-teaser__note {
+  @apply font-mono text-[10px] tracking-fc-mono-sm uppercase text-fc-muted mt-3 m-0;
+}
+
+/* ── Builder ── */
+.fc-builder-teaser__form {
+  @apply border border-fc-rule overflow-hidden;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1023px) {
+  .fc-builder-teaser__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-builder-teaser__h2 {
+    @apply text-[30px];
+  }
+}
+
+@media (max-width: 639px) {
+  .fc-builder-teaser__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-builder-teaser__h2 {
+    @apply text-[26px];
+  }
+}

@@ -1,0 +1,17 @@
+@reference "../../../app/globals.css";
+
+/* --- Empty State --- */
+.fc-blog-empty {
+  @apply max-w-[1280px] mx-auto text-center px-10 py-20;
+}
+
+.fc-blog-empty p {
+  @apply m-0 text-fc-body text-fc-muted;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-empty {
+    @apply px-5 py-[60px];
+  }
+}

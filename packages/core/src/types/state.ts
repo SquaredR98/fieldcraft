@@ -23,6 +23,7 @@ export type FormState = {
   isSubmitted: boolean;
   /** Error message from a failed submission attempt. */
   submitError?: string;
+
   /** True after the user has clicked submit at least once (enables showing all errors). */
   submitAttempted: boolean;
 

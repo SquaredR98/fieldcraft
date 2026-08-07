@@ -1,0 +1,60 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Schema vs Code: Two columns --- */
+.fc-illus-vs {
+  @apply absolute inset-0 flex items-center justify-center gap-2.5 md:gap-4 px-6 md:px-14;
+}
+
+/* Column */
+.fc-illus-vs__col {
+  @apply flex flex-col items-center gap-1 md:gap-1.5;
+}
+
+/* Tag label */
+.fc-illus-vs__tag {
+  @apply font-mono text-[0.45rem] md:text-[0.6rem] uppercase tracking-wider leading-none;
+  color: var(--teal);
+  opacity: 0.5;
+}
+
+/* Card */
+.fc-illus-vs__card {
+  @apply flex flex-col gap-1 md:gap-1.5 p-2 md:p-3 w-[5rem] md:w-[8rem];
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+/* Indented block (for code side) */
+.fc-illus-vs__indent {
+  @apply flex flex-col gap-1 md:gap-1.5 pl-2 md:pl-3;
+}
+
+/* Bars */
+.fc-illus-vs__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-vs__bar--teal {
+  background-color: var(--teal);
+  opacity: 0.35;
+}
+
+/* Vertical divider */
+.fc-illus-vs__divider {
+  @apply flex flex-col items-center gap-1 md:gap-1.5 shrink-0;
+}
+
+.fc-illus-vs__divider-line {
+  @apply w-px h-4 md:h-6;
+  background-color: var(--muted);
+  opacity: 0.15;
+}
+
+.fc-illus-vs__divider-text {
+  @apply font-mono text-[0.45rem] md:text-[0.6rem] italic leading-none;
+  color: var(--muted);
+  opacity: 0.4;
+}

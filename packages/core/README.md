@@ -2,6 +2,12 @@
 
 Headless TypeScript form engine with zero UI dependencies. Define multi-section forms via JSON schemas with validation, conditional visibility, and computed fields.
 
+[![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
+[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
+
+> **Website:** [fieldcraft.squaredr.tech](https://fieldcraft.squaredr.tech) · **Docs:** [fieldcraft.squaredr.tech/docs](https://fieldcraft.squaredr.tech/docs) · **GitHub:** [github.com/SquaredR98/fieldcraft](https://github.com/SquaredR98/fieldcraft)
+
 ## Install
 
 ```bash
@@ -228,10 +234,9 @@ The React package provides a ready-to-use `FormEngineRenderer` component with 44
 
 ## Community
 
-- [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
-- [Docs](https://squaredr.tech/products/fieldcraft/docs) — Full documentation
+- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
+- [Docs](https://fieldcraft.squaredr.tech/docs) — Full documentation
 - [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
-- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, ResponseViewer, ThemeEditor
 
 ## License
 

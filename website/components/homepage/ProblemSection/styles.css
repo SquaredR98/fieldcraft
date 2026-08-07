@@ -1,0 +1,90 @@
+@reference "../../../app/globals.css";
+
+.fc-problem {
+  @apply border-b border-fc-rule;
+}
+
+.fc-problem__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-problem__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-problem__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 max-w-160 text-fc-ink-strong;
+}
+
+.fc-problem__sub {
+  @apply text-base leading-[1.65] text-fc-muted;
+  @apply mt-4 mb-11 max-w-140;
+}
+
+.fc-problem__grid {
+  @apply grid gap-px bg-fc-rule border border-fc-rule;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.fc-problem__card {
+  @apply bg-fc-surface p-7;
+}
+
+.fc-problem__kicker {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-danger mb-3.5;
+}
+
+.fc-problem__card-title {
+  @apply font-display text-xl font-semibold;
+  @apply tracking-[-0.02em] mb-2.5;
+}
+
+.fc-problem__card-body {
+  @apply text-sm leading-[1.65] text-fc-muted;
+}
+
+.fc-problem__callout {
+  @apply flex gap-3.5 items-start mt-7;
+  @apply border border-fc-teal-border bg-fc-wash;
+  @apply px-6 py-5;
+}
+
+.fc-problem__callout-dot {
+  @apply w-1.5 h-1.5 bg-fc-teal mt-1.75 shrink-0;
+}
+
+.fc-problem__callout-text {
+  @apply text-[15px] leading-[1.6] text-fc-ink;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-problem__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-problem__h2 {
+    @apply text-[30px];
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-problem__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-problem__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-problem__grid {
+    grid-template-columns: 1fr;
+  }
+}

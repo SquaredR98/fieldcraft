@@ -1,0 +1,18 @@
+@reference "../../../app/globals.css";
+
+.fc-copy-install {
+  @apply flex items-center gap-2.5;
+  @apply whitespace-nowrap cursor-pointer shrink-0;
+  @apply font-mono text-[13px] text-fc-teal;
+  @apply px-4 py-3.25 border border-fc-teal-border bg-fc-wash;
+}
+
+.fc-copy-install__label {
+  @apply text-[10px] tracking-widest text-fc-muted;
+}
+
+@media (max-width: 639px) {
+  .fc-copy-install {
+    @apply text-[11.5px] px-3 py-2.75 shrink;
+  }
+}

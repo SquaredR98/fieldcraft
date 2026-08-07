@@ -1,0 +1,143 @@
+@reference "../../../app/globals.css";
+
+.fc-tpl-detail {
+  @apply border-b border-fc-rule;
+}
+
+.fc-tpl-detail__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+/* ── Header ── */
+.fc-tpl-detail__header {
+  @apply mb-10;
+}
+
+.fc-tpl-detail__breadcrumb {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+}
+
+.fc-tpl-detail__breadcrumb a {
+  @apply text-fc-muted no-underline;
+  transition: color var(--motion-hover);
+}
+
+.fc-tpl-detail__breadcrumb a:hover {
+  @apply text-fc-teal;
+}
+
+.fc-tpl-detail__badge {
+  @apply inline-block font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal px-[7px] py-[3px] border border-fc-teal-border bg-fc-wash leading-[1.3] mb-3;
+}
+
+.fc-tpl-detail__title {
+  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 mb-3 text-fc-ink-strong;
+}
+
+.fc-tpl-detail__desc {
+  @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0 mb-4 max-w-160;
+}
+
+.fc-tpl-detail__stats {
+  @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted flex gap-3;
+}
+
+/* ── Panels container ── */
+.fc-tpl-detail__panels {
+  @apply grid grid-cols-2 border border-fc-rule;
+}
+
+/* ── Tab bar (mobile only) ── */
+.fc-tpl-detail__tabs {
+  @apply hidden;
+}
+
+/* ── Individual panels ── */
+.fc-tpl-detail__panel {
+  @apply min-w-0;
+}
+
+/* Schema panel — scrolls, height matched to form panel */
+.fc-tpl-detail__panel--schema {
+  @apply overflow-y-auto;
+  /* Force this panel to match sibling height instead of expanding */
+  height: 0;
+  min-height: 100%;
+}
+
+/* Form panel — drives the row height */
+.fc-tpl-detail__panel--form {
+  @apply overflow-visible;
+}
+
+/* Hairline divider between panels */
+.fc-tpl-detail__panel + .fc-tpl-detail__panel {
+  @apply border-l border-fc-rule;
+}
+
+.fc-tpl-detail__panel-label {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted sticky top-0 z-10 bg-fc-surface px-5 py-3 border-b border-fc-rule;
+}
+
+/* Schema panel */
+.fc-tpl-detail__schema {
+  @apply overflow-x-auto;
+}
+
+/* Form panel */
+.fc-tpl-detail__form {
+  @apply p-6;
+}
+
+/* ── Mobile ── */
+@media (max-width: 1023px) {
+  .fc-tpl-detail__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-tpl-detail__title {
+    @apply text-2xl;
+  }
+
+  .fc-tpl-detail__panels {
+    @apply grid-cols-1 border-0;
+    max-height: none;
+  }
+
+  .fc-tpl-detail__panel,
+  .fc-tpl-detail__panel--schema,
+  .fc-tpl-detail__panel--form {
+    @apply overflow-visible border border-fc-rule;
+    height: auto;
+    min-height: 0;
+  }
+
+  .fc-tpl-detail__panel + .fc-tpl-detail__panel {
+    @apply border-l border-fc-rule;
+  }
+
+  .fc-tpl-detail__panel-label {
+    @apply static bg-transparent px-0 py-0 border-b-0 mb-3;
+  }
+
+  .fc-tpl-detail__tabs {
+    @apply flex border-b border-fc-rule mb-6;
+  }
+
+  .fc-tpl-detail__tab {
+    @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted px-4 py-2.5 border-b-2 border-transparent cursor-pointer bg-transparent;
+    transition: color var(--motion-hover), border-color var(--motion-hover);
+  }
+
+  .fc-tpl-detail__tab:hover {
+    @apply text-fc-ink;
+  }
+
+  .fc-tpl-detail__tab--active {
+    @apply text-fc-teal border-fc-teal;
+  }
+
+  .fc-tpl-detail__panel--hidden {
+    @apply hidden;
+  }
+}

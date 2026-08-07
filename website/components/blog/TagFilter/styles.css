@@ -1,0 +1,49 @@
+@reference "../../../app/globals.css";
+
+/* --- Filter Rail --- */
+.fc-blog-filter-rail {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-blog-filter-rail__inner {
+  @apply max-w-[1280px] mx-auto px-10 flex items-center gap-0.5;
+}
+
+.fc-blog-filter-rail__tabs {
+  @apply flex items-center gap-0.5 overflow-x-auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.fc-blog-filter-rail__tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.fc-blog-filter-rail__tab {
+  @apply font-mono uppercase bg-none border-none cursor-pointer whitespace-nowrap leading-none p-4 text-fc-xs-tab tracking-fc-mono text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-blog-filter-rail__tab:hover {
+  @apply text-fc-ink;
+}
+
+.fc-blog-filter-rail__tab--active {
+  @apply text-fc-teal;
+  box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.fc-blog-filter-rail__tab--active:hover {
+  @apply text-fc-teal;
+}
+
+.fc-blog-filter-rail__count {
+  @apply ml-auto font-mono uppercase shrink-0 pl-6 text-fc-xs tracking-fc-mono text-fc-muted;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-filter-rail__inner {
+    @apply px-5;
+  }
+}

@@ -145,7 +145,12 @@ export function createStateManager(config: StateManagerConfig) {
     // Run validation on touch (blur)
     const field = questionMap.get(fieldId);
     if (field) {
-      const fieldErrors = validateField(field, state.values[fieldId], state.values, validatorRegistry);
+      const fieldErrors = validateField(
+        field,
+        state.values[fieldId],
+        state.values,
+        validatorRegistry,
+      );
       state = {
         ...state,
         errors: { ...state.errors, [fieldId]: fieldErrors },
@@ -293,7 +298,7 @@ export function createStateManager(config: StateManagerConfig) {
     const visibleIds = navigation.getVisibleSectionIds(state.values);
     const effectiveSectionId = visibleIds.includes(currentSectionId)
       ? currentSectionId
-      : visibleIds[0] ?? schema.sections[0]?.id ?? "";
+      : (visibleIds[0] ?? schema.sections[0]?.id ?? "");
 
     const navState = navigation.computeState(effectiveSectionId, state.values);
     state = {
@@ -334,7 +339,12 @@ export function createStateManager(config: StateManagerConfig) {
       for (const question of currentSection.questions) {
         if (question.showIf && !evaluate(question.showIf, state.values)) continue;
         if (isStructuralField(question.type)) continue;
-        const errors = validateField(question, state.values[question.id], state.values, validatorRegistry);
+        const errors = validateField(
+          question,
+          state.values[question.id],
+          state.values,
+          validatorRegistry,
+        );
         if (errors.length > 0) {
           isCurrentSectionValid = false;
           break;
@@ -404,9 +414,7 @@ export function createStateManager(config: StateManagerConfig) {
 
       hasScoring = true;
       const selectedValue = state.values[id];
-      const selectedOption = scoringConfig.options.find(
-        (opt) => opt.value === selectedValue,
-      );
+      const selectedOption = scoringConfig.options.find((opt) => opt.value === selectedValue);
       if (selectedOption) {
         scores[id] = selectedOption.score;
         totalScore += selectedOption.score;
@@ -427,7 +435,12 @@ export function createStateManager(config: StateManagerConfig) {
       for (const question of section.questions) {
         if (question.showIf && !evaluate(question.showIf, state.values)) continue;
         if (isStructuralField(question.type)) continue;
-        const errors = validateField(question, state.values[question.id], state.values, validatorRegistry);
+        const errors = validateField(
+          question,
+          state.values[question.id],
+          state.values,
+          validatorRegistry,
+        );
         if (errors.length > 0) {
           newErrors[question.id] = errors;
         }

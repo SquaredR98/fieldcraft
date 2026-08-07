@@ -1,0 +1,118 @@
+@reference "../../../app/globals.css";
+
+/* ── Production schemas section ── */
+
+.fc-schemas {
+  @apply bg-fc-surface border-b border-fc-rule;
+}
+
+.fc-schemas__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-schemas__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-schemas__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 max-w-160 text-fc-ink-strong mb-11;
+}
+
+.fc-schemas__grid {
+  @apply grid items-start gap-9;
+  grid-template-columns: 1.35fr 1fr;
+}
+
+/* ── Left column: tab strip + code panel ── */
+
+.fc-schemas__tabs {
+  @apply flex border-t border-l border-r border-fc-rule;
+}
+
+.fc-schemas__tab {
+  @apply font-mono text-[11px] tracking-[0.1em] uppercase;
+  @apply px-5 py-3.25 cursor-pointer text-fc-muted;
+  transition: color var(--motion-hover), background var(--motion-hover);
+}
+
+.fc-schemas__tab--active {
+  @apply bg-fc-wash text-fc-teal;
+  box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.fc-schemas__tab:not(.fc-schemas__tab--active):hover {
+  @apply text-fc-ink;
+}
+
+/* Cap the code panel height so it scrolls instead of stretching the section */
+.fc-schemas__grid .fc-code-block {
+  @apply max-h-[480px] overflow-y-auto;
+}
+
+/* ── Right column: hairline-stacked sidebar ── */
+
+.fc-schemas__sidebar {
+  @apply grid gap-px bg-fc-rule;
+}
+
+.fc-schemas__sidebar-top {
+  @apply bg-fc-surface2 px-6 py-5.5;
+}
+
+.fc-schemas__sidebar-bottom {
+  @apply bg-fc-surface px-6 py-5.5;
+}
+
+.fc-schemas__sidebar-eyebrow {
+  @apply font-mono text-[10px] tracking-[0.12em];
+  @apply uppercase text-fc-muted mb-2.5;
+}
+
+.fc-schemas__sidebar-desc {
+  @apply text-sm leading-[1.65] text-fc-muted;
+}
+
+.fc-schemas__sidebar-text {
+  @apply text-sm leading-[1.65] text-fc-muted;
+}
+
+.fc-schemas__sidebar-link {
+  @apply text-fc-teal no-underline;
+  @apply border-b border-fc-teal;
+  transition: opacity var(--motion-hover);
+}
+
+.fc-schemas__sidebar-link:hover {
+  @apply opacity-80;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-schemas__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-schemas__h2 {
+    @apply text-[30px];
+  }
+
+  .fc-schemas__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-schemas__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-schemas__h2 {
+    @apply text-[26px];
+  }
+}

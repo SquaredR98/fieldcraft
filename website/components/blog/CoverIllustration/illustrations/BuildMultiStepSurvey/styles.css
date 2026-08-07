@@ -1,0 +1,54 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Multi-Step Survey: Stepper --- */
+.fc-illus-steps {
+  @apply absolute inset-0 flex items-center justify-center gap-0 px-6 md:px-14;
+}
+
+/* Each step column */
+.fc-illus-steps__step {
+  @apply flex flex-col items-center gap-1 md:gap-1.5;
+}
+
+/* Step dot */
+.fc-illus-steps__dot {
+  @apply w-1.5 md:w-2.5 h-1.5 md:h-2.5 rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-steps__dot--active {
+  background-color: var(--teal);
+  opacity: 0.7;
+}
+
+/* Connector line */
+.fc-illus-steps__line {
+  @apply w-4 md:w-8 h-px shrink-0 self-start mt-[0.3rem] md:mt-[0.45rem];
+  background-color: var(--muted);
+  opacity: 0.2;
+}
+
+/* Step card */
+.fc-illus-steps__card {
+  @apply flex flex-col gap-1 md:gap-1.5 p-1.5 md:p-2.5 w-[4rem] md:w-[7rem];
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+}
+
+.fc-illus-steps__step--active .fc-illus-steps__card {
+  border-color: color-mix(in srgb, var(--teal) 40%, transparent);
+}
+
+/* Content bars */
+.fc-illus-steps__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.3;
+}
+
+.fc-illus-steps__bar--teal {
+  background-color: var(--teal);
+  opacity: 0.35;
+}

@@ -1,0 +1,26 @@
+@reference "../../../app/globals.css";
+
+/* --- Cover Illustration Shell --- */
+.fc-illus {
+  @apply absolute inset-0 w-full h-full overflow-hidden;
+  background-color: var(--wash);
+}
+
+.fc-illus__grid {
+  @apply absolute inset-0;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* --- Default Fallback --- */
+.fc-illus__default {
+  @apply absolute inset-0 flex items-center justify-center;
+}
+
+.fc-illus__default-text {
+  @apply font-mono text-5xl md:text-7xl font-bold;
+  color: var(--teal);
+  opacity: 0.1;
+}

@@ -1,0 +1,200 @@
+---
+title: "Building Accessible Forms: What Most Developers Get Wrong"
+slug: "accessible-forms-guide"
+date: "2026-07-13"
+description: "A practical guide to building WCAG-compliant forms. Label association, error handling, keyboard navigation, and how schema-driven engines handle accessibility automatically."
+author: "ravi"
+category: "Guide"
+tags: ["fieldcraft", "forms", "accessibility", "a11y"]
+---
+
+> **TL;DR** — Most form accessibility issues come from five mistakes: missing label associations, invisible error messages, broken keyboard navigation, no live-region announcements, and unmarked required fields. Schema-driven form engines can eliminate these by default. Here's how.
+
+## The Problem Nobody Talks About
+
+15% of the world's population lives with some form of disability. Form accessibility isn't a niche concern — it's a legal requirement in many jurisdictions (ADA, Section 508, EAA) and a moral obligation everywhere else.
+
+Yet most forms on the web fail basic accessibility checks. Not because developers don't care, but because they don't know what's expected.
+
+## The Five Most Common Mistakes
+
+### 1. Labels That Don't Label
+
+The most common accessibility failure in forms is a `<label>` that isn't associated with its input.
+
+```html
+<!-- Broken: label exists but doesn't connect to the input -->
+<label>Email</label>
+<input type="email" />
+
+<!-- Fixed: htmlFor/id association -->
+<label for="email">Email</label>
+<input type="email" id="email" />
+```
+
+Screen readers cannot tell the user what a field is for unless the label is programmatically linked via `for`/`id` or by nesting the input inside the label.
+
+In a schema-driven engine, this association is automatic. Each field has an `id` in the schema, and the renderer uses it for both the `<label htmlFor>` and the `<input id>`:
+
+```tsx
+// FieldCraft handles this internally — you write zero accessibility code
+<Label htmlFor={field.id}>
+  {field.label}
+</Label>
+<Input id={field.id} ... />
+```
+
+### 2. Error Messages That Screen Readers Can't Find
+
+A red "This field is required" message below an input is useless to a screen reader user unless two things are true:
+
+1. The error container has `role="alert"` so it's announced immediately when it appears
+2. The input has `aria-describedby` pointing to the error's `id`
+
+```html
+<!-- Broken: visual error, invisible to assistive tech -->
+<input type="email" />
+<span class="error">Email is required</span>
+
+<!-- Fixed: linked and announced -->
+<input
+  type="email"
+  id="email"
+  aria-describedby="email-error"
+  aria-invalid="true"
+/>
+<div id="email-error" role="alert">Email is required</div>
+```
+
+The `aria-invalid="true"` attribute tells the screen reader the field has an error. The `aria-describedby` tells it where to find the error message. The `role="alert"` ensures the message is announced when it appears — without the user needing to navigate to it.
+
+### 3. Required Fields Without `aria-required`
+
+A visual asterisk (*) next to a label tells sighted users a field is mandatory. But screen readers skip decorative content. You need `aria-required="true"` on the input and `aria-hidden="true"` on the asterisk:
+
+```html
+<label for="name">
+  Name
+  <span aria-hidden="true"> *</span>
+</label>
+<input id="name" aria-required="true" />
+```
+
+The `aria-hidden` prevents the screen reader from saying "Name star" — it just says "Name, required".
+
+### 4. Broken Keyboard Navigation
+
+Every interactive element must be reachable by Tab and operable by Enter or Space. Custom dropdowns, date pickers, and multi-select components frequently break this contract.
+
+Common issues:
+- Custom `<div>` dropdowns that can't be focused
+- Click-only interactions with no keyboard equivalent
+- Focus traps (modals that don't cycle focus)
+- Skip links that don't work
+
+The fix: use native HTML elements whenever possible (`<select>`, `<input>`, `<button>`). When you need custom components, ensure they implement the [WAI-ARIA design patterns](https://www.w3.org/WAI/ARIA/apg/patterns/) for their role.
+
+Schema-driven engines that use established component libraries (like Radix UI primitives) get keyboard support for free. Every select, checkbox group, and radio group follows the ARIA specification.
+
+### 5. Help Text That's Disconnected
+
+Help text like "Enter your email address" or "Must be at least 8 characters" is often just a `<p>` below the label. Screen readers don't associate it with the input unless you use `aria-describedby`:
+
+```html
+<label for="password">Password</label>
+<p id="password-help">Must be at least 8 characters</p>
+<input
+  id="password"
+  type="password"
+  aria-describedby="password-help"
+/>
+```
+
+When errors appear, `aria-describedby` should reference **both** the help text and the error:
+
+```html
+<input
+  id="password"
+  type="password"
+  aria-describedby="password-help password-error"
+  aria-invalid="true"
+/>
+<p id="password-help">Must be at least 8 characters</p>
+<div id="password-error" role="alert">Password is too short</div>
+```
+
+## How Schema-Driven Engines Solve This
+
+The pattern above repeats for every field in every form. If you're building forms manually, you must remember all of these attributes every time. Miss one, and your form is broken for assistive technology users.
+
+Schema-driven form engines flip the model. You define what the field **is** — its label, type, help text, required status, and validation rules — and the engine renders the accessible markup:
+
+```json
+{
+  "id": "email",
+  "type": "email",
+  "label": "Work Email",
+  "helpText": "We'll use this for account recovery",
+  "required": true,
+  "validation": [
+    { "type": "email", "message": "Enter a valid email address" }
+  ]
+}
+```
+
+From that definition, the engine generates:
+
+- `<label htmlFor="email">` linked to `<input id="email">`
+- `aria-required="true"` because `required` is true
+- `aria-describedby="email-help"` pointing to the help text
+- `aria-describedby="email-help email-error"` when validation fails
+- `aria-invalid="true"` when the field has errors
+- `role="alert"` on the error container
+- `aria-hidden="true"` on the visual asterisk
+
+Zero manual accessibility code. Every field gets the same treatment.
+
+## The Accessibility Checklist for Forms
+
+Whether you build forms manually or use a form engine, every form should pass these checks:
+
+| Check | WCAG Criterion | How to Test |
+|-------|---------------|-------------|
+| Every input has a programmatic label | 1.3.1 Info and Relationships | Inspect: does the input have a matching `<label for>`? |
+| Error messages are announced | 4.1.3 Status Messages | Turn on a screen reader. Trigger a validation error. Was it announced? |
+| Required fields are marked in code | 3.3.2 Labels or Instructions | Check for `aria-required="true"` |
+| Invalid fields are marked in code | 3.3.1 Error Identification | Check for `aria-invalid="true"` on error |
+| All controls are keyboard-accessible | 2.1.1 Keyboard | Tab through the entire form. Can you reach and operate everything? |
+| Help text is linked to its input | 1.3.1 Info and Relationships | Check for `aria-describedby` pointing to help text |
+| Focus is visible | 2.4.7 Focus Visible | Tab through. Can you always see which element has focus? |
+| Color isn't the only error indicator | 1.4.1 Use of Color | Turn your screen grayscale. Can you still identify errors? |
+
+## Testing Tools
+
+- **axe DevTools** (browser extension) — automated scan that catches ~57% of WCAG issues
+- **NVDA** (Windows) or **VoiceOver** (macOS) — real screen reader testing
+- **Keyboard-only testing** — unplug your mouse and navigate the form
+- **WAVE** (browser extension) — visual overlay showing accessibility issues
+- **Lighthouse** (Chrome DevTools → Accessibility tab) — quick automated audit
+
+Automated tools catch structural issues. Manual testing with a screen reader catches interaction issues. You need both.
+
+## What About Dynamic Forms?
+
+Multi-step forms, conditional fields, and dynamically added inputs create additional accessibility challenges:
+
+**Live region announcements**: When a conditional field appears (e.g., "Other — please specify"), screen reader users need to know. Use `aria-live="polite"` on the container so additions are announced without interrupting the current task.
+
+**Focus management on step change**: When navigating between sections of a multi-step form, move focus to the new section heading or first field. Without this, the user's cursor stays at the bottom of the previous section.
+
+**Progress indication**: Multi-step forms should communicate where the user is. An `aria-label` like "Step 2 of 5" on the progress indicator, or a visually hidden status announcement, keeps screen reader users oriented.
+
+Schema-driven engines handle these automatically because the engine manages the lifecycle. When a section changes, the engine can move focus. When conditional logic hides or shows a field, the engine controls the container's ARIA attributes.
+
+## The Bottom Line
+
+Form accessibility isn't optional, and it isn't hard — it's systematic. The same five patterns (`htmlFor`/`id`, `aria-describedby`, `aria-invalid`, `aria-required`, `role="alert"`) apply to every field in every form.
+
+If you're building forms by hand, create a wrapper component that handles these attributes consistently. If you're using a form engine, verify that it generates them. If it doesn't, switch to one that does.
+
+Your users — all of them — deserve forms that work.

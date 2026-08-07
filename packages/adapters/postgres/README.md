@@ -1,6 +1,6 @@
 # @squaredr/fieldcraft-postgres
 
-PostgreSQL storage adapter for [FieldCraft](https://squaredr.tech/products/fieldcraft). Stores form responses directly in PostgreSQL using Drizzle ORM with optional AES-256-GCM encryption.
+PostgreSQL storage adapter for [FieldCraft](https://fieldcraft.squaredr.tech). Stores form responses directly in PostgreSQL using Drizzle ORM with optional AES-256-GCM encryption.
 
 ## Install
 
@@ -77,11 +77,9 @@ The adapter uses Drizzle ORM and expects a `formengine_responses` table. A Drizz
 
 ## Community
 
-[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/zMxdu5UVW)
-
-- [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
-- [Docs](https://squaredr.tech/products/fieldcraft/docs/adapters) — Adapter documentation
-- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
+- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
+- [Docs](https://fieldcraft.squaredr.tech/docs/submission/adapters-overview) — Adapter documentation
+- [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 
 ## License
 

@@ -1,0 +1,74 @@
+@reference "../../../app/globals.css";
+
+.fc-footer {
+  @apply bg-fc-surface;
+}
+
+.fc-footer__grid {
+  @apply grid mx-auto max-w-310 gap-10;
+  @apply px-10 pt-12 pb-9;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+}
+
+.fc-footer__brand-desc {
+  @apply text-[13.5px] leading-[1.6] text-fc-muted max-w-70;
+}
+
+.fc-footer__brand-url {
+  @apply font-mono text-[11.5px] text-fc-teal mt-4;
+}
+
+.fc-footer__col-title {
+  @apply font-mono text-[9.5px] tracking-[0.14em];
+  @apply uppercase text-fc-muted mb-3.5;
+}
+
+.fc-footer__col-links {
+  @apply flex flex-col gap-2.25 text-[13.5px];
+}
+
+.fc-footer__col-links a {
+  @apply text-fc-teal no-underline;
+  transition: color var(--motion-hover);
+}
+
+.fc-footer__col-links a:hover {
+  @apply text-fc-teal-hover;
+}
+
+.fc-footer__bottom {
+  @apply border-t border-fc-rule;
+}
+
+.fc-footer__bottom-inner {
+  @apply flex justify-between items-center mx-auto;
+  @apply max-w-310 px-10 py-4.5;
+  @apply font-mono text-[10.5px] tracking-[0.08em];
+  @apply uppercase text-fc-muted;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-footer__grid {
+    @apply px-6 pt-10 pb-8;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fc-footer__bottom-inner {
+    @apply px-6;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-footer__grid {
+    @apply px-5 pt-8 pb-6;
+    grid-template-columns: 1fr;
+  }
+
+  .fc-footer__bottom-inner {
+    @apply px-5 flex-col gap-2 items-start;
+  }
+}

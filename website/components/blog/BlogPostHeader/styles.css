@@ -1,0 +1,62 @@
+@reference "../../../app/globals.css";
+
+/* --- Back Link --- */
+.fc-blog-post__back {
+  @apply font-mono uppercase no-underline block mb-[22px] text-fc-xs tracking-fc-mono-md text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-blog-post__back:hover {
+  @apply text-fc-ink;
+}
+
+/* --- Article Header --- */
+.fc-blog-post__header {
+  @apply mb-8;
+}
+
+.fc-blog-post__title {
+  @apply font-display font-semibold m-0 text-fc-h1 tracking-fc-tight leading-[1.06] text-fc-ink-strong;
+  text-wrap: pretty;
+}
+
+.fc-blog-post__desc {
+  @apply text-fc-lead leading-[1.6] text-fc-muted mt-5 mb-0;
+  text-wrap: pretty;
+}
+
+/* --- Author Strip --- */
+.fc-blog-post__author-strip {
+  @apply flex items-center gap-4 mt-7.5 py-5 border-y border-fc-rule;
+}
+
+.fc-blog-post__avatar {
+  @apply w-[38px] h-[38px] shrink-0;
+}
+
+.fc-blog-post__author-info {
+  @apply flex-1;
+}
+
+.fc-blog-post__author-name {
+  @apply font-semibold text-fc-sm-body leading-[1.35] text-fc-ink-strong;
+}
+
+.fc-blog-post__author-meta {
+  @apply font-mono uppercase text-fc-xs tracking-fc-mono-sm text-fc-muted leading-[1.35];
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .fc-blog-post__title {
+    @apply text-[32px];
+  }
+
+  .fc-blog-post__desc {
+    @apply text-base;
+  }
+
+  .fc-blog-post__author-strip {
+    @apply flex-wrap;
+  }
+}

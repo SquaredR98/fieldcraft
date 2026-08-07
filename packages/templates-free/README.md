@@ -1,9 +1,12 @@
 # @squaredr/fieldcraft-templates-free
 
 [![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates-free.svg)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free)
+[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-templates-free)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free)
 [![license](https://img.shields.io/npm/l/@squaredr/fieldcraft-templates-free.svg)](https://github.com/SquaredR98/fieldcraft/blob/main/packages/templates-free/LICENSE)
 
-16 free, production-ready form schemas for [FieldCraft](https://squaredr.tech/products/fieldcraft). Drop them into your app, customize, and ship.
+16 free, production-ready form schemas for [FieldCraft](https://fieldcraft.squaredr.tech). Drop them into your app, customize, and ship.
+
+> **Website:** [fieldcraft.squaredr.tech](https://fieldcraft.squaredr.tech) · **Docs:** [fieldcraft.squaredr.tech/docs](https://fieldcraft.squaredr.tech/docs) · **GitHub:** [github.com/SquaredR98/fieldcraft](https://github.com/SquaredR98/fieldcraft)
 
 ## Install
 
@@ -141,12 +144,11 @@ Plus:
 
 - `@squaredr/fieldcraft-core` >= 1.0.0
 
-## Links
+## Community
 
-- [Documentation](https://squaredr.tech/products/fieldcraft/docs)
-- [GitHub](https://github.com/SquaredR98/fieldcraft)
-- [Discord](https://discord.gg/squaredr)
-- [FieldCraft Pro](https://squaredr.tech/products/fieldcraft/pro) — FormBuilder, ResponseViewer, ThemeEditor
+- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
+- [Docs](https://fieldcraft.squaredr.tech/docs) — Full documentation
+- [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 
 ## License
 

@@ -1,0 +1,113 @@
+@reference "../../../app/globals.css";
+
+.fc-nav {
+  @apply sticky top-0 z-50;
+  @apply bg-fc-surface border-b border-fc-rule;
+}
+
+.fc-nav__inner {
+  @apply flex items-center justify-between mx-auto;
+  @apply max-w-310 h-16 gap-6 px-10;
+}
+
+.fc-nav__links {
+  @apply flex items-center gap-6.5;
+  @apply text-[13.5px] text-fc-muted;
+}
+
+.fc-nav__link {
+  @apply text-fc-muted no-underline;
+  transition: color var(--motion-hover);
+}
+
+.fc-nav__link:hover {
+  @apply text-fc-ink;
+}
+
+.fc-nav__cta {
+  @apply whitespace-nowrap shrink-0 no-underline;
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply font-display text-[13.5px] font-medium;
+  @apply px-4 py-2.25;
+  transition: background var(--motion-hover);
+}
+
+.fc-nav__cta:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+/* ── Mobile actions (hamburger + theme toggle) ── */
+
+.fc-nav__mobile-actions {
+  @apply hidden items-center gap-4;
+}
+
+.fc-nav__hamburger {
+  @apply flex items-center justify-center;
+  @apply w-10 h-10 p-0 border-0 bg-transparent;
+  @apply text-fc-muted cursor-pointer;
+}
+
+.fc-nav__hamburger:focus-visible {
+  box-shadow: 0 0 0 1.5px var(--teal), 0 0 0 3px rgba(31, 107, 110, 0.14);
+}
+
+/* ── Drawer ── */
+
+.fc-nav__drawer {
+  @apply absolute top-16 left-0 right-0 z-40;
+  @apply flex flex-col;
+  @apply bg-fc-surface border-b border-fc-rule;
+  @apply px-6 py-4;
+}
+
+.fc-nav__drawer-link {
+  @apply block no-underline text-fc-muted;
+  @apply text-[14px] py-3;
+  @apply border-b border-fc-rule;
+  transition: color var(--motion-hover);
+}
+
+.fc-nav__drawer-link:hover {
+  @apply text-fc-ink;
+}
+
+.fc-nav__drawer-cta {
+  @apply block no-underline text-center;
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply font-display text-[14px] font-medium;
+  @apply px-4 py-3 mt-3;
+  transition: background var(--motion-hover);
+}
+
+.fc-nav__drawer-cta:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+/* ── Responsive: below lg (1024px) ── */
+
+@media (max-width: 1023px) {
+  .fc-nav__inner {
+    @apply px-6;
+  }
+
+  .fc-nav__links {
+    @apply hidden;
+  }
+
+  .fc-nav__mobile-actions {
+    @apply flex;
+  }
+}
+
+/* ── Responsive: mobile (640px) ── */
+
+@media (max-width: 639px) {
+  .fc-nav__inner {
+    @apply px-5;
+  }
+
+  .fc-nav__drawer {
+    @apply px-5;
+  }
+}

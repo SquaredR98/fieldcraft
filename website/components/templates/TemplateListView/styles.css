@@ -1,0 +1,51 @@
+@reference "../../../app/globals.css";
+
+.fc-tpl-list {
+  @apply border-b border-fc-rule;
+}
+
+.fc-tpl-list__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-tpl-list__header {
+  @apply mb-14;
+}
+
+.fc-tpl-list__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+}
+
+.fc-tpl-list__h1 {
+  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 mb-4 text-fc-ink-strong;
+}
+
+.fc-tpl-list__sub {
+  @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0 max-w-160;
+}
+
+.fc-tpl-list__category {
+  @apply mb-14 last:mb-0;
+}
+
+.fc-tpl-list__category-title {
+  @apply font-display text-xl font-semibold text-fc-ink-strong m-0 mb-5;
+}
+
+.fc-tpl-list__grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+@media (max-width: 768px) {
+  .fc-tpl-list__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-tpl-list__h1 {
+    @apply text-2xl;
+  }
+
+  .fc-tpl-list__header {
+    @apply mb-10;
+  }
+}

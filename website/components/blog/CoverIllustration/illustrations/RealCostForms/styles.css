@@ -1,0 +1,59 @@
+@reference "../../../../../app/globals.css";
+
+/* --- Real Cost of Forms: Iceberg --- */
+.fc-illus-cost {
+  @apply absolute inset-0 flex flex-col items-center justify-center gap-0 px-8 md:px-20;
+}
+
+/* Visible tip */
+.fc-illus-cost__visible {
+  @apply flex flex-col gap-1 md:gap-1.5 p-2 md:p-3 w-[7rem] md:w-[11rem];
+  background-color: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 4px 4px 0 0;
+}
+
+/* Waterline divider */
+.fc-illus-cost__waterline {
+  @apply w-[9rem] md:w-[14rem];
+  border-top: 1px dashed color-mix(in srgb, var(--teal) 25%, transparent);
+}
+
+/* Hidden complexity */
+.fc-illus-cost__hidden {
+  @apply flex flex-col gap-0.5 md:gap-1 p-2 md:p-3 w-[9rem] md:w-[14rem];
+  background-color: color-mix(in srgb, var(--surface) 50%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rule) 30%, transparent);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+}
+
+/* Row of bars */
+.fc-illus-cost__row {
+  @apply flex items-center gap-1 md:gap-1.5;
+}
+
+/* Bars */
+.fc-illus-cost__bar {
+  @apply h-[2px] md:h-[3px] rounded-full;
+  background-color: var(--muted);
+  opacity: 0.25;
+}
+
+.fc-illus-cost__bar--teal {
+  background-color: var(--teal);
+  opacity: 0.25;
+}
+
+/* Simple input */
+.fc-illus-cost__input {
+  @apply h-2.5 md:h-4 rounded-sm;
+  border: 1px solid color-mix(in srgb, var(--rule) 50%, transparent);
+}
+
+/* Button */
+.fc-illus-cost__btn {
+  @apply h-2 md:h-3 w-2/5 rounded-sm;
+  background-color: var(--teal);
+  opacity: 0.5;
+}

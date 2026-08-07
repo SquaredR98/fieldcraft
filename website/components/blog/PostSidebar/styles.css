@@ -1,0 +1,13 @@
+@reference "../../../app/globals.css";
+
+/* --- Sidebar --- */
+.fc-blog-sidebar {
+  @apply sticky top-[62px] border-l border-fc-rule pl-6 pt-11 pb-16;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .fc-blog-sidebar {
+    @apply relative top-auto border-l-0 border-t border-fc-rule pl-0 py-6 -order-1;
+  }
+}

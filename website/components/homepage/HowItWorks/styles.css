@@ -1,0 +1,89 @@
+@reference "../../../app/globals.css";
+
+.fc-how {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-how__inner {
+  @apply max-w-310 mx-auto px-10 py-20;
+}
+
+.fc-how__eyebrow {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-4;
+}
+
+.fc-how__h2 {
+  @apply font-display text-[38px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 mb-11 max-w-160 text-fc-ink-strong;
+}
+
+.fc-how__grid {
+  @apply grid gap-7;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.fc-how__step-header {
+  @apply flex items-center gap-2.5;
+  @apply pb-3 border-b border-fc-rule mb-4;
+}
+
+.fc-how__chip {
+  @apply font-mono text-[10px];
+  @apply bg-fc-ink text-fc-bg;
+  @apply px-1.75 py-0.75;
+}
+
+.fc-how__step-title {
+  @apply font-display text-[17px] font-semibold tracking-[-0.01em];
+}
+
+.fc-how__step-body {
+  @apply text-sm leading-[1.65] text-fc-muted mb-3.5;
+}
+
+.fc-how__code {
+  @apply border border-fc-rule bg-fc-bg;
+  @apply p-3.5 font-mono text-xs leading-[1.8] text-fc-ink;
+}
+
+.fc-how__code-muted {
+  @apply text-fc-muted;
+}
+
+.fc-how__code-key {
+  @apply text-fc-teal;
+}
+
+.fc-how__code-string {
+  @apply text-fc-amber-ink;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-how__inner {
+    @apply px-6 py-14;
+  }
+
+  .fc-how__h2 {
+    @apply text-[30px];
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-how__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-how__h2 {
+    @apply text-[26px];
+  }
+
+  .fc-how__grid {
+    grid-template-columns: 1fr;
+  }
+}

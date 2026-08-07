@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Top bar: outlined teal -->
+  <rect x="4" y="7" width="24" height="5" rx="1" fill="none" stroke="#1F6B6E" stroke-width="1.5"/>
+  <!-- Middle bar: filled teal -->
+  <rect x="4" y="14" width="24" height="5" rx="1" fill="#1F6B6E"/>
+  <!-- Bottom bar: outlined amber -->
+  <rect x="4" y="21" width="24" height="5" rx="1" fill="none" stroke="#C98A2E" stroke-width="1.5"/>
+</svg>

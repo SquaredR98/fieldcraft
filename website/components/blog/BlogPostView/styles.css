@@ -1,0 +1,19 @@
+@reference "../../../app/globals.css";
+
+/* --- Two-Column Layout --- */
+.fc-blog-post-layout {
+  @apply max-w-[1280px] mx-auto px-10 grid items-start gap-14;
+  grid-template-columns: minmax(0, 1fr) 220px;
+}
+
+/* --- Article --- */
+.fc-blog-post {
+  @apply py-11 pb-24;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .fc-blog-post-layout {
+    @apply grid-cols-1 gap-0 px-5;
+  }
+}

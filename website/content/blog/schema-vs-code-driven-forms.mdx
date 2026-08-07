@@ -1,0 +1,217 @@
+---
+title: "Schema-Driven vs Code-Driven Forms: Which Approach Fits Your Project?"
+slug: "schema-vs-code-driven-forms"
+date: "2026-06-20"
+description: "Two fundamentally different ways to build forms in React. One defines forms as JSON, the other as JSX. Here's when to use each — and what you trade away."
+author: "ravi"
+category: "Engineering"
+tags: ["forms", "architecture", "react", "schema-driven", "typescript"]
+---
+
+> **TL;DR** — Code-driven forms give maximum control for few, highly-custom forms. Schema-driven forms give portability, consistency, and non-developer authoring for many forms. Most teams benefit from using both.
+
+## Two Ways to Build Forms
+
+Every React form library falls into one of two camps:
+
+**Code-driven:** You write JSX for each field, wire up state with hooks, and add validation logic inline or through a schema library. The form definition lives in your component tree.
+
+**Schema-driven:** You define the form as a JSON object — fields, validation, conditions, sections — and a renderer turns it into UI. The form definition lives in data.
+
+Both work. Both ship production apps. But they solve different problems, and choosing the wrong one costs you down the line.
+
+## Code-Driven: The Default
+
+Most React developers start here because it feels natural. You already know JSX. You already know hooks. Forms are just more components.
+
+```tsx
+function ContactForm() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    const errs = {};
+    if (!name) errs.name = "Required";
+    if (!email) errs.email = "Required";
+    else if (!/\S+@\S+\.\S{2,}/.test(email)) errs.email = "Invalid email";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  return (
+    <form onSubmit={(e) => { e.preventDefault(); if (validate()) submit(); }}>
+      <input value={name} onChange={(e) => setName(e.target.value)} />
+      {errors.name && <span>{errors.name}</span>}
+      <input value={email} onChange={(e) => setEmail(e.target.value)} />
+      {errors.email && <span>{errors.email}</span>}
+      <button type="submit">Send</button>
+    </form>
+  );
+}
+```
+
+This is fine for one form. It's fine for three forms. At ten forms, you start noticing patterns — the same validation logic, the same error display, the same `useState` calls. You extract a `useForm` hook. Then a `<FormField>` component. Then a validation schema.
+
+Eventually you've built a framework inside your codebase.
+
+### When Code-Driven Works
+
+- **Few forms** — 1-5 forms with stable requirements
+- **Highly custom UI** — each form looks completely different
+- **Tight coupling** — the form is deeply integrated with surrounding page logic
+- **Small team** — everyone who creates forms can write React
+
+### What You Trade Away
+
+- **Portability** — the form definition is locked inside React components. You can't render the same form in React Native, a mobile app, or a different framework without rewriting it.
+- **Non-developer authoring** — a product manager can't create a form without a pull request.
+- **Duplication** — similar forms share no structure. Changes to "how we show errors" or "how we validate emails" ripple through every form file.
+- **Testing** — each form needs its own integration tests for rendering, validation, and submission.
+
+## Schema-Driven: The Alternative
+
+A schema-driven form starts with data, not components:
+
+```typescript
+const schema = {
+  id: "contact",
+  version: "1.0.0",
+  title: "Contact Us",
+  sections: [{
+    id: "main",
+    title: "Your Details",
+    questions: [
+      { id: "name", type: "short_text", label: "Name", required: true },
+      { id: "email", type: "email", label: "Email", required: true },
+      { id: "message", type: "long_text", label: "Message", required: true },
+    ],
+  }],
+  submitAction: { type: "callback" },
+};
+```
+
+A renderer turns this into a working form with validation, error display, and keyboard navigation — without you writing any of that:
+
+```tsx
+<FormEngineRenderer schema={schema} onSubmit={handleSubmit} />
+```
+
+The schema is portable. Store it in a database. Generate it from a form builder. Send it over an API. Render it anywhere you have a compatible renderer.
+
+### When Schema-Driven Works
+
+- **Many forms** — 10+ forms, especially if they share patterns (surveys, intake forms, registrations)
+- **Non-developer authoring** — someone needs to create and modify forms without touching code
+- **Multi-platform** — the same form needs to render on web, mobile, or in different frameworks
+- **Dynamic forms** — forms that are created, modified, or personalized at runtime
+- **Consistent UX** — every form should look and behave the same way (validation timing, error display, progress tracking)
+
+### What You Trade Away
+
+- **Fine-grained control** — you work within the renderer's component library. Custom one-off layouts need escape hatches.
+- **Learning curve** — developers need to learn the schema format instead of using familiar JSX.
+- **Runtime dependency** — you depend on the engine and renderer. Code-driven forms have zero runtime dependencies beyond React itself.
+- **Debugging** — errors happen in the engine, not in your code. Stack traces point to the renderer, not your schema.
+
+## Side-by-Side Comparison
+
+| Dimension | Code-Driven | Schema-Driven |
+|-----------|------------|---------------|
+| **Form definition** | JSX components + hooks | JSON object |
+| **Best for** | 1–5 custom forms | 10+ standardized forms |
+| **Who can author** | Developers only | Anyone who can edit JSON |
+| **Portability** | Locked to React | Render anywhere |
+| **UI flexibility** | Full control | Constrained by renderer |
+| **Validation** | Manual wiring per form | Declared once, engine runs it |
+| **Consistency** | Varies per implementation | Uniform across all forms |
+| **Testing** | Integration tests per form | Test the engine once |
+| **Runtime dependency** | React only | React + engine |
+| **Conditional logic** | Manual state + cleanup | Declarative `showIf` |
+
+---
+
+## The Decision Framework
+
+Don't choose based on what's trendy. Choose based on three questions:
+
+### 1. Who creates forms?
+
+**Non-developers involved? Go schema-driven.**
+
+If only developers create forms, code-driven is fine. If product managers, designers, ops teams, or customers need to create forms — you need schema-driven. JSON is readable by anyone. JSX is not.
+
+### 2. How many forms do you have?
+
+**Under 5: code-driven. Over 10: schema-driven. At 50+: schema-driven is mandatory.**
+
+Under 5 forms, the overhead of a schema engine isn't worth it. Over 10, the consistency and deduplication pay for themselves. At 50+, code-driven becomes unmaintainable.
+
+### 3. Does the form definition need to travel?
+
+**If the form needs to exist outside React, it needs to be data.**
+
+If the form lives only in one React app, code-driven works. If the same form needs to render on a website, a mobile app, a kiosk, or get stored in a database — the schema needs to be separate from the renderer.
+
+## Hybrid Approaches
+
+You don't have to pick one for your entire project. Common patterns:
+
+- **Schema for standard forms, code for custom pages.** A checkout flow with complex animations is code-driven. A settings form with 30 fields is schema-driven.
+- **Schema with custom field types.** Use schema-driven architecture but register your own field components for specialized inputs. You get the portability of schemas with the flexibility of custom React components.
+- **Code-driven validation, schema-driven layout.** Define the form structure as JSON but handle validation in hooks. A middle ground that gives you portable structure without giving up validation control.
+
+## What About Performance?
+
+Neither approach is inherently faster. A well-built schema engine re-renders only changed fields, just like a well-built code-driven form. A poorly-built version of either will re-render everything on every keystroke.
+
+> The real performance difference is at **build time**, not runtime. Schema-driven forms have a single renderer that's optimized once. Code-driven forms have N renderers (one per form) that each need individual attention.
+
+## The Practical Test
+
+Here's a simple test: imagine adding conditional logic to a form. If the user selects "Enterprise" in a dropdown, show a "Company Name" field. Otherwise, hide it.
+
+**Code-driven:**
+
+```tsx
+{formValues.type === "enterprise" && (
+  <input
+    value={company}
+    onChange={(e) => setCompany(e.target.value)}
+    placeholder="Company Name"
+  />
+)}
+```
+
+You also need to clear the company value when it's hidden, exclude it from validation when invisible, and handle it in your submit logic.
+
+**Schema-driven:**
+
+```json
+{
+  "id": "company",
+  "type": "short_text",
+  "label": "Company Name",
+  "showIf": { "field": "type", "operator": "eq", "value": "enterprise" }
+}
+```
+
+The engine handles value cleanup, validation exclusion, and submission filtering automatically.
+
+> For one conditional field, the difference is cosmetic. For a form with 15 conditional dependencies, the schema approach eliminates an entire class of bugs.
+
+## Conclusion
+
+Code-driven forms give you maximum control and zero abstraction overhead. Schema-driven forms give you portability, consistency, and non-developer authoring. Neither is universally better.
+
+Pick code-driven when you have few forms, highly custom UI, and an all-developer team. Pick schema-driven when you have many forms, need consistency, or need the definition to exist independently of the renderer.
+
+> **The best teams use both** — standard forms get schemas, custom experiences get code.
+
+---
+
+## Further Reading
+
+- [Build a Multi-Step Survey in 5 Minutes](/blog/build-multi-step-survey) — practical tutorial
+- [Introducing FieldCraft](/blog/introducing-fieldcraft) — schema-driven form engine for React
+- [Why Schema-Driven](/blog/why-schema-driven) — deeper dive into the architecture

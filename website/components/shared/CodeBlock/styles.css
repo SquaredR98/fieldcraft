@@ -1,0 +1,46 @@
+@reference "../../../app/globals.css";
+
+.fc-code-block {
+  @apply border border-fc-rule bg-fc-surface;
+  @apply overflow-x-auto;
+}
+
+.fc-code-block__content {
+  @apply font-mono text-xs text-fc-ink;
+  @apply px-4.5 py-4 leading-[1.85];
+}
+
+.fc-code-block__content pre {
+  @apply m-0 bg-transparent;
+}
+
+.fc-code-block__content code {
+  @apply font-mono text-xs leading-[1.85];
+}
+
+.fc-code-block__placeholder {
+  @apply m-0 text-fc-muted whitespace-pre-wrap;
+}
+
+/* Shiki dual-theme support.
+   Shiki generates inline styles: `color: #xxx` (light) and `--shiki-dark: #xxx`.
+   In light mode, the inline `color` already works — don't override it.
+   In dark mode, override `color` to read from the `--shiki-dark` CSS variable. */
+.fc-code-block__content .shiki,
+.fc-code-block__content .shiki span {
+  background-color: transparent !important;
+  @apply font-mono;
+}
+
+.fc-code-block__content .shiki {
+  background-color: transparent !important;
+}
+
+:root[data-theme="dark"] .fc-code-block__content .shiki,
+:root[data-theme="dark"] .fc-code-block__content .shiki span {
+  color: var(--shiki-dark) !important;
+}
+
+:root[data-theme="dark"] .fc-code-block__content .shiki {
+  background-color: transparent !important;
+}

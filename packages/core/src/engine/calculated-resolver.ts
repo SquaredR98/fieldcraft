@@ -7,7 +7,8 @@ import { evaluateMathExpression } from "../utils/expression-parser";
  * Field references use the format: {fieldId}
  * Example: "{height} * 703 / ({weight} ^ 2)"
  *
- * Returns null if any referenced field is missing or non-numeric.
+ * Returns the numeric result, or null if any referenced field is missing,
+ * non-numeric, or the expression is invalid.
  */
 export function evaluateExpression(
   expression: string,
@@ -26,16 +27,22 @@ export function evaluateExpression(
 
   for (const ref of refs) {
     const value = values[ref];
-    if (value === undefined || value === null) return null;
+    if (value === undefined || value === null) {
+      return null;
+    }
     const num = Number(value);
-    if (isNaN(num)) return null;
+    if (isNaN(num)) {
+      return null;
+    }
     // Replace all occurrences of {ref} with the numeric value
     substituted = substituted.replaceAll(`{${ref}}`, String(num));
   }
 
   try {
     const result = evaluateMathExpression(substituted);
-    if (!isFinite(result)) return null;
+    if (!isFinite(result)) {
+      return null;
+    }
     return result;
   } catch {
     return null;

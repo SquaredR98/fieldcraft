@@ -1,0 +1,180 @@
+---
+title: "Conversational Forms: One Question at a Time"
+slug: "conversational-forms"
+date: "2026-07-05"
+description: "Why the one-question-at-a-time pattern works, how schema-driven architecture makes it trivial to implement, and what FieldCraft's conversational mode will look like."
+author: "ravi"
+category: "Patterns"
+tags: ["fieldcraft", "react", "forms", "ux", "conversational"]
+---
+
+> **TL;DR** — Showing one question at a time reduces cognitive load, increases completion rates, and feels more human. FieldCraft's schema-driven architecture means switching from a classic form to conversational mode is a one-line config change — same schema, different renderer. Here's what's coming.
+
+## The Pattern
+
+You've seen the pattern before. One question fills the screen. You answer, press Enter, and the next question slides in. No scrolling. No wall of fields. No anxiety about how much is left.
+
+This is the conversational form pattern, and it works because of a simple psychological principle: **people handle one decision at a time better than twenty at once.**
+
+Traditional forms dump every field on screen simultaneously. The user sees a wall of inputs, mentally estimates the effort required, and either powers through or bounces. Conversational forms eliminate that estimation entirely. There's always exactly one thing to do: answer this question.
+
+> **The research backs this up.** Studies on form completion rates consistently show that perceived complexity — not actual field count — is the primary driver of abandonment. A 20-field conversational form can outperform a 10-field traditional form because users never see all 20 at once.
+
+## Why Most Implementations Are Painful
+
+Building conversational forms from scratch is harder than it looks. You need:
+
+- **Field-level navigation** — track which question is current, handle forward/back
+- **Per-field validation** — validate on advance, not on submit
+- **Conditional logic awareness** — skip hidden questions, recalculate the sequence when answers change
+- **Auto-advance for simple fields** — single-select and boolean fields shouldn't need a "Continue" button
+- **Keyboard navigation** — Enter to advance, arrow keys for options, Shift+Tab to go back
+- **Progress tracking** — "Question 4 of 12" that updates as conditional fields appear or disappear
+- **Smooth transitions** — CSS animations between questions
+- **Accessibility** — focus management, screen reader announcements, reduced motion support
+
+Most teams build the first two, skip the rest, and ship something that feels clunky. The remaining six items are where the UX polish lives.
+
+## Schema-Driven Architecture Makes This Trivial
+
+Here's where FieldCraft's architecture pays off. Because the form definition is a JSON schema — not a tree of React components — switching display modes is a renderer concern, not a schema concern.
+
+The same schema that powers a classic all-at-once form can power a conversational one-question-at-a-time flow:
+
+```typescript
+// Classic mode — all fields visible at once
+const schema = {
+  id: "onboarding",
+  version: "1.0.0",
+  title: "Get Started",
+  settings: {
+    displayMode: "classic"
+  },
+  sections: [{
+    id: "about-you",
+    title: "About You",
+    questions: [
+      { id: "name", type: "short_text", label: "What's your name?", required: true },
+      { id: "role", type: "single_select", label: "What's your role?",
+        options: [
+          { label: "Developer", value: "developer" },
+          { label: "Designer", value: "designer" },
+          { label: "Product Manager", value: "pm" },
+          { label: "Other", value: "other" }
+        ]
+      },
+      { id: "experience", type: "rating", label: "How experienced are you with form builders?",
+        config: { type: "rating", max: 5 }
+      },
+      { id: "goals", type: "long_text", label: "What are you hoping to build?",
+        placeholder: "Tell us about your project..."
+      }
+    ]
+  }],
+  submitAction: { type: "http", url: "/api/onboarding" }
+}
+```
+
+To switch to conversational mode, you change one line:
+
+```typescript
+settings: {
+  displayMode: "conversational"
+}
+```
+
+That's it. Same schema. Same validation rules. Same conditional logic. Same submit action. The engine handles everything differently under the hood — field-level navigation, per-field validation, progress recalculation — but you don't change your schema.
+
+> **This is the core benefit of schema-driven architecture.** The schema describes *what* the form is. The renderer decides *how* to present it. Swapping renderers doesn't require rewriting anything.
+
+## Three Display Modes, One Schema
+
+FieldCraft's type system already defines three display modes:
+
+| Mode | Behavior | Best For |
+|------|----------|----------|
+| `classic` | All sections and fields render on a single page | Short forms, settings pages, data entry |
+| `stepped` | One section per screen, with navigation between sections | Multi-step wizards, onboarding flows, surveys |
+| `conversational` | One question per screen, one-at-a-time | Lead capture, quizzes, interviews, intake forms |
+
+The engine internally handles each mode differently:
+
+- **Classic** validates on submit. All fields are visible and editable.
+- **Stepped** validates per-section. Users navigate between sections with Next/Back buttons.
+- **Conversational** validates per-field. Users advance one question at a time.
+
+But from the schema author's perspective, there's nothing to learn. You already know how to write a FieldCraft schema. You just set `displayMode`.
+
+## Design Decisions We're Making
+
+Building conversational mode right means making deliberate UX choices. Here's what we're working through:
+
+### Auto-Advance
+
+Some field types have a natural "done" signal. When you click an option in a single-select, you've answered — there's no reason to also click "Continue." Same for boolean (Yes/No) and rating fields.
+
+Text fields are different. The user might type one word or three paragraphs. There's no way to know when they're done, so text fields always require an explicit Continue action (button click or Enter key).
+
+Our plan:
+
+| Field Type | Advance Behavior |
+|-----------|-----------------|
+| `single_select` | Auto-advance after selection |
+| `boolean` | Auto-advance after Yes/No |
+| `rating` | Auto-advance after star click |
+| `dropdown` | Auto-advance after selection |
+| All text inputs | Explicit Continue (Enter or button) |
+| `multi_select` | Explicit Continue (multiple selections possible) |
+
+Auto-advance will include a brief delay (around 500ms) with a visual indicator, so the transition doesn't feel jarring.
+
+### Keyboard Navigation
+
+Conversational forms should feel fast. Mouse-only interaction kills the flow. We're planning:
+
+- **Enter** — advance to next question
+- **Shift + Enter** — newline in long text fields (Enter still advances)
+- **Shift + Tab** or **Up arrow** — go back to previous question
+- **Number keys (1–9)** — select option by index in single-select/dropdown
+- **Y / N** — answer boolean fields
+- **Tab** — focus the Continue button
+
+Optional keyboard shortcut hints will appear below each field, toggled via a `showKeyboardHints` prop.
+
+### Progress Indication
+
+"Question 4 of 12" is straightforward until conditional logic enters the picture. If question 5 has a visibility condition that hides it based on the answer to question 3, is the total 12 or 11? And it can change mid-flow as answers are revised.
+
+We're planning dynamic progress that recalculates the total based on current visibility state. The progress indicator will show the actual number of remaining visible questions, not the total in the schema.
+
+### Transitions
+
+Questions will slide in with CSS transitions — smooth but not slow. We'll respect `prefers-reduced-motion` for users who have motion reduction enabled. All transition classes will follow the `fc-conversational-*` naming convention for easy customization.
+
+## What This Means for Existing Users
+
+If you're using FieldCraft today with `classic` or `stepped` mode, nothing changes. Conversational mode is additive. Your existing schemas, validation rules, conditional logic, and themes all carry forward.
+
+When conversational mode ships, upgrading looks like this:
+
+1. Update `@squaredr/fieldcraft-react` to the version that includes it
+2. Set `displayMode: "conversational"` in your schema's `settings`
+3. Optionally configure auto-advance and keyboard hints
+
+No schema migration. No new components to learn. No breaking changes.
+
+> **Same schema, new experience.** That's the promise of schema-driven forms — the schema is stable, and renderers evolve independently.
+
+## When It Ships
+
+Conversational mode is on the FieldCraft roadmap for late 2026. We're building it in stages: core renderer first, then auto-advance, then keyboard navigation, then progress components.
+
+Star the [GitHub repo](https://github.com/SquaredR98/fieldcraft) to get notified when the PR lands.
+
+---
+
+## Further Reading
+
+- [Build a Multi-Step Survey in 5 Minutes](/blog/build-multi-step-survey) — stepped mode tutorial
+- [How FieldCraft's Validation Pipeline Works](/blog/fieldcraft-validation-pipeline) — the validation engine that powers per-field validation
+- [Why Schema-Driven Forms Beat Code-Driven Ones](/blog/why-schema-driven) — the architecture philosophy behind FieldCraft

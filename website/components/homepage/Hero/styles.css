@@ -1,0 +1,302 @@
+@reference "../../../app/globals.css";
+
+/* ── Hero section ── */
+
+.fc-hero {
+  @apply border-b border-fc-rule;
+  /* Drafting grid — no Tailwind equivalent for this pattern */
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fc-hero__inner {
+  @apply grid items-start mx-auto max-w-310;
+  @apply px-10 pt-22 pb-20 gap-14;
+  grid-template-columns: 1.02fr 1fr;
+}
+
+/* ── Left column ── */
+
+.fc-hero__eyebrow {
+  @apply flex items-center gap-2.5 mb-5.5;
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-teal;
+}
+
+.fc-hero__eyebrow-dot {
+  @apply w-1.5 h-1.5 bg-fc-teal;
+}
+
+.fc-hero__h1 {
+  @apply font-display text-[60px] font-semibold;
+  @apply tracking-[-0.04em] leading-none;
+  @apply m-0 text-fc-ink-strong;
+}
+
+.fc-hero__sub {
+  @apply text-[17px] leading-[1.6] text-fc-muted;
+  @apply mt-5.5 max-w-125;
+  text-wrap: pretty;
+}
+
+.fc-hero__actions {
+  @apply flex flex-wrap gap-3 mt-8;
+}
+
+.fc-hero__cta {
+  @apply whitespace-nowrap shrink-0 no-underline;
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply font-display text-[15px] font-medium;
+  @apply px-6 py-3.5;
+  transition: background var(--motion-hover);
+}
+
+.fc-hero__cta:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+.fc-hero__badges {
+  @apply flex flex-wrap gap-2.5 mt-7;
+  @apply font-mono text-[10px] tracking-widest;
+  @apply uppercase text-fc-muted;
+}
+
+.fc-hero__badge {
+  @apply border border-fc-rule bg-fc-surface;
+  @apply px-2.25 py-1.25;
+}
+
+/* ── Right column: hero card ── */
+
+.fc-hero-card {
+  @apply border border-fc-rule bg-fc-surface;
+}
+
+.fc-hero-card__tabs {
+  @apply flex border-b border-fc-rule;
+}
+
+.fc-hero-card__tab {
+  @apply font-mono text-[11px] tracking-widest uppercase;
+  @apply px-5 py-3.25 cursor-pointer text-fc-muted;
+  transition: color var(--motion-hover), background var(--motion-hover);
+}
+
+.fc-hero-card__tab--active {
+  @apply bg-fc-wash text-fc-teal;
+  box-shadow: inset 0 -2px 0 var(--teal);
+}
+
+.fc-hero-card__tab:not(.fc-hero-card__tab--active):hover {
+  @apply text-fc-ink;
+}
+
+.fc-hero-card__live-label {
+  @apply flex-1 text-right;
+  @apply font-mono text-[10px] tracking-widest uppercase;
+  @apply px-4 py-2.75 text-fc-muted;
+}
+
+/* ── Code panel (Shiki-powered) ── */
+
+.fc-hero-code-block {
+  @apply border-0 rounded-none;
+}
+
+.fc-hero-code-block .fc-code-block__content {
+  @apply text-[11.5px] leading-[1.85];
+  @apply max-h-[420px] overflow-y-auto;
+}
+
+/* ── Rendered panel ── */
+
+.fc-hero-rendered {
+  @apply flex flex-col gap-4;
+  @apply px-5 pt-5.5 pb-6;
+}
+
+.fc-hero-rendered__label {
+  @apply block text-[12.5px] font-semibold mb-1.5 text-fc-ink;
+}
+
+.fc-hero-rendered__required {
+  @apply text-fc-danger;
+}
+
+.fc-hero-rendered__input {
+  @apply w-full border border-fc-rule bg-fc-surface;
+  @apply px-3 py-2.75 text-sm text-fc-ink;
+  @apply outline-none rounded-none;
+  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
+}
+
+.fc-hero-rendered__input::placeholder {
+  @apply text-fc-muted;
+}
+
+.fc-hero-rendered__input:focus {
+  @apply border-fc-teal;
+  box-shadow: var(--focus-ring);
+}
+
+.fc-hero-rendered__checkbox {
+  @apply flex items-center gap-2.5 cursor-pointer;
+}
+
+.fc-hero-rendered__check {
+  @apply flex items-center justify-center shrink-0;
+  @apply w-4 h-4 text-[11px] leading-none;
+  @apply border border-fc-rule bg-fc-surface text-transparent;
+  transition: background var(--motion-hover), border-color var(--motion-hover);
+}
+
+.fc-hero-rendered__check--on {
+  @apply bg-fc-teal text-fc-teal-on border-fc-teal;
+}
+
+.fc-hero-rendered__check-label {
+  @apply text-sm text-fc-ink;
+}
+
+.fc-hero-rendered__conditional {
+  @apply pl-3.5 border-l-2 border-fc-teal;
+}
+
+.fc-hero-rendered__conditional-label {
+  @apply font-mono text-[9.5px] tracking-[0.12em];
+  @apply uppercase text-fc-teal mb-2;
+}
+
+.fc-hero-rendered__buttons {
+  @apply flex gap-2.5 pt-1;
+}
+
+.fc-hero-rendered__btn-outline {
+  @apply border border-fc-btn-line bg-transparent;
+  @apply px-4.5 py-2.5 text-[13.5px] text-fc-muted;
+  @apply cursor-pointer font-display font-medium;
+  transition: color var(--motion-hover);
+}
+
+.fc-hero-rendered__btn-outline:hover {
+  @apply text-fc-ink;
+}
+
+.fc-hero-rendered__btn-primary {
+  @apply bg-fc-teal text-fc-teal-on border-0;
+  @apply px-4.5 py-2.5 text-[13.5px];
+  @apply font-display font-medium cursor-pointer;
+  transition: background var(--motion-hover);
+}
+
+.fc-hero-rendered__btn-primary:hover {
+  @apply bg-fc-teal-hover;
+}
+
+/* ── Spec strip ── */
+
+.fc-spec-strip {
+  @apply border-t border-fc-rule bg-fc-surface overflow-hidden;
+}
+
+.fc-spec-strip__inner {
+  @apply grid mx-auto max-w-310 px-10;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.fc-spec-strip__cell {
+  @apply py-5;
+}
+
+.fc-spec-strip__cell + .fc-spec-strip__cell {
+  @apply pl-6 border-l border-fc-rule;
+}
+
+.fc-spec-strip__value {
+  @apply font-display text-2xl font-semibold tracking-[-0.02em];
+}
+
+.fc-spec-strip__label {
+  @apply font-mono text-[9.5px] tracking-[0.12em];
+  @apply uppercase text-fc-muted mt-1;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1023px) {
+  .fc-hero__inner {
+    @apply px-6 pt-16 pb-14 gap-10;
+    grid-template-columns: 1fr;
+  }
+
+  .fc-hero__h1 {
+    @apply text-[42px];
+  }
+
+  .fc-hero__sub {
+    @apply max-w-full;
+  }
+
+  .fc-spec-strip__inner {
+    @apply px-6;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 639px) {
+  .fc-hero__inner {
+    @apply px-5 pt-12 pb-10 gap-8;
+  }
+
+  .fc-hero__h1 {
+    @apply text-[32px];
+  }
+
+  .fc-hero__sub {
+    @apply text-[15px];
+  }
+
+  /* Prevent hero card from overflowing viewport */
+  .fc-hero-card {
+    @apply min-w-0 overflow-hidden;
+  }
+
+  .fc-hero-code-block .fc-code-block__content {
+    @apply max-h-[320px];
+  }
+
+  .fc-hero-card__tab {
+    @apply px-3 text-[10px];
+  }
+
+  .fc-hero-card__live-label {
+    @apply text-[9px] px-2;
+  }
+
+  .fc-spec-strip__inner {
+    @apply px-5;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fc-spec-strip__cell + .fc-spec-strip__cell {
+    @apply pl-0 border-l-0;
+  }
+
+  .fc-spec-strip__cell:nth-child(even) {
+    @apply pl-6 border-l border-fc-rule;
+  }
+
+  .fc-spec-strip__cell:nth-child(n+3) {
+    @apply border-t border-fc-rule;
+  }
+
+  /* Last (5th) cell spans full width */
+  .fc-spec-strip__cell:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    @apply border-l-0 pl-0;
+  }
+}

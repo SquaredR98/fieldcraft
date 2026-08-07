@@ -1,0 +1,11 @@
+@reference "../../../app/globals.css";
+
+/* --- Reading Progress Bar --- */
+.fc-blog-progress {
+  @apply sticky top-[60px] z-50 h-0.5 bg-fc-rule;
+}
+
+.fc-blog-progress__fill {
+  @apply h-0.5 bg-fc-teal;
+  transition: width 100ms linear;
+}

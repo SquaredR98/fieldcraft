@@ -1,0 +1,206 @@
+---
+title: "Introducing FieldCraft: A Schema-Driven Form Engine for React"
+slug: "introducing-fieldcraft"
+date: "2026-05-10"
+description: "Define forms as JSON. Get validation, conditional logic, multi-step, theming, and draft persistence — without writing a single input component."
+author: "ravi"
+category: "Release"
+tags: ["fieldcraft", "react", "forms", "open-source"]
+---
+
+> **TL;DR** — FieldCraft is a schema-driven form engine for React. Define your form as JSON, get validation, conditional logic, multi-step flows, draft persistence, and 44 field types — without writing form state code.
+
+## The Problem
+
+Every React project eventually needs forms. And every team eventually builds the same infrastructure: validation, error display, conditional fields, multi-step flows, draft saving, theming.
+
+You wire up state. You add validation. You handle edge cases. You realize the contact form and the onboarding flow share 80% of the same plumbing. You refactor. You add more forms. The plumbing grows.
+
+FieldCraft exists so you never write that plumbing again.
+
+## What It Is
+
+FieldCraft is a schema-driven form engine. You define your form as a JSON schema — fields, validation rules, conditional logic, sections — and the engine handles everything else.
+
+```typescript
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
+import '@squaredr/fieldcraft-react/styles.css'
+
+const schema = {
+  id: 'contact',
+  version: '1.0.0',
+  title: 'Contact Us',
+  sections: [{
+    id: 'main',
+    title: 'Your Details',
+    questions: [
+      {
+        id: 'name',
+        type: 'short_text',
+        label: 'Your Name',
+        required: true,
+      },
+      {
+        id: 'email',
+        type: 'email',
+        label: 'Email Address',
+        required: true,
+      },
+      {
+        id: 'type',
+        type: 'single_select',
+        label: 'Inquiry Type',
+        options: [
+          { label: 'General', value: 'general' },
+          { label: 'Support', value: 'support' },
+          { label: 'Enterprise', value: 'enterprise' },
+        ],
+      },
+      {
+        id: 'message',
+        type: 'long_text',
+        label: 'Message',
+        required: true,
+        validation: [{ type: 'minLength', value: 10 }],
+      },
+    ],
+  }],
+  submitAction: { type: 'callback' },
+}
+
+export default function ContactPage() {
+  return (
+    <FormEngineRenderer
+      schema={schema}
+      onSubmit={(response) => console.log(response.values)}
+    />
+  )
+}
+```
+
+That's a working form with validation, error messages, and keyboard navigation. No `useState`, no `onChange` handlers, no validation library.
+
+## What You Get
+
+### 44 Field Types
+
+Text, email, number, phone, select, multi-select, checkbox, radio, toggle, rating, slider, date, time, file upload, signature pad, and more. Each field type handles its own rendering, validation, and accessibility.
+
+### Conditional Logic
+
+Show or hide fields based on other field values. Supports nested AND/OR condition groups.
+
+```json
+{
+  "id": "company",
+  "type": "short_text",
+  "label": "Company Name",
+  "showIf": {
+    "field": "type",
+    "operator": "eq",
+    "value": "enterprise"
+  }
+}
+```
+
+The "Company Name" field only appears when the user selects "Enterprise" as their inquiry type. The engine re-evaluates conditions on every change, handles visibility cascading, and cleans up hidden field values.
+
+### Multi-Step Sections
+
+Split long forms into steps. The engine tracks progress, validates per-section, and lets users navigate back without losing data.
+
+```json
+{
+  "sections": [
+    {
+      "id": "basics",
+      "title": "Basic Info",
+      "questions": [
+        { "id": "name", "type": "short_text", "label": "Your Name", "required": true },
+        { "id": "email", "type": "email", "label": "Email", "required": true }
+      ]
+    },
+    {
+      "id": "details",
+      "title": "Details",
+      "questions": [
+        { "id": "type", "type": "single_select", "label": "Inquiry Type", "options": [] },
+        { "id": "message", "type": "long_text", "label": "Message", "required": true }
+      ]
+    }
+  ]
+}
+```
+
+### Validation
+
+Required fields, min/max length, regex patterns, numeric ranges, custom validators. Errors show on blur by default — not on every keystroke.
+
+### Computed Fields
+
+Fields that calculate their value from other fields using an expression engine.
+
+```json
+{
+  "id": "total",
+  "type": "calculated",
+  "config": {
+    "type": "calculated",
+    "expression": "{quantity} * {price}"
+  }
+}
+```
+
+### Draft Persistence
+
+Long forms auto-save to localStorage. If a user closes the tab and comes back within 72 hours, their progress is restored. No configuration needed — it's on by default.
+
+### Theming
+
+Six built-in theme presets: Clean, Dark, Modern, High Contrast, Clinical, and Playful. Or pass your own theme object for full control over colors, spacing, border radius, and typography.
+
+```tsx
+import { darkPreset } from '@squaredr/fieldcraft-react'
+
+<FormEngineRenderer
+  schema={schema}
+  theme={darkPreset}
+  onSubmit={handleSubmit}
+/>
+```
+
+### Custom Field Types
+
+Need a field type that doesn't exist? Register your own through the field registry.
+
+## Storage Adapters
+
+Form data needs to go somewhere. FieldCraft ships three storage adapters — all MIT licensed:
+
+- **Postgres** (`@squaredr/fieldcraft-adapters/postgres`) — Built on Drizzle ORM with optional field-level AES-256-GCM encryption
+- **Supabase** (`@squaredr/fieldcraft-adapters/supabase`) — Works with existing Supabase projects
+- **Webhook** (`@squaredr/fieldcraft-adapters/webhook`) — POST to any endpoint with HMAC-SHA256 signed payloads
+
+You pick which fields get encrypted. An email field can be encrypted while a "how did you hear about us" field stays queryable in plain text.
+
+## Why Schema-Driven
+
+Writing forms imperatively (JSX + state + validation per field) works fine for one or two forms. It stops working when you have 10 forms, or when non-developers need to create forms, or when the same form needs to render on multiple platforms.
+
+A JSON schema is portable. It can be stored in a database, generated by a form builder, or shared between a React frontend and a React Native app. The schema is the source of truth — the renderer is interchangeable.
+
+> FieldCraft's core engine (`@squaredr/fieldcraft-core`) is renderer-agnostic. The React renderer (`@squaredr/fieldcraft-react`) is one implementation. The schema format stays the same regardless of how you render it.
+
+---
+
+## Get Started
+
+```bash
+npm install @squaredr/fieldcraft-core @squaredr/fieldcraft-react
+```
+
+Full documentation, live examples, and API reference at [fieldcraft.squaredr.tech/docs](/docs).
+
+All packages are MIT licensed. Full TypeScript support.
+
+Check the [GitHub issues](https://github.com/SquaredR98/fieldcraft/issues) to see what's shipping next — and submit feature requests directly.

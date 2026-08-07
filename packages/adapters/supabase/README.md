@@ -1,6 +1,6 @@
 # @squaredr/fieldcraft-supabase
 
-Supabase storage adapter for [FieldCraft](https://squaredr.tech/products/fieldcraft). Stores form responses in Supabase with optional field-level AES-256-GCM encryption and row-level security support.
+Supabase storage adapter for [FieldCraft](https://fieldcraft.squaredr.tech). Stores form responses in Supabase with optional field-level AES-256-GCM encryption and row-level security support.
 
 ## Install
 
@@ -86,11 +86,9 @@ The adapter is compatible with Supabase RLS policies. Configure your table's RLS
 
 ## Community
 
-[![Discord](https://img.shields.io/discord/YOUR_SERVER_ID?color=5865F2&label=Discord&logo=discord&logoColor=white)](https://discord.gg/zMxdu5UVW)
-
-- [Discord](https://discord.gg/zMxdu5UVW) — Get help, share projects, request features
-- [Docs](https://squaredr.tech/products/fieldcraft/docs/adapters) — Adapter documentation
-- [Pro Tools](https://squaredr.tech/products/fieldcraft/admin-pro) — Visual FormBuilder, SchemaEditor, ResponseViewer, ThemeEditor
+- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
+- [Docs](https://fieldcraft.squaredr.tech/docs/submission/adapters-overview) — Adapter documentation
+- [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 
 ## License
 
