@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
+import { GoogleTagManager } from '@next/third-parties/google';
 import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import './globals.css';
+
+const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -81,6 +84,7 @@ export default function RootLayout({
           }}
         />
       </head>
+      {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <body>
         <RootProvider>{children}</RootProvider>
       </body>
