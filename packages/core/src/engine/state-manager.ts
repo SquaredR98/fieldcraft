@@ -48,6 +48,7 @@ export function createStateManager(config: StateManagerConfig) {
   let state: FormState = {
     values: { ...config.initialValues },
     errors: {},
+    warnings: {},
     touched: {},
     isDirty: false,
 
@@ -376,13 +377,18 @@ export function createStateManager(config: StateManagerConfig) {
       const calcConfig = question.config as CalculatedConfig | undefined;
       if (!calcConfig?.expression) continue;
 
-      const result = evaluateExpression(calcConfig.expression, state.values);
-      if (result !== null) {
-        state = {
-          ...state,
-          values: { ...state.values, [depId]: result },
-        };
+      const { value, warning } = evaluateExpression(calcConfig.expression, state.values);
+      const newWarnings = { ...state.warnings };
+      if (warning) {
+        newWarnings[depId] = warning;
+      } else {
+        delete newWarnings[depId];
       }
+      state = {
+        ...state,
+        values: { ...state.values, ...(value !== null ? { [depId]: value } : {}) },
+        warnings: newWarnings,
+      };
     }
   }
 
@@ -392,13 +398,18 @@ export function createStateManager(config: StateManagerConfig) {
       const calcConfig = question.config as CalculatedConfig | undefined;
       if (!calcConfig?.expression) continue;
 
-      const result = evaluateExpression(calcConfig.expression, state.values);
-      if (result !== null) {
-        state = {
-          ...state,
-          values: { ...state.values, [id]: result },
-        };
+      const { value, warning } = evaluateExpression(calcConfig.expression, state.values);
+      const newWarnings = { ...state.warnings };
+      if (warning) {
+        newWarnings[id] = warning;
+      } else {
+        delete newWarnings[id];
       }
+      state = {
+        ...state,
+        values: { ...state.values, ...(value !== null ? { [id]: value } : {}) },
+        warnings: newWarnings,
+      };
     }
   }
 

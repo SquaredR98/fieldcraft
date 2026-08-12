@@ -47,9 +47,9 @@ export const roadmap: RoadmapGroup[] = [
     items: [
       { title: 'FieldCraft website + documentation site', status: 'shipped' },
       { title: '7 blog posts (multi-step, validation, accessibility, and more)', status: 'shipped' },
-      { title: 'JSDoc on remaining core exports', status: 'planned' },
-      { title: 'CONTRIBUTING.md and CODE_OF_CONDUCT.md', status: 'planned' },
-      { title: 'Calculated field warning system', status: 'planned' },
+      { title: 'JSDoc on remaining core exports', status: 'shipped' },
+      { title: 'CONTRIBUTING.md and CODE_OF_CONDUCT.md', status: 'shipped' },
+      { title: 'Calculated field warning system', status: 'shipped' },
       { title: 'Analytics event system (onEvent callback)', status: 'planned' },
       { title: 'Readonly field state', status: 'planned' },
       { title: 'Response viewer search and bulk actions (Pro)', status: 'planned' },

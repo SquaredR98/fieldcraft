@@ -12,6 +12,8 @@ export type FormState = {
   values: Record<string, unknown>;
   /** Validation errors keyed by field ID. Each field can have multiple error messages. */
   errors: Record<string, string[]>;
+  /** Warnings keyed by field ID (e.g. calculated field evaluation failures). */
+  warnings: Record<string, string>;
   /** Tracks which fields the user has interacted with (focused then blurred). */
   touched: Record<string, boolean>;
   /** True if any field value differs from its initial/prefilled value. */

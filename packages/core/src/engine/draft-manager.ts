@@ -1,5 +1,16 @@
 import type { DraftAdapter, DraftData } from "../types/adapters";
 
+/**
+ * Configuration for the draft manager factory.
+ *
+ * @property schemaId - Unique identifier for the form schema (used as part of the storage key)
+ * @property sessionToken - Per-user/session token to isolate drafts between users
+ * @property storage - Where to persist drafts: `"local"` (localStorage only),
+ *   `"server"` (via DraftAdapter only), or `"both"` (localStorage + server)
+ * @property ttlHours - How long a draft remains valid before automatic expiry
+ * @property draftAdapter - Optional server-side adapter for remote draft storage.
+ *   Required when `storage` is `"server"` or `"both"`.
+ */
 export type DraftManagerConfig = {
   schemaId: string;
   sessionToken: string;
@@ -8,16 +19,40 @@ export type DraftManagerConfig = {
   draftAdapter?: DraftAdapter;
 };
 
+/**
+ * A point-in-time snapshot of form progress, used for saving and restoring drafts.
+ */
 export type DraftSnapshot = {
   values: Record<string, unknown>;
   currentSectionId: string;
   visitedSectionIds: string[];
-  savedAt: string; // ISO 8601
+  /** ISO 8601 timestamp of when the snapshot was saved. */
+  savedAt: string;
 };
 
 /**
- * Manages draft save/load/clear operations.
- * Supports localStorage and/or a server-side DraftAdapter.
+ * Creates a draft manager that handles save, load, clear, and existence
+ * checks for form drafts. Supports localStorage, a server-side
+ * `DraftAdapter`, or both simultaneously.
+ *
+ * Drafts are keyed by `schemaId + sessionToken` and automatically expire
+ * after `ttlHours`. Expired drafts are cleared on load.
+ *
+ * @param config - Draft storage configuration
+ * @returns An object with `save`, `load`, `clear`, and `hasDraft` methods
+ *
+ * @example
+ * ```ts
+ * const drafts = createDraftManager({
+ *   schemaId: "contact-form",
+ *   sessionToken: "user-abc",
+ *   storage: "local",
+ *   ttlHours: 24,
+ * });
+ *
+ * await drafts.save({ values, currentSectionId, visitedSectionIds, savedAt });
+ * const draft = await drafts.load();
+ * ```
  */
 export function createDraftManager(config: DraftManagerConfig) {
   const localKey = `fe_draft__${config.schemaId}__${config.sessionToken}`;

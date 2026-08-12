@@ -1,18 +1,43 @@
 import type { SubmitAdapter } from "../types/adapters";
 import type { FormResponse } from "../types/response";
 
+/**
+ * Configuration for {@link createHttpAdapter}.
+ *
+ * @property url - The endpoint to send form responses to
+ * @property method - HTTP method. Defaults to `"POST"`
+ * @property headers - Additional headers merged with `Content-Type: application/json`
+ * @property transform - Optional function to reshape the `FormResponse` before sending
+ * @property timeout - Request timeout in milliseconds. Defaults to 30000 (30s)
+ * @property retries - Number of retry attempts on network errors or 5xx responses.
+ *   Uses exponential backoff with jitter. Set to 0 to disable. Defaults to 3.
+ */
 export type HttpAdapterConfig = {
   url: string;
   method?: "POST" | "PUT" | "PATCH";
   headers?: Record<string, string>;
   transform?: (response: FormResponse) => unknown;
   timeout?: number;
-  /** Number of retry attempts on network errors or 5xx responses. 0 disables retry. Default: 3. */
   retries?: number;
 };
 
 /**
- * Creates an HTTP submit adapter that POSTs form responses to a URL.
+ * Creates a `SubmitAdapter` that sends form responses to an HTTP endpoint.
+ *
+ * Retries on network errors and 5xx responses with exponential backoff
+ * (1s, 2s, 4s... with jitter). Client errors (4xx) fail immediately.
+ *
+ * @param config - Endpoint URL, method, headers, and retry settings
+ * @returns A `SubmitAdapter` with a `submit(response)` method
+ *
+ * @example
+ * ```ts
+ * const adapter = createHttpAdapter({
+ *   url: "https://api.example.com/forms/submit",
+ *   headers: { Authorization: "Bearer token" },
+ *   retries: 2,
+ * });
+ * ```
  */
 export function createHttpAdapter(config: HttpAdapterConfig): SubmitAdapter {
   const method = config.method ?? "POST";

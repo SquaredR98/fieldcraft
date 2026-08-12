@@ -3,58 +3,86 @@ import { evaluateExpression, extractFieldRefs } from "../src/engine/calculated-r
 
 describe("evaluateExpression", () => {
   it("simple addition", () => {
-    expect(evaluateExpression("{a} + {b}", { a: 3, b: 5 })).toBe(8);
+    const result = evaluateExpression("{a} + {b}", { a: 3, b: 5 });
+    expect(result.value).toBe(8);
+    expect(result.warning).toBeUndefined();
   });
 
   it("multiplication", () => {
-    expect(evaluateExpression("{qty} * {price}", { qty: 4, price: 10 })).toBe(40);
+    const result = evaluateExpression("{qty} * {price}", { qty: 4, price: 10 });
+    expect(result.value).toBe(40);
+    expect(result.warning).toBeUndefined();
   });
 
   it("complex expression with parentheses", () => {
-    expect(evaluateExpression("{subtotal} * (1 + {tax} / 100)", { subtotal: 100, tax: 8 })).toBe(108);
+    const result = evaluateExpression("{subtotal} * (1 + {tax} / 100)", { subtotal: 100, tax: 8 });
+    expect(result.value).toBe(108);
+    expect(result.warning).toBeUndefined();
   });
 
   it("power operator", () => {
-    expect(evaluateExpression("{x} ^ 2", { x: 5 })).toBe(25);
+    const result = evaluateExpression("{x} ^ 2", { x: 5 });
+    expect(result.value).toBe(25);
+    expect(result.warning).toBeUndefined();
   });
 
   it("BMI formula", () => {
-    // BMI = weight * 703 / height^2
     const result = evaluateExpression("{weight} * 703 / ({height} ^ 2)", { weight: 150, height: 65 });
-    expect(result).toBeCloseTo(24.96, 1);
+    expect(result.value).toBeCloseTo(24.96, 1);
+    expect(result.warning).toBeUndefined();
   });
 
-  it("returns null when referenced field is missing", () => {
-    expect(evaluateExpression("{a} + {b}", { a: 3 })).toBeNull();
+  it("returns null with warning when referenced field is missing", () => {
+    const result = evaluateExpression("{a} + {b}", { a: 3 });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("{b}");
+    expect(result.warning).toContain("no value");
   });
 
-  it("returns null when referenced field is null", () => {
-    expect(evaluateExpression("{a} + {b}", { a: 3, b: null })).toBeNull();
+  it("returns null with warning when referenced field is null", () => {
+    const result = evaluateExpression("{a} + {b}", { a: 3, b: null });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("{b}");
+    expect(result.warning).toContain("no value");
   });
 
-  it("returns null when referenced field is non-numeric", () => {
-    expect(evaluateExpression("{a} + {b}", { a: 3, b: "hello" })).toBeNull();
+  it("returns null with warning when referenced field is non-numeric", () => {
+    const result = evaluateExpression("{a} + {b}", { a: 3, b: "hello" });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("{b}");
+    expect(result.warning).toContain("not a number");
+    expect(result.warning).toContain("hello");
   });
 
   it("handles string numeric values", () => {
-    expect(evaluateExpression("{a} + {b}", { a: "3", b: "5" })).toBe(8);
+    const result = evaluateExpression("{a} + {b}", { a: "3", b: "5" });
+    expect(result.value).toBe(8);
+    expect(result.warning).toBeUndefined();
   });
 
   it("handles negative numbers", () => {
-    expect(evaluateExpression("{a} + {b}", { a: -3, b: 5 })).toBe(2);
+    const result = evaluateExpression("{a} + {b}", { a: -3, b: 5 });
+    expect(result.value).toBe(2);
+    expect(result.warning).toBeUndefined();
   });
 
-  it("handles division by zero gracefully", () => {
+  it("returns null with warning on division by zero", () => {
     const result = evaluateExpression("{a} / {b}", { a: 5, b: 0 });
-    expect(result).toBeNull();
+    expect(result.value).toBeNull();
+    expect(result.warning).toBeDefined();
+    expect(result.warning!.toLowerCase()).toContain("division by zero");
   });
 
   it("handles no field references (pure math)", () => {
-    expect(evaluateExpression("2 + 3 * 4", {})).toBe(14);
+    const result = evaluateExpression("2 + 3 * 4", {});
+    expect(result.value).toBe(14);
+    expect(result.warning).toBeUndefined();
   });
 
-  it("returns null for invalid expression", () => {
-    expect(evaluateExpression("{a} +++ {b}", { a: 1, b: 2 })).toBeNull();
+  it("returns null with warning for malformed expression", () => {
+    const result = evaluateExpression("{a} +++ {b}", { a: 1, b: 2 });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("invalid");
   });
 });
 

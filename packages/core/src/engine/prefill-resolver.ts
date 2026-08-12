@@ -2,13 +2,31 @@ import type { FormEngineSchema } from "../types/schema";
 import type { PrefillConfig } from "../types/settings";
 
 /**
- * Resolve prefill values from multiple sources.
- * Priority (highest to lowest): props > URL params > schema defaults
+ * Resolves initial field values by merging three sources in priority order:
  *
- * @param schema - The form schema (for extracting default values and prefillKeys)
- * @param prefillValues - Values passed as props
- * @param prefillConfig - Prefill configuration from schema settings
- * @returns Merged values record
+ * 1. **Schema defaults** (lowest) — `defaultValue` in each question's config
+ * 2. **URL parameters** (middle) — query params matching `prefillConfig.paramPrefix`
+ * 3. **Props values** (highest) — values passed directly via `prefillValues`
+ *
+ * Fields use `question.prefillKey` as the lookup key in URL params and props.
+ * If `prefillKey` is not set, `question.id` is used as the fallback key.
+ *
+ * @param schema - The form schema (provides default values and prefillKey mappings)
+ * @param prefillValues - Values passed as component props (highest priority)
+ * @param prefillConfig - Controls which sources are active (`"props"`, `"url"`, or `"both"`)
+ *   and optional param prefix / transform function
+ * @returns Merged values record keyed by field ID
+ *
+ * @example
+ * ```ts
+ * // URL: ?fe_name=John&fe_email=john@example.com
+ * const values = resolvePrefill(schema, { name: "Jane" }, {
+ *   source: "both",
+ *   paramPrefix: "fe_",
+ * });
+ * // values.name === "Jane" (props wins over URL)
+ * // values.email === "john@example.com" (from URL)
+ * ```
  */
 export function resolvePrefill(
   schema: FormEngineSchema,
@@ -64,8 +82,11 @@ export function resolvePrefill(
 }
 
 /**
- * Extract URL query parameters filtered by prefix.
- * Only available in browser environments.
+ * Extracts URL query parameters that start with the given prefix,
+ * stripping the prefix from each key. Browser-only — returns an
+ * empty object in server/Node environments.
+ *
+ * @example `getUrlParams("fe_")` with URL `?fe_name=John` → `{ name: "John" }`
  */
 function getUrlParams(prefix: string): Record<string, string> {
   const params: Record<string, string> = {};

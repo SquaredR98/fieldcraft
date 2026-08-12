@@ -1,9 +1,18 @@
 /**
  * Safe math expression evaluator using the Shunting-yard algorithm.
- * NO eval() — parses and evaluates a mathematical expression safely.
+ * No `eval()` — tokenizes, converts to postfix (RPN), and evaluates.
  *
- * Supports: numbers, +, -, *, /, ^ (power), parentheses,
- * Math.floor, Math.ceil, Math.round, Math.min, Math.max, Math.abs
+ * Supports:
+ * - Arithmetic: `+`, `-`, `*`, `/`, `^` (power)
+ * - Grouping: parentheses `()`
+ * - Unary minus: `-5`, `(-3 + 2)`
+ * - Functions: `floor`, `ceil`, `round`, `abs`, `min`, `max`
+ *   (also accepts `Math.floor`, `Math.ceil`, etc.)
+ *
+ * Throws on invalid expressions, unknown functions, mismatched
+ * parentheses, and division by zero.
+ *
+ * @module expression-parser
  */
 
 type Token =
@@ -27,6 +36,13 @@ const FUNCTIONS = new Set([
   "Math.floor", "Math.ceil", "Math.round", "Math.min", "Math.max", "Math.abs",
 ]);
 
+/**
+ * Tokenizes a math expression string into an array of typed tokens.
+ * Handles numbers (including decimals and unary minus), operators,
+ * parentheses, commas, and function names.
+ *
+ * @throws {Error} On unknown characters or function names
+ */
 function tokenize(expression: string): Token[] {
   const tokens: Token[] = [];
   let i = 0;
@@ -121,7 +137,10 @@ function tokenize(expression: string): Token[] {
 }
 
 /**
- * Shunting-yard algorithm: convert infix tokens to postfix (RPN).
+ * Converts infix tokens to postfix (Reverse Polish Notation) using the
+ * Shunting-yard algorithm. Respects operator precedence and associativity.
+ *
+ * @throws {Error} On mismatched parentheses
  */
 function toPostfix(tokens: Token[]): Token[] {
   const output: Token[] = [];
@@ -185,7 +204,11 @@ function toPostfix(tokens: Token[]): Token[] {
 }
 
 /**
- * Evaluate postfix (RPN) token array to produce a number.
+ * Evaluates a postfix (RPN) token array by processing each token
+ * left to right, pushing numbers onto a stack and applying operators
+ * and functions to stack operands.
+ *
+ * @throws {Error} On invalid expressions or division by zero
  */
 function evaluatePostfix(postfix: Token[]): number {
   const stack: number[] = [];
@@ -260,8 +283,22 @@ function evaluatePostfix(postfix: Token[]): number {
 }
 
 /**
- * Evaluate a math expression string and return the result.
- * Throws on invalid expressions.
+ * Evaluates a math expression string and returns the numeric result.
+ *
+ * This is the only exported function. Internally it tokenizes the input,
+ * converts to postfix via Shunting-yard, and evaluates the RPN stack.
+ *
+ * @param expression - A math expression string, e.g. `"(3 + 4) * 2"`
+ * @returns The evaluated numeric result
+ * @throws {Error} On invalid syntax, unknown functions, mismatched
+ *   parentheses, or division by zero
+ *
+ * @example
+ * ```ts
+ * evaluateMathExpression("(3 + 4) * 2");  // 14
+ * evaluateMathExpression("floor(3.7)");   // 3
+ * evaluateMathExpression("max(10, 20)");  // 20
+ * ```
  */
 export function evaluateMathExpression(expression: string): number {
   const tokens = tokenize(expression);

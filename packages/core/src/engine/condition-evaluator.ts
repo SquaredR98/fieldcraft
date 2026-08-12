@@ -2,13 +2,30 @@ import type { ConditionExpression, ConditionOperator } from "../types/conditions
 
 /**
  * Evaluates a condition expression against current form values.
- * Pure function — no side effects.
+ * Used by the engine to determine field/section visibility (`showIf`).
  *
- * Rules:
- * - Leaf node (field + operator): evaluate directly
- * - Group node (conditions[]): evaluate each child, combine with AND/OR
- * - Empty expression (no field, no conditions): returns true
- * - Missing field in values: treat as undefined
+ * Supports two node types:
+ * - **Leaf**: `{ field, operator, value }` — evaluates a single comparison
+ * - **Group**: `{ conditions[], combine }` — recursively evaluates children
+ *   with AND (all must pass) or OR (any must pass)
+ *
+ * Returns `true` for empty or malformed expressions (safe default: show the field).
+ *
+ * @param expression - The condition tree to evaluate
+ * @param values - Current form values keyed by field ID
+ * @returns Whether the condition is satisfied
+ *
+ * @example
+ * ```ts
+ * evaluate({ field: "age", operator: "gte", value: 18 }, { age: 21 }); // true
+ * evaluate({
+ *   combine: "OR",
+ *   conditions: [
+ *     { field: "role", operator: "eq", value: "admin" },
+ *     { field: "role", operator: "eq", value: "editor" },
+ *   ],
+ * }, { role: "editor" }); // true
+ * ```
  */
 export function evaluate(
   expression: ConditionExpression,
@@ -39,6 +56,12 @@ export function evaluate(
   return true;
 }
 
+/**
+ * Evaluates a single operator comparison between a field's runtime value
+ * and the condition's target value. Supports 16 operators:
+ * eq, neq, gt, gte, lt, lte, in, notIn, exists, notExists,
+ * contains, notContains, startsWith, endsWith, between, matches.
+ */
 function evaluateOperator(
   operator: ConditionOperator,
   fieldValue: unknown,
@@ -110,6 +133,7 @@ function evaluateOperator(
   }
 }
 
+/** Coerces a value to a number. Returns 0 for non-numeric values. */
 function toNumber(value: unknown): number {
   if (typeof value === "number") return value;
   if (typeof value === "string") {

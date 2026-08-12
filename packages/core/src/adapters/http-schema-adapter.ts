@@ -1,16 +1,47 @@
 import type { SchemaAdapter, SchemaListParams, SchemaListResult } from "../types/adapters";
 import type { FormEngineSchema } from "../types/schema";
 
+/**
+ * Configuration for {@link createHttpSchemaAdapter}.
+ *
+ * @property baseUrl - Base URL for the schema API (e.g. `"https://api.example.com"`)
+ * @property headers - Additional headers sent with every request
+ * @property timeout - Request timeout in milliseconds. Defaults to 30000 (30s)
+ * @property cacheTtl - Cache TTL in milliseconds for `load()` results.
+ *   Set to 0 to disable caching. Defaults to 60000 (60s).
+ */
 export type HttpSchemaAdapterConfig = {
   baseUrl: string;
   headers?: Record<string, string>;
   timeout?: number;
-  /** Cache TTL in milliseconds for `load()` results. 0 disables caching. Default: 60000 (60s). */
   cacheTtl?: number;
 };
 
 /**
- * Creates an HTTP schema adapter for CRUD operations on form schemas.
+ * Creates a `SchemaAdapter` that performs CRUD operations on form schemas
+ * via a REST API. Endpoints:
+ *
+ * - `PUT /schemas/:id` — save/update a schema
+ * - `GET /schemas/:id` — load a schema (with in-memory cache)
+ * - `DELETE /schemas/:id` — delete a schema
+ * - `GET /schemas` — list schemas (with pagination, search, sorting)
+ *
+ * Load results are cached in memory for `cacheTtl` milliseconds.
+ * Save and delete operations invalidate the cache for the affected schema.
+ *
+ * @param config - Base URL, headers, timeout, and cache settings
+ * @returns A `SchemaAdapter` with `save`, `load`, `delete`, and `list` methods
+ *
+ * @example
+ * ```ts
+ * const schemas = createHttpSchemaAdapter({
+ *   baseUrl: "https://api.example.com",
+ *   headers: { Authorization: "Bearer token" },
+ * });
+ *
+ * const schema = await schemas.load("contact-form");
+ * await schemas.save(updatedSchema);
+ * ```
  */
 export function createHttpSchemaAdapter(config: HttpSchemaAdapterConfig): SchemaAdapter {
   const timeout = config.timeout ?? 30000;
