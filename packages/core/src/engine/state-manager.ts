@@ -189,6 +189,33 @@ export function createStateManager(config: StateManagerConfig) {
     const navState = navigation.computeState(state.currentSectionId, state.values);
     if (!navState.canGoNext) return false;
 
+    // Validate all visible fields in the current section before allowing navigation
+    const currentSection = schema.sections.find((s) => s.id === state.currentSectionId);
+    if (currentSection) {
+      const sectionErrors: Record<string, string[]> = {};
+      const sectionTouched: Record<string, boolean> = {};
+      for (const question of currentSection.questions) {
+        if (question.showIf && !evaluate(question.showIf, state.values)) continue;
+        if (isStructuralField(question.type)) continue;
+        const errors = validateField(question, state.values[question.id], state.values, validatorRegistry);
+        if (errors.length > 0) {
+          sectionErrors[question.id] = errors;
+        }
+        sectionTouched[question.id] = true;
+      }
+      if (Object.keys(sectionErrors).length > 0) {
+        // Block navigation — show errors on all fields in section
+        state = {
+          ...state,
+          errors: { ...state.errors, ...sectionErrors },
+          touched: { ...state.touched, ...sectionTouched },
+          isCurrentSectionValid: false,
+        };
+        notify();
+        return false;
+      }
+    }
+
     const nextId = navigation.resolveNextSectionId(state.currentSectionId, state.values);
     if (!nextId) return false;
 
@@ -220,8 +247,10 @@ export function createStateManager(config: StateManagerConfig) {
       ...state,
       currentSectionId: newNavState.currentSectionId,
       currentSectionIndex: newNavState.currentSectionIndex,
+      visitedSectionIds: newNavState.visitedSectionIds,
       canGoNext: newNavState.canGoNext,
       canGoPrev: newNavState.canGoPrev,
+      progressPercent: newNavState.progressPercent,
     };
 
     config.onSectionChange?.(state.currentSectionId, state.currentSectionIndex);

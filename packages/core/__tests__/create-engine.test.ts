@@ -227,12 +227,21 @@ describe("createEngine", () => {
 
     it("nextSection moves to the next section", () => {
       const engine = createEngine(makeSchema());
+      engine.setValue("name", "Alice");
       engine.nextSection();
       expect(engine.getState().currentSectionId).toBe("s2");
     });
 
+    it("nextSection blocks when required fields are empty", () => {
+      const engine = createEngine(makeSchema());
+      engine.nextSection();
+      expect(engine.getState().currentSectionId).toBe("s1");
+      expect(engine.getState().errors.name).toBeDefined();
+    });
+
     it("prevSection moves back", () => {
       const engine = createEngine(makeSchema());
+      engine.setValue("name", "Alice");
       engine.nextSection();
       engine.prevSection();
       expect(engine.getState().currentSectionId).toBe("s1");
@@ -363,6 +372,7 @@ describe("createEngine", () => {
       const onSectionChange = vi.fn();
       const engine = createEngine(makeSchema(), { onSectionChange });
 
+      engine.setValue("name", "Alice");
       engine.nextSection();
       expect(onSectionChange).toHaveBeenCalledWith("s2", 1);
     });

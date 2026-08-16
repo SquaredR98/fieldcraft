@@ -171,8 +171,8 @@ describe("createStateManager", () => {
   });
 
   describe("navigation", () => {
-    it("navigates to next section", () => {
-      const sm = createStateManager({ schema: makeSchema(), initialValues: {} });
+    it("navigates to next section when current section is valid", () => {
+      const sm = createStateManager({ schema: makeSchema(), initialValues: { name: "Alice" } });
       expect(sm.getState().currentSectionId).toBe("s1");
 
       const moved = sm.nextSection();
@@ -180,13 +180,73 @@ describe("createStateManager", () => {
       expect(sm.getState().currentSectionId).toBe("s2");
     });
 
-    it("navigates to previous section", () => {
+    it("blocks navigation when required fields are empty", () => {
       const sm = createStateManager({ schema: makeSchema(), initialValues: {} });
+      expect(sm.getState().currentSectionId).toBe("s1");
+
+      const moved = sm.nextSection();
+      expect(moved).toBe(false);
+      expect(sm.getState().currentSectionId).toBe("s1");
+      expect(sm.getState().errors.name).toBeDefined();
+      expect(sm.getState().errors.name.length).toBeGreaterThan(0);
+      expect(sm.getState().touched.name).toBe(true);
+      expect(sm.getState().isCurrentSectionValid).toBe(false);
+    });
+
+    it("allows navigation after fixing validation errors", () => {
+      const sm = createStateManager({ schema: makeSchema(), initialValues: {} });
+
+      // First attempt blocked
+      expect(sm.nextSection()).toBe(false);
+      expect(sm.getState().currentSectionId).toBe("s1");
+
+      // Fill the required field
+      sm.setValue("name", "Alice");
+
+      // Second attempt succeeds
+      expect(sm.nextSection()).toBe(true);
+      expect(sm.getState().currentSectionId).toBe("s2");
+    });
+
+    it("navigates to previous section", () => {
+      const sm = createStateManager({ schema: makeSchema(), initialValues: { name: "Alice" } });
       sm.nextSection();
       expect(sm.getState().currentSectionId).toBe("s2");
 
       const moved = sm.prevSection();
       expect(moved).toBe(true);
+      expect(sm.getState().currentSectionId).toBe("s1");
+    });
+
+    it("updates progressPercent when navigating backward", () => {
+      const threeStepSchema = makeSchema({
+        sections: [
+          { id: "s1", title: "S1", questions: [{ id: "q1", type: "short_text", label: "Q1" }] },
+          { id: "s2", title: "S2", questions: [{ id: "q2", type: "short_text", label: "Q2" }] },
+          { id: "s3", title: "S3", questions: [{ id: "q3", type: "short_text", label: "Q3" }] },
+        ],
+      } as Partial<FormEngineSchema>);
+
+      const sm = createStateManager({ schema: threeStepSchema, initialValues: {} });
+
+      // Navigate forward to s2
+      sm.nextSection();
+      const progressAtS2 = sm.getState().progressPercent;
+      expect(progressAtS2).toBeGreaterThan(0);
+
+      // Navigate forward to s3
+      sm.nextSection();
+      const progressAtS3 = sm.getState().progressPercent;
+      expect(progressAtS3).toBeGreaterThan(progressAtS2);
+
+      // Navigate back to s2 — progress should decrease
+      sm.prevSection();
+      expect(sm.getState().progressPercent).toBe(progressAtS2);
+      expect(sm.getState().currentSectionId).toBe("s2");
+
+      // Navigate back to s1 — progress should decrease further
+      sm.prevSection();
+      expect(sm.getState().progressPercent).toBeLessThan(progressAtS2);
       expect(sm.getState().currentSectionId).toBe("s1");
     });
 
@@ -219,7 +279,7 @@ describe("createStateManager", () => {
       const onSectionChange = vi.fn();
       const sm = createStateManager({
         schema: makeSchema(),
-        initialValues: {},
+        initialValues: { name: "Alice" },
         onSectionChange,
       });
 

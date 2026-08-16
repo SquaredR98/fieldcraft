@@ -57,7 +57,7 @@ Core is framework-agnostic. You could build a Vue or Svelte renderer on top of i
 
 | Package | npm | Licence |
 |---------|-----|---------|
-| `@squaredr/fieldcraft-core` | v1.4.0 | MIT |
+| `@squaredr/fieldcraft-core` | v1.4.1 | MIT |
 | `@squaredr/fieldcraft-react` | v1.3.0 | MIT |
 | `@squaredr/fieldcraft-adapters` | v1.0.1 | MIT |
 | `@squaredr/fieldcraft-templates-free` | v1.1.1 | MIT |

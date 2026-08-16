@@ -23,7 +23,7 @@ export const roadmap: RoadmapGroup[] = [
       { title: 'Draft persistence with auto-save', status: 'shipped' },
       { title: '6 theme presets (Clean, Dark, Modern, High Contrast, Clinical, Playful)', status: 'shipped' },
       { title: 'Custom field registry', status: 'shipped' },
-      { title: 'Full TypeScript support, 569+ passing tests', status: 'shipped' },
+      { title: 'Full TypeScript support, 573+ passing tests', status: 'shipped' },
     ],
   },
   {
