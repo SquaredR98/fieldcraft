@@ -217,5 +217,5 @@ You can register any string as a field type via the [field registry](/docs/react
 ## Next steps
 
 - [Conditional logic](/docs/core-concepts/conditional-logic) — show, hide, and require fields based on answers
-- [Validation](/docs/core-concepts/validation) — 12 built-in rule types plus custom and async validators
+- [Validation](/docs/core-concepts/validation) — 19 built-in rule types plus custom and async validators
 - [Computed fields](/docs/core-concepts/computed-fields) — auto-calculate values from expressions

@@ -332,6 +332,25 @@ export type MatrixConfig = {
 };
 
 /**
+ * A sub-question within a repeater field entry. Same shape as `Question` but
+ * defined here to avoid circular imports between `question-types.ts` and `schema.ts`.
+ *
+ * @since 1.4.0
+ */
+export type RepeaterField = {
+  id: string;
+  type: QuestionType;
+  label: string;
+  helpText?: string;
+  placeholder?: string;
+  required?: boolean;
+  validation?: { type: string; [key: string]: unknown }[];
+  config?: QuestionConfig;
+  options?: { label: string; value: string | number | boolean }[];
+  customProps?: Record<string, unknown>;
+};
+
+/**
  * Config for `repeater` fields. Dynamic list where users add/remove entries,
  * each containing the same set of sub-questions.
  *
@@ -339,8 +358,8 @@ export type MatrixConfig = {
  */
 export type RepeaterConfig = {
   type: "repeater";
-  /** Sub-questions for each repeater entry. Typed as `unknown[]` to avoid circular import — holds `Question[]` at runtime. */
-  fields: unknown[];
+  /** Sub-questions for each repeater entry. */
+  fields: RepeaterField[];
   minEntries?: number;
   maxEntries?: number;
   addLabel?: string;
@@ -395,6 +414,10 @@ export type ConsentConfig = {
   text: string;
   expandableText?: string;
   checkboxLabel?: string;
+  /** Version identifier for the consent text. Stored in the response for audit trails. @since 1.4.0 */
+  consentVersion?: string;
+  /** Whether to record the timestamp when consent was given. Defaults to `false`. @since 1.4.0 */
+  recordTimestamp?: boolean;
 };
 
 /** Config for `info_block` fields. Static informational message. Non-input — no value collected. @since 1.0.0 */

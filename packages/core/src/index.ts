@@ -4,7 +4,7 @@
 // Dev console banner — runs once in development mode
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 if (typeof globalThis !== "undefined" && typeof (globalThis as any).process !== "undefined" && (globalThis as any).process.env?.NODE_ENV !== "production") {
-  const _fc_banner = `\n%c FieldCraft Core %c v1.3.14\n\n%cDocs      → https://fieldcraft.squaredr.tech/docs\nGitHub    → https://github.com/SquaredR98/fieldcraft\nDiscord   → https://discord.gg/FK8pszp5z\nTelemetry → off (set FIELDCRAFT_TELEMETRY_ENABLED=1 to help improve FieldCraft)\n`;
+  const _fc_banner = `\n%c FieldCraft Core %c v1.4.0\n\n%cDocs      → https://fieldcraft.squaredr.tech/docs\nGitHub    → https://github.com/SquaredR98/fieldcraft\nDiscord   → https://discord.gg/FK8pszp5z\nTelemetry → off (set FIELDCRAFT_TELEMETRY_ENABLED=1 to help improve FieldCraft)\n`;
   console.log(
     _fc_banner,
     "background:#2563eb;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px 0 0 3px",
@@ -56,6 +56,7 @@ export type {
   PaymentConfig,
   MatrixConfig,
   RepeaterConfig,
+  RepeaterField,
   CalculatedConfig,
   HiddenConfig,
   ScoringConfig,
@@ -107,12 +108,19 @@ export type { FormEngineTheme } from "./types/theme";
 // Engine
 export { createEngine } from "./engine/create-engine";
 export type { FormEngine, EngineOptions, ValidationResult } from "./engine/create-engine";
+export type { FieldCraftEvent, OnEventCallback } from "./engine/analytics-emitter";
+export type { DraftSnapshot } from "./engine/draft-manager";
 
 // Adapters
 export { createHttpAdapter } from "./adapters/http-adapter";
 export type { HttpAdapterConfig } from "./adapters/http-adapter";
 export { createHttpSchemaAdapter } from "./adapters/http-schema-adapter";
 export type { HttpSchemaAdapterConfig } from "./adapters/http-schema-adapter";
+export type { FormAdapter } from "./adapters/adapter-interface";
+
+// Validator Registry
+export { createValidatorRegistry } from "./validators/registry";
+export type { ValidatorRegistry, ValidatorMetadata } from "./validators/registry";
 
 // Schema Validation
 export { validateSchema, FormEngineSchemaError } from "./schema/schema-validator";
@@ -120,3 +128,19 @@ export { validateSchema, FormEngineSchemaError } from "./schema/schema-validator
 // Utils
 export { deepEqual } from "./utils/deep-equal";
 export { generateSessionToken } from "./utils/session-token";
+export { exportFormData } from "./utils/export";
+export type { ExportFormat } from "./utils/export";
+export { evaluateFunction } from "./utils/expression-parser";
+export {
+  getFieldById,
+  getAllFieldIds,
+  getRequiredFieldIds,
+  cloneSchema,
+  mergeSchemas,
+  createEmptySchema,
+  schemaDiff,
+  migrateSchema,
+} from "./utils/schema-utils";
+export type { SchemaDiff } from "./utils/schema-utils";
+export { flattenFormValues, unflattenFormValues } from "./utils/form-utils";
+export { validateResponse, formatResponseValues, flattenResponse } from "./utils/response-utils";

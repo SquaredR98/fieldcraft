@@ -73,6 +73,8 @@ export function createStateManager(config: StateManagerConfig) {
 
     hasDraft: false,
     lastDraftSavedAt: undefined,
+
+    focusTimestamps: {},
   };
 
   // Compute initial derived state
@@ -439,6 +441,107 @@ export function createStateManager(config: StateManagerConfig) {
     };
   }
 
+  function resetField(fieldId: string): void {
+    const initialValue = config.initialValues[fieldId];
+    const newValues = { ...state.values };
+    if (initialValue !== undefined) {
+      newValues[fieldId] = initialValue;
+    } else {
+      delete newValues[fieldId];
+    }
+    const newErrors = { ...state.errors };
+    delete newErrors[fieldId];
+    const newTouched = { ...state.touched };
+    delete newTouched[fieldId];
+    const newWarnings = { ...state.warnings };
+    delete newWarnings[fieldId];
+
+    state = {
+      ...state,
+      values: newValues,
+      errors: newErrors,
+      touched: newTouched,
+      warnings: newWarnings,
+    };
+
+    recomputeCalculatedFields(fieldId);
+    recomputeScores();
+    recomputeDerivedState();
+    notify();
+  }
+
+  function resetForm(): void {
+    state = {
+      ...state,
+      values: { ...config.initialValues },
+      errors: {},
+      warnings: {},
+      touched: {},
+      isDirty: false,
+      isSubmitted: false,
+      isSubmitting: false,
+      submitError: undefined,
+      submitAttempted: false,
+    };
+
+    recomputeAllCalculatedFields();
+    recomputeScores();
+    recomputeDerivedState();
+    notify();
+  }
+
+  function getFieldState(fieldId: string) {
+    const question = questionMap.get(fieldId);
+    return {
+      value: state.values[fieldId],
+      error: state.errors[fieldId] ?? [],
+      touched: state.touched[fieldId] ?? false,
+      visible: question?.showIf ? evaluate(question.showIf, state.values) : true,
+      disabled: question?.disabled
+        ? typeof question.disabled === "boolean"
+          ? question.disabled
+          : evaluate(question.disabled, state.values)
+        : false,
+      readonly: question?.readonly
+        ? typeof question.readonly === "boolean"
+          ? question.readonly
+          : evaluate(question.readonly, state.values)
+        : false,
+      required: question?.required
+        ? typeof question.required === "boolean"
+          ? question.required
+          : evaluate(question.required, state.values)
+        : false,
+      warning: state.warnings[fieldId],
+    };
+  }
+
+  function getChangedFields(): Record<string, unknown> {
+    const changed: Record<string, unknown> = {};
+    for (const [id, value] of Object.entries(state.values)) {
+      if (value !== config.initialValues[id]) {
+        changed[id] = value;
+      }
+    }
+    // Check for fields that were in initial but removed
+    for (const id of Object.keys(config.initialValues)) {
+      if (!(id in state.values)) {
+        changed[id] = undefined;
+      }
+    }
+    return changed;
+  }
+
+  function focusField(fieldId: string): void {
+    state = {
+      ...state,
+      focusTimestamps: {
+        ...state.focusTimestamps,
+        [fieldId]: Date.now(),
+      },
+    };
+  }
+
   function revalidateAllVisibleFields(): void {
     const newErrors: Record<string, string[]> = {};
     for (const section of schema.sections) {
@@ -475,6 +578,11 @@ export function createStateManager(config: StateManagerConfig) {
     setSubmitAttempted,
     setDraftState,
     restoreFromDraft,
+    resetField,
+    resetForm,
+    getFieldState,
+    getChangedFields,
+    focusField,
     notify,
     navigation,
   };

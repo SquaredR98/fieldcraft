@@ -2,7 +2,7 @@ import type { SectionHeaderConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { cn } from "../../utils/cn";
 
-export function SectionHeaderField({ field }: FieldProps) {
+export function SectionHeaderField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as SectionHeaderConfig | undefined;
   const level = config?.level ?? "h2";
   const showDivider = config?.showDivider ?? true;

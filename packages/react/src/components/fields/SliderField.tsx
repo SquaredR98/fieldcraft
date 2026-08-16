@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Slider } from "../ui/slider";
 
-export function SliderField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function SliderField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as SliderConfig | undefined;
   const min = config?.min ?? 0;
   const max = config?.max ?? 100;
@@ -22,9 +22,10 @@ export function SliderField({ field, value, error, touched, disabled, onChange, 
           max={max}
           step={step}
           value={[current]}
-          disabled={disabled}
+          disabled={disabled || readonly}
           onValueChange={(vals) => onChange(vals[0])}
           onValueCommit={() => onBlur()}
+          onFocus={onFocus}
         />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>{config?.minLabel ?? min}</span>

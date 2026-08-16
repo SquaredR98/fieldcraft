@@ -2,7 +2,7 @@ import type { DividerConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { Separator } from "../ui/separator";
 
-export function DividerField({ field }: FieldProps) {
+export function DividerField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as DividerConfig | undefined;
 
   const style = config?.style ?? "solid";

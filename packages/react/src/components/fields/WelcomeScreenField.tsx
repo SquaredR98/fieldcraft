@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
-export function WelcomeScreenField({ field }: FieldProps) {
+export function WelcomeScreenField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as WelcomeScreenConfig | undefined;
 
   if (!config) return null;

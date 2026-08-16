@@ -10,7 +10,7 @@ import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "../../utils/cn";
 
-export function DateRangeField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function DateRangeField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as DateRangeConfig | undefined;
   const hasError = !!(touched && error?.length);
   const [open, setOpen] = useState(false);
@@ -54,12 +54,13 @@ export function DateRangeField({ field, value, error, touched, disabled, onChang
           <Button
             {...fieldAria(field, hasError)}
             variant="outline"
-            disabled={disabled}
+            disabled={disabled || readonly}
             className={cn(
               "w-full justify-start text-left font-normal",
               !selected && "text-muted-foreground"
             )}
             onBlur={onBlur}
+            onFocus={onFocus}
           >
             <CalendarIcon className="mr-2 size-4" />
             {formatDisplay()}

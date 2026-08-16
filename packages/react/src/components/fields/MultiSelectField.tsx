@@ -5,7 +5,7 @@ import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
 
-export function MultiSelectField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function MultiSelectField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as MultiSelectConfig | undefined;
   const options = field.options ?? [];
   const selected = (value as (string | number | boolean)[]) ?? [];
@@ -30,7 +30,7 @@ export function MultiSelectField({ field, value, error, touched, disabled, onCha
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2" role="group" aria-label={field.label}>
+      <div className="flex flex-col gap-2" role="group" aria-label={field.label} onFocus={onFocus}>
         {options.map((opt) => {
           const checked = selected.includes(opt.value);
           const optId = `${field.id}-${opt.value}`;
@@ -49,7 +49,7 @@ export function MultiSelectField({ field, value, error, touched, disabled, onCha
               <Checkbox
                 id={optId}
                 checked={checked}
-                disabled={disabled}
+                disabled={disabled || readonly}
                 onCheckedChange={() => toggle(opt.value, opt.exclusive)}
               />
               <div className="flex flex-col gap-0.5">

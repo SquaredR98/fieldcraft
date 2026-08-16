@@ -36,7 +36,7 @@ Two packages, each depending only on the one beneath it. Take the layer you need
 | Layer | Package | What it does |
 |-------|---------|-------------|
 | Core | `@squaredr/fieldcraft-core` | Schema parsing, state management, condition evaluation, validation, expression engine, navigation. No UI, no React. |
-| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 44 field components, 4 hooks, theming system with 6 presets, draft persistence, step navigation. |
+| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 44 field components, 10 hooks, theming system with 6 presets, draft persistence, step navigation. |
 
 Core is framework-agnostic. You could build a Vue or Svelte renderer on top of it — the engine API is the same. React is the official renderer that ships with the project.
 
@@ -45,7 +45,7 @@ Core is framework-agnostic. You could build a Vue or Svelte renderer on top of i
 | Concern | How it works |
 |---------|-------------|
 | **Conditional visibility** | Any field or section can declare `showIf` — a condition expression evaluated against current form values. Hidden fields are excluded from validation and submission. |
-| **Validation** | 12 built-in rule types (required, min/max, minLength/maxLength, pattern, email, phone, URL, date, file size, file type) plus custom sync and async validators. Validation runs on blur, on section change, and on submit. |
+| **Validation** | 19 built-in rule types (required, min/max, minLength/maxLength, pattern, email, phone, URL, date, file size, file type, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField) plus custom sync and async validators. Conditional validation with `applyIf` and severity levels. Validation runs on blur, on section change, and on submit. |
 | **Multi-step navigation** | Sections become steps. The engine tracks which sections are visible, which have been visited, and whether the current section is valid before allowing forward navigation. |
 | **Computed fields** | Expressions like `{price} * {quantity}` are parsed and evaluated safely — no `eval()`. Dependencies are tracked so computed fields update when their inputs change. |
 | **Draft persistence** | Answers survive a page refresh with zero configuration. Drafts are keyed by schema ID + session token, stored in localStorage by default, or sent to a server via a draft adapter. |
@@ -57,8 +57,8 @@ Core is framework-agnostic. You could build a Vue or Svelte renderer on top of i
 
 | Package | npm | Licence |
 |---------|-----|---------|
-| `@squaredr/fieldcraft-core` | v1.3.14 | MIT |
-| `@squaredr/fieldcraft-react` | v1.2.12 | MIT |
+| `@squaredr/fieldcraft-core` | v1.4.0 | MIT |
+| `@squaredr/fieldcraft-react` | v1.3.0 | MIT |
 | `@squaredr/fieldcraft-adapters` | v1.0.1 | MIT |
 | `@squaredr/fieldcraft-templates-free` | v1.1.1 | MIT |
 

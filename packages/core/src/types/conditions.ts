@@ -48,10 +48,14 @@ export type ConditionExpression = {
  * - `gt` / `gte` / `lt` / `lte` — numeric comparisons
  * - `in` / `notIn` — value is in / not in an array
  * - `exists` / `notExists` — field has / does not have a value
- * - `contains` / `notContains` — string/array contains value
+ * - `isEmpty` / `isNotEmpty` — aliases for notExists / exists
+ * - `contains` / `notContains` — string contains substring
  * - `startsWith` / `endsWith` — string prefix/suffix matching
  * - `between` — value is within a [min, max] range
- * - `matches` — value matches a regex pattern
+ * - `matches` / `matchesRegex` — value matches a regex pattern
+ * - `dateAfter` / `dateBefore` — date comparison (ISO strings or timestamps)
+ * - `arrayContains` / `arrayNotContains` — array value includes / excludes an element
+ * - `lengthGreaterThan` / `lengthLessThan` — string/array length comparison
  *
  * @since 1.0.0
  */
@@ -66,9 +70,18 @@ export type ConditionOperator =
   | "notIn"
   | "exists"
   | "notExists"
+  | "isEmpty"
+  | "isNotEmpty"
   | "contains"
   | "notContains"
   | "startsWith"
   | "endsWith"
   | "between"
-  | "matches";
+  | "matches"
+  | "matchesRegex"
+  | "dateAfter"
+  | "dateBefore"
+  | "arrayContains"
+  | "arrayNotContains"
+  | "lengthGreaterThan"
+  | "lengthLessThan";

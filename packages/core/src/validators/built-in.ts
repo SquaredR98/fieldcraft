@@ -3,7 +3,7 @@ import type { ValidationRule } from "../types/validation";
 /**
  * Executes a single built-in validation rule against a field value.
  *
- * This is the core dispatcher for FieldCraft's 12 built-in validators.
+ * This is the core dispatcher for FieldCraft's 19 built-in validators.
  * Each rule type maps to a focused validator function. Rules with
  * `type: "custom"` or `type: "async"` are handled by the validation
  * runner, not here — this function returns `null` for those.
@@ -31,7 +31,7 @@ import type { ValidationRule } from "../types/validation";
 export function runBuiltInRule(
   rule: ValidationRule,
   value: unknown,
-  _allValues?: Record<string, unknown>,
+  allValues?: Record<string, unknown>,
 ): string | null {
   switch (rule.type) {
     case "required":
@@ -69,6 +69,27 @@ export function runBuiltInRule(
 
     case "fileType":
       return validateFileType(value, rule.accept, rule.message);
+
+    case "integer":
+      return validateInteger(value, rule.message);
+
+    case "positiveNumber":
+      return validatePositiveNumber(value, rule.message);
+
+    case "alphanumeric":
+      return validateAlphanumeric(value, rule.message);
+
+    case "noSpecialChars":
+      return validateNoSpecialChars(value, rule.message);
+
+    case "minItems":
+      return validateMinItems(value, rule.value, rule.message);
+
+    case "maxItems":
+      return validateMaxItems(value, rule.value, rule.message);
+
+    case "compareToField":
+      return validateCompareToField(value, rule.fieldId, rule.operator, allValues ?? {}, rule.message);
 
     // Custom and async validators are handled by the validation runner, not here
     case "custom":
@@ -385,6 +406,170 @@ function validateFileType(value: unknown, accept: string[], message?: string): s
     if (!matches) {
       return message ?? `File type must be one of: ${accept.join(", ")}`;
     }
+  }
+  return null;
+}
+
+/**
+ * Validates that a numeric value is a whole number (no decimal part).
+ * Non-numeric and empty values pass.
+ *
+ * Schema usage: `{ type: "integer" }`
+ *
+ * @param value - The field value (coerced to number via `Number()`).
+ * @param message - Custom error message. Defaults to `"Must be a whole number"`.
+ * @since 1.4.0
+ */
+function validateInteger(value: unknown, message?: string): string | null {
+  if (isEmpty(value)) return null;
+  const num = Number(value);
+  if (isNaN(num)) return null;
+  if (!Number.isInteger(num)) {
+    return message ?? "Must be a whole number";
+  }
+  return null;
+}
+
+/**
+ * Validates that a numeric value is greater than zero.
+ * Non-numeric and empty values pass.
+ *
+ * Schema usage: `{ type: "positiveNumber" }`
+ *
+ * @param value - The field value (coerced to number via `Number()`).
+ * @param message - Custom error message. Defaults to `"Must be a positive number"`.
+ * @since 1.4.0
+ */
+function validatePositiveNumber(value: unknown, message?: string): string | null {
+  if (isEmpty(value)) return null;
+  const num = Number(value);
+  if (isNaN(num)) return null;
+  if (num <= 0) {
+    return message ?? "Must be a positive number";
+  }
+  return null;
+}
+
+/**
+ * Validates that a string contains only letters and digits (no spaces, no special characters).
+ * Empty values pass.
+ *
+ * Schema usage: `{ type: "alphanumeric" }`
+ *
+ * @param value - The field value (coerced to string via `String()`).
+ * @param message - Custom error message. Defaults to `"Must contain only letters and numbers"`.
+ * @since 1.4.0
+ */
+function validateAlphanumeric(value: unknown, message?: string): string | null {
+  if (isEmpty(value)) return null;
+  if (!/^[a-zA-Z0-9]+$/.test(String(value))) {
+    return message ?? "Must contain only letters and numbers";
+  }
+  return null;
+}
+
+/**
+ * Validates that a string contains only letters, numbers, and spaces (no special characters).
+ * Empty values pass.
+ *
+ * Schema usage: `{ type: "noSpecialChars" }`
+ *
+ * @param value - The field value (coerced to string via `String()`).
+ * @param message - Custom error message. Defaults to `"Must not contain special characters"`.
+ * @since 1.4.0
+ */
+function validateNoSpecialChars(value: unknown, message?: string): string | null {
+  if (isEmpty(value)) return null;
+  if (!/^[a-zA-Z0-9\s]+$/.test(String(value))) {
+    return message ?? "Must not contain special characters";
+  }
+  return null;
+}
+
+/**
+ * Validates that an array has at least a minimum number of items.
+ * Non-array and empty values pass.
+ *
+ * Schema usage: `{ type: "minItems", value: 1 }`
+ *
+ * @param value - The field value (expected to be an array).
+ * @param min - The minimum number of items required.
+ * @param message - Custom error message. Defaults to `"Must have at least {min} item(s)"`.
+ * @since 1.4.0
+ */
+function validateMinItems(value: unknown, min: number, message?: string): string | null {
+  if (isEmpty(value)) return null;
+  if (!Array.isArray(value)) return null;
+  if (value.length < min) {
+    return message ?? `Must have at least ${min} item(s)`;
+  }
+  return null;
+}
+
+/**
+ * Validates that an array does not exceed a maximum number of items.
+ * Non-array and empty values pass.
+ *
+ * Schema usage: `{ type: "maxItems", value: 5 }`
+ *
+ * @param value - The field value (expected to be an array).
+ * @param max - The maximum number of items allowed.
+ * @param message - Custom error message. Defaults to `"Must have at most {max} item(s)"`.
+ * @since 1.4.0
+ */
+function validateMaxItems(value: unknown, max: number, message?: string): string | null {
+  if (isEmpty(value)) return null;
+  if (!Array.isArray(value)) return null;
+  if (value.length > max) {
+    return message ?? `Must have at most ${max} item(s)`;
+  }
+  return null;
+}
+
+/**
+ * Compares a field's value to another field's value using the specified operator.
+ * Useful for "confirm password", "end date after start date", etc.
+ *
+ * Schema usage: `{ type: "compareToField", fieldId: "password", operator: "eq" }`
+ *
+ * @param value - The current field's value.
+ * @param fieldId - The ID of the field to compare against.
+ * @param operator - Comparison operator: eq, neq, gt, gte, lt, lte.
+ * @param allValues - All form values for cross-field lookup.
+ * @param message - Custom error message.
+ * @since 1.4.0
+ */
+function validateCompareToField(
+  value: unknown,
+  fieldId: string,
+  operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte",
+  allValues: Record<string, unknown>,
+  message?: string,
+): string | null {
+  if (isEmpty(value)) return null;
+  const otherValue = allValues[fieldId];
+
+  const operatorLabels: Record<string, string> = {
+    eq: "equal to",
+    neq: "different from",
+    gt: "greater than",
+    gte: "greater than or equal to",
+    lt: "less than",
+    lte: "less than or equal to",
+  };
+
+  let passes = false;
+  switch (operator) {
+    case "eq": passes = value === otherValue; break;
+    case "neq": passes = value !== otherValue; break;
+    case "gt": passes = Number(value) > Number(otherValue); break;
+    case "gte": passes = Number(value) >= Number(otherValue); break;
+    case "lt": passes = Number(value) < Number(otherValue); break;
+    case "lte": passes = Number(value) <= Number(otherValue); break;
+  }
+
+  if (!passes) {
+    return message ?? `Must be ${operatorLabels[operator]} the value of ${fieldId}`;
   }
   return null;
 }

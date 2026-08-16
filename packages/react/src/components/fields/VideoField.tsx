@@ -19,7 +19,7 @@ function extractVimeoId(url: string): string {
   return match?.[1] ?? url;
 }
 
-export function VideoField({ field }: FieldProps) {
+export function VideoField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as VideoConfig | undefined;
 
   if (!config?.src || !config?.provider) return null;

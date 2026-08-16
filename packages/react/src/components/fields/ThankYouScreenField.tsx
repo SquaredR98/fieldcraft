@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import type { ThankYouScreenConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 
-export function ThankYouScreenField({ field }: FieldProps) {
+export function ThankYouScreenField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as ThankYouScreenConfig | undefined;
 
   if (!config) return null;

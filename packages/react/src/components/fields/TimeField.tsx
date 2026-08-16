@@ -33,7 +33,7 @@ function generateTimeOptions(step: number, format: "12h" | "24h"): { value: stri
   return options;
 }
 
-export function TimeField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function TimeField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as TimeConfig | undefined;
   const hasError = !!(touched && error?.length);
   const minuteStep = config?.minuteStep ?? 15;
@@ -51,7 +51,7 @@ export function TimeField({ field, value, error, touched, disabled, onChange, on
       <Select
         value={(value as string) || undefined}
         onValueChange={(val) => onChange(val)}
-        disabled={disabled}
+        disabled={disabled || readonly}
       >
         <SelectTrigger
           id={aria.id}
@@ -60,6 +60,7 @@ export function TimeField({ field, value, error, touched, disabled, onChange, on
           aria-required={aria["aria-required"]}
           className="w-full"
           onBlur={onBlur}
+          onFocus={onFocus}
         >
           <div className="flex items-center gap-2">
             <ClockIcon className="size-4 text-muted-foreground" />

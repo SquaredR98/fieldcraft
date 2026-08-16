@@ -17,7 +17,7 @@
  *
  * @since 1.0.0
  */
-export type ValidationRule =
+export type ValidationRule = (
   | { type: "required"; message?: string }
   | { type: "min"; value: number; message?: string }
   | { type: "max"; value: number; message?: string }
@@ -30,8 +30,31 @@ export type ValidationRule =
   | { type: "date"; min?: string; max?: string; message?: string }
   | { type: "fileSize"; maxMb: number; message?: string }
   | { type: "fileType"; accept: string[]; message?: string }
+  | { type: "integer"; message?: string }
+  | { type: "positiveNumber"; message?: string }
+  | { type: "alphanumeric"; message?: string }
+  | { type: "noSpecialChars"; message?: string }
+  | { type: "minItems"; value: number; message?: string }
+  | { type: "maxItems"; value: number; message?: string }
+  | { type: "compareToField"; fieldId: string; operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte"; message?: string }
   | { type: "custom"; name: string; params?: Record<string, unknown>; message?: string }
-  | { type: "async"; endpoint: string; debounceMs?: number; message?: string };
+  | { type: "async"; endpoint: string; debounceMs?: number; message?: string }
+) & {
+  /**
+   * Conditional expression that controls whether this rule is applied.
+   * When the condition evaluates to `false`, the rule is skipped.
+   * @since 1.4.0
+   */
+  applyIf?: import("./conditions").ConditionExpression;
+  /**
+   * Severity level of the validation result.
+   * - `"error"` (default) — blocks submission
+   * - `"warning"` — shows a warning but does not block submission
+   * - `"info"` — informational, does not block submission
+   * @since 1.4.0
+   */
+  severity?: "error" | "warning" | "info";
+};
 
 /**
  * Signature for custom synchronous validators registered via `ValidatorRegistry`.

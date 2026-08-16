@@ -4,7 +4,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Checkbox } from "../ui/checkbox";
 
-export function ConsentField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function ConsentField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as ConsentConfig | undefined;
   const checked = value === true;
   const [expanded, setExpanded] = useState(false);
@@ -16,8 +16,9 @@ export function ConsentField({ field, value, error, touched, disabled, onChange,
           <Checkbox
             id={field.id}
             checked={checked}
-            disabled={disabled}
+            disabled={disabled || readonly}
             onCheckedChange={(val) => { onChange(val === true); onBlur(); }}
+            onFocus={onFocus}
             aria-required={field.required ? true : undefined}
             className="mt-0.5"
           />

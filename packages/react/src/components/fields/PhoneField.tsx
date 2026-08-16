@@ -2,7 +2,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
 
-export function PhoneField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function PhoneField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const hasError = !!(touched && error?.length);
 
   return (
@@ -13,8 +13,10 @@ export function PhoneField({ field, value, error, touched, disabled, onChange, o
         value={(value as string) ?? ""}
         placeholder={field.placeholder ?? "(555) 123-4567"}
         disabled={disabled}
+        readOnly={readonly}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
+        onFocus={onFocus}
         autoComplete="tel"
       />
     </FieldWrapper>

@@ -4,7 +4,7 @@ import { FieldWrapper } from "./FieldWrapper";
 
 type MatrixValue = Record<string, string | string[]>;
 
-export function MatrixField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function MatrixField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as MatrixConfig | undefined;
   if (!config) return null;
   const { rows, columns, inputType = "radio" } = config;
@@ -55,8 +55,9 @@ export function MatrixField({ field, value, error, touched, disabled, onChange, 
                         type={inputType === "checkbox" ? "checkbox" : "radio"}
                         name={`${field.id}-${row.value}`}
                         checked={checked}
-                        disabled={disabled}
+                        disabled={disabled || readonly}
                         onChange={() => updateCell(row.value, col.value)}
+                        onFocus={onFocus}
                         className="accent-primary h-4 w-4"
                         aria-label={`${row.label}: ${col.label}`}
                       />

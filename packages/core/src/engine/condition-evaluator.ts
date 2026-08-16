@@ -58,9 +58,11 @@ export function evaluate(
 
 /**
  * Evaluates a single operator comparison between a field's runtime value
- * and the condition's target value. Supports 16 operators:
+ * and the condition's target value. Supports 25 operators:
  * eq, neq, gt, gte, lt, lte, in, notIn, exists, notExists,
- * contains, notContains, startsWith, endsWith, between, matches.
+ * isEmpty, isNotEmpty, contains, notContains, startsWith, endsWith,
+ * between, matches, matchesRegex, dateAfter, dateBefore,
+ * arrayContains, arrayNotContains, lengthGreaterThan, lengthLessThan.
  */
 function evaluateOperator(
   operator: ConditionOperator,
@@ -95,9 +97,11 @@ function evaluateOperator(
       return !conditionValue.includes(fieldValue);
 
     case "exists":
+    case "isNotEmpty":
       return fieldValue !== undefined && fieldValue !== null && fieldValue !== "";
 
     case "notExists":
+    case "isEmpty":
       return fieldValue === undefined || fieldValue === null || fieldValue === "";
 
     case "contains":
@@ -119,13 +123,46 @@ function evaluateOperator(
       return num >= min && num <= max;
     }
 
-    case "matches": {
+    case "matches":
+    case "matchesRegex": {
       try {
         const regex = new RegExp(String(conditionValue ?? ""));
         return regex.test(String(fieldValue ?? ""));
       } catch {
         return false;
       }
+    }
+
+    case "dateAfter": {
+      const fieldDate = toDate(fieldValue);
+      const condDate = toDate(conditionValue);
+      if (!fieldDate || !condDate) return false;
+      return fieldDate.getTime() > condDate.getTime();
+    }
+
+    case "dateBefore": {
+      const fieldDate = toDate(fieldValue);
+      const condDate = toDate(conditionValue);
+      if (!fieldDate || !condDate) return false;
+      return fieldDate.getTime() < condDate.getTime();
+    }
+
+    case "arrayContains":
+      if (!Array.isArray(fieldValue)) return false;
+      return fieldValue.includes(conditionValue);
+
+    case "arrayNotContains":
+      if (!Array.isArray(fieldValue)) return true;
+      return !fieldValue.includes(conditionValue);
+
+    case "lengthGreaterThan": {
+      const len = getLength(fieldValue);
+      return len > toNumber(conditionValue);
+    }
+
+    case "lengthLessThan": {
+      const len = getLength(fieldValue);
+      return len < toNumber(conditionValue);
     }
 
     default:
@@ -140,5 +177,22 @@ function toNumber(value: unknown): number {
     const parsed = Number(value);
     return isNaN(parsed) ? 0 : parsed;
   }
+  return 0;
+}
+
+/** Parses a value into a Date. Returns null for invalid dates. */
+function toDate(value: unknown): Date | null {
+  if (value instanceof Date) return isNaN(value.getTime()) ? null : value;
+  if (typeof value === "string" || typeof value === "number") {
+    const d = new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  return null;
+}
+
+/** Returns the length of a string or array, 0 for other types. */
+function getLength(value: unknown): number {
+  if (typeof value === "string") return value.length;
+  if (Array.isArray(value)) return value.length;
   return 0;
 }

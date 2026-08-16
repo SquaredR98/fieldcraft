@@ -17,7 +17,7 @@ const COUNTRY_CODES = COUNTRIES.map((c) => ({
   label: `${c.phone} (${c.code})`,
 }));
 
-export function PhoneInternationalField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function PhoneInternationalField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as PhoneInternationalConfig | undefined;
   const hasError = !!(touched && error?.length);
   const phoneValue = (value as { countryCode?: string; number?: string }) ?? {};
@@ -30,7 +30,7 @@ export function PhoneInternationalField({ field, value, error, touched, disabled
           onValueChange={(val) =>
             onChange({ ...phoneValue, countryCode: val })
           }
-          disabled={disabled}
+          disabled={disabled || readonly}
         >
           <SelectTrigger className="w-32 shrink-0" aria-label="Country code">
             <SelectValue />
@@ -49,10 +49,12 @@ export function PhoneInternationalField({ field, value, error, touched, disabled
           value={phoneValue.number ?? ""}
           placeholder={field.placeholder}
           disabled={disabled}
+          readOnly={readonly}
           onChange={(e) =>
             onChange({ ...phoneValue, number: e.target.value })
           }
           onBlur={onBlur}
+          onFocus={onFocus}
         />
       </div>
     </FieldWrapper>

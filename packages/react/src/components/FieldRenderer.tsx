@@ -8,8 +8,10 @@ export type FieldRendererProps = {
   error?: string[];
   touched: boolean;
   disabled: boolean;
+  readonly: boolean;
   onChange: (value: unknown) => void;
   onBlur: () => void;
+  onFocus: () => void;
   theme: FormEngineTheme;
   registry: FieldRegistry;
 };
@@ -25,8 +27,10 @@ export function FieldRenderer({
   error,
   touched,
   disabled,
+  readonly,
   onChange,
   onBlur,
+  onFocus,
   theme,
   registry,
 }: FieldRendererProps) {
@@ -56,8 +60,10 @@ export function FieldRenderer({
         error={error}
         touched={touched}
         disabled={disabled}
+        readonly={readonly}
         onChange={onChange}
         onBlur={onBlur}
+        onFocus={onFocus}
         theme={theme}
         customProps={field.customProps}
       />

@@ -17,6 +17,10 @@ export type DraftManagerConfig = {
   storage: "local" | "server" | "both";
   ttlHours: number;
   draftAdapter?: DraftAdapter;
+  /** Auto-save interval in milliseconds. When set, `startAutoSave` will save at this interval. @since 1.4.0 */
+  autoSaveIntervalMs?: number;
+  /** Current schema version. Stored in snapshots for migration support. @since 1.4.0 */
+  schemaVersion?: string;
 };
 
 /**
@@ -28,6 +32,8 @@ export type DraftSnapshot = {
   visitedSectionIds: string[];
   /** ISO 8601 timestamp of when the snapshot was saved. */
   savedAt: string;
+  /** Schema version at the time the draft was saved. Used for migration detection. @since 1.4.0 */
+  schemaVersion?: string;
 };
 
 /**
@@ -56,6 +62,7 @@ export type DraftSnapshot = {
  */
 export function createDraftManager(config: DraftManagerConfig) {
   const localKey = `fe_draft__${config.schemaId}__${config.sessionToken}`;
+  let autoSaveTimer: ReturnType<typeof setInterval> | null = null;
 
   async function save(snapshot: DraftSnapshot): Promise<void> {
     const now = new Date();
@@ -68,6 +75,7 @@ export function createDraftManager(config: DraftManagerConfig) {
       visitedSectionIds: snapshot.visitedSectionIds,
       savedAt: now.toISOString(),
       expiresAt: expiresAt.toISOString(),
+      schemaVersion: config.schemaVersion,
     };
 
     if (config.storage === "local" || config.storage === "both") {
@@ -79,7 +87,9 @@ export function createDraftManager(config: DraftManagerConfig) {
     }
   }
 
-  async function load(): Promise<DraftSnapshot | null> {
+  async function load(
+    migrations?: Record<string, (draft: DraftSnapshot) => DraftSnapshot>,
+  ): Promise<DraftSnapshot | null> {
     let data: DraftData | null = null;
 
     // Try localStorage first
@@ -100,12 +110,30 @@ export function createDraftManager(config: DraftManagerConfig) {
       return null;
     }
 
-    return {
+    let snapshot: DraftSnapshot = {
       values: data.partialData,
       currentSectionId: data.currentSectionId ?? "",
       visitedSectionIds: data.visitedSectionIds ?? [],
       savedAt: data.savedAt,
+      schemaVersion: data.schemaVersion,
     };
+
+    // Schema version mismatch detection + migration
+    const draftVersion = data.schemaVersion;
+    if (config.schemaVersion && draftVersion && draftVersion !== config.schemaVersion) {
+      if (migrations && migrations[draftVersion]) {
+        snapshot = migrations[draftVersion](snapshot);
+        snapshot.schemaVersion = config.schemaVersion;
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `[FieldCraft] Draft was saved with schema v${draftVersion} but current schema is v${config.schemaVersion}. ` +
+          `Data may be stale. Provide a migration for "${draftVersion}" to auto-fix.`,
+        );
+      }
+    }
+
+    return snapshot;
   }
 
   async function clear(): Promise<void> {
@@ -128,7 +156,35 @@ export function createDraftManager(config: DraftManagerConfig) {
     return false;
   }
 
-  return { save, load, clear, hasDraft };
+  /**
+   * Starts auto-saving at the configured interval. Calls the provided `getSnapshot`
+   * function on each tick to get the current form state.
+   *
+   * @param getSnapshot - Function that returns the current draft snapshot.
+   * @since 1.4.0
+   */
+  function startAutoSave(getSnapshot: () => DraftSnapshot): void {
+    if (!config.autoSaveIntervalMs || config.autoSaveIntervalMs <= 0) return;
+    stopAutoSave();
+    autoSaveTimer = setInterval(() => {
+      save(getSnapshot()).catch(() => {
+        // Silently ignore auto-save failures
+      });
+    }, config.autoSaveIntervalMs);
+  }
+
+  /**
+   * Stops the auto-save interval timer.
+   * @since 1.4.0
+   */
+  function stopAutoSave(): void {
+    if (autoSaveTimer !== null) {
+      clearInterval(autoSaveTimer);
+      autoSaveTimer = null;
+    }
+  }
+
+  return { save, load, clear, hasDraft, startAutoSave, stopAutoSave };
 }
 
 // ---- localStorage helpers ----

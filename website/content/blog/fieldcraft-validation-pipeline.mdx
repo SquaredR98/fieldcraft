@@ -36,7 +36,7 @@ The flow is always **Layer 1 → Layer 2 → Layer 3**. Each layer can produce e
 
 ### Layer 1: Built-in Rules
 
-FieldCraft ships 12 built-in validators that cover the most common cases:
+FieldCraft ships 19 built-in validators that cover the most common cases:
 
 | Rule | What It Checks |
 |------|---------------|
@@ -217,7 +217,7 @@ The `required` property supports more than `true`/`false`. It can be a full cond
 }
 ```
 
-The engine evaluates this condition against current form values on every validation pass. The field is only required when the condition matches. This is evaluated by the same condition evaluator that handles `showIf`, so all 16 operators are available.
+The engine evaluates this condition against current form values on every validation pass. The field is only required when the condition matches. This is evaluated by the same condition evaluator that handles `showIf`, so all 25 operators are available.
 
 ## Structural Fields Are Exempt
 
@@ -283,6 +283,6 @@ This covers synchronous validation. Async validators (for server-side checks lik
 If you want to explore the source, the relevant files are:
 
 - `validation-runner.ts` — the pipeline orchestrator
-- `built-in.ts` — all 12 built-in validators
+- `built-in.ts` — all 19 built-in validators
 - `registry.ts` — custom and async validator registry
 - `create-engine.ts` — where validation integrates with the engine lifecycle

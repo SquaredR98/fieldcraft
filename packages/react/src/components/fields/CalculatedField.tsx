@@ -2,7 +2,7 @@ import type { CalculatedConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 
-export function CalculatedField({ field, value, error, touched }: FieldProps) {
+export function CalculatedField({ field, value, error, touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as CalculatedConfig | undefined;
   if (config?.visible === false) return null;
 

@@ -9,7 +9,7 @@ import {
 } from "../ui/select";
 import { COUNTRIES } from "../../data/countries";
 
-export function CountrySelectField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function CountrySelectField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const hasError = !!(touched && error?.length);
   const options = field.options;
   const aria = fieldAria(field, hasError);
@@ -23,7 +23,7 @@ export function CountrySelectField({ field, value, error, touched, disabled, onC
       <Select
         value={(value as string) || undefined}
         onValueChange={(val) => onChange(val)}
-        disabled={disabled}
+        disabled={disabled || readonly}
       >
         <SelectTrigger
           id={aria.id}
@@ -32,6 +32,7 @@ export function CountrySelectField({ field, value, error, touched, disabled, onC
           aria-required={aria["aria-required"]}
           className="w-full"
           onBlur={onBlur}
+          onFocus={onFocus}
         >
           <SelectValue placeholder={field.placeholder ?? "Select country..."} />
         </SelectTrigger>

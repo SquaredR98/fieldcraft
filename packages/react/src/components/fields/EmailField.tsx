@@ -2,7 +2,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
 
-export function EmailField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function EmailField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const hasError = !!(touched && error?.length);
 
   return (
@@ -13,8 +13,10 @@ export function EmailField({ field, value, error, touched, disabled, onChange, o
         value={(value as string) ?? ""}
         placeholder={field.placeholder ?? "email@example.com"}
         disabled={disabled}
+        readOnly={readonly}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
+        onFocus={onFocus}
         autoComplete="email"
       />
     </FieldWrapper>

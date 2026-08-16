@@ -17,8 +17,12 @@ export type HttpAdapterConfig = {
   method?: "POST" | "PUT" | "PATCH";
   headers?: Record<string, string>;
   transform?: (response: FormResponse) => unknown;
+  /** Transform the HTTP response body after a successful request. @since 1.4.0 */
+  transformResponse?: (body: unknown) => unknown;
   timeout?: number;
   retries?: number;
+  /** Callback fired on each retry attempt. Receives the attempt number (1-based) and the error. @since 1.4.0 */
+  onRetry?: (attempt: number, error: Error) => void;
 };
 
 /**
@@ -64,6 +68,12 @@ export function createHttpAdapter(config: HttpAdapterConfig): SubmitAdapter {
         (err as any).status = res.status;
         throw err;
       }
+
+      // Transform response body if configured
+      if (config.transformResponse) {
+        const body = await res.json();
+        config.transformResponse(body);
+      }
     } finally {
       clearTimeout(timeoutId);
     }
@@ -95,6 +105,7 @@ export function createHttpAdapter(config: HttpAdapterConfig): SubmitAdapter {
         } catch (err) {
           lastError = err;
           if (i < maxRetries && isRetryable(err)) {
+            config.onRetry?.(i + 1, err instanceof Error ? err : new Error(String(err)));
             // Exponential backoff: 1s, 2s, 4s... with ±25% jitter
             const base = 1000 * Math.pow(2, i);
             const jitter = base * 0.25 * (Math.random() * 2 - 1);

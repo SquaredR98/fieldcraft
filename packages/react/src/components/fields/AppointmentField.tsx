@@ -4,7 +4,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";
 
-export function AppointmentField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function AppointmentField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as AppointmentConfig | undefined;
   const slots = config?.slots ?? [];
   const selected = value as { date?: string; time?: string } | undefined;
@@ -30,7 +30,8 @@ export function AppointmentField({ field, value, error, touched, disabled, onCha
                     ? "fc-option-active"
                     : "border-input hover:bg-accent",
                 )}
-                disabled={disabled}
+                disabled={disabled || readonly}
+                onFocus={onFocus}
                 onClick={() => {
                   setSelectedDate(slot.date);
                   onChange({ date: slot.date, time: undefined });
@@ -58,7 +59,8 @@ export function AppointmentField({ field, value, error, touched, disabled, onCha
                       ? "fc-option-active"
                       : "border-input hover:bg-accent",
                   )}
-                  disabled={disabled}
+                  disabled={disabled || readonly}
+                  onFocus={onFocus}
                   onClick={() => {
                     onChange({ date: selectedDate, time });
                     onBlur();

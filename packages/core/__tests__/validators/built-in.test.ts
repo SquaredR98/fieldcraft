@@ -363,6 +363,214 @@ describe("fileType validator", () => {
   });
 });
 
+// ---- integer ----
+
+describe("integer validator", () => {
+  const rule = { type: "integer" as const };
+
+  it("passes for whole numbers", () => {
+    expect(runBuiltInRule(rule, 5)).toBeNull();
+    expect(runBuiltInRule(rule, 0)).toBeNull();
+    expect(runBuiltInRule(rule, -3)).toBeNull();
+  });
+
+  it("fails for decimal numbers", () => {
+    expect(runBuiltInRule(rule, 3.14)).toBe("Must be a whole number");
+    expect(runBuiltInRule(rule, 0.5)).toBe("Must be a whole number");
+  });
+
+  it("coerces string to number", () => {
+    expect(runBuiltInRule(rule, "7")).toBeNull();
+    expect(runBuiltInRule(rule, "3.5")).toBe("Must be a whole number");
+  });
+
+  it("passes for empty values", () => {
+    expect(runBuiltInRule(rule, "")).toBeNull();
+    expect(runBuiltInRule(rule, null)).toBeNull();
+    expect(runBuiltInRule(rule, undefined)).toBeNull();
+  });
+
+  it("passes for NaN values", () => {
+    expect(runBuiltInRule(rule, "abc")).toBeNull();
+  });
+
+  it("uses custom message", () => {
+    const customRule = { type: "integer" as const, message: "Whole numbers only" };
+    expect(runBuiltInRule(customRule, 1.5)).toBe("Whole numbers only");
+  });
+});
+
+// ---- positiveNumber ----
+
+describe("positiveNumber validator", () => {
+  const rule = { type: "positiveNumber" as const };
+
+  it("passes for positive numbers", () => {
+    expect(runBuiltInRule(rule, 1)).toBeNull();
+    expect(runBuiltInRule(rule, 100)).toBeNull();
+    expect(runBuiltInRule(rule, 0.5)).toBeNull();
+  });
+
+  it("fails for zero", () => {
+    expect(runBuiltInRule(rule, 0)).toBe("Must be a positive number");
+  });
+
+  it("fails for negative numbers", () => {
+    expect(runBuiltInRule(rule, -1)).toBe("Must be a positive number");
+    expect(runBuiltInRule(rule, -100)).toBe("Must be a positive number");
+  });
+
+  it("passes for empty values", () => {
+    expect(runBuiltInRule(rule, "")).toBeNull();
+    expect(runBuiltInRule(rule, null)).toBeNull();
+  });
+
+  it("coerces string to number", () => {
+    expect(runBuiltInRule(rule, "5")).toBeNull();
+    expect(runBuiltInRule(rule, "-3")).toBe("Must be a positive number");
+  });
+
+  it("uses custom message", () => {
+    const customRule = { type: "positiveNumber" as const, message: "Enter a positive value" };
+    expect(runBuiltInRule(customRule, -1)).toBe("Enter a positive value");
+  });
+});
+
+// ---- alphanumeric ----
+
+describe("alphanumeric validator", () => {
+  const rule = { type: "alphanumeric" as const };
+
+  it("passes for letters only", () => {
+    expect(runBuiltInRule(rule, "Hello")).toBeNull();
+  });
+
+  it("passes for digits only", () => {
+    expect(runBuiltInRule(rule, "12345")).toBeNull();
+  });
+
+  it("passes for mixed letters and digits", () => {
+    expect(runBuiltInRule(rule, "abc123")).toBeNull();
+  });
+
+  it("fails for strings with spaces", () => {
+    expect(runBuiltInRule(rule, "hello world")).toBe("Must contain only letters and numbers");
+  });
+
+  it("fails for strings with special characters", () => {
+    expect(runBuiltInRule(rule, "hello!")).toBe("Must contain only letters and numbers");
+    expect(runBuiltInRule(rule, "user@name")).toBe("Must contain only letters and numbers");
+  });
+
+  it("passes for empty values", () => {
+    expect(runBuiltInRule(rule, "")).toBeNull();
+    expect(runBuiltInRule(rule, null)).toBeNull();
+  });
+
+  it("uses custom message", () => {
+    const customRule = { type: "alphanumeric" as const, message: "Letters and numbers only" };
+    expect(runBuiltInRule(customRule, "a b")).toBe("Letters and numbers only");
+  });
+});
+
+// ---- noSpecialChars ----
+
+describe("noSpecialChars validator", () => {
+  const rule = { type: "noSpecialChars" as const };
+
+  it("passes for letters, numbers, and spaces", () => {
+    expect(runBuiltInRule(rule, "Hello World 123")).toBeNull();
+  });
+
+  it("passes for letters only", () => {
+    expect(runBuiltInRule(rule, "Hello")).toBeNull();
+  });
+
+  it("fails for strings with special characters", () => {
+    expect(runBuiltInRule(rule, "hello!")).toBe("Must not contain special characters");
+    expect(runBuiltInRule(rule, "user@email.com")).toBe("Must not contain special characters");
+    expect(runBuiltInRule(rule, "price: $5")).toBe("Must not contain special characters");
+  });
+
+  it("passes for empty values", () => {
+    expect(runBuiltInRule(rule, "")).toBeNull();
+    expect(runBuiltInRule(rule, null)).toBeNull();
+  });
+
+  it("uses custom message", () => {
+    const customRule = { type: "noSpecialChars" as const, message: "No symbols allowed" };
+    expect(runBuiltInRule(customRule, "test!")).toBe("No symbols allowed");
+  });
+});
+
+// ---- minItems ----
+
+describe("minItems validator", () => {
+  const rule = { type: "minItems" as const, value: 2 };
+
+  it("fails when array has fewer items than minimum", () => {
+    expect(runBuiltInRule(rule, ["a"])).toBe("Must have at least 2 item(s)");
+  });
+
+  it("passes when array meets minimum", () => {
+    expect(runBuiltInRule(rule, ["a", "b"])).toBeNull();
+  });
+
+  it("passes when array exceeds minimum", () => {
+    expect(runBuiltInRule(rule, ["a", "b", "c"])).toBeNull();
+  });
+
+  it("passes for empty values (use required for that)", () => {
+    expect(runBuiltInRule(rule, "")).toBeNull();
+    expect(runBuiltInRule(rule, null)).toBeNull();
+    expect(runBuiltInRule(rule, undefined)).toBeNull();
+    expect(runBuiltInRule(rule, [])).toBeNull();
+  });
+
+  it("passes for non-array values", () => {
+    expect(runBuiltInRule(rule, "string")).toBeNull();
+    expect(runBuiltInRule(rule, 42)).toBeNull();
+  });
+
+  it("uses custom message", () => {
+    const customRule = { type: "minItems" as const, value: 1, message: "Add at least one" };
+    expect(runBuiltInRule(customRule, [])).toBeNull(); // empty = pass (not required check)
+  });
+});
+
+// ---- maxItems ----
+
+describe("maxItems validator", () => {
+  const rule = { type: "maxItems" as const, value: 3 };
+
+  it("fails when array exceeds maximum", () => {
+    expect(runBuiltInRule(rule, ["a", "b", "c", "d"])).toBe("Must have at most 3 item(s)");
+  });
+
+  it("passes when array meets maximum", () => {
+    expect(runBuiltInRule(rule, ["a", "b", "c"])).toBeNull();
+  });
+
+  it("passes when array is under maximum", () => {
+    expect(runBuiltInRule(rule, ["a"])).toBeNull();
+  });
+
+  it("passes for empty values", () => {
+    expect(runBuiltInRule(rule, "")).toBeNull();
+    expect(runBuiltInRule(rule, null)).toBeNull();
+    expect(runBuiltInRule(rule, [])).toBeNull();
+  });
+
+  it("passes for non-array values", () => {
+    expect(runBuiltInRule(rule, "string")).toBeNull();
+  });
+
+  it("uses custom message", () => {
+    const customRule = { type: "maxItems" as const, value: 2, message: "Too many selections" };
+    expect(runBuiltInRule(customRule, ["a", "b", "c"])).toBe("Too many selections");
+  });
+});
+
 // ---- dispatcher behavior ----
 
 describe("runBuiltInRule dispatcher", () => {

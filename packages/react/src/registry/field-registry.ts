@@ -7,8 +7,10 @@ export type FieldProps = {
   error?: string[];
   touched: boolean;
   disabled: boolean;
+  readonly: boolean;
   onChange: (value: unknown) => void;
   onBlur: () => void;
+  onFocus: () => void;
   theme: FormEngineTheme;
   customProps?: Record<string, unknown>;
 };

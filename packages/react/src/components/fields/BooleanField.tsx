@@ -2,7 +2,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";
 
-export function BooleanField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function BooleanField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const current = value as boolean | undefined;
   const options = field.options ?? [
     { label: "Yes", value: true },
@@ -11,7 +11,7 @@ export function BooleanField({ field, value, error, touched, disabled, onChange,
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex gap-2" role="radiogroup" aria-label={field.label}>
+      <div className="flex gap-2" role="radiogroup" aria-label={field.label} onFocus={onFocus}>
         {options.map((opt) => (
           <button
             key={String(opt.value)}
@@ -24,7 +24,7 @@ export function BooleanField({ field, value, error, touched, disabled, onChange,
                 ? "fc-option-active"
                 : "border-input bg-transparent text-foreground hover:bg-accent",
             )}
-            disabled={disabled}
+            disabled={disabled || readonly}
             onClick={() => { onChange(opt.value); onBlur(); }}
           >
             {opt.label}

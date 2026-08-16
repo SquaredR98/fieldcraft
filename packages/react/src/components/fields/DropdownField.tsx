@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "../ui/select";
 
-export function DropdownField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function DropdownField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const options = field.options ?? [];
   const hasError = !!(touched && error?.length);
   const aria = fieldAria(field, hasError);
@@ -18,7 +18,7 @@ export function DropdownField({ field, value, error, touched, disabled, onChange
       <Select
         value={(value as string) || undefined}
         onValueChange={(val) => onChange(val)}
-        disabled={disabled}
+        disabled={disabled || readonly}
       >
         <SelectTrigger
           id={aria.id}
@@ -27,6 +27,7 @@ export function DropdownField({ field, value, error, touched, disabled, onChange
           aria-required={aria["aria-required"]}
           className="w-full"
           onBlur={onBlur}
+          onFocus={onFocus}
         >
           <SelectValue placeholder={field.placeholder ?? "Select..."} />
         </SelectTrigger>

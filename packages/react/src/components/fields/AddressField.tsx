@@ -14,7 +14,7 @@ type AddressValue = {
 
 const DEFAULT_FIELDS: AddressConfig["fields"] = ["street", "city", "state", "zip", "country"];
 
-export function AddressField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function AddressField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as AddressConfig | undefined;
   const addr = (value as AddressValue) ?? {};
   const fields = config?.fields ?? DEFAULT_FIELDS;
@@ -33,8 +33,10 @@ export function AddressField({ field, value, error, touched, disabled, onChange,
             placeholder="Street address"
             value={addr.street ?? ""}
             disabled={disabled}
+            readOnly={readonly}
             onChange={(e) => update("street", e.target.value)}
             onBlur={onBlur}
+            onFocus={onFocus}
             autoComplete="address-line1"
           />
         )}
@@ -45,6 +47,7 @@ export function AddressField({ field, value, error, touched, disabled, onChange,
             placeholder="Apt, suite, etc. (optional)"
             value={addr.street2 ?? ""}
             disabled={disabled}
+            readOnly={readonly}
             onChange={(e) => update("street2", e.target.value)}
             onBlur={onBlur}
             autoComplete="address-line2"
@@ -59,6 +62,7 @@ export function AddressField({ field, value, error, touched, disabled, onChange,
               placeholder="City"
               value={addr.city ?? ""}
               disabled={disabled}
+              readOnly={readonly}
               onChange={(e) => update("city", e.target.value)}
               onBlur={onBlur}
               autoComplete="address-level2"
@@ -72,6 +76,7 @@ export function AddressField({ field, value, error, touched, disabled, onChange,
               placeholder="State / Province"
               value={addr.state ?? ""}
               disabled={disabled}
+              readOnly={readonly}
               onChange={(e) => update("state", e.target.value)}
               onBlur={onBlur}
               autoComplete="address-level1"
@@ -85,6 +90,7 @@ export function AddressField({ field, value, error, touched, disabled, onChange,
               placeholder="ZIP / Postal"
               value={addr.zip ?? ""}
               disabled={disabled}
+              readOnly={readonly}
               onChange={(e) => update("zip", e.target.value)}
               onBlur={onBlur}
               autoComplete="postal-code"
@@ -98,6 +104,7 @@ export function AddressField({ field, value, error, touched, disabled, onChange,
             placeholder="Country"
             value={addr.country ?? config?.defaultCountry ?? ""}
             disabled={disabled}
+            readOnly={readonly}
             onChange={(e) => update("country", e.target.value)}
             onBlur={onBlur}
             autoComplete="country-name"

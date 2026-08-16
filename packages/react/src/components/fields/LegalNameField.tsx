@@ -4,7 +4,7 @@ import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
-export function LegalNameField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function LegalNameField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as LegalNameConfig | undefined;
   const hasError = !!(touched && error?.length);
   const nameValue = (value as { first?: string; middle?: string; last?: string }) ?? {};
@@ -27,8 +27,10 @@ export function LegalNameField({ field, value, error, touched, disabled, onChang
             type="text"
             value={nameValue.first ?? ""}
             disabled={disabled}
+            readOnly={readonly}
             onChange={(e) => update("first", e.target.value)}
             onBlur={onBlur}
+            onFocus={onFocus}
             autoComplete="given-name"
           />
         </div>
@@ -42,6 +44,7 @@ export function LegalNameField({ field, value, error, touched, disabled, onChang
               type="text"
               value={nameValue.middle ?? ""}
               disabled={disabled}
+              readOnly={readonly}
               onChange={(e) => update("middle", e.target.value)}
               onBlur={onBlur}
               autoComplete="additional-name"
@@ -57,6 +60,7 @@ export function LegalNameField({ field, value, error, touched, disabled, onChang
             type="text"
             value={nameValue.last ?? ""}
             disabled={disabled}
+            readOnly={readonly}
             onChange={(e) => update("last", e.target.value)}
             onBlur={onBlur}
             autoComplete="family-name"

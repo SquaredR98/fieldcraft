@@ -1,6 +1,17 @@
 import type { CustomValidator, AsyncValidator } from "../types/validation";
 
 /**
+ * Metadata about a registered validator.
+ * @since 1.4.0
+ */
+export type ValidatorMetadata = {
+  /** Validator name. */
+  name: string;
+  /** Whether this is a custom (sync) or async validator. */
+  kind: "custom" | "async";
+};
+
+/**
  * Registry for custom and async validators.
  * Custom validators are registered by name and referenced in schema validation rules.
  */
@@ -9,6 +20,10 @@ export type ValidatorRegistry = {
   registerAsync(name: string, validator: AsyncValidator): void;
   getCustom(name: string): CustomValidator | undefined;
   getAsync(name: string): AsyncValidator | undefined;
+  /** Returns names of all registered validators (custom + async). @since 1.4.0 */
+  listAll(): string[];
+  /** Returns metadata for a registered validator by name. @since 1.4.0 */
+  getMetadata(name: string): ValidatorMetadata | undefined;
 };
 
 export function createValidatorRegistry(
@@ -34,6 +49,17 @@ export function createValidatorRegistry(
     },
     getAsync(name) {
       return asyncs.get(name);
+    },
+    listAll() {
+      const names = new Set<string>();
+      for (const name of customs.keys()) names.add(name);
+      for (const name of asyncs.keys()) names.add(name);
+      return [...names].sort();
+    },
+    getMetadata(name) {
+      if (customs.has(name)) return { name, kind: "custom" };
+      if (asyncs.has(name)) return { name, kind: "async" };
+      return undefined;
     },
   };
 }

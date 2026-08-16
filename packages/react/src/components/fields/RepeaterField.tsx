@@ -8,7 +8,7 @@ import { useTheme } from "../../theme/ThemeProvider";
 
 type RepeaterEntry = Record<string, unknown>;
 
-export function RepeaterField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function RepeaterField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as RepeaterConfig | undefined;
   const entries = (value as RepeaterEntry[]) ?? [];
   const subFields = (config?.fields ?? []) as Question[];
@@ -47,7 +47,7 @@ export function RepeaterField({ field, value, error, touched, disabled, onChange
                   type="button"
                   className="text-xs text-muted-foreground hover:text-destructive transition-colors"
                   onClick={() => removeEntry(index)}
-                  disabled={disabled}
+                  disabled={disabled || readonly}
                   aria-label={config?.removeLabel ?? `Remove entry ${index + 1}`}
                 >
                   {config?.removeLabel ?? "Remove"}
@@ -63,8 +63,10 @@ export function RepeaterField({ field, value, error, touched, disabled, onChange
                   error={undefined}
                   touched={touched}
                   disabled={disabled}
+                  readonly={readonly}
                   onChange={(val) => updateEntry(index, subField.id, val)}
                   onBlur={onBlur}
+                  onFocus={onFocus}
                   theme={theme}
                   registry={registry}
                 />
@@ -78,7 +80,7 @@ export function RepeaterField({ field, value, error, touched, disabled, onChange
           variant="outline"
           size="sm"
           onClick={addEntry}
-          disabled={disabled || entries.length >= maxEntries}
+          disabled={disabled || readonly || entries.length >= maxEntries}
         >
           {config?.addLabel ?? "+ Add entry"}
         </Button>

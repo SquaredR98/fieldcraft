@@ -4,7 +4,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
 
-export function LikertField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function LikertField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const options = field.options ?? [];
   const current = value as string | number | undefined;
   const hasError = touched && !!error?.length;
@@ -14,9 +14,10 @@ export function LikertField({ field, value, error, touched, disabled, onChange, 
       <RadioGroup
         value={current != null ? String(current) : ""}
         onValueChange={(val) => { onChange(val); onBlur(); }}
-        disabled={disabled}
+        disabled={disabled || readonly}
         className="flex flex-wrap gap-2"
         aria-label={field.label}
+        onFocus={onFocus}
         {...(hasError ? { "aria-invalid": true } : {})}
       >
         {options.map((opt) => {
@@ -31,7 +32,7 @@ export function LikertField({ field, value, error, touched, disabled, onChange, 
                 isSelected
                   ? "fc-option-filled"
                   : "border-input bg-transparent text-foreground hover:bg-accent",
-                disabled && "cursor-not-allowed opacity-50",
+                (disabled || readonly) && "cursor-not-allowed opacity-50",
               )}
             >
               <RadioGroupItem value={String(opt.value)} id={optId} className="sr-only" />

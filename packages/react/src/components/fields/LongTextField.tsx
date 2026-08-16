@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Textarea } from "../ui/textarea";
 
-export function LongTextField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function LongTextField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as LongTextConfig | undefined;
   const hasError = !!(touched && error?.length);
   const text = (value as string) ?? "";
@@ -17,8 +17,10 @@ export function LongTextField({ field, value, error, touched, disabled, onChange
         rows={config?.rows ?? 4}
         maxLength={config?.maxLength}
         disabled={disabled}
+        readOnly={readonly}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
+        onFocus={onFocus}
       />
       {config?.maxLength && (
         <span className="text-xs text-muted-foreground text-right">

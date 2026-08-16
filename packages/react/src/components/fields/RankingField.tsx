@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";
 
-export function RankingField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function RankingField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const options = field.options ?? [];
   const ranked = (value as (string | number | boolean)[]) ?? options.map((o) => o.value);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -27,9 +27,9 @@ export function RankingField({ field, value, error, touched, disabled, onChange,
               className={cn(
                 "flex items-center gap-3 rounded-lg border border-input px-4 py-2.5 bg-card transition-shadow",
                 dragIndex === index && "shadow-md opacity-70",
-                disabled && "opacity-50",
+                (disabled || readonly) && "opacity-50",
               )}
-              draggable={!disabled}
+              draggable={!disabled && !readonly}
               onDragStart={() => setDragIndex(index)}
               onDragOver={(e) => e.preventDefault()}
               onDrop={() => {
@@ -47,8 +47,9 @@ export function RankingField({ field, value, error, touched, disabled, onChange,
                 <button
                   type="button"
                   className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-30 p-0.5"
-                  disabled={disabled || index === 0}
+                  disabled={disabled || readonly || index === 0}
                   onClick={() => moveItem(index, index - 1)}
+                  onFocus={onFocus}
                   aria-label={`Move ${opt?.label ?? val} up`}
                 >
                   &#x25B2;
@@ -56,8 +57,9 @@ export function RankingField({ field, value, error, touched, disabled, onChange,
                 <button
                   type="button"
                   className="text-xs text-muted-foreground hover:text-foreground disabled:opacity-30 p-0.5"
-                  disabled={disabled || index === ranked.length - 1}
+                  disabled={disabled || readonly || index === ranked.length - 1}
                   onClick={() => moveItem(index, index + 1)}
+                  onFocus={onFocus}
                   aria-label={`Move ${opt?.label ?? val} down`}
                 >
                   &#x25BC;

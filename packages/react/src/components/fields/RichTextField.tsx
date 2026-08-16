@@ -32,7 +32,7 @@ function markdownToHtml(markdown: string): string {
   return html;
 }
 
-export function RichTextField({ field, theme }: FieldProps) {
+export function RichTextField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus, theme }: FieldProps) {
   const config = field.config as RichTextConfig | undefined;
 
   const sanitizedHtml = useMemo(() => {

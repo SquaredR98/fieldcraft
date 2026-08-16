@@ -58,4 +58,7 @@ export type FormState = {
   hasDraft: boolean;
   /** ISO timestamp of the last draft save. */
   lastDraftSavedAt?: string;
+
+  /** Timestamps (epoch ms) of when each field was last focused. Used for analytics timing. */
+  focusTimestamps: Record<string, number>;
 };

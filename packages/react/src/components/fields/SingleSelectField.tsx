@@ -4,7 +4,7 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
 
-export function SingleSelectField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function SingleSelectField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const options = field.options ?? [];
   const current = value as string | undefined;
   const hasError = touched && !!error?.length;
@@ -14,9 +14,10 @@ export function SingleSelectField({ field, value, error, touched, disabled, onCh
       <RadioGroup
         value={current || undefined}
         onValueChange={(val) => { onChange(val); onBlur(); }}
-        disabled={disabled}
+        disabled={disabled || readonly}
         className="flex flex-col gap-2"
         aria-label={field.label}
+        onFocus={onFocus}
         {...(hasError ? { "aria-invalid": true } : {})}
       >
         {options.map((opt) => {

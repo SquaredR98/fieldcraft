@@ -2,7 +2,7 @@ import type { ImageConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { cn } from "../../utils/cn";
 
-export function ImageField({ field }: FieldProps) {
+export function ImageField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as ImageConfig | undefined;
 
   if (!config?.src) return null;

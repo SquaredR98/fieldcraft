@@ -67,6 +67,8 @@ export type DraftData = {
   savedAt: string;
   /** ISO timestamp of when the draft expires and should be discarded. */
   expiresAt: string;
+  /** Schema version at the time the draft was saved. Used for migration detection. @since 1.4.0 */
+  schemaVersion?: string;
 };
 
 /**
@@ -164,4 +166,8 @@ export interface SchemaAdapter {
   list(params?: SchemaListParams): Promise<SchemaListResult>;
   /** Optional error handler. */
   onError?: (error: Error) => void;
+  /** Check if the adapter's backing store is reachable. @since 1.4.0 */
+  healthCheck?(): Promise<boolean>;
+  /** Invalidate cached schemas. @since 1.4.0 */
+  invalidateCache?(schemaId?: string): void;
 }

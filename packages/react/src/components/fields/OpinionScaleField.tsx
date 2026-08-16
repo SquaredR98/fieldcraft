@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";
 
-export function OpinionScaleField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function OpinionScaleField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as OpinionScaleConfig | undefined;
   const min = config?.min ?? 1;
   const max = config?.max ?? 5;
@@ -13,7 +13,7 @@ export function OpinionScaleField({ field, value, error, touched, disabled, onCh
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label}>
+      <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label} onFocus={onFocus}>
         <div className="flex gap-0.5">
           {steps.map((n) => (
             <button
@@ -27,7 +27,7 @@ export function OpinionScaleField({ field, value, error, touched, disabled, onCh
                   ? "fc-option-filled"
                   : "bg-transparent text-foreground hover:bg-accent",
               )}
-              disabled={disabled}
+              disabled={disabled || readonly}
               onClick={() => { onChange(n); onBlur(); }}
             >
               {n}

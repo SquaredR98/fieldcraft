@@ -104,6 +104,11 @@ const engine = createEngine(schema, {
 | `engine.getState()` | Get full form state: `{ values, errors, touched, currentSectionId, isSubmitting, isSubmitted, ... }` |
 | `engine.touchField(fieldId)` | Mark a field as touched (triggers error display) |
 | `engine.clearField(fieldId)` | Clear a field value and its errors |
+| `engine.resetField(fieldId)` | Reset a field to its initial value, clear errors and touched |
+| `engine.resetForm()` | Reset all fields to initial values |
+| `engine.focusField(fieldId)` | Record focus timestamp for analytics timing |
+| `engine.getFieldState(fieldId)` | Get `{ value, error, touched, visible, disabled, required }` |
+| `engine.getChangedFields()` | Get map of fields where value differs from initial |
 
 ### Navigation
 
@@ -122,6 +127,7 @@ const engine = createEngine(schema, {
 | `engine.isFieldRequired(fieldId)` | Check if field is currently required |
 | `engine.isFieldVisible(fieldId)` | Check if field passes its `showIf` condition |
 | `engine.isFieldDisabled(fieldId)` | Check if field is currently disabled |
+| `engine.isFieldReadonly(fieldId)` | Check if field is readonly (accepts value programmatically) |
 | `engine.getFieldError(fieldId)` | Get validation errors for a field |
 
 ### Validation & Submission
@@ -139,6 +145,8 @@ const engine = createEngine(schema, {
 | `engine.saveDraft()` | Save current form state to localStorage |
 | `engine.loadDraft()` | Restore a previously saved draft |
 | `engine.clearDraft()` | Delete the saved draft |
+
+Drafts support auto-save intervals, schema versioning, and migrations. See `EngineOptions` for `autoSaveIntervalMs` and `draftMigrations`.
 
 ### Schema Introspection
 
@@ -190,7 +198,7 @@ Use `showIf` on any question or section to control visibility based on other fie
 }
 ```
 
-Supported operators: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`, `notIn`, `exists`, `notExists`, `contains`, `notContains`, `startsWith`, `endsWith`, `between`, `matches`.
+Supported operators: `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `in`, `notIn`, `exists`, `notExists`, `contains`, `notContains`, `startsWith`, `endsWith`, `between`, `matches`, `isEmpty`, `isNotEmpty`, `matchesRegex`, `dateAfter`, `dateBefore`, `arrayContains`, `arrayNotContains`, `lengthGreaterThan`, `lengthLessThan`.
 
 Combine conditions with `AND`/`OR`:
 
@@ -222,7 +230,41 @@ Use expression syntax to derive values from other fields:
 }
 ```
 
-Supported: `+`, `-`, `*`, `/`, `^`, parentheses, `floor()`, `ceil()`, `round()`, `min()`, `max()`, `abs()`.
+Supported math: `+`, `-`, `*`, `/`, `^`, parentheses, `FLOOR()`, `CEIL()`, `ROUND()`, `MIN()`, `MAX()`, `ABS()`.
+
+String functions: `UPPER()`, `LOWER()`, `TRIM()`, `LEN()`, `CONCAT()`.
+
+Date functions: `TODAY()`, `DATEDIFF()`, `DATEADD()`.
+
+Conditional: `IF(condition, trueVal, falseVal)`.
+
+## Validation
+
+Built-in validators: `required`, `min`, `max`, `minLength`, `maxLength`, `pattern`, `email`, `phone`, `url`, `date`, `fileSize`, `fileType`, `integer`, `positiveNumber`, `alphanumeric`, `noSpecialChars`, `minItems`, `maxItems`, `compareToField`.
+
+All rules support optional `message` overrides, conditional application via `applyIf`, and severity levels (`error`, `warning`, `info`).
+
+```typescript
+{
+  id: "password_confirm",
+  type: "short_text",
+  label: "Confirm Password",
+  validation: [
+    { type: "required" },
+    { type: "compareToField", fieldId: "password", operator: "eq", message: "Passwords must match" },
+  ],
+}
+```
+
+## Subpath Exports
+
+```typescript
+// Testing utilities
+import { createTestSchema, createMockSubmitAdapter } from "@squaredr/fieldcraft-core/testing";
+
+// Validator registry
+import { createValidatorRegistry } from "@squaredr/fieldcraft-core/validators";
+```
 
 ## Pair with React
 

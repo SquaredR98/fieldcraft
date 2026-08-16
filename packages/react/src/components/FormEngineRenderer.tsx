@@ -59,6 +59,9 @@ export type FormEngineRendererProps = {
   prevLabel?: string;
   nextLabel?: string;
   submitLabel?: string;
+
+  // Accessibility
+  autoFocus?: boolean;
 };
 
 export function FormEngineRenderer({
@@ -81,6 +84,7 @@ export function FormEngineRenderer({
   prevLabel,
   nextLabel,
   submitLabel,
+  autoFocus,
 }: FormEngineRendererProps) {
   const engine = useFormEngine(schema, {
     adapters,
@@ -194,6 +198,7 @@ export function FormEngineRenderer({
                 section={currentSection}
                 engine={engine}
                 registry={registry}
+                autoFocus={autoFocus}
               />
             )}
           </FormErrorBoundary>
@@ -221,10 +226,12 @@ function FormEngineRendererInner({
   section,
   engine,
   registry,
+  autoFocus,
 }: {
   section: import("@squaredr/fieldcraft-core").Section;
   engine: FormEngine;
   registry: FieldRegistry;
+  autoFocus?: boolean;
 }) {
   const theme = useTheme();
   return (
@@ -233,6 +240,7 @@ function FormEngineRendererInner({
       engine={engine}
       theme={theme}
       registry={registry}
+      autoFocus={autoFocus}
     />
   );
 }

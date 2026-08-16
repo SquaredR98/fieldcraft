@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
 
-export function NumberField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function NumberField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as NumberConfig | undefined;
   const hasError = !!(touched && error?.length);
 
@@ -19,11 +19,13 @@ export function NumberField({ field, value, error, touched, disabled, onChange, 
           max={config?.max}
           step={config?.step ?? 1}
           disabled={disabled}
+          readOnly={readonly}
           onChange={(e) => {
             const raw = e.target.value;
             onChange(raw === "" ? undefined : Number(raw));
           }}
           onBlur={onBlur}
+          onFocus={onFocus}
         />
         {config?.suffix && (
           <span className="text-sm text-muted-foreground shrink-0">{config.suffix}</span>

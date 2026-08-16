@@ -14,6 +14,8 @@ import { createDraftManager } from "./draft-manager";
 import { runSubmission } from "./submission-pipeline";
 import { generateSessionToken } from "../utils/session-token";
 import { isTelemetryEnabled, collectTelemetryData, sendTelemetryEvent } from "./telemetry";
+import { createAnalyticsEmitter } from "./analytics-emitter";
+import type { FieldCraftEvent } from "./analytics-emitter";
 
 /**
  * Configuration options for creating a form engine instance via {@link createEngine}.
@@ -57,12 +59,51 @@ export type EngineOptions = {
   onSectionChange?: (sectionId: string, index: number) => void;
   /** Fires when any field value changes. Receives the field ID and new value. */
   onFieldChange?: (fieldId: string, value: unknown) => void;
+  /** Called after validation completes (section or full-form). Receives the validation result. @since 1.4.0 */
+  onValidationComplete?: (result: ValidationResult) => void;
+  /**
+   * Called after validation passes, before adapters run. Return a modified response
+   * to continue, or `false` to cancel the submission.
+   * @since 1.4.0
+   */
+  beforeSubmit?: (response: FormResponse) => FormResponse | false | Promise<FormResponse | false>;
   /** Named custom validators referenced by `{ type: "custom", name: "..." }` validation rules. */
   validators?: Record<string, CustomValidator>;
   /** Named async validators referenced by `{ type: "async", endpoint: "..." }` validation rules. */
   asyncValidators?: Record<string, AsyncValidator>;
   /** Explicit session token for draft storage. Auto-generated if omitted. */
   sessionToken?: string;
+  /** Arbitrary metadata to attach to the form response. Merged with schema-level metadata on submit. @since 1.4.0 */
+  metadata?: Record<string, unknown>;
+  /**
+   * Unified analytics callback. Receives all form interaction events as a discriminated union.
+   * Forward to Google Analytics, Segment, Mixpanel, or any analytics service.
+   * @since 1.4.0
+   */
+  onEvent?: (event: FieldCraftEvent) => void;
+  /**
+   * Auto-save interval in milliseconds. When set with `allowDraftSave`, drafts
+   * are automatically saved at this interval. E.g. `30000` for every 30 seconds.
+   * @since 1.4.0
+   */
+  autoSaveIntervalMs?: number;
+  /**
+   * Draft migration functions keyed by the schema version the draft was saved with.
+   * When a draft is loaded that was saved under a different schema version,
+   * the matching migration function transforms the draft to the current schema format.
+   *
+   * @example
+   * ```typescript
+   * draftMigrations: {
+   *   "1.0.0": (draft) => ({
+   *     ...draft,
+   *     values: { ...draft.values, newField: "default" },
+   *   }),
+   * }
+   * ```
+   * @since 1.4.0
+   */
+  draftMigrations?: Record<string, (draft: import("./draft-manager").DraftSnapshot) => import("./draft-manager").DraftSnapshot>;
   /**
    * Override the telemetry opt-in setting. `true` enables anonymous telemetry,
    * `false` disables it. When omitted, falls back to the `FIELDCRAFT_TELEMETRY_ENABLED`
@@ -177,6 +218,31 @@ export type FormEngine = {
    */
   clearField(fieldId: string): void;
 
+  /**
+   * Resets a single field to its initial value, clears errors, touched state, and warnings.
+   *
+   * @param fieldId - The question's `id`.
+   * @since 1.4.0
+   */
+  resetField(fieldId: string): void;
+
+  /**
+   * Resets the entire form to its initial state — values, errors, touched,
+   * warnings, submission status. Section navigation is preserved.
+   *
+   * @since 1.4.0
+   */
+  resetForm(): void;
+
+  /**
+   * Records that a field received focus. Stores a timestamp used for
+   * analytics timing (time-to-complete per field).
+   *
+   * @param fieldId - The question's `id`.
+   * @since 1.4.0
+   */
+  focusField(fieldId: string): void;
+
   // ---- Visibility & State Queries ----
 
   /** Returns all sections whose `showIf` condition evaluates to `true` (or have no condition). */
@@ -213,12 +279,51 @@ export type FormEngine = {
    */
   isFieldDisabled(fieldId: string): boolean;
   /**
+   * Checks whether a field is currently read-only. Evaluates conditional
+   * `readonly` expressions against the current form values.
+   * Read-only fields are submitted but not editable by the user.
+   *
+   * @param fieldId - The question's `id`.
+   * @returns `true` if read-only, `false` if editable or not found.
+   * @since 1.4.0
+   */
+  isFieldReadonly(fieldId: string): boolean;
+
+  /**
    * Returns the current validation errors for a field.
    *
    * @param fieldId - The question's `id`.
    * @returns Array of error message strings, or `undefined` if no errors.
    */
   getFieldError(fieldId: string): string[] | undefined;
+
+  /**
+   * Returns the complete state of a single field — value, errors, touched,
+   * visibility, disabled, required, and any warnings.
+   *
+   * @param fieldId - The question's `id`.
+   * @returns A field state object with all computed properties.
+   * @since 1.4.0
+   */
+  getFieldState(fieldId: string): {
+    value: unknown;
+    error: string[];
+    touched: boolean;
+    visible: boolean;
+    disabled: boolean;
+    readonly: boolean;
+    required: boolean;
+    warning?: string;
+  };
+
+  /**
+   * Returns a map of field IDs whose current value differs from the initial value.
+   * Includes fields that were removed (value becomes `undefined`).
+   *
+   * @returns Map of changed field IDs to their current values.
+   * @since 1.4.0
+   */
+  getChangedFields(): Record<string, unknown>;
 
   // ---- Drafts ----
 
@@ -366,6 +471,10 @@ export function createEngine(
   // Track form start time
   const startedAt = Date.now();
 
+  // Create analytics emitter
+  const analytics = createAnalyticsEmitter(schema.id, options?.onEvent);
+  let hasStarted = false;
+
   // Create state manager
   const stateManager = createStateManager({
     schema,
@@ -383,6 +492,8 @@ export function createEngine(
     storage: schema.settings?.draftStorage ?? "local",
     ttlHours: schema.settings?.draftTtlHours ?? 72,
     draftAdapter: options?.draftAdapter,
+    autoSaveIntervalMs: options?.autoSaveIntervalMs,
+    schemaVersion: schema.version,
   });
 
   // Normalize adapters to array
@@ -414,7 +525,12 @@ export function createEngine(
     },
 
     nextSection() {
+      const prevState = stateManager.getState();
       stateManager.nextSection();
+      const newState = stateManager.getState();
+      if (newState.currentSectionId !== prevState.currentSectionId) {
+        analytics.sectionComplete(prevState.currentSectionId, prevState.currentSectionIndex);
+      }
     },
 
     prevSection() {
@@ -427,6 +543,10 @@ export function createEngine(
 
     setValue(fieldId, value) {
       assertNotDestroyed();
+      if (!hasStarted) {
+        hasStarted = true;
+        analytics.formStart(fieldId);
+      }
       stateManager.setValue(fieldId, value);
     },
 
@@ -436,10 +556,27 @@ export function createEngine(
 
     touchField(fieldId) {
       stateManager.touchField(fieldId);
+      // Emit field complete with duration if we have a focus timestamp
+      const focusTs = stateManager.getState().focusTimestamps[fieldId];
+      const durationMs = focusTs ? Date.now() - focusTs : undefined;
+      analytics.fieldComplete(fieldId, durationMs);
     },
 
     clearField(fieldId) {
       stateManager.clearField(fieldId);
+    },
+
+    resetField(fieldId) {
+      stateManager.resetField(fieldId);
+    },
+
+    resetForm() {
+      stateManager.resetForm();
+    },
+
+    focusField(fieldId) {
+      stateManager.focusField(fieldId);
+      analytics.fieldFocus(fieldId);
     },
 
     getVisibleSections() {
@@ -488,10 +625,29 @@ export function createEngine(
       return false;
     },
 
+    isFieldReadonly(fieldId) {
+      const question = questionMap.get(fieldId);
+      if (!question) return false;
+      if (typeof question.readonly === "boolean") return question.readonly;
+      if (question.readonly) {
+        const state = stateManager.getState();
+        return evaluate(question.readonly as ConditionExpression, state.values);
+      }
+      return false;
+    },
+
     getFieldError(fieldId) {
       const state = stateManager.getState();
       const errors = state.errors[fieldId];
       return errors && errors.length > 0 ? errors : undefined;
+    },
+
+    getFieldState(fieldId) {
+      return stateManager.getFieldState(fieldId);
+    },
+
+    getChangedFields() {
+      return stateManager.getChangedFields();
     },
 
     async saveDraft() {
@@ -503,10 +659,11 @@ export function createEngine(
         savedAt: new Date().toISOString(),
       });
       stateManager.setDraftState(true, new Date().toISOString());
+      analytics.draftSave();
     },
 
     async loadDraft() {
-      const snapshot = await draftManager.load();
+      const snapshot = await draftManager.load(options?.draftMigrations);
       if (!snapshot) return false;
       stateManager.restoreFromDraft(
         snapshot.values,
@@ -514,6 +671,7 @@ export function createEngine(
         snapshot.visitedSectionIds,
       );
       stateManager.setDraftState(true, snapshot.savedAt);
+      analytics.draftResume();
       return true;
     },
 
@@ -524,7 +682,14 @@ export function createEngine(
 
     validate() {
       const state = stateManager.getState();
-      return validateAll(schema, state.values, validatorRegistry);
+      const result = validateAll(schema, state.values, validatorRegistry);
+      options?.onValidationComplete?.(result);
+      if (!result.valid) {
+        for (const [fieldId, errors] of Object.entries(result.errors)) {
+          analytics.validationError(fieldId, errors.length);
+        }
+      }
+      return result;
     },
 
     validateSection(sectionId) {
@@ -533,7 +698,9 @@ export function createEngine(
         return { valid: true, errors: {} };
       }
       const state = stateManager.getState();
-      return runValidateSection(section, state.values, validatorRegistry);
+      const result = runValidateSection(section, state.values, validatorRegistry);
+      options?.onValidationComplete?.(result);
+      return result;
     },
 
     async submit() {
@@ -558,6 +725,10 @@ export function createEngine(
       const state = stateManager.getState();
 
       // Build response
+      const metadata = {
+        ...schema.metadata,
+        ...options?.metadata,
+      };
       const response: FormResponse = {
         schemaId: schema.id,
         schemaVersion: schema.version,
@@ -567,16 +738,36 @@ export function createEngine(
         scores: Object.keys(state.scores).length > 0 ? state.scores : undefined,
         totalScore: state.totalScore,
         completionTimeMs: Date.now() - startedAt,
+        metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
       };
 
+      // Run beforeSubmit hook
+      let finalResponse = response;
+      if (options?.beforeSubmit) {
+        const hookResult = await options.beforeSubmit(response);
+        if (hookResult === false) {
+          stateManager.setSubmitting(false);
+          return {
+            success: false,
+            adapterResults: [{
+              adapterName: "beforeSubmit",
+              success: false,
+              error: "Submission cancelled by beforeSubmit hook",
+            }],
+          };
+        }
+        finalResponse = hookResult;
+      }
+
       // Run submission pipeline
-      const result = await runSubmission(response, adapters, options?.onSubmit);
+      const result = await runSubmission(finalResponse, adapters, options?.onSubmit);
 
       if (result.success) {
         stateManager.setSubmitted(true);
         // Clear draft on successful submission
         draftManager.clear();
         stateManager.setDraftState(false);
+        analytics.formSubmit(Date.now() - startedAt, Object.keys(state.values).length);
       } else {
         const failedAdapters = result.adapterResults
           .filter((r) => !r.success)
@@ -610,9 +801,27 @@ export function createEngine(
 
     destroy() {
       destroyed = true;
+      draftManager.stopAutoSave();
       // Allow GC
     },
   };
+
+  // Start auto-save if configured and drafts are allowed
+  if (schema.settings?.allowDraftSave !== false && options?.autoSaveIntervalMs) {
+    draftManager.startAutoSave(() => {
+      const state = stateManager.getState();
+      return {
+        values: state.values,
+        currentSectionId: state.currentSectionId,
+        visitedSectionIds: state.visitedSectionIds,
+        savedAt: new Date().toISOString(),
+        schemaVersion: schema.version,
+      };
+    });
+  }
+
+  // Emit form view event
+  analytics.formView();
 
   // Telemetry (opt-in, non-blocking, fire-and-forget)
   if (isTelemetryEnabled(options?.telemetry)) {

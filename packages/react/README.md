@@ -144,9 +144,15 @@ The hook returns a proxy that is resilient to React Strict Mode — it lazily re
 | Hook | Description |
 |------|-------------|
 | `useFormEngine(schema, options?)` | Creates and subscribes to a form engine |
-| `useFieldValue(engine, questionId)` | Reactive field value |
-| `useFieldError(engine, questionId)` | Reactive field error |
+| `useFieldValue(engine, fieldId)` | Reactive field value |
+| `useFieldError(engine, fieldId)` | Reactive field error |
 | `useSectionProgress(engine)` | Section completion progress |
+| `useFormDirty(engine)` | Whether any field has changed from initial |
+| `useFieldVisibility(engine, fieldId)` | Whether a field is currently visible |
+| `useFormProgress(engine)` | `{ current, total, percentage }` |
+| `useConditionalFields(engine)` | Map of all field IDs to their visibility |
+| `useFormSubmit(engine)` | `{ submit, isSubmitting, isSubmitted, error }` |
+| `useFieldOptions(engine, fieldId)` | Options array for select/dropdown fields |
 
 ## Theme Presets
 
@@ -176,7 +182,7 @@ const customRegistry = mergeRegistries(defaultRegistry, {
 
 - `react` ^18 || ^19
 - `react-dom` ^18 || ^19
-- `@squaredr/fieldcraft-core` ^1.3.2
+- `@squaredr/fieldcraft-core` ^1.4.0
 
 ## Community
 

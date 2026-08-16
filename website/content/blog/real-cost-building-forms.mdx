@@ -29,7 +29,7 @@ Let's walk through what production-ready forms actually require. These aren't th
 **What it actually requires:**
 
 - A validation runner that applies multiple rules per field in sequence
-- 10–15 built-in validators (required, min, max, email, phone, URL, date, pattern, file size, file type, length constraints)
+- 19 built-in validators (required, min, max, email, phone, URL, date, pattern, file size, file type, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField, length constraints)
 - Custom validator registration so teams can add business-specific rules
 - Async validators for server-side checks (email uniqueness, username availability) with debouncing
 - Conditional required — fields that become required based on other answers

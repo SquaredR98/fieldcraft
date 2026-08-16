@@ -285,8 +285,8 @@ function evaluatePostfix(postfix: Token[]): number {
 /**
  * Evaluates a math expression string and returns the numeric result.
  *
- * This is the only exported function. Internally it tokenizes the input,
- * converts to postfix via Shunting-yard, and evaluates the RPN stack.
+ * This is the primary export for numeric expressions. Internally it tokenizes
+ * the input, converts to postfix via Shunting-yard, and evaluates the RPN stack.
  *
  * @param expression - A math expression string, e.g. `"(3 + 4) * 2"`
  * @returns The evaluated numeric result
@@ -304,4 +304,120 @@ export function evaluateMathExpression(expression: string): number {
   const tokens = tokenize(expression);
   const postfix = toPostfix(tokens);
   return evaluatePostfix(postfix);
+}
+
+// ---- String, Date, and Conditional Functions ----
+
+/**
+ * Evaluates a function expression that returns a string, number, or date.
+ *
+ * Supported functions:
+ * - **String**: `UPPER(s)`, `LOWER(s)`, `TRIM(s)`, `LEN(s)`, `CONCAT(a, b, ...)`
+ * - **Date**: `TODAY()`, `DATEDIFF(d1, d2, unit)`, `DATEADD(date, amount, unit)`
+ * - **Conditional**: `IF(condition, trueVal, falseVal)`
+ *
+ * @param funcName - The function name (case-insensitive).
+ * @param args - Arguments to the function.
+ * @returns The result of the function evaluation.
+ * @throws {Error} On unknown functions or invalid arguments.
+ *
+ * @example
+ * ```ts
+ * evaluateFunction("UPPER", ["hello"]);       // "HELLO"
+ * evaluateFunction("LEN", ["hello"]);          // 5
+ * evaluateFunction("TODAY", []);               // "2024-01-15" (ISO date string)
+ * evaluateFunction("DATEDIFF", ["2024-01-01", "2024-01-31", "days"]); // 30
+ * evaluateFunction("IF", [true, "yes", "no"]); // "yes"
+ * ```
+ *
+ * @since 1.4.0
+ */
+export function evaluateFunction(
+  funcName: string,
+  args: unknown[],
+): unknown {
+  const name = funcName.toUpperCase();
+
+  switch (name) {
+    // ---- String functions ----
+    case "UPPER":
+      assertArgCount(name, args, 1);
+      return String(args[0] ?? "").toUpperCase();
+
+    case "LOWER":
+      assertArgCount(name, args, 1);
+      return String(args[0] ?? "").toLowerCase();
+
+    case "TRIM":
+      assertArgCount(name, args, 1);
+      return String(args[0] ?? "").trim();
+
+    case "LEN":
+      assertArgCount(name, args, 1);
+      return String(args[0] ?? "").length;
+
+    case "CONCAT":
+      if (args.length < 1) throw new Error("CONCAT requires at least 1 argument");
+      return args.map((a) => String(a ?? "")).join("");
+
+    // ---- Date functions ----
+    case "TODAY":
+      return new Date().toISOString().split("T")[0]; // "YYYY-MM-DD"
+
+    case "DATEDIFF": {
+      assertArgCount(name, args, 3);
+      const d1 = new Date(String(args[0]));
+      const d2 = new Date(String(args[1]));
+      const unit = String(args[2]).toLowerCase();
+      if (isNaN(d1.getTime()) || isNaN(d2.getTime())) {
+        throw new Error("DATEDIFF: invalid date argument");
+      }
+      const diffMs = d2.getTime() - d1.getTime();
+      switch (unit) {
+        case "days": return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+        case "hours": return Math.floor(diffMs / (1000 * 60 * 60));
+        case "minutes": return Math.floor(diffMs / (1000 * 60));
+        case "seconds": return Math.floor(diffMs / 1000);
+        case "weeks": return Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7));
+        case "months": return (d2.getFullYear() - d1.getFullYear()) * 12 + (d2.getMonth() - d1.getMonth());
+        case "years": return d2.getFullYear() - d1.getFullYear();
+        default: throw new Error(`DATEDIFF: unknown unit "${unit}". Use days, hours, minutes, seconds, weeks, months, or years`);
+      }
+    }
+
+    case "DATEADD": {
+      assertArgCount(name, args, 3);
+      const date = new Date(String(args[0]));
+      const amount = Number(args[1]);
+      const unit = String(args[2]).toLowerCase();
+      if (isNaN(date.getTime())) throw new Error("DATEADD: invalid date argument");
+      if (isNaN(amount)) throw new Error("DATEADD: amount must be a number");
+      const result = new Date(date);
+      switch (unit) {
+        case "days": result.setDate(result.getDate() + amount); break;
+        case "hours": result.setHours(result.getHours() + amount); break;
+        case "minutes": result.setMinutes(result.getMinutes() + amount); break;
+        case "seconds": result.setSeconds(result.getSeconds() + amount); break;
+        case "weeks": result.setDate(result.getDate() + amount * 7); break;
+        case "months": result.setMonth(result.getMonth() + amount); break;
+        case "years": result.setFullYear(result.getFullYear() + amount); break;
+        default: throw new Error(`DATEADD: unknown unit "${unit}". Use days, hours, minutes, seconds, weeks, months, or years`);
+      }
+      return result.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    }
+
+    // ---- Conditional ----
+    case "IF":
+      assertArgCount(name, args, 3);
+      return args[0] ? args[1] : args[2];
+
+    default:
+      throw new Error(`Unknown function: ${funcName}`);
+  }
+}
+
+function assertArgCount(name: string, args: unknown[], expected: number): void {
+  if (args.length < expected) {
+    throw new Error(`${name} requires ${expected} argument(s), got ${args.length}`);
+  }
 }

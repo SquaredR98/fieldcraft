@@ -126,5 +126,40 @@ export function createHttpSchemaAdapter(config: HttpSchemaAdapterConfig): Schema
       const qs = query.toString();
       return request<SchemaListResult>(`/schemas${qs ? `?${qs}` : ""}`);
     },
+
+    /**
+     * Checks if the schema API is reachable by sending a HEAD request to `/schemas`.
+     * Returns `true` if the server responds with a 2xx status.
+     * @since 1.4.0
+     */
+    async healthCheck(): Promise<boolean> {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+      try {
+        const res = await fetch(`${config.baseUrl}/schemas`, {
+          method: "HEAD",
+          headers: { ...config.headers },
+          signal: controller.signal,
+        });
+        return res.ok;
+      } catch {
+        return false;
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    },
+
+    /**
+     * Clears the in-memory schema cache. Optionally pass a schema ID to
+     * invalidate only that entry; omit to clear the entire cache.
+     * @since 1.4.0
+     */
+    invalidateCache(schemaId?: string): void {
+      if (schemaId) {
+        cache.delete(schemaId);
+      } else {
+        cache.clear();
+      }
+    },
   };
 }

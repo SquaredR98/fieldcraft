@@ -161,6 +161,6 @@ This cascade happens synchronously and is fast — the condition evaluator is a 
 
 ## Next steps
 
-- [Validation](/docs/core-concepts/validation) — validate field values with 12 built-in rule types
+- [Validation](/docs/core-concepts/validation) — validate field values with 19 built-in rule types
 - [Computed fields](/docs/core-concepts/computed-fields) — derive values from expressions
 - [Multi-step forms](/docs/core-concepts/multi-step-forms) — navigation, progress, and jump rules

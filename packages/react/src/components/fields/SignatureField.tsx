@@ -3,7 +3,7 @@ import type { SignatureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 
-export function SignatureField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function SignatureField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as SignatureConfig | undefined;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
@@ -23,7 +23,7 @@ export function SignatureField({ field, value, error, touched, disabled, onChang
 
   const startDraw = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-      if (disabled) return;
+      if (disabled || readonly) return;
       drawingRef.current = true;
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -34,12 +34,12 @@ export function SignatureField({ field, value, error, touched, disabled, onChang
       ctx.beginPath();
       ctx.moveTo(point.clientX - rect.left, point.clientY - rect.top);
     },
-    [disabled],
+    [disabled, readonly],
   );
 
   const draw = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
-      if (!drawingRef.current || disabled) return;
+      if (!drawingRef.current || disabled || readonly) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext("2d");
@@ -52,7 +52,7 @@ export function SignatureField({ field, value, error, touched, disabled, onChang
       ctx.lineTo(point.clientX - rect.left, point.clientY - rect.top);
       ctx.stroke();
     },
-    [config?.penColor, disabled],
+    [config?.penColor, disabled, readonly],
   );
 
   const endDraw = useCallback(() => {
@@ -89,6 +89,7 @@ export function SignatureField({ field, value, error, touched, disabled, onChang
           onTouchStart={startDraw}
           onTouchMove={draw}
           onTouchEnd={endDraw}
+          onFocus={onFocus}
           aria-label={`${field.label} signature pad`}
           role="img"
         />
@@ -96,7 +97,7 @@ export function SignatureField({ field, value, error, touched, disabled, onChang
           type="button"
           className="self-end text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
           onClick={clear}
-          disabled={disabled}
+          disabled={disabled || readonly}
         >
           Clear
         </button>

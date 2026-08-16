@@ -28,7 +28,7 @@ export function DocsTopBar() {
 
         <div className="fc-docs-topbar__actions">
           <div className="fc-docs-topbar__version">
-            <span>v1.3.14</span>
+            <span>v1.4.0</span>
             <span className="fc-docs-topbar__version-caret">&#9662;</span>
           </div>
           <a

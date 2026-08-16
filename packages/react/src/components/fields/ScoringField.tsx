@@ -6,7 +6,7 @@ import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
 import { cn } from "../../utils/cn";
 
-export function ScoringField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function ScoringField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as ScoringConfig | undefined;
   const options = config?.options ?? [];
   const current = value as string | undefined;
@@ -17,9 +17,10 @@ export function ScoringField({ field, value, error, touched, disabled, onChange,
       <RadioGroup
         value={current || undefined}
         onValueChange={(val) => { onChange(val); onBlur(); }}
-        disabled={disabled}
+        disabled={disabled || readonly}
         className="flex flex-col gap-2"
         aria-label={field.label}
+        onFocus={onFocus}
         {...(hasError ? { "aria-invalid": true } : {})}
       >
         {options.map((opt) => {
@@ -34,7 +35,7 @@ export function ScoringField({ field, value, error, touched, disabled, onChange,
                 isSelected
                   ? "fc-option-active"
                   : "border-input hover:bg-accent",
-                disabled && "cursor-not-allowed opacity-50",
+                (disabled || readonly) && "cursor-not-allowed opacity-50",
               )}
             >
               <RadioGroupItem value={opt.value} id={optId} />

@@ -42,6 +42,14 @@ export type FormEngineSchema = {
   submitAction: SubmitAction;
   /** What happens after successful submission: redirect, message, or callback. */
   onComplete?: CompleteAction;
+  /** Arbitrary metadata attached to the schema. Included in form responses on submit. @since 1.4.0 */
+  metadata?: Record<string, unknown>;
+  /** Tags for categorizing and filtering schemas. @since 1.4.0 */
+  tags?: string[];
+  /** ISO 8601 timestamp of when the schema was created. @since 1.4.0 */
+  createdAt?: string;
+  /** ISO 8601 timestamp of when the schema was last updated. @since 1.4.0 */
+  updatedAt?: string;
 };
 
 /**
@@ -135,8 +143,23 @@ export type Question = {
   showIf?: ConditionExpression;
   /** Whether the field is disabled. Can be a boolean or a conditional expression. */
   disabled?: boolean | ConditionExpression;
+  /**
+   * Whether the field is read-only. Read-only fields are submitted but cannot be edited by the user.
+   * `setValue()` still works programmatically (only the UI is locked).
+   * Can be a boolean or a conditional expression.
+   * @since 1.4.0
+   */
+  readonly?: boolean | ConditionExpression;
   /** Array of validation rules applied to this field's value. */
   validation?: ValidationRule[];
+  /**
+   * When this field should be validated.
+   * - `"blur"` — on field blur (default)
+   * - `"change"` — on every value change
+   * - `"submit"` — only on form submission
+   * @since 1.4.0
+   */
+  validateOn?: "blur" | "change" | "submit";
   /** Key used to match prefill data from URL params or props. */
   prefillKey?: string;
   /** Type-specific configuration object. Shape depends on the `type` field. */
@@ -145,6 +168,10 @@ export type Question = {
   options?: Option[];
   /** Layout configuration for this field (width, columns, custom CSS). */
   layout?: QuestionLayout;
+  /** Custom ARIA label for accessibility. Overrides the default label. @since 1.4.0 */
+  ariaLabel?: string;
+  /** Custom ARIA description for accessibility. Supplements the help text. @since 1.4.0 */
+  ariaDescription?: string;
   /** Escape hatch for passing arbitrary data to custom field type renderers. */
   customProps?: Record<string, unknown>;
 };

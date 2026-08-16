@@ -4,7 +4,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Button } from "../ui/button";
 
-export function ImageCaptureField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function ImageCaptureField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as ImageCaptureConfig | undefined;
   const inputRef = useRef<HTMLInputElement>(null);
   const imageUrl = value as string | undefined;
@@ -30,8 +30,9 @@ export function ImageCaptureField({ field, value, error, touched, disabled, onCh
           accept="image/*"
           capture={allowGallery ? undefined : (config?.camera === "front" ? "user" : "environment")}
           className="sr-only"
-          disabled={disabled}
+          disabled={disabled || readonly}
           onChange={(e) => handleFile(e.target.files)}
+          onFocus={onFocus}
           aria-label={field.label}
         />
 
@@ -43,7 +44,7 @@ export function ImageCaptureField({ field, value, error, touched, disabled, onCh
               variant="outline"
               size="sm"
               onClick={() => onChange(undefined)}
-              disabled={disabled}
+              disabled={disabled || readonly}
             >
               Remove
             </Button>
@@ -52,7 +53,7 @@ export function ImageCaptureField({ field, value, error, touched, disabled, onCh
           <Button
             type="button"
             onClick={() => inputRef.current?.click()}
-            disabled={disabled}
+            disabled={disabled || readonly}
           >
             {allowGallery ? "Take photo or choose from gallery" : "Take photo"}
           </Button>

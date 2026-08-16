@@ -3,7 +3,7 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
 
-export function ShortTextField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function ShortTextField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as ShortTextConfig | undefined;
   const hasError = !!(touched && error?.length);
 
@@ -16,8 +16,10 @@ export function ShortTextField({ field, value, error, touched, disabled, onChang
         placeholder={field.placeholder}
         maxLength={config?.maxLength}
         disabled={disabled}
+        readOnly={readonly}
         onChange={(e) => onChange(e.target.value)}
         onBlur={onBlur}
+        onFocus={onFocus}
       />
     </FieldWrapper>
   );

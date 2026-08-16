@@ -20,7 +20,7 @@ When telemetry is enabled, the following data is sent once per `createEngine()` 
 | Section count | `3` | Understand form structure |
 | Field type distribution | `{ short_text: 5, email: 2 }` | Prioritize field type development |
 | Feature flags | `usesConditions: true` | Know which features are adopted |
-| Core version | `1.3.14` | Track version adoption |
+| Core version | `1.4.0` | Track version adoption |
 | Node version | `20.11.0` | Ensure compatibility |
 | Runtime | `browser` | Understand deployment environments |
 | Schema valid | `true` | Track schema validation success rates |

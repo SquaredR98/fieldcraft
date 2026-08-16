@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type {
   Section,
   Question,
@@ -13,6 +14,7 @@ export type SectionRendererProps = {
   engine: FormEngine;
   theme: FormEngineTheme;
   registry: FieldRegistry;
+  autoFocus?: boolean;
 };
 
 const sectionVariants: Record<string, string> = {
@@ -54,15 +56,26 @@ export function SectionRenderer({
   engine,
   theme,
   registry,
+  autoFocus,
 }: SectionRendererProps) {
   const state = engine.getState();
   const visibleFields = engine.getVisibleFields(section.id);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const sectionLayout = theme.layout?.sectionLayout ?? "card";
   const fieldGroups = groupFields(visibleFields);
 
+  useEffect(() => {
+    if (!autoFocus || !sectionRef.current) return;
+    const focusable = sectionRef.current.querySelector<HTMLElement>(
+      'input:not([type="hidden"]), select, textarea, button:not([type="button"]), [tabindex="0"]'
+    );
+    focusable?.focus();
+  }, [autoFocus, section.id]);
+
   return (
     <section
+      ref={sectionRef}
       className={cn(
         "flex flex-col gap-6",
         sectionVariants[sectionLayout] ?? sectionVariants.card,
@@ -93,8 +106,10 @@ export function SectionRenderer({
                 error={state.errors[field.id]}
                 touched={!!state.touched[field.id]}
                 disabled={engine.isFieldDisabled(field.id)}
+                readonly={engine.isFieldReadonly(field.id)}
                 onChange={(val) => engine.setValue(field.id, val)}
                 onBlur={() => engine.touchField(field.id)}
+                onFocus={() => engine.focusField(field.id)}
                 theme={theme}
                 registry={registry}
               />
@@ -118,8 +133,10 @@ export function SectionRenderer({
                   error={state.errors[field.id]}
                   touched={!!state.touched[field.id]}
                   disabled={engine.isFieldDisabled(field.id)}
+                  readonly={engine.isFieldReadonly(field.id)}
                   onChange={(val) => engine.setValue(field.id, val)}
                   onBlur={() => engine.touchField(field.id)}
+                  onFocus={() => engine.focusField(field.id)}
                   theme={theme}
                   registry={registry}
                 />

@@ -3,13 +3,13 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";
 
-export function NpsField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function NpsField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as NpsConfig | undefined;
   const current = value as number | undefined;
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label}>
+      <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label} onFocus={onFocus}>
         <div className="flex gap-0.5">
           {Array.from({ length: 11 }, (_, i) => {
             const isSelected = current === i;
@@ -34,7 +34,7 @@ export function NpsField({ field, value, error, touched, disabled, onChange, onB
                   "flex-1 h-10 rounded-md border text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
                   isSelected ? activeClass : colorClass,
                 )}
-                disabled={disabled}
+                disabled={disabled || readonly}
                 onClick={() => { onChange(i); onBlur(); }}
               >
                 {i}

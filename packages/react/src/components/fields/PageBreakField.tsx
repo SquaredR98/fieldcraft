@@ -1,7 +1,7 @@
 import type { PageBreakConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 
-export function PageBreakField({ field }: FieldProps) {
+export function PageBreakField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as PageBreakConfig | undefined;
   const label = config?.label ?? field.label;
 

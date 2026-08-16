@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 type FileEntry = { name: string; size: number; type: string };
 
-export function FileUploadField({ field, value, error, touched, disabled, onChange, onBlur }: FieldProps) {
+export function FileUploadField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as FileUploadConfig | undefined;
   const files = (value as FileEntry[]) ?? [];
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,15 +58,15 @@ export function FileUploadField({ field, value, error, touched, disabled, onChan
     <FieldWrapper field={field} error={error} touched={touched}>
       <div
         className={cn(
-          "flex flex-col items-center gap-2 rounded-lg border-2 border-dashed border-input p-6 transition-colors",
-          !disabled && "hover:border-ring hover:bg-accent/50",
-          disabled && "opacity-50 cursor-not-allowed",
+          "relative z-10 flex flex-col items-center gap-2 rounded-lg border-2 border-dashed border-input p-6 transition-colors",
+          !disabled && !readonly && "hover:border-ring hover:bg-accent/50",
+          (disabled || readonly) && "opacity-50 cursor-not-allowed",
         )}
         onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
         onDrop={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          if (!disabled) handleFiles(e.dataTransfer.files);
+          if (!disabled && !readonly) handleFiles(e.dataTransfer.files);
         }}
       >
         <input
@@ -75,15 +75,16 @@ export function FileUploadField({ field, value, error, touched, disabled, onChan
           className="sr-only"
           accept={accept}
           multiple={maxFiles > 1}
-          disabled={disabled}
+          disabled={disabled || readonly}
           onChange={(e) => handleFiles(e.target.files)}
+          onFocus={onFocus}
           aria-label={field.label}
         />
         <Button
           type="button"
           variant="outline"
           size="sm"
-          disabled={disabled || files.length >= maxFiles}
+          disabled={disabled || readonly || files.length >= maxFiles}
           onClick={() => inputRef.current?.click()}
         >
           Choose file{maxFiles > 1 ? "s" : ""}
@@ -111,7 +112,7 @@ export function FileUploadField({ field, value, error, touched, disabled, onChan
                 className="text-muted-foreground hover:text-destructive transition-colors shrink-0 p-0.5"
                 onClick={() => removeFile(i)}
                 aria-label={`Remove ${f.name}`}
-                disabled={disabled}
+                disabled={disabled || readonly}
               >
                 &times;
               </button>

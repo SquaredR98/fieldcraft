@@ -10,7 +10,7 @@ const variantStyles: Record<string, string> = {
   success: "border-green-500/30 bg-green-50 text-foreground",
 };
 
-export function InfoBlockField({ field }: FieldProps) {
+export function InfoBlockField({ field, value: _value, error: _error, touched: _touched, disabled: _disabled, readonly: _readonly, onChange: _onChange, onBlur: _onBlur, onFocus: _onFocus }: FieldProps) {
   const config = field.config as InfoBlockConfig | undefined;
   const variant = config?.variant ?? "info";
 
