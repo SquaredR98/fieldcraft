@@ -194,5 +194,16 @@ export function validateAll(
 
 /** Structural field types that don't hold values and shouldn't be validated */
 function isStructuralField(type: string): boolean {
-  return ["section_header", "info_block", "page_break"].includes(type);
+  return [
+    "section_header",
+    "info_block",
+    "page_break",
+    "welcome-screen",
+    "thank-you-screen",
+    "rich-text",
+    "image",
+    "video",
+    "divider",
+    "spacer",
+  ].includes(type);
 }

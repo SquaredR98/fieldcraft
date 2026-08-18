@@ -76,7 +76,29 @@
 }
 
 .fc-tpl-detail__panel-label {
-  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted sticky top-0 z-10 bg-fc-surface px-5 py-3 border-b border-fc-rule;
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted sticky top-0 z-10 bg-fc-surface px-5 py-3 border-b border-fc-rule flex items-center justify-between;
+}
+
+/* ── Display mode toggle ── */
+.fc-tpl-detail__mode-toggle {
+  @apply flex gap-0 border border-fc-rule rounded-[3px] overflow-hidden;
+}
+
+.fc-tpl-detail__mode-btn {
+  @apply px-2.5 py-1 text-[10px] tracking-fc-mono uppercase text-fc-muted bg-transparent border-0 cursor-pointer;
+  transition: color var(--motion-hover), background-color var(--motion-hover);
+}
+
+.fc-tpl-detail__mode-btn:not(:last-child) {
+  @apply border-r border-fc-rule;
+}
+
+.fc-tpl-detail__mode-btn:hover {
+  @apply text-fc-ink bg-fc-wash;
+}
+
+.fc-tpl-detail__mode-btn--active {
+  @apply text-fc-teal bg-fc-wash;
 }
 
 /* Schema panel */
@@ -117,7 +139,7 @@
   }
 
   .fc-tpl-detail__panel-label {
-    @apply static bg-transparent px-0 py-0 border-b-0 mb-3;
+    @apply static bg-transparent px-0 py-0 border-b-0 mb-3 flex-wrap gap-2;
   }
 
   .fc-tpl-detail__tabs {

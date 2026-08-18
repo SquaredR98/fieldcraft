@@ -147,7 +147,7 @@ const prefillConfig = z.object({
 });
 
 const formSettings = z.object({
-  displayMode: z.enum(["classic", "stepped"]).optional(),
+  displayMode: z.enum(["classic", "stepped", "conversational"]).optional(),
   allowDraftSave: z.boolean().optional(),
   draftStorage: z.enum(["local", "server", "both"]).optional(),
   draftTtlHours: z.number().optional(),

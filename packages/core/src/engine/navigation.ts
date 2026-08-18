@@ -1,5 +1,19 @@
-import type { FormEngineSchema, Section } from "../types/schema";
+import type { FormEngineSchema, Question, Section } from "../types/schema";
 import { evaluate } from "./condition-evaluator";
+
+/** Structural field types that are not user-input questions. */
+const STRUCTURAL_TYPES = new Set([
+  "section_header",
+  "info_block",
+  "page_break",
+  "welcome-screen",
+  "thank-you-screen",
+  "rich-text",
+  "image",
+  "video",
+  "divider",
+  "spacer",
+]);
 
 export type NavigationState = {
   currentSectionId: string;
@@ -10,6 +24,13 @@ export type NavigationState = {
   canGoPrev: boolean;
   totalVisibleSections: number;
   progressPercent: number;
+};
+
+/** A visible input question with its parent section context. */
+export type VisibleQuestion = {
+  question: Question;
+  sectionId: string;
+  globalIndex: number;
 };
 
 /**
@@ -152,6 +173,107 @@ export function createNavigation(schema: FormEngineSchema) {
     return visibleIds[0] ?? schema.sections[0]?.id ?? "";
   }
 
+  // ── Question-level navigation (for conversational mode) ──
+
+  /**
+   * Get all visible input questions across all visible sections,
+   * in schema order, excluding structural fields and hidden questions.
+   */
+  function getVisibleQuestions(values: Record<string, unknown>): VisibleQuestion[] {
+    const visibleSections = getVisibleSections(values);
+    const result: VisibleQuestion[] = [];
+    let globalIndex = 0;
+
+    for (const section of visibleSections) {
+      for (const question of section.questions) {
+        if (STRUCTURAL_TYPES.has(question.type)) continue;
+        if (question.showIf && !evaluate(question.showIf, values)) continue;
+        result.push({ question, sectionId: section.id, globalIndex });
+        globalIndex++;
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Compute question-level navigation state.
+   */
+  function computeQuestionState(
+    currentQuestionId: string,
+    values: Record<string, unknown>,
+  ) {
+    const visibleQs = getVisibleQuestions(values);
+    const total = visibleQs.length;
+
+    if (total === 0) {
+      return {
+        currentQuestionId: "",
+        currentQuestionIndex: 0,
+        totalVisibleQuestions: 0,
+        questionProgressPercent: 0,
+        canGoNextQuestion: false,
+        canGoPrevQuestion: false,
+      };
+    }
+
+    const currentIdx = visibleQs.findIndex((vq) => vq.question.id === currentQuestionId);
+    const effectiveIdx = currentIdx >= 0 ? currentIdx : 0;
+    const effectiveId = visibleQs[effectiveIdx].question.id;
+
+    const progressPercent = total > 0
+      ? Math.round(((effectiveIdx + 1) / total) * 100)
+      : 0;
+
+    return {
+      currentQuestionId: effectiveId,
+      currentQuestionIndex: effectiveIdx,
+      totalVisibleQuestions: total,
+      questionProgressPercent: Math.min(progressPercent, 100),
+      canGoNextQuestion: effectiveIdx < total - 1,
+      canGoPrevQuestion: effectiveIdx > 0,
+    };
+  }
+
+  /**
+   * Resolve the next question ID after the current question.
+   * Returns the next visible input question in schema order, or null if at the end.
+   */
+  function resolveNextQuestionId(
+    currentQuestionId: string,
+    values: Record<string, unknown>,
+  ): VisibleQuestion | null {
+    const visibleQs = getVisibleQuestions(values);
+    const currentIdx = visibleQs.findIndex((vq) => vq.question.id === currentQuestionId);
+    if (currentIdx >= 0 && currentIdx < visibleQs.length - 1) {
+      return visibleQs[currentIdx + 1];
+    }
+    return null;
+  }
+
+  /**
+   * Resolve the previous question ID before the current question.
+   */
+  function resolvePrevQuestionId(
+    currentQuestionId: string,
+    values: Record<string, unknown>,
+  ): VisibleQuestion | null {
+    const visibleQs = getVisibleQuestions(values);
+    const currentIdx = visibleQs.findIndex((vq) => vq.question.id === currentQuestionId);
+    if (currentIdx > 0) {
+      return visibleQs[currentIdx - 1];
+    }
+    return null;
+  }
+
+  /**
+   * Get the initial question ID (first visible input question).
+   */
+  function getInitialQuestionId(values: Record<string, unknown>): string {
+    const visibleQs = getVisibleQuestions(values);
+    return visibleQs[0]?.question.id ?? "";
+  }
+
   return {
     getVisibleSectionIds,
     getVisibleSections,
@@ -161,5 +283,11 @@ export function createNavigation(schema: FormEngineSchema) {
     markVisited,
     restoreVisited,
     getInitialSectionId,
+    // Question-level navigation
+    getVisibleQuestions,
+    computeQuestionState,
+    resolveNextQuestionId,
+    resolvePrevQuestionId,
+    getInitialQuestionId,
   };
 }

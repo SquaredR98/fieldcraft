@@ -185,6 +185,24 @@ export type FormEngine = {
    */
   jumpTo(sectionId: string): void;
 
+  /**
+   * Advances to the next visible input question (for conversational mode).
+   * Validates the current question before advancing. Automatically crosses
+   * section boundaries. No-op if already on the last question.
+   *
+   * @returns `true` if navigation succeeded, `false` if blocked by validation or at the end.
+   * @since 1.5.0
+   */
+  nextQuestion(): boolean;
+  /**
+   * Navigates to the previous visible input question (for conversational mode).
+   * Automatically crosses section boundaries. No-op if on the first question.
+   *
+   * @returns `true` if navigation succeeded, `false` if already at the first question.
+   * @since 1.5.0
+   */
+  prevQuestion(): boolean;
+
   // ---- Values ----
 
   /**
@@ -247,6 +265,15 @@ export type FormEngine = {
 
   /** Returns all sections whose `showIf` condition evaluates to `true` (or have no condition). */
   getVisibleSections(): Section[];
+
+  /**
+   * Returns all visible input questions across all visible sections, in schema order.
+   * Excludes structural fields (dividers, headers, etc.) and questions hidden by `showIf`.
+   * Each entry includes the question, its parent section ID, and its global index.
+   *
+   * @since 1.5.0
+   */
+  getVisibleQuestions(): import("./navigation").VisibleQuestion[];
   /**
    * Returns the visible questions within a specific section.
    * Questions with a `showIf` that evaluates to `false` are excluded.
@@ -541,6 +568,14 @@ export function createEngine(
       stateManager.jumpTo(sectionId);
     },
 
+    nextQuestion() {
+      return stateManager.nextQuestion();
+    },
+
+    prevQuestion() {
+      return stateManager.prevQuestion();
+    },
+
     setValue(fieldId, value) {
       assertNotDestroyed();
       if (!hasStarted) {
@@ -584,6 +619,11 @@ export function createEngine(
       return schema.sections.filter(
         (s) => !s.showIf || evaluate(s.showIf, state.values),
       );
+    },
+
+    getVisibleQuestions() {
+      const state = stateManager.getState();
+      return stateManager.navigation.getVisibleQuestions(state.values);
     },
 
     getVisibleFields(sectionId) {

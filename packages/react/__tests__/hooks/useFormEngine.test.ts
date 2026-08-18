@@ -52,6 +52,11 @@ describe("useFormEngine", () => {
   it("navigation works through hook", () => {
     const { result } = renderHook(() => useFormEngine(makeSchema()));
 
+    // Fill in required field before navigating (nextSection validates)
+    act(() => {
+      result.current.setValue("name", "Jane");
+    });
+
     act(() => {
       result.current.nextSection();
     });

@@ -49,6 +49,21 @@ export type FormState = {
   /** Whether all required fields in the current section pass validation. */
   isCurrentSectionValid: boolean;
 
+  // ── Question-level navigation (for conversational mode) ──
+
+  /** ID of the currently active question (conversational mode). */
+  currentQuestionId: string;
+  /** Zero-based index of the current question among all visible questions across all sections. */
+  currentQuestionIndex: number;
+  /** Total number of visible input questions (excludes structural fields hidden by showIf). */
+  totalVisibleQuestions: number;
+  /** Question-level completion percentage (0–100). More granular than section-based progress. */
+  questionProgressPercent: number;
+  /** Whether the user can advance to the next question. */
+  canGoNextQuestion: boolean;
+  /** Whether the user can go back to the previous question. */
+  canGoPrevQuestion: boolean;
+
   /** Scoring results keyed by scoring field ID. Used by scoring-type fields. */
   scores: Record<string, number>;
   /** Aggregate score across all scoring fields. */

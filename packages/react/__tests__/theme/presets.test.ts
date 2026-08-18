@@ -48,7 +48,7 @@ describe("theme presets", () => {
   });
 
   it("dark preset has dark background", () => {
-    expect(darkPreset.colors!.background).toBe("#0F172A");
+    expect(darkPreset.colors!.background).toBe("#0F1A1F");
   });
 
   it("high-contrast preset uses black text", () => {

@@ -43,6 +43,7 @@ export function createStateManager(config: StateManagerConfig) {
 
   // Initialize state
   const initialSectionId = navigation.getInitialSectionId(config.initialValues);
+  const initialQuestionId = navigation.getInitialQuestionId(config.initialValues);
   navigation.markVisited(initialSectionId);
 
   let state: FormState = {
@@ -67,6 +68,14 @@ export function createStateManager(config: StateManagerConfig) {
     canGoNext: false,
     canGoPrev: false,
     isCurrentSectionValid: true,
+
+    // Question-level navigation
+    currentQuestionId: initialQuestionId,
+    currentQuestionIndex: 0,
+    totalVisibleQuestions: 0,
+    questionProgressPercent: 0,
+    canGoNextQuestion: false,
+    canGoPrevQuestion: false,
 
     scores: {},
     totalScore: undefined,
@@ -280,6 +289,82 @@ export function createStateManager(config: StateManagerConfig) {
     return true;
   }
 
+  // ── Question-level navigation ──
+
+  function nextQuestion(): boolean {
+    const next = navigation.resolveNextQuestionId(state.currentQuestionId, state.values);
+    if (!next) return false;
+
+    // Validate the current question before advancing
+    const currentQ = questionMap.get(state.currentQuestionId);
+    if (currentQ && !isStructuralField(currentQ.type)) {
+      const errors = validateField(
+        currentQ,
+        state.values[currentQ.id],
+        state.values,
+        validatorRegistry,
+      );
+      if (errors.length > 0) {
+        state = {
+          ...state,
+          errors: { ...state.errors, [currentQ.id]: errors },
+          touched: { ...state.touched, [currentQ.id]: true },
+        };
+        notify();
+        return false;
+      }
+    }
+
+    // Move to the next question
+    state = { ...state, currentQuestionId: next.question.id };
+
+    // If the next question is in a different section, navigate the section too
+    if (next.sectionId !== state.currentSectionId) {
+      navigation.markVisited(next.sectionId);
+      const navState = navigation.computeState(next.sectionId, state.values);
+      state = {
+        ...state,
+        currentSectionId: navState.currentSectionId,
+        currentSectionIndex: navState.currentSectionIndex,
+        visitedSectionIds: navState.visitedSectionIds,
+        canGoNext: navState.canGoNext,
+        canGoPrev: navState.canGoPrev,
+        progressPercent: navState.progressPercent,
+      };
+      config.onSectionChange?.(state.currentSectionId, state.currentSectionIndex);
+    }
+
+    recomputeDerivedState();
+    notify();
+    return true;
+  }
+
+  function prevQuestion(): boolean {
+    const prev = navigation.resolvePrevQuestionId(state.currentQuestionId, state.values);
+    if (!prev) return false;
+
+    state = { ...state, currentQuestionId: prev.question.id };
+
+    // If the prev question is in a different section, navigate the section too
+    if (prev.sectionId !== state.currentSectionId) {
+      const navState = navigation.computeState(prev.sectionId, state.values);
+      state = {
+        ...state,
+        currentSectionId: navState.currentSectionId,
+        currentSectionIndex: navState.currentSectionIndex,
+        visitedSectionIds: navState.visitedSectionIds,
+        canGoNext: navState.canGoNext,
+        canGoPrev: navState.canGoPrev,
+        progressPercent: navState.progressPercent,
+      };
+      config.onSectionChange?.(state.currentSectionId, state.currentSectionIndex);
+    }
+
+    recomputeDerivedState();
+    notify();
+    return true;
+  }
+
   function setSubmitting(submitting: boolean): void {
     state = { ...state, isSubmitting: submitting };
     notify();
@@ -384,6 +469,12 @@ export function createStateManager(config: StateManagerConfig) {
       }
     }
 
+    // Compute question-level navigation state
+    const questionNav = navigation.computeQuestionState(
+      state.currentQuestionId,
+      state.values,
+    );
+
     state = {
       ...state,
       currentSectionId: navState.currentSectionId,
@@ -395,6 +486,13 @@ export function createStateManager(config: StateManagerConfig) {
       totalVisibleSections: navState.totalVisibleSections,
       progressPercent: navState.progressPercent,
       isCurrentSectionValid,
+      // Question-level navigation
+      currentQuestionId: questionNav.currentQuestionId,
+      currentQuestionIndex: questionNav.currentQuestionIndex,
+      totalVisibleQuestions: questionNav.totalVisibleQuestions,
+      questionProgressPercent: questionNav.questionProgressPercent,
+      canGoNextQuestion: questionNav.canGoNextQuestion,
+      canGoPrevQuestion: questionNav.canGoPrevQuestion,
     };
   }
 
@@ -602,6 +700,8 @@ export function createStateManager(config: StateManagerConfig) {
     nextSection,
     prevSection,
     jumpTo,
+    nextQuestion,
+    prevQuestion,
     setSubmitting,
     setSubmitted,
     setSubmitAttempted,
@@ -620,7 +720,18 @@ export function createStateManager(config: StateManagerConfig) {
 // ---- Helpers ----
 
 function isStructuralField(type: string): boolean {
-  return ["section_header", "info_block", "page_break"].includes(type);
+  return [
+    "section_header",
+    "info_block",
+    "page_break",
+    "welcome-screen",
+    "thank-you-screen",
+    "rich-text",
+    "image",
+    "video",
+    "divider",
+    "spacer",
+  ].includes(type);
 }
 
 /**

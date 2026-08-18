@@ -21,6 +21,8 @@ import { CompletionScreen } from "./CompletionScreen";
 import { DraftResumePrompt } from "./DraftResumePrompt";
 import { FormErrorBoundary } from "./FormErrorBoundary";
 import { FieldRegistryProvider } from "../registry/FieldRegistryContext";
+import { ClassicModeRenderer } from "./ClassicModeRenderer";
+import { ConversationalRenderer } from "./conversational/ConversationalRenderer";
 import { cn } from "../utils/cn";
 
 export type FormEngineRendererProps = {
@@ -100,6 +102,7 @@ export function FormEngineRenderer({
   });
 
   const { state } = engine;
+  const displayMode = schema.settings?.displayMode ?? "stepped";
 
   // Notify parent when engine is ready
   useEffect(() => {
@@ -166,6 +169,136 @@ export function FormEngineRenderer({
     );
   }
 
+  return (
+    <FormEngineThemeProvider theme={theme}>
+      <div className={cn("flex flex-col gap-8", className)} data-display-mode={displayMode}>
+        <FieldRegistryProvider registry={registry}>
+          <FormErrorBoundary>
+            {displayMode === "classic" && (
+              <ClassicModeContent
+                engine={engine}
+                state={state}
+                registry={registry}
+                fieldLabels={fieldLabels}
+                autoFocus={autoFocus}
+                submitLabel={submitLabel}
+                onSubmit={handleSubmit}
+              />
+            )}
+
+            {displayMode === "stepped" && (
+              <SteppedModeContent
+                engine={engine}
+                state={state}
+                registry={registry}
+                fieldLabels={fieldLabels}
+                autoFocus={autoFocus}
+                prevLabel={prevLabel ?? schema.settings?.navigation?.backLabel}
+                nextLabel={nextLabel ?? schema.settings?.navigation?.nextLabel}
+                submitLabel={submitLabel ?? schema.settings?.submitButton?.label}
+                onSubmit={handleSubmit}
+                progressPosition={theme?.layout?.progressPosition}
+                showProgress={schema.settings?.showProgress}
+                showBack={schema.settings?.navigation?.showBack}
+              />
+            )}
+
+            {displayMode === "conversational" && (
+              <ConversationalModeContent
+                engine={engine}
+                registry={registry}
+                autoFocus={autoFocus}
+                prevLabel={prevLabel}
+                nextLabel={nextLabel}
+                submitLabel={submitLabel}
+                onSubmit={handleSubmit}
+              />
+            )}
+          </FormErrorBoundary>
+        </FieldRegistryProvider>
+      </div>
+    </FormEngineThemeProvider>
+  );
+}
+
+// ── Mode-specific content components ──
+
+function ClassicModeContent({
+  engine,
+  state,
+  registry,
+  fieldLabels,
+  autoFocus,
+  submitLabel = "Submit",
+  onSubmit,
+}: {
+  engine: FormEngine;
+  state: import("@squaredr/fieldcraft-core").FormState;
+  registry: FieldRegistry;
+  fieldLabels: Record<string, string>;
+  autoFocus?: boolean;
+  submitLabel?: string;
+  onSubmit: () => void;
+}) {
+  const theme = useTheme();
+  return (
+    <>
+      {state.submitAttempted && !state.isSubmitted && (
+        <ErrorSummary errors={state.errors} fieldLabels={fieldLabels} />
+      )}
+      <ClassicModeRenderer
+        engine={engine}
+        theme={theme}
+        registry={registry}
+        autoFocus={autoFocus}
+      />
+      <div className="flex justify-end pt-2">
+        <button
+          type="button"
+          onClick={onSubmit}
+          disabled={state.isSubmitting}
+          className={cn(
+            "px-6 py-2 text-sm rounded-md",
+            "bg-primary text-primary-foreground",
+            "hover:bg-primary/90 transition-colors",
+            state.isSubmitting && "opacity-50 cursor-not-allowed",
+          )}
+        >
+          {state.isSubmitting ? "Submitting\u2026" : submitLabel}
+        </button>
+      </div>
+    </>
+  );
+}
+
+function SteppedModeContent({
+  engine,
+  state,
+  registry,
+  fieldLabels,
+  autoFocus,
+  prevLabel,
+  nextLabel,
+  submitLabel,
+  onSubmit,
+  progressPosition,
+  showProgress = true,
+  showBack = true,
+}: {
+  engine: FormEngine;
+  state: import("@squaredr/fieldcraft-core").FormState;
+  registry: FieldRegistry;
+  fieldLabels: Record<string, string>;
+  autoFocus?: boolean;
+  prevLabel?: string;
+  nextLabel?: string;
+  submitLabel?: string;
+  onSubmit: () => void;
+  progressPosition?: string;
+  showProgress?: boolean;
+  showBack?: boolean;
+}) {
+  const theme = useTheme();
   const visibleSections = engine.getVisibleSections();
   const currentSection = visibleSections.find(
     (s) => s.id === state.currentSectionId,
@@ -174,73 +307,73 @@ export function FormEngineRenderer({
     state.currentSectionIndex === state.totalVisibleSections - 1;
 
   return (
-    <FormEngineThemeProvider theme={theme}>
-      <div className={cn("flex flex-col gap-8", className)}>
-        {theme?.layout?.progressPosition !== "none" && (
-          <ProgressBar
-            percent={state.progressPercent}
-            currentStep={state.currentSectionIndex + 1}
-            totalSteps={state.totalVisibleSections}
-          />
-        )}
-
-        {state.submitAttempted && !state.isSubmitted && (
-          <ErrorSummary
-            errors={state.errors}
-            fieldLabels={fieldLabels}
-          />
-        )}
-
-        <FieldRegistryProvider registry={registry}>
-          <FormErrorBoundary>
-            {currentSection && (
-              <FormEngineRendererInner
-                section={currentSection}
-                engine={engine}
-                registry={registry}
-                autoFocus={autoFocus}
-              />
-            )}
-          </FormErrorBoundary>
-        </FieldRegistryProvider>
-
-        <NavigationButtons
-          canGoPrev={state.canGoPrev}
-          canGoNext={state.canGoNext}
-          isLastSection={isLastSection}
-          isSubmitting={state.isSubmitting}
-          onPrev={() => engine.prevSection()}
-          onNext={() => engine.nextSection()}
-          onSubmit={handleSubmit}
-          prevLabel={prevLabel}
-          nextLabel={nextLabel}
-          submitLabel={submitLabel}
+    <div className="fc-mode-stepped flex flex-col gap-6">
+      {showProgress && progressPosition !== "none" && (
+        <ProgressBar
+          percent={state.progressPercent}
+          currentStep={state.currentSectionIndex + 1}
+          totalSteps={state.totalVisibleSections}
         />
-      </div>
-    </FormEngineThemeProvider>
+      )}
+
+      {state.submitAttempted && !state.isSubmitted && (
+        <ErrorSummary errors={state.errors} fieldLabels={fieldLabels} />
+      )}
+
+      {currentSection && (
+        <SectionRenderer
+          section={currentSection}
+          engine={engine}
+          theme={theme}
+          registry={registry}
+          autoFocus={autoFocus}
+        />
+      )}
+
+      <NavigationButtons
+        canGoPrev={showBack ? state.canGoPrev : false}
+        canGoNext={state.canGoNext}
+        isLastSection={isLastSection}
+        isSubmitting={state.isSubmitting}
+        onPrev={() => engine.prevSection()}
+        onNext={() => engine.nextSection()}
+        onSubmit={onSubmit}
+        prevLabel={prevLabel}
+        nextLabel={nextLabel}
+        submitLabel={submitLabel}
+      />
+    </div>
   );
 }
 
-/** Inner renderer uses theme context. */
-function FormEngineRendererInner({
-  section,
+function ConversationalModeContent({
   engine,
   registry,
   autoFocus,
+  prevLabel,
+  nextLabel,
+  submitLabel,
+  onSubmit,
 }: {
-  section: import("@squaredr/fieldcraft-core").Section;
   engine: FormEngine;
   registry: FieldRegistry;
   autoFocus?: boolean;
+  prevLabel?: string;
+  nextLabel?: string;
+  submitLabel?: string;
+  onSubmit: () => void;
 }) {
   const theme = useTheme();
   return (
-    <SectionRenderer
-      section={section}
+    <ConversationalRenderer
       engine={engine}
       theme={theme}
       registry={registry}
       autoFocus={autoFocus}
+      prevLabel={prevLabel}
+      nextLabel={nextLabel}
+      submitLabel={submitLabel}
+      onSubmit={onSubmit}
     />
   );
 }

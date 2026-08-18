@@ -226,11 +226,60 @@ Items marked 🚫 are deferred to future releases (post-Pro).
 |---|--------|------|---------|
 | B4.01-B4.10 | 🚫 | Dark theme, minimal theme, compact theme, accessible theme, CSS docs, ThemeProvider, useTheme, override support, print styles, responsive breakpoints | patch/minor |
 
-### B5. Layout & UX Components (🚫 Deferred)
+### B5. Display Modes & Layout (🔄 Unblocks Pro)
+
+> **Priority: HIGH.** Pro FormBuilder preview depends on the renderer supporting all 3 display modes.
+> Must publish core 1.5.0 + react 1.4.0 before Pro can use these.
+
+#### B5-A. Core Engine — Question-Level Navigation (core 1.5.0)
+
+| # | Status | Item |
+|---|--------|------|
+| B5.A01 | ⬚ | Add `currentQuestionId`, `currentQuestionIndex`, `totalVisibleQuestions` to `NavigationState` |
+| B5.A02 | ⬚ | Add `resolveNextQuestionId()` and `resolvePrevQuestionId()` to navigation module |
+| B5.A03 | ⬚ | Add `nextQuestion()` and `prevQuestion()` methods to state-manager / engine |
+| B5.A04 | ⬚ | Add question-level progress: `questionProgressPercent` to FormState |
+| B5.A05 | ⬚ | Validate single question on `nextQuestion()` (not entire section) |
+| B5.A06 | ⬚ | Update `displayMode` Zod enum in schema-validator to accept `conversational` |
+| B5.A07 | ⬚ | Export question-level nav types from core index |
+| B5.A08 | ⬚ | Tests for question-level navigation (next/prev/boundary/showIf skip) |
+| B5.A09 | ⬚ | Bump core to 1.5.0, update CHANGELOG |
+
+#### B5-B. React Renderer — Display Mode Branching (react 1.4.0)
+
+| # | Status | Item |
+|---|--------|------|
+| B5.B01 | ⬚ | Refactor `FormEngineRenderer` — read `schema.settings?.displayMode` and branch |
+| B5.B02 | ⬚ | `classic` mode — render ALL visible sections at once, no navigation buttons, validate on submit |
+| B5.B03 | ⬚ | `stepped` mode — current behavior (one section at a time), extract into clean component |
+| B5.B04 | ⬚ | `conversational` mode — one question at a time, centered layout, animated transitions |
+| B5.B05 | ⬚ | Conversational: CSS transitions for question enter/exit (slide + fade, respect `prefers-reduced-motion`) |
+| B5.B06 | ⬚ | Conversational: auto-advance on selection fields (yes/no, radio, dropdown) |
+| B5.B07 | ⬚ | Conversational: keyboard Enter to advance on text/number fields |
+| B5.B08 | ⬚ | Respect `settings.showProgress` — hide progress bar when false |
+| B5.B09 | ⬚ | Respect `settings.progressStyle` — bar (current), steps (step indicators), percentage (text) |
+| B5.B10 | ⬚ | Respect `settings.navigation` — showBack, showSectionList, custom labels, allowSkip |
+| B5.B11 | ⬚ | CSS: `.fc-mode-classic`, `.fc-mode-stepped`, `.fc-mode-conversational` on form root |
+| B5.B12 | ⬚ | Bump react to 1.4.0, update CHANGELOG |
+
+#### B5-C. Publish & Pro Integration
+
+| # | Status | Item |
+|---|--------|------|
+| B5.C01 | ⬚ | Build + test core (all existing tests must pass + new navigation tests) |
+| B5.C02 | ⬚ | Build + test react |
+| B5.C03 | ⬚ | Publish core 1.5.0 to npm |
+| B5.C04 | ⬚ | Publish react 1.4.0 to npm |
+| B5.C05 | ⬚ | Update Pro peer deps to core ^1.5.0, react ^1.4.0 |
+| B5.C06 | ⬚ | Add display mode selector to Pro FormBuilder settings panel |
+| B5.C07 | ⬚ | Verify FormPreviewPanel renders correctly in all 3 modes |
+| B5.C08 | ⬚ | Bump Pro version, update Pro CHANGELOG |
+
+#### B5-D. Remaining Layout Components (Deferred)
 
 | # | Status | Item | Version |
 |---|--------|------|---------|
-| B5.01-B5.10 | 🚫 | Conversational renderer, auto-advance, keyboard nav, progress bar, step indicator, collapsible sections, submit confirmation, form result, error summary, unsaved changes warning | patch/minor |
+| B5.D01-D05 | 🚫 | Collapsible sections, submit confirmation, form result screen enhancements, unsaved changes warning, section list sidebar | patch/minor |
 
 ### B6. React Testing (🚫 Deferred)
 
@@ -362,7 +411,31 @@ Work sequentially through these groups:
 
 ## Version Target
 
+### v1.4.x (shipped)
+
 | Package | From | To |
 |---------|------|----|
-| `@squaredr/fieldcraft-core` | 1.3.14 | 1.4.0 |
+| `@squaredr/fieldcraft-core` | 1.3.14 | 1.4.1 |
 | `@squaredr/fieldcraft-react` | 1.2.12 | 1.3.0 |
+
+### v1.5.0 (display modes — next)
+
+| Package | From | To | Change |
+|---------|------|----|--------|
+| `@squaredr/fieldcraft-core` | 1.4.1 | 1.5.0 | Question-level navigation, displayMode enum fix |
+| `@squaredr/fieldcraft-react` | 1.3.0 | 1.4.0 | Classic/stepped/conversational renderer branching |
+
+### Execution Order for v1.5.0
+
+| Step | Items | Area |
+|------|-------|------|
+| 1 | B5.A01–A05 | Core: question-level navigation state + methods |
+| 2 | B5.A06–A07 | Core: schema validator fix + exports |
+| 3 | B5.A08 | Core: tests for question navigation |
+| 4 | B5.A09 | Core: version bump 1.5.0 + changelog |
+| 5 | B5.B01–B03 | React: renderer refactor, classic mode, stepped mode extraction |
+| 6 | B5.B04–B07 | React: conversational mode (one-at-a-time, transitions, auto-advance, keyboard) |
+| 7 | B5.B08–B10 | React: settings support (progress, navigation config) |
+| 8 | B5.B11–B12 | React: CSS mode classes + version bump 1.4.0 + changelog |
+| 9 | B5.C01–C04 | Build, test, publish both packages |
+| 10 | B5.C05–C08 | Pro: update peer deps, add mode selector, verify preview, bump Pro |

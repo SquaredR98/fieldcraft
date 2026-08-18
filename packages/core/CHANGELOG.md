@@ -5,6 +5,54 @@ All notable changes to `@squaredr/fieldcraft-core` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-08-18
+
+### Added
+- **Question-level navigation** for conversational display mode
+  - `nextQuestion()` / `prevQuestion()` engine methods with per-question validation
+  - `getVisibleQuestions()` engine method returns all visible input questions across sections
+  - `VisibleQuestion` type exported from core (question + sectionId + globalIndex)
+  - `NavigationState` extended with question-level fields
+  - `FormState` extended: `currentQuestionId`, `currentQuestionIndex`, `totalVisibleQuestions`, `questionProgressPercent`, `canGoNextQuestion`, `canGoPrevQuestion`
+  - Question navigation crosses section boundaries automatically
+- `"conversational"` added to `displayMode` Zod enum in schema validator
+- 20 new tests for question-level navigation (getVisibleQuestions, computeQuestionState, resolveNextQuestionId, resolvePrevQuestionId, getInitialQuestionId)
+
+### Fixed
+- `isStructuralField()` now correctly identifies all 10 non-input types: `section_header`, `info_block`, `page_break`, `welcome-screen`, `thank-you-screen`, `rich-text`, `image`, `video`, `divider`, `spacer` (was only checking 3)
+
+## [1.4.1] - 2026-08-10
+
+### Added
+- `beforeSubmit` hook in EngineOptions — runs after validation, before adapters
+- `onEvent` analytics callback with `FieldCraftEvent` discriminated union
+- `onValidationComplete` callback in EngineOptions
+- `resetField()` and `resetForm()` engine methods
+- `getFieldState()` and `getChangedFields()` engine methods
+- `focusField()` for analytics timing
+- `exportFormData()` utility (JSON, CSV, flat formats)
+- Schema utilities: `cloneSchema`, `mergeSchemas`, `createEmptySchema`, `schemaDiff`, `migrateSchema`
+- Form utilities: `flattenFormValues`, `unflattenFormValues`
+- Response utilities: `validateResponse`, `formatResponseValues`, `flattenResponse`
+- Analytics emitter with 10 event types
+- Draft auto-save interval and schema versioning
+- `readonly` field state support
+- `metadata` on FormEngineSchema and EngineOptions
+- `/validators` and `/testing` subpath exports
+
+## [1.4.0] - 2026-07-28
+
+### Added
+- New validators: `integer`, `positiveNumber`, `alphanumeric`, `noSpecialChars`, `minItems`, `maxItems`
+- New condition operators: `isEmpty`, `isNotEmpty`, `matchesRegex`, `dateAfter`, `dateBefore`, `arrayContains`, `arrayNotContains`, `lengthGreaterThan`, `lengthLessThan`
+- Expression functions: `UPPER`, `LOWER`, `TRIM`, `LEN`, `CONCAT`, `TODAY`, `DATEDIFF`, `DATEADD`, `IF`
+- `applyIf` on ValidationRule for conditional validation
+- `compareToField` validator
+- `validateOn` on Question type
+- `severity` on ValidationRule (`error` | `warning` | `info`)
+- HTTP adapter enhancements: `onRetry`, `timeout`, `transformResponse`, `healthCheck`, `invalidateCache`
+- `FormAdapter` interface for custom adapter authors
+
 ## [1.3.11] - 2026-06-26
 
 ### Added
@@ -131,6 +179,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schema validator for runtime schema structure checks
 - Full TypeScript type definitions for `FormSchema`, `FieldConfig`, `SectionConfig`, `ConditionGroup`, `ValidationRule`
 
+[1.5.0]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.5.0
+[1.4.1]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.4.1
+[1.4.0]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.4.0
 [1.3.11]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.11
 [1.3.10]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.10
 [1.3.9]: https://www.npmjs.com/package/@squaredr/fieldcraft-core/v/1.3.9
