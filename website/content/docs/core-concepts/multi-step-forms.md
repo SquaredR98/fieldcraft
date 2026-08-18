@@ -9,9 +9,9 @@ The `settings.displayMode` property controls how sections are rendered:
 
 | Mode | Behaviour |
 |------|-----------|
-| `classic` | All visible sections render on one scrollable page. No navigation buttons. |
-| `stepped` | One section at a time. Next/Back buttons. Progress indicator. |
-| `conversational` | One question at a time. Typeform-style. |
+| `classic` | All visible sections render on one scrollable page. A single Submit button at the bottom. |
+| `stepped` | One section at a time. Next/Back buttons. Progress bar. **(default)** |
+| `conversational` | One question at a time. Enter key to advance. Question-level progress. |
 
 ```ts
 settings: {
@@ -20,6 +20,8 @@ settings: {
   progressStyle: 'bar',
 }
 ```
+
+For a full guide on each mode with examples, see [Display modes](/docs/core-concepts/display-modes).
 
 ## Navigation
 

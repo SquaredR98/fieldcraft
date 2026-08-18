@@ -82,7 +82,9 @@ All field components use semantic `.fc-*` CSS classes (FieldCraft namespace) def
 
 | Component | Description |
 |-----------|-------------|
-| `FormEngineRenderer` | Full form renderer — pass a schema and get a working form |
+| `FormEngineRenderer` | Full form renderer — pass a schema and get a working form. Supports `stepped`, `classic`, and `conversational` display modes via `schema.settings.displayMode` |
+| `ClassicModeRenderer` | Renders all sections at once in a scrollable layout |
+| `ConversationalRenderer` | One question at a time with Enter key support |
 | `SectionRenderer` | Renders a single section of fields |
 | `FieldRenderer` | Renders a single field by type |
 | `ProgressBar` | Multi-section progress indicator |
@@ -164,6 +166,45 @@ import { FormEngineRenderer, darkPreset } from "@squaredr/fieldcraft-react";
 
 Available presets: `cleanPreset`, `modernPreset`, `darkPreset`, `highContrastPreset`, `clinicalPreset`, `playfulPreset`
 
+## Display Modes
+
+Control how the form is presented by setting `displayMode` in your schema settings:
+
+```typescript
+const schema: FormEngineSchema = {
+  id: "my-form",
+  version: "1.0.0",
+  title: "My Form",
+  settings: {
+    displayMode: "conversational", // "stepped" | "classic" | "conversational"
+  },
+  // ...
+};
+```
+
+| Mode | Behavior |
+|------|----------|
+| `stepped` (default) | One section at a time with Back/Next navigation and progress bar |
+| `classic` | All sections rendered at once in a scrollable layout with a single Submit button |
+| `conversational` | One question at a time with Enter key to advance, auto-focus, and question-level progress |
+
+Additional settings for stepped mode:
+
+```typescript
+settings: {
+  displayMode: "stepped",
+  showProgress: true,           // show/hide progress bar
+  navigation: {
+    showBack: true,             // show/hide back button
+    backLabel: "Previous",      // custom back button label
+    nextLabel: "Continue",      // custom next button label
+  },
+  submitButton: {
+    label: "Send",              // custom submit button label
+  },
+}
+```
+
 ## Custom Field Registry
 
 Override or add field components:
@@ -182,7 +223,7 @@ const customRegistry = mergeRegistries(defaultRegistry, {
 
 - `react` ^18 || ^19
 - `react-dom` ^18 || ^19
-- `@squaredr/fieldcraft-core` ^1.4.0
+- `@squaredr/fieldcraft-core` ^1.5.0
 
 ## Community
 

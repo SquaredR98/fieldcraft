@@ -1,6 +1,6 @@
 const specs = [
   { value: '44', label: 'Field types' },
-  { value: '573', label: 'Tests passing' },
+  { value: '593', label: 'Tests passing' },
   { value: '6', label: 'Theme presets' },
   { value: '<15 KB', label: 'Core, minified' },
   { value: '1', label: 'Dependency \u00b7 zod' },

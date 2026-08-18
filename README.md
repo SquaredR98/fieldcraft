@@ -76,6 +76,7 @@ function App() {
 - **Headless core** -- pure TypeScript engine with zero UI dependencies; bring your own renderer or use the React package
 - **44 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
 - **JSON schemas** -- define entire forms as plain objects in TypeScript or JSON
+- **Display modes** -- stepped (wizard), classic (all-at-once), or conversational (one question at a time, Typeform-style)
 - **Multi-step flows** -- wizard-style sections with progress tracking and back/next navigation
 - **Conditional visibility** -- show/hide fields based on answers, with AND/OR combinators
 - **Validation** -- required, regex, min/max, custom sync/async validators
@@ -159,7 +160,7 @@ pnpm install
 # Build all packages
 pnpm build
 
-# Run tests (403 core + 74 react + 56 adapters = 533 passing)
+# Run tests (463 core + 74 react + 56 adapters = 593 passing)
 pnpm test
 
 # Start docs site

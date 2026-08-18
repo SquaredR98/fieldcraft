@@ -61,6 +61,7 @@ console.log(state.values); // { name: "Alice", email: "alice@example.com" }
 - **Schema-driven** — define forms with JSON/TypeScript schemas
 - **44 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
 - **Conditional logic** — show/hide fields based on previous answers with AND/OR combinators
+- **Display modes** — stepped (wizard), classic (all-at-once), or conversational (one question at a time)
 - **Multi-section flows** — wizard-style forms with progress tracking
 - **Validation** — required fields, regex, min/max, custom validators
 - **Computed fields** — derive values automatically from other field responses
@@ -117,6 +118,9 @@ const engine = createEngine(schema, {
 | `engine.nextSection()` | Move to next visible section |
 | `engine.prevSection()` | Move to previous section |
 | `engine.jumpTo(sectionId)` | Jump to a specific section |
+| `engine.nextQuestion()` | Move to next visible input question (conversational mode) |
+| `engine.prevQuestion()` | Move to previous input question (conversational mode) |
+| `engine.getVisibleQuestions()` | Get all visible input questions across all sections |
 
 ### Visibility & Field State
 

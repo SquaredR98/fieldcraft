@@ -131,10 +131,14 @@ export default function IntakePage() {
 
 1. Creates a `FormEngine` instance via `useFormEngine(schema, options)`
 2. Subscribes to state changes via `useSyncExternalStore`
-3. Renders the current section's visible fields using the field registry
-4. Handles navigation buttons (Next/Back/Submit)
-5. Shows the progress indicator based on `settings.progressStyle`
-6. Manages draft persistence if `settings.allowDraftSave` is `true`
+3. Selects the rendering strategy based on `schema.settings.displayMode`:
+   - **stepped** (default) — one section at a time with Back/Next/Submit buttons and a progress bar
+   - **classic** — all visible sections rendered at once with a Submit button at the bottom
+   - **conversational** — one question at a time with Enter key support and question-level progress
+4. Handles navigation, validation, and submission
+5. Manages draft persistence if `settings.allowDraftSave` is `true`
+
+See [Display modes](/docs/core-concepts/display-modes) for details on each mode.
 
 The engine lives in a `useRef` and is created once. React Strict Mode double-mounts don't create multiple engines.
 
