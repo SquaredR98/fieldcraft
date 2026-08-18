@@ -43,7 +43,10 @@ export function createStateManager(config: StateManagerConfig) {
 
   // Initialize state
   const initialSectionId = navigation.getInitialSectionId(config.initialValues);
-  const initialQuestionId = navigation.getInitialQuestionId(config.initialValues);
+  const isConversational = schema.settings?.displayMode === "conversational";
+  const initialQuestionId = isConversational
+    ? navigation.getInitialQuestionId(config.initialValues)
+    : "";
   navigation.markVisited(initialSectionId);
 
   let state: FormState = {
@@ -469,12 +472,6 @@ export function createStateManager(config: StateManagerConfig) {
       }
     }
 
-    // Compute question-level navigation state
-    const questionNav = navigation.computeQuestionState(
-      state.currentQuestionId,
-      state.values,
-    );
-
     state = {
       ...state,
       currentSectionId: navState.currentSectionId,
@@ -486,14 +483,25 @@ export function createStateManager(config: StateManagerConfig) {
       totalVisibleSections: navState.totalVisibleSections,
       progressPercent: navState.progressPercent,
       isCurrentSectionValid,
-      // Question-level navigation
-      currentQuestionId: questionNav.currentQuestionId,
-      currentQuestionIndex: questionNav.currentQuestionIndex,
-      totalVisibleQuestions: questionNav.totalVisibleQuestions,
-      questionProgressPercent: questionNav.questionProgressPercent,
-      canGoNextQuestion: questionNav.canGoNextQuestion,
-      canGoPrevQuestion: questionNav.canGoPrevQuestion,
     };
+
+    // Compute question-level navigation state only in conversational mode
+    // to avoid expensive iteration on every keystroke in stepped/classic modes
+    if (schema.settings?.displayMode === "conversational") {
+      const questionNav = navigation.computeQuestionState(
+        state.currentQuestionId,
+        state.values,
+      );
+      state = {
+        ...state,
+        currentQuestionId: questionNav.currentQuestionId,
+        currentQuestionIndex: questionNav.currentQuestionIndex,
+        totalVisibleQuestions: questionNav.totalVisibleQuestions,
+        questionProgressPercent: questionNav.questionProgressPercent,
+        canGoNextQuestion: questionNav.canGoNextQuestion,
+        canGoPrevQuestion: questionNav.canGoPrevQuestion,
+      };
+    }
   }
 
   function recomputeCalculatedFields(changedFieldId: string): void {
