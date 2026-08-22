@@ -41,6 +41,16 @@ export const docsNav: DocNavSection[] = [
       { title: 'Server validation', href: `${base}/submission/server-validation` },
     ],
   },
+  {
+    label: 'Pro',
+    items: [
+      { title: 'Visual builder', href: `${base}/pro/visual-builder`, badge: 'Pro' },
+      { title: 'Theme editor', href: `${base}/pro/theme-editor`, badge: 'Pro' },
+      { title: 'Response viewer', href: `${base}/pro/response-viewer`, badge: 'Pro' },
+      { title: 'Templates', href: `${base}/pro/templates` },
+      { title: 'Licence & activation', href: `${base}/pro/licence-and-activation` },
+    ],
+  },
 ];
 
 /** Flat list of all doc pages for prev/next navigation */
