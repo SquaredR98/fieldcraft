@@ -1,0 +1,116 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Hero ── */
+
+.fc-pro-hero {
+  @apply border-b border-fc-rule;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fc-pro-hero__inner {
+  @apply mx-auto px-10;
+  max-width: 1280px;
+  padding-top: 88px;
+  padding-bottom: 76px;
+}
+
+.fc-pro-hero__eyebrow {
+  @apply flex items-center gap-2.25 mb-5.5;
+  @apply font-mono text-[10.5px] tracking-[0.18em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-hero__eyebrow-dot {
+  @apply w-1.5 h-1.5 bg-fc-teal;
+}
+
+.fc-pro-hero__h1 {
+  @apply font-display font-semibold;
+  @apply m-0 text-fc-ink-strong;
+  font-size: 66px;
+  letter-spacing: -0.042em;
+  line-height: 1.0;
+  max-width: 900px;
+  text-wrap: pretty;
+}
+
+.fc-pro-hero__sub {
+  @apply text-fc-muted;
+  font-size: 18.5px;
+  line-height: 1.6;
+  margin: 24px 0 0;
+  max-width: 620px;
+  text-wrap: pretty;
+}
+
+.fc-pro-hero__badges {
+  @apply flex flex-wrap gap-2.5;
+  margin-top: 34px;
+}
+
+.fc-pro-hero__badge {
+  @apply font-mono text-[10.5px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+  @apply border border-fc-rule bg-fc-surface;
+  @apply px-2.75 py-1.75;
+}
+
+.fc-pro-hero__badge--amber {
+  @apply text-fc-amber-ink border-fc-amber-border bg-fc-amber-bg;
+}
+
+.fc-pro-hero__actions {
+  @apply flex flex-wrap gap-3;
+  margin-top: 36px;
+}
+
+.fc-pro-hero__cta {
+  @apply no-underline;
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply font-display text-[15px] font-medium;
+  @apply px-6 py-3.5;
+  transition: background var(--motion-hover);
+}
+
+.fc-pro-hero__cta:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+.fc-pro-hero__cta--outline {
+  @apply bg-fc-surface text-fc-ink;
+  @apply border border-fc-btn-line;
+}
+
+.fc-pro-hero__cta--outline:hover {
+  @apply bg-fc-surface border-fc-teal text-fc-teal;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
+  .fc-pro-hero__inner {
+    @apply px-6;
+    padding-top: 56px;
+    padding-bottom: 48px;
+  }
+
+  .fc-pro-hero__h1 {
+    font-size: 44px;
+  }
+}
+
+@media (max-width: 640px) {
+  .fc-pro-hero__inner {
+    @apply px-5;
+    padding-top: 40px;
+    padding-bottom: 36px;
+  }
+
+  .fc-pro-hero__h1 {
+    font-size: 34px;
+  }
+}

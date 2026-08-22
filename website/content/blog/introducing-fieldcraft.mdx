@@ -157,17 +157,17 @@ Long forms auto-save to localStorage. If a user closes the tab and comes back wi
 
 ### Theming
 
-Six built-in theme presets: Clean, Dark, Modern, High Contrast, Clinical, and Playful. Or pass your own theme object for full control over colors, spacing, border radius, and typography.
+The renderer auto-inherits CSS custom properties from your host page (`--background`, `--foreground`, `--primary`, etc.) — if you use shadcn/ui or similar, theming is zero-config. Or pass a custom `FormEngineTheme` object for full control over colors, spacing, border radius, and typography.
 
 ```tsx
-import { darkPreset } from '@squaredr/fieldcraft-react'
-
 <FormEngineRenderer
   schema={schema}
-  theme={darkPreset}
+  theme={{ colors: { primary: '#0066cc', background: '#fafafa' } }}
   onSubmit={handleSubmit}
 />
 ```
+
+Five preset families (Clean, Modern, Clinical, Playful, High Contrast) with light/dark variants are available in [FieldCraft Pro](/pro).
 
 ### Custom Field Types
 

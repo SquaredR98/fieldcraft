@@ -1,0 +1,188 @@
+@reference "../../app/globals.css";
+
+/* ── Shared Pro section layout ── */
+
+.fc-pro-section {
+  @apply border-b border-fc-rule;
+}
+
+.fc-pro-section--surface {
+  @apply bg-fc-surface;
+}
+
+.fc-pro-section__inner {
+  @apply mx-auto px-10 py-20;
+  max-width: 1280px;
+}
+
+.fc-pro-eyebrow {
+  @apply flex items-center gap-2.25 mb-4.5;
+  @apply font-mono text-[10.5px] tracking-[0.18em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-eyebrow__dot {
+  @apply w-1.5 h-1.5 bg-fc-teal;
+}
+
+.fc-pro-eyebrow__dot--amber {
+  background: var(--amber);
+}
+
+.fc-pro-eyebrow--amber {
+  color: var(--amber-ink);
+}
+
+.fc-pro-h2 {
+  @apply font-display text-[34px] font-semibold;
+  @apply tracking-[-0.03em] leading-[1.1];
+  @apply m-0 text-fc-ink-strong;
+  text-wrap: pretty;
+}
+
+.fc-pro-sub {
+  @apply text-[16px] leading-[1.7] text-fc-muted;
+  @apply mt-3.5;
+  max-width: 620px;
+  text-wrap: pretty;
+}
+
+/* ── Shared badge pills ── */
+
+.fc-pro-badges {
+  @apply flex flex-wrap gap-2.5 mt-4.5;
+}
+
+.fc-pro-badge {
+  @apply font-mono text-[10.5px] tracking-[0.12em];
+  @apply uppercase text-fc-muted;
+  @apply border border-fc-rule bg-fc-surface;
+  @apply px-2.75 py-1.75;
+}
+
+/* ── Shared demo chrome bar ── */
+
+.fc-pro-demo {
+  @apply border border-fc-rule mt-8;
+}
+
+.fc-pro-demo__chrome {
+  @apply flex items-center gap-3 px-3.5 py-2.5;
+  @apply border-b border-fc-rule;
+  background: var(--surface2, var(--color-fc-surface));
+}
+
+.fc-pro-demo__dots {
+  @apply flex gap-1.25;
+}
+
+.fc-pro-demo__dot {
+  @apply w-1.75 h-1.75 bg-fc-teal;
+}
+
+.fc-pro-demo__dot--muted {
+  @apply bg-transparent border border-fc-rule;
+}
+
+.fc-pro-demo__chrome-label {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-demo__chrome-tag {
+  @apply ml-auto font-mono text-[9.5px] tracking-[0.1em];
+  @apply uppercase text-fc-teal;
+  @apply border border-fc-teal-border bg-fc-wash;
+  @apply px-1.75 py-0.75;
+}
+
+.fc-pro-demo__body {
+  @apply overflow-hidden;
+  background: var(--bg);
+
+  /* Re-apply the site's shadcn variable bridge so Pro components
+     (ResponseViewer, ThemeEditor) inherit the correct light/dark tokens
+     instead of the Pro package's :root-level light-only defaults.
+     Values reference the site's Drafting Teal tokens which already
+     switch between light and dark via data-theme="dark". */
+  --radius: 0px;
+  --background: var(--bg);
+  --foreground: var(--ink);
+  --card: var(--surface);
+  --card-foreground: var(--ink);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --primary: var(--teal);
+  --primary-foreground: var(--teal-on);
+  --secondary: var(--wash);
+  --secondary-foreground: var(--ink);
+  --muted: var(--wash);
+  --muted-foreground: var(--color-fc-muted);
+  --accent: var(--wash);
+  --accent-foreground: var(--ink);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--teal-on);
+  --border: var(--rule);
+  --input: var(--rule);
+  --ring: var(--teal);
+}
+
+/* ── Shared demo section header (title left, tag right) ── */
+
+.fc-pro-demo-header {
+  @apply flex items-end justify-between gap-10 flex-wrap;
+}
+
+.fc-pro-demo-header__tag {
+  @apply font-mono text-[12px] text-fc-muted;
+  @apply border border-fc-rule bg-fc-surface;
+  @apply px-3.5 py-2.5;
+}
+
+/* ── 1px gap grid ── */
+
+.fc-pro-grid-1px {
+  @apply border border-fc-rule mt-10;
+  display: grid;
+  gap: 1px;
+  background: var(--color-fc-rule);
+}
+
+.fc-pro-grid-1px > * {
+  @apply bg-fc-surface;
+  padding: 28px 26px 32px;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
+  .fc-pro-section__inner {
+    @apply px-6 py-16;
+  }
+
+  .fc-pro-h2 {
+    @apply text-[28px];
+  }
+
+  .fc-pro-grid-1px--3col {
+    grid-template-columns: 1fr !important;
+  }
+
+  .fc-pro-2col {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .fc-pro-section__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-pro-h2 {
+    @apply text-[26px];
+  }
+
+  .fc-pro-sub {
+    @apply text-[15px];
+  }
+}

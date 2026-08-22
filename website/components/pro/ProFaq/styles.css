@@ -1,0 +1,76 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro FAQ ── */
+
+.fc-pro-faq__container {
+  max-width: 820px;
+  @apply border border-fc-rule bg-fc-surface;
+}
+
+.fc-pro-faq__item {
+  border-bottom: 1px solid var(--color-fc-rule);
+}
+
+.fc-pro-faq__item:last-child {
+  border-bottom: none;
+}
+
+.fc-pro-faq__trigger {
+  @apply flex items-center gap-4.5;
+  @apply px-6 py-5 cursor-pointer w-full;
+  @apply bg-transparent border-0;
+  text-align: left;
+  transition: background var(--motion-hover);
+}
+
+.fc-pro-faq__trigger:hover {
+  background: var(--wash, var(--color-fc-wash));
+}
+
+.fc-pro-faq__num {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply text-fc-muted shrink-0;
+}
+
+.fc-pro-faq__question {
+  @apply font-display text-[17px] font-medium text-fc-ink-strong;
+  @apply flex-1;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+.fc-pro-faq__icon {
+  @apply text-fc-muted shrink-0;
+  @apply font-mono text-[18px] leading-none;
+  @apply w-5 text-center;
+  transition: transform var(--motion-hover);
+}
+
+.fc-pro-faq__item--open .fc-pro-faq__icon {
+  transform: rotate(45deg);
+}
+
+.fc-pro-faq__answer {
+  @apply px-6 pb-5.5;
+  padding-left: 60px;
+  @apply text-[14.5px] leading-[1.75] text-fc-muted;
+  max-width: 680px;
+  text-wrap: pretty;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 640px) {
+  .fc-pro-faq__trigger {
+    @apply px-4 py-4 gap-3;
+  }
+
+  .fc-pro-faq__question {
+    @apply text-[15px];
+  }
+
+  .fc-pro-faq__answer {
+    @apply px-4 pb-4;
+    padding-left: 40px;
+  }
+}

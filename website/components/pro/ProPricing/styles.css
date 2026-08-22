@@ -1,0 +1,144 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Pricing ── */
+
+.fc-pro-pricing {
+  @apply border-b border-fc-rule;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fc-pro-pricing__inner {
+  @apply mx-auto px-10 py-20;
+  max-width: 1280px;
+}
+
+.fc-pro-pricing__center {
+  max-width: 760px;
+  @apply mx-auto;
+}
+
+.fc-pro-pricing__header {
+  @apply text-center mb-8;
+}
+
+.fc-pro-pricing__card {
+  @apply border border-fc-rule bg-fc-surface;
+}
+
+.fc-pro-pricing__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+.fc-pro-pricing__left {
+  @apply border-r border-fc-rule bg-fc-wash;
+  padding: 40px 36px;
+  @apply flex flex-col justify-between gap-7;
+}
+
+.fc-pro-pricing__right {
+  padding: 40px 36px;
+}
+
+.fc-pro-pricing__tier-label {
+  @apply font-mono text-[10px] tracking-[0.14em];
+  @apply uppercase text-fc-muted mb-5;
+}
+
+.fc-pro-pricing__price-row {
+  @apply flex items-end gap-3;
+}
+
+.fc-pro-pricing__price {
+  @apply font-display font-semibold text-fc-ink-strong;
+  font-size: 84px;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+}
+
+.fc-pro-pricing__price-old {
+  @apply font-display text-[24px] text-fc-muted line-through;
+  line-height: 1.4;
+}
+
+.fc-pro-pricing__price-note {
+  @apply font-mono text-[10.5px] tracking-[0.12em];
+  @apply uppercase text-fc-muted mt-4;
+}
+
+.fc-pro-pricing__cta-area {
+  @apply flex flex-col gap-3;
+  @apply pt-6 border-t;
+  border-color: var(--wash-rule, var(--color-fc-rule));
+}
+
+.fc-pro-pricing__cta {
+  @apply block text-center no-underline;
+  @apply bg-fc-teal text-fc-teal-on;
+  @apply font-display text-[15px] font-medium;
+  @apply px-5 py-3.5 cursor-pointer;
+  transition: background var(--motion-hover);
+}
+
+.fc-pro-pricing__cta:hover {
+  @apply bg-fc-teal-hover text-fc-teal-on;
+}
+
+.fc-pro-pricing__legal {
+  @apply text-[12.5px] leading-[1.6] text-fc-muted;
+}
+
+.fc-pro-pricing__includes-label {
+  @apply font-mono text-[10px] tracking-[0.14em];
+  @apply uppercase text-fc-muted mb-5;
+}
+
+.fc-pro-pricing__bullets {
+  @apply list-none p-0 m-0;
+  @apply flex flex-col gap-3.5;
+}
+
+.fc-pro-pricing__bullet {
+  @apply flex gap-3;
+  @apply text-[14.5px] leading-[1.55] text-fc-ink;
+}
+
+.fc-pro-pricing__bullet-check {
+  @apply text-fc-teal shrink-0;
+  @apply font-mono text-[12px] leading-[1.7];
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
+  .fc-pro-pricing__inner {
+    @apply px-6 py-16;
+  }
+
+  .fc-pro-pricing__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-pro-pricing__left {
+    @apply border-r-0 border-b border-fc-rule;
+  }
+}
+
+@media (max-width: 640px) {
+  .fc-pro-pricing__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-pro-pricing__left,
+  .fc-pro-pricing__right {
+    padding: 24px 20px;
+  }
+
+  .fc-pro-pricing__price {
+    font-size: 64px;
+  }
+}

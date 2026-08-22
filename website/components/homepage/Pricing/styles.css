@@ -93,6 +93,11 @@
   @apply tracking-[-0.03em] text-fc-ink-strong;
 }
 
+.fc-pricing__price--strike {
+  @apply text-[22px] font-normal text-fc-muted;
+  text-decoration: line-through;
+}
+
 .fc-pricing__price-note {
   @apply text-[13px] text-fc-muted;
 }

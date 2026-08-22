@@ -1,0 +1,121 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Contact ── */
+
+.fc-pro-contact {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-pro-contact__inner {
+  @apply mx-auto px-10 py-20;
+  max-width: 1280px;
+}
+
+.fc-pro-contact__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 56px;
+  align-items: start;
+}
+
+.fc-pro-contact__desc {
+  @apply text-[16px] leading-[1.7] text-fc-muted;
+  @apply mt-4;
+  text-wrap: pretty;
+}
+
+.fc-pro-contact__dogfood {
+  @apply border bg-fc-wash;
+  border-color: var(--teal-border, var(--color-fc-teal-border));
+  @apply px-4.5 py-4 mt-7;
+}
+
+.fc-pro-contact__dogfood-label {
+  @apply font-mono text-[9.5px] tracking-[0.12em];
+  @apply uppercase text-fc-teal mb-1.75;
+}
+
+.fc-pro-contact__dogfood-text {
+  @apply text-[14px] leading-[1.65] text-fc-ink;
+}
+
+/* ── Form wrapper with chrome bar ── */
+
+.fc-pro-contact__form-wrapper {
+  @apply border border-fc-rule;
+  background: var(--bg);
+}
+
+.fc-pro-contact__chrome {
+  @apply flex items-center gap-2.5 px-4 py-2.5;
+  @apply border-b border-fc-rule;
+  background: var(--surface2, var(--color-fc-surface));
+}
+
+.fc-pro-contact__chrome-dot {
+  @apply w-1.5 h-1.5 bg-fc-teal;
+}
+
+.fc-pro-contact__chrome-label {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-contact__form-body {
+  @apply p-7;
+}
+
+/* ── Success state ── */
+
+.fc-pro-contact__success {
+  @apply py-14 px-7 text-center;
+}
+
+.fc-pro-contact__success-label {
+  @apply font-mono text-[9.5px] tracking-[0.14em];
+  @apply uppercase text-fc-teal mb-3;
+}
+
+.fc-pro-contact__success-title {
+  @apply font-display text-[22px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.02em;
+}
+
+.fc-pro-contact__success-desc {
+  @apply text-[14.5px] leading-[1.65] text-fc-muted;
+  @apply mt-3 mb-5.5;
+}
+
+.fc-pro-contact__success-reset {
+  @apply inline-block border border-fc-rule;
+  @apply px-4.5 py-2.5 text-[13.5px] cursor-pointer;
+  @apply text-fc-ink no-underline;
+  transition: border-color var(--motion-hover), color var(--motion-hover);
+}
+
+.fc-pro-contact__success-reset:hover {
+  @apply border-fc-teal text-fc-teal;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
+  .fc-pro-contact__inner {
+    @apply px-6 py-16;
+  }
+
+  .fc-pro-contact__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .fc-pro-contact__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-pro-contact__form-body {
+    @apply p-5;
+  }
+}

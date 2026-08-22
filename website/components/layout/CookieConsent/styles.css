@@ -1,0 +1,65 @@
+@reference "../../../app/globals.css";
+
+/* ── Cookie consent banner ── */
+
+.fc-consent {
+  @apply fixed bottom-0 left-0 right-0 z-50;
+  @apply border-t border-fc-rule;
+  background: var(--surface, var(--color-fc-surface));
+}
+
+.fc-consent__inner {
+  @apply mx-auto px-6 py-4;
+  @apply flex items-center justify-between gap-6 flex-wrap;
+  max-width: 1280px;
+}
+
+.fc-consent__text {
+  @apply text-[13.5px] leading-[1.6] text-fc-muted;
+  @apply m-0 flex-1;
+  min-width: 280px;
+}
+
+.fc-consent__link {
+  @apply text-fc-teal underline;
+}
+
+.fc-consent__actions {
+  @apply flex gap-2.5 shrink-0;
+}
+
+.fc-consent__btn {
+  @apply font-mono text-[11px] tracking-[0.1em] uppercase;
+  @apply px-4 py-2 cursor-pointer border;
+  transition: background var(--motion-hover), border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-consent__btn--accept {
+  @apply bg-fc-teal text-white border-transparent;
+}
+
+.fc-consent__btn--accept:hover {
+  background: var(--teal-hover);
+}
+
+.fc-consent__btn--decline {
+  @apply bg-transparent text-fc-muted border-fc-rule;
+}
+
+.fc-consent__btn--decline:hover {
+  @apply border-fc-teal text-fc-teal;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 640px) {
+  .fc-consent__inner {
+    @apply px-5 py-3.5;
+    @apply flex-col items-stretch;
+  }
+
+  .fc-consent__actions {
+    @apply justify-end;
+  }
+}

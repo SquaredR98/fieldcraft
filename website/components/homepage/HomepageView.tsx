@@ -10,6 +10,7 @@ import { SubmissionPipeline } from '@/components/homepage/SubmissionPipeline';
 import { ComparisonTable } from '@/components/homepage/ComparisonTable';
 import { NpmStats } from '@/components/homepage/NpmStats';
 import { FormBuilderTeaser } from '@/components/homepage/FormBuilderTeaser';
+import { Pricing } from '@/components/homepage/Pricing';
 import { FinalCta } from '@/components/homepage/FinalCta';
 import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import type { Template } from '@/lib/templates';
@@ -35,6 +36,7 @@ export function HomepageView({ showcaseTemplates, npmStats }: HomepageViewProps)
       <ScrollReveal><ComparisonTable /></ScrollReveal>
       <ScrollReveal><NpmStats stats={npmStats} /></ScrollReveal>
       <ScrollReveal><FormBuilderTeaser /></ScrollReveal>
+      <ScrollReveal><Pricing /></ScrollReveal>
       <ScrollReveal><FinalCta /></ScrollReveal>
     </>
   );

@@ -1,0 +1,36 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Telehealth Section ── */
+
+.fc-pro-telehealth__title {
+  @apply font-display text-[19px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.02em;
+  @apply mb-2.75;
+}
+
+.fc-pro-telehealth__desc {
+  @apply text-[14px] leading-[1.7] text-fc-muted;
+  @apply m-0 mb-4;
+}
+
+.fc-pro-telehealth__tags {
+  @apply flex flex-wrap gap-1.75;
+}
+
+.fc-pro-telehealth__tag {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-teal;
+  @apply border border-fc-teal-border bg-fc-wash;
+  @apply px-1.75 py-0.75;
+}
+
+.fc-pro-telehealth__included {
+  @apply font-mono text-[10.5px] tracking-[0.12em];
+  @apply uppercase text-fc-amber-ink;
+  @apply border border-fc-amber-border bg-fc-amber-bg;
+  @apply px-3 py-2;
+}
+
+.fc-pro-telehealth__header {
+  @apply flex items-end justify-between gap-10 flex-wrap;
+}

@@ -228,19 +228,31 @@ See [Validation](/docs/core-concepts/validation) for the complete reference.
 
 ## Step 7: Apply a theme
 
-Pass a theme preset to change the visual appearance:
+Pass a `FormEngineTheme` object to the `theme` prop to change the visual appearance:
 
 ```tsx
-import { FormRenderer, cleanPreset } from '@squaredr/fieldcraft-react'
+import { FormRenderer } from '@squaredr/fieldcraft-react'
+import type { FormEngineTheme } from '@squaredr/fieldcraft-core'
+
+const myTheme: FormEngineTheme = {
+  colors: {
+    primary: '#1F6B6E',
+    background: '#F4F7F8',
+    text: '#12222A',
+    border: '#DCE4E8',
+  },
+}
 
 <FormRenderer
   schema={contactFormSchema}
-  theme={cleanPreset}
+  theme={myTheme}
   onSubmit={handleSubmit}
 />
 ```
 
-Six built-in presets are available: `cleanPreset`, `modernPreset`, `darkPreset`, `highContrastPreset`, `clinicalPreset`, `playfulPreset`. You can also pass a custom `FormEngineTheme` object — see [Theming](/docs/react/theming).
+If your host page defines CSS custom properties (`--background`, `--foreground`, `--primary`, etc.), the renderer inherits them automatically — no `theme` prop needed. For full theming details, see [Theming](/docs/react/theming).
+
+Five ready-made preset families (Clean, Modern, Clinical, Playful, High Contrast) with light/dark variants are available in [FieldCraft Pro](/pro) via `PRESET_FAMILIES`.
 
 ## The complete schema
 

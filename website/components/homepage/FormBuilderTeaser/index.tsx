@@ -18,15 +18,13 @@ export function FormBuilderTeaser() {
             schema — ready to render anywhere.
           </p>
           <a
-            href="https://www.npmjs.com/package/@squaredr/fieldcraft-pro"
+            href="/pro"
             className="fc-builder-teaser__cta"
-            target="_blank"
-            rel="noopener noreferrer"
           >
-            Try it locally on npm &rarr;
+            See all Pro components &rarr;
           </a>
           <p className="fc-builder-teaser__note">
-            Purchase options available soon.
+            $199 one-time &middot; includes FormBuilder, ResponseViewer, ThemeEditor &amp; Telehealth.
           </p>
         </div>
         <div className="fc-builder-teaser__form">

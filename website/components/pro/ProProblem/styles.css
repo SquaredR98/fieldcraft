@@ -1,0 +1,55 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Problem Section ── */
+
+.fc-pro-problem__label {
+  @apply font-mono text-[9.5px] tracking-[0.14em];
+  @apply uppercase text-fc-muted mb-3.5;
+}
+
+.fc-pro-problem__label--teal {
+  @apply flex items-center gap-2.25;
+  @apply text-fc-teal;
+}
+
+.fc-pro-problem__recommended {
+  @apply font-mono text-[9px] tracking-[0.1em];
+  @apply uppercase text-fc-teal;
+  @apply border border-fc-teal-border;
+  @apply px-1.5 py-0.5;
+}
+
+.fc-pro-problem__title {
+  @apply font-display text-[21px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.02em;
+  @apply mb-5;
+}
+
+.fc-pro-problem__bullets {
+  @apply list-none p-0 m-0;
+  @apply flex flex-col gap-3.25;
+}
+
+.fc-pro-problem__bullet {
+  @apply flex gap-2.75;
+  @apply text-[14px] leading-[1.6] text-fc-muted;
+}
+
+.fc-pro-problem__bullet--positive {
+  @apply text-fc-ink;
+}
+
+.fc-pro-problem__x {
+  @apply text-fc-danger shrink-0;
+  @apply font-mono;
+}
+
+.fc-pro-problem__check {
+  @apply text-fc-teal shrink-0;
+  @apply font-mono text-[12px] leading-[1.6];
+}
+
+.fc-pro-problem__highlight {
+  @apply bg-fc-wash;
+  box-shadow: inset 0 2px 0 var(--teal);
+}

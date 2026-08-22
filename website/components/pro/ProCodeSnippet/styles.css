@@ -1,0 +1,67 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Code Snippet ── */
+
+.fc-pro-code__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.fc-pro-code__compat {
+  @apply font-mono text-[11px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+  @apply border border-fc-rule bg-fc-bg;
+  @apply px-3.25 py-2.5;
+  @apply inline-block mt-6;
+}
+
+.fc-pro-code__block {
+  @apply border border-fc-rule bg-fc-bg;
+}
+
+.fc-pro-code__chrome {
+  @apply flex items-center justify-between;
+  @apply px-3.5 py-2.25;
+  @apply border-b border-fc-rule;
+  background: var(--surface2, var(--color-fc-surface));
+}
+
+.fc-pro-code__chrome-file {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-code__chrome-copy {
+  @apply font-mono text-[9.5px] tracking-[0.12em];
+  @apply uppercase text-fc-teal cursor-pointer;
+}
+
+.fc-pro-code__pre {
+  @apply m-0 overflow-x-auto;
+  @apply font-mono text-fc-ink;
+  font-size: 12.5px;
+  line-height: 1.9;
+  padding: 20px;
+}
+
+.fc-pro-code__muted {
+  @apply text-fc-muted;
+}
+
+.fc-pro-code__string {
+  @apply text-fc-amber-ink;
+}
+
+.fc-pro-code__tag {
+  color: var(--teal);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
+  .fc-pro-code__grid {
+    grid-template-columns: 1fr;
+  }
+}

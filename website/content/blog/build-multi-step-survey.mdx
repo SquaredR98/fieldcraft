@@ -296,19 +296,23 @@ Long surveys risk abandonment. FieldCraft auto-saves progress to localStorage by
 
 ## Theming
 
-Import a theme preset and pass it to the `theme` prop:
+If your page defines CSS custom properties (`--background`, `--foreground`, `--primary`, etc.), the renderer inherits them automatically. Or pass a custom `FormEngineTheme` object for explicit control:
 
 ```tsx
-import { darkPreset } from '@squaredr/fieldcraft-react'
+import type { FormEngineTheme } from '@squaredr/fieldcraft-core'
+
+const myTheme: FormEngineTheme = {
+  colors: { primary: '#0066cc', background: '#1a1a2e', text: '#e0e0e0' },
+}
 
 <FormEngineRenderer
   schema={surveySchema}
-  theme={darkPreset}
+  theme={myTheme}
   onSubmit={handleSubmit}
 />
 ```
 
-Built-in presets: `cleanPreset`, `darkPreset`, `modernPreset`, `highContrastPreset`, `clinicalPreset`, `playfulPreset`. Or pass a custom `FormEngineTheme` object for full control over colors, spacing, borders, and typography.
+Five ready-made preset families (Clean, Modern, Clinical, Playful, High Contrast) with light and dark variants are available in [FieldCraft Pro](/pro). See [Theming](/docs/react/theming) for the full reference.
 
 ## Using a Pre-Built Template
 

@@ -1,0 +1,32 @@
+@reference "../../../app/globals.css";
+
+/* ── Pro Feature Grid ── */
+
+.fc-pro-features__header {
+  @apply flex items-baseline justify-between gap-2.5;
+  @apply pb-3.5 mb-4 border-b border-fc-rule;
+}
+
+.fc-pro-features__cat-title {
+  @apply font-display text-[16px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.015em;
+}
+
+.fc-pro-features__cat-count {
+  @apply font-mono text-[9.5px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-features__items {
+  @apply flex flex-col gap-2.5;
+}
+
+.fc-pro-features__item {
+  @apply flex items-start gap-2.5;
+  @apply text-[13.5px] leading-[1.5] text-fc-muted;
+}
+
+.fc-pro-features__check {
+  @apply text-fc-teal shrink-0;
+  @apply font-mono text-[12px] leading-[1.6];
+}

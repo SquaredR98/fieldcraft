@@ -1,40 +1,17 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
 import './styles.css';
 
-type Theme = 'light' | 'dark';
-
-function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'light';
-  const stored = localStorage.getItem('fieldcraft-theme');
-  if (stored === 'light' || stored === 'dark') return stored;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>('light');
-
-  useEffect(() => {
-    setTheme(getInitialTheme());
-  }, []);
-
-  const toggle = useCallback(() => {
-    setTheme((prev) => {
-      const next: Theme = prev === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('fieldcraft-theme', next);
-      return next;
-    });
-  }, []);
-
-  const isDark = theme === 'dark';
+  const { resolvedTheme, setTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   return (
     <button
       className="fc-theme-toggle"
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      onClick={toggle}
+      onClick={() => setTheme(isDark ? 'light' : 'dark')}
     >
       {isDark ? (
         <svg

@@ -1,0 +1,260 @@
+@reference "../../../app/globals.css";
+
+/* ── Combined Contact + FAQ section ── */
+
+.fc-pro-contactfaq {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-pro-contactfaq__inner {
+  @apply mx-auto px-10 py-20;
+  max-width: 1280px;
+}
+
+/* ── Two-column grid: equal halves ── */
+
+.fc-pro-contactfaq__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* ── Left column ── */
+
+.fc-pro-contactfaq__desc {
+  @apply text-[15px] leading-[1.7] text-fc-muted;
+  @apply mt-3 mb-6;
+  text-wrap: pretty;
+}
+
+/* FAQ accordion */
+
+.fc-pro-contactfaq__faq {
+  @apply border border-fc-rule bg-fc-bg;
+}
+
+.fc-pro-faq__item {
+  border-bottom: 1px solid var(--color-fc-rule);
+}
+
+.fc-pro-faq__item:last-child {
+  border-bottom: none;
+}
+
+.fc-pro-faq__trigger {
+  @apply flex items-center gap-4.5;
+  @apply px-5 py-4.5 cursor-pointer w-full;
+  @apply bg-transparent border-0;
+  text-align: left;
+  transition: background var(--motion-hover);
+}
+
+.fc-pro-faq__trigger:hover {
+  background: var(--wash, var(--color-fc-wash));
+}
+
+.fc-pro-faq__num {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply text-fc-muted shrink-0;
+}
+
+.fc-pro-faq__question {
+  @apply font-display text-[15px] font-medium text-fc-ink-strong;
+  @apply flex-1;
+  letter-spacing: -0.015em;
+  text-wrap: pretty;
+}
+
+.fc-pro-faq__icon {
+  @apply text-fc-muted shrink-0;
+  @apply font-mono text-[16px] leading-none;
+  @apply w-5 text-center;
+  transition: transform var(--motion-hover);
+}
+
+.fc-pro-faq__item--open .fc-pro-faq__icon {
+  transform: rotate(45deg);
+}
+
+.fc-pro-faq__answer {
+  @apply px-5 pb-5;
+  padding-left: 52px;
+  @apply text-[13.5px] leading-[1.75] text-fc-muted;
+  text-wrap: pretty;
+}
+
+/* Key terms */
+
+.fc-pro-contactfaq__terms {
+  @apply mt-8;
+}
+
+.fc-pro-contactfaq__terms-label {
+  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply uppercase text-fc-muted mb-3;
+}
+
+.fc-pro-contactfaq__terms-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  @apply border border-fc-rule;
+  background: var(--color-fc-rule);
+}
+
+.fc-pro-contactfaq__term {
+  @apply flex flex-col px-4 py-4;
+  @apply bg-fc-bg no-underline;
+  transition: background var(--motion-hover);
+}
+
+.fc-pro-contactfaq__term:hover {
+  background: var(--wash, var(--color-fc-wash));
+}
+
+.fc-pro-contactfaq__term-label {
+  @apply font-display text-[14px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.01em;
+}
+
+.fc-pro-contactfaq__term-desc {
+  @apply text-[12.5px] leading-[1.55] text-fc-muted;
+  @apply mt-1 mb-2;
+  text-wrap: pretty;
+}
+
+.fc-pro-contactfaq__term-link {
+  @apply font-mono text-[9.5px] tracking-[0.1em];
+  @apply uppercase text-fc-teal mt-auto;
+}
+
+/* Dogfood note */
+
+.fc-pro-contactfaq__dogfood {
+  @apply border bg-fc-wash;
+  border-color: var(--teal-border, var(--color-fc-teal-border));
+  @apply px-4.5 py-4 mt-8;
+}
+
+.fc-pro-contactfaq__dogfood-label {
+  @apply font-mono text-[9.5px] tracking-[0.12em];
+  @apply uppercase text-fc-teal mb-1.75;
+}
+
+.fc-pro-contactfaq__dogfood-text {
+  @apply text-[13.5px] leading-[1.65] text-fc-ink;
+}
+
+/* ── Right column: form ── */
+
+.fc-pro-contactfaq__right {
+  position: sticky;
+  top: 100px;
+}
+
+.fc-pro-contactfaq__form-wrapper {
+  @apply border border-fc-rule;
+  background: var(--bg);
+}
+
+.fc-pro-contactfaq__chrome {
+  @apply flex items-center gap-2.5 px-4 py-2.5;
+  @apply border-b border-fc-rule;
+  background: var(--surface2, var(--color-fc-surface));
+}
+
+.fc-pro-contactfaq__chrome-dot {
+  @apply w-1.5 h-1.5 bg-fc-teal;
+}
+
+.fc-pro-contactfaq__chrome-label {
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-muted;
+}
+
+.fc-pro-contactfaq__form-body {
+  @apply p-7;
+}
+
+/* ── Success state ── */
+
+.fc-pro-contactfaq__success {
+  @apply py-14 px-7 text-center;
+}
+
+.fc-pro-contactfaq__success-label {
+  @apply font-mono text-[9.5px] tracking-[0.14em];
+  @apply uppercase text-fc-teal mb-3;
+}
+
+.fc-pro-contactfaq__success-title {
+  @apply font-display text-[22px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.02em;
+}
+
+.fc-pro-contactfaq__success-desc {
+  @apply text-[14.5px] leading-[1.65] text-fc-muted;
+  @apply mt-3 mb-5.5;
+}
+
+.fc-pro-contactfaq__success-reset {
+  @apply inline-block border border-fc-rule;
+  @apply px-4.5 py-2.5 text-[13.5px] cursor-pointer;
+  @apply text-fc-ink no-underline;
+  transition: border-color var(--motion-hover), color var(--motion-hover);
+}
+
+.fc-pro-contactfaq__success-reset:hover {
+  @apply border-fc-teal text-fc-teal;
+}
+
+/* ── Responsive: tablet ── */
+
+@media (max-width: 1000px) {
+  .fc-pro-contactfaq__inner {
+    @apply px-6 py-16;
+  }
+
+  .fc-pro-contactfaq__grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .fc-pro-contactfaq__right {
+    position: static;
+  }
+
+  .fc-pro-contactfaq__terms-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Responsive: mobile ── */
+
+@media (max-width: 640px) {
+  .fc-pro-contactfaq__inner {
+    @apply px-5 py-12;
+  }
+
+  .fc-pro-contactfaq__terms-list {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-pro-faq__trigger {
+    @apply px-4 py-3.5 gap-3;
+  }
+
+  .fc-pro-faq__question {
+    @apply text-[14px];
+  }
+
+  .fc-pro-faq__answer {
+    @apply px-4 pb-4;
+    padding-left: 36px;
+  }
+
+  .fc-pro-contactfaq__form-body {
+    @apply p-5;
+  }
+}

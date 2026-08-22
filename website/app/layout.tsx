@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { GoogleTagManager } from '@next/third-parties/google';
 import { Space_Grotesk, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import { RootProvider } from 'fumadocs-ui/provider/next';
+import { CookieConsent } from '@/components/layout/CookieConsent';
 import './globals.css';
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
@@ -77,16 +78,26 @@ export default function RootLayout({
     >
       <head>
         <Script
-          id="theme-init"
+          id="consent-defaults"
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem('fieldcraft-theme');if(!t){t=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}document.documentElement.setAttribute('data-theme',t)}catch(e){}})()`,
+            __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('consent','default',{'analytics_storage':'denied','ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','wait_for_update':500});try{if(document.cookie.indexOf('fc_consent=granted')>-1){gtag('consent','update',{'analytics_storage':'granted'})}}catch(e){}`,
           }}
         />
       </head>
       {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <body>
-        <RootProvider>{children}</RootProvider>
+        <RootProvider
+          theme={{
+            attribute: 'data-theme',
+            storageKey: 'fieldcraft-theme',
+            defaultTheme: 'system',
+            enableSystem: true,
+          }}
+        >
+          {children}
+          <CookieConsent />
+        </RootProvider>
       </body>
     </html>
   );

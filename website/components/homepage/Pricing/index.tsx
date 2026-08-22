@@ -10,10 +10,10 @@ const engineBullets = [
 
 const proBullets = [
   'Drag-and-drop form builder',
-  'Schema editor with live preview',
-  'Theme editor and response viewer',
-  'Validation and condition builders',
-  'Full undo, redo and shortcuts',
+  'Response viewer with export and charts',
+  'Theme editor with live preview',
+  'Telehealth module with clinical instruments',
+  'TypeScript types and full API reference',
 ];
 
 export function Pricing() {
@@ -24,8 +24,8 @@ export function Pricing() {
         <h2 className="fc-pricing__h2">Free forever, or paid once.</h2>
         <p className="fc-pricing__sub">
           The engine and the React renderer are MIT and always free. Pro is a
-          one-time purchase with free patch and minor updates inside the major
-          version you bought.
+          one-time purchase — FormBuilder, ResponseViewer, ThemeEditor and
+          Telehealth, all included.
         </p>
 
         {/* ── Main cards ── */}
@@ -50,7 +50,7 @@ export function Pricing() {
                 </li>
               ))}
             </ul>
-            <a href="/products/fieldcraft/docs" className="fc-pricing__cta fc-pricing__cta--outline">
+            <a href="/docs" className="fc-pricing__cta fc-pricing__cta--outline">
               Read the docs &rarr;
             </a>
           </div>
@@ -61,11 +61,12 @@ export function Pricing() {
               <div className="fc-pricing__card-eyebrow fc-pricing__card-eyebrow--amber">
                 Pro &middot; one-time licence
               </div>
-              <span className="fc-pricing__badge">Most complete</span>
+              <span className="fc-pricing__badge">Everything included</span>
             </div>
             <h3 className="fc-pricing__card-title">FieldCraft Pro</h3>
             <div className="fc-pricing__price-line">
-              <span className="fc-pricing__price">$99</span>
+              <span className="fc-pricing__price fc-pricing__price--strike">$399</span>
+              <span className="fc-pricing__price">$199</span>
               <span className="fc-pricing__price-note">
                 once, per production domain
               </span>
@@ -78,60 +79,18 @@ export function Pricing() {
                 </li>
               ))}
             </ul>
-            <a href="/products/fieldcraft/docs/pro" className="fc-pricing__cta fc-pricing__cta--primary">
-              Learn about Pro &rarr;
+            <a href="/pro" className="fc-pricing__cta fc-pricing__cta--primary">
+              See Pro in action &rarr;
             </a>
-          </div>
-        </div>
-
-        {/* ── Secondary row ── */}
-        <div className="fc-pricing__secondary">
-          {/* ── Telehealth addon ── */}
-          <div className="fc-pricing__addon">
-            <div className="fc-pricing__addon-left">
-              <div className="fc-pricing__addon-title-row">
-                <h4 className="fc-pricing__addon-title">Telehealth</h4>
-                <span className="fc-pricing__addon-price">$249 once</span>
-              </div>
-              <p className="fc-pricing__addon-desc">
-                Everything in Pro, plus 15 telehealth field types, HIPAA-ready
-                patterns, patient intake templates and clinical assessment
-                fields.
-              </p>
-            </div>
-            <div className="fc-pricing__addon-right">
-              <a href="mailto:hello@squaredr.tech?subject=FieldCraft%20Telehealth%20interest" className="fc-pricing__addon-link">
-                I&rsquo;m interested &rarr;
-              </a>
-            </div>
-          </div>
-
-          {/* ── Admin template addon ── */}
-          <div className="fc-pricing__addon">
-            <div className="fc-pricing__addon-left">
-              <div className="fc-pricing__addon-title-row">
-                <h4 className="fc-pricing__addon-title">Admin template</h4>
-                <span className="fc-pricing__addon-price">$549 once</span>
-              </div>
-              <p className="fc-pricing__addon-desc">
-                A production Next.js application with Prisma, authentication and
-                the builder pre-integrated. Delivered as a private repository.
-              </p>
-            </div>
-            <div className="fc-pricing__addon-right">
-              <span className="fc-pricing__addon-badge">Coming soon</span>
-            </div>
           </div>
         </div>
 
         {/* ── Legal footnote ── */}
         <p className="fc-pricing__legal">
-          Prices in USD, exclusive of tax; tax may be added at checkout
-          depending on your region. One licence key covers one production
-          domain, with unlimited development and localhost use. Patch and minor
-          updates are free within the major version purchased. No refunds after
-          a licence key is activated. The MIT-licensed engine and renderer are
-          separate open-source packages and are not part of a Pro purchase.
+          Prices in USD, exclusive of tax. One licence key covers one production
+          domain, with unlimited development and localhost use. Twelve months of
+          updates included. The MIT-licensed engine and renderer are separate
+          open-source packages and are not part of a Pro purchase.
         </p>
       </div>
     </section>

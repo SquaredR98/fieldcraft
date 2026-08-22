@@ -36,7 +36,7 @@ Two packages, each depending only on the one beneath it. Take the layer you need
 | Layer | Package | What it does |
 |-------|---------|-------------|
 | Core | `@squaredr/fieldcraft-core` | Schema parsing, state management, condition evaluation, validation, expression engine, navigation. No UI, no React. |
-| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 44 field components, 10 hooks, theming system with 6 presets, draft persistence, step navigation. |
+| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 44 field components, 10 hooks, CSS variable theming with auto-inherit, draft persistence, step navigation. |
 
 Core is framework-agnostic. You could build a Vue or Svelte renderer on top of it — the engine API is the same. React is the official renderer that ships with the project.
 
