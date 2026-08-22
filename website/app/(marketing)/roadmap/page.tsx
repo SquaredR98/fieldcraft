@@ -1,19 +1,19 @@
 import type { Metadata } from 'next';
-import { RoadmapView } from '@/components/roadmap/RoadmapView';
-import { roadmap } from '@/lib/roadmap';
+import { ChangelogView } from '@/components/roadmap/RoadmapView';
+import { changelog, planned } from '@/lib/changelog';
 
 export const metadata: Metadata = {
-  title: 'Roadmap \u2014 FieldCraft',
+  title: 'Changelog — FieldCraft',
   description:
-    "See what's shipped, what's in progress, and what's coming next for FieldCraft.",
+    'Version history and upcoming plans for FieldCraft core, react, and pro packages.',
   openGraph: {
-    title: 'Roadmap \u2014 FieldCraft',
+    title: 'Changelog — FieldCraft',
     description:
-      "See what's shipped, what's in progress, and what's coming next for FieldCraft.",
+      'Version history and upcoming plans for FieldCraft core, react, and pro packages.',
     url: 'https://fieldcraft.squaredr.tech/roadmap',
   },
 };
 
-export default function RoadmapPage() {
-  return <RoadmapView groups={roadmap} />;
+export default function ChangelogPage() {
+  return <ChangelogView entries={changelog} planned={planned} />;
 }

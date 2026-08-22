@@ -7,6 +7,7 @@ const links = [
   { label: 'Layers', href: '/#layers' },
   { label: 'Demos', href: '/#demos' },
   { label: 'Features', href: '/#features' },
+  { label: 'Docs', href: '/docs' },
   { label: 'Blog', href: '/blog' },
 ];
 
@@ -58,11 +59,11 @@ export function NavMobile() {
             </Link>
           ))}
           <Link
-            href="/docs"
+            href="/pro"
             className="fc-nav__drawer-cta"
             onClick={() => setOpen(false)}
           >
-            Read the docs →
+            Explore Pro →
           </Link>
         </div>
       )}

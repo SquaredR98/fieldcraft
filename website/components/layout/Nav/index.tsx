@@ -8,6 +8,7 @@ const links = [
   { label: 'Layers', href: '/#layers' },
   { label: 'Demos', href: '/#demos' },
   { label: 'Features', href: '/#features' },
+  { label: 'Docs', href: '/docs' },
   { label: 'Blog', href: '/blog' },
 ];
 
@@ -23,7 +24,7 @@ export function Nav() {
             </Link>
           ))}
           <ThemeToggle />
-          <Link href="/docs" className="fc-nav__cta">Read the docs →</Link>
+          <Link href="/pro" className="fc-nav__cta">Explore Pro →</Link>
         </div>
         <div className="fc-nav__mobile-actions">
           <ThemeToggle />

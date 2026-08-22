@@ -1,6 +1,6 @@
 @reference "../../../app/globals.css";
 
-/* ── Roadmap page ── */
+/* ── Changelog page ── */
 
 .fc-roadmap {
   @apply bg-fc-bg;
@@ -23,6 +23,10 @@
   @apply font-display text-[42px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 text-fc-ink-strong mb-4;
 }
 
+.fc-roadmap__h2 {
+  @apply font-display text-[28px] font-semibold tracking-[-0.02em] leading-[1.2] m-0 text-fc-ink-strong mb-8;
+}
+
 .fc-roadmap__sub {
   @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0;
 }
@@ -38,19 +42,97 @@
 
 /* ── Timeline ── */
 .fc-roadmap__timeline {
-  @apply grid gap-12;
+  @apply grid gap-0;
+}
+
+/* ── Version entry ── */
+.fc-roadmap__entry {
+  @apply border-t border-fc-rule py-6;
+}
+
+.fc-roadmap__entry-header {
+  @apply flex items-center justify-between gap-4 mb-3;
+}
+
+.fc-roadmap__version-row {
+  @apply flex items-center gap-2;
+}
+
+.fc-roadmap__version {
+  @apply font-mono text-[15px] font-semibold text-fc-ink-strong;
+}
+
+.fc-roadmap__date {
+  @apply font-mono text-[11px] tracking-[0.14em] uppercase text-fc-muted shrink-0;
+}
+
+/* ── Package badges ── */
+.fc-roadmap__pkg {
+  @apply font-mono text-[9px] tracking-fc-mono uppercase px-2 py-0.5 shrink-0 rounded-sm;
+}
+
+.fc-roadmap__pkg--core {
+  background: color-mix(in oklch, oklch(0.55 0.18 260) 12%, transparent);
+  color: oklch(0.55 0.18 260);
+}
+
+.fc-roadmap__pkg--react {
+  background: color-mix(in oklch, oklch(0.55 0.15 200) 12%, transparent);
+  color: oklch(0.55 0.15 200);
+}
+
+.fc-roadmap__pkg--pro {
+  background: color-mix(in oklch, var(--teal) 12%, transparent);
+  color: var(--teal);
+}
+
+/* ── Changes list ── */
+.fc-roadmap__changes {
+  @apply list-none m-0 p-0 grid gap-0;
+}
+
+.fc-roadmap__change {
+  @apply flex items-start gap-3 py-1.5;
+}
+
+.fc-roadmap__change-tag {
+  @apply font-mono text-[9px] tracking-fc-mono uppercase px-2 py-0.5 shrink-0 rounded-sm mt-0.5;
+}
+
+.fc-roadmap__change-tag--added {
+  background: color-mix(in oklch, oklch(0.55 0.18 145) 12%, transparent);
+  color: oklch(0.55 0.18 145);
+}
+
+.fc-roadmap__change-tag--fixed {
+  background: color-mix(in oklch, oklch(0.6 0.16 65) 12%, transparent);
+  color: oklch(0.6 0.16 65);
+}
+
+.fc-roadmap__change-tag--changed {
+  background: color-mix(in oklch, oklch(0.55 0.15 260) 12%, transparent);
+  color: oklch(0.55 0.15 260);
+}
+
+.fc-roadmap__change-text {
+  @apply text-fc-body leading-[1.5] text-fc-ink;
+}
+
+/* ── Planned section ── */
+.fc-roadmap__planned {
+  @apply mt-16 pt-8 border-t-2 border-fc-rule;
 }
 
 /* ── Group (one month) ── */
 .fc-roadmap__group {
-  @apply border-t border-fc-rule pt-6;
+  @apply border-t border-fc-rule pt-6 mb-8;
 }
 
 .fc-roadmap__period {
   @apply font-mono text-[11px] tracking-[0.14em] uppercase text-fc-muted mb-5;
 }
 
-/* ── Item list ── */
+/* ── Item list (planned) ── */
 .fc-roadmap__list {
   @apply list-none m-0 p-0 grid gap-0;
 }
@@ -71,11 +153,6 @@
 /* ── Status tags ── */
 .fc-roadmap__tag {
   @apply font-mono text-[9px] tracking-fc-mono uppercase px-2 py-0.5 shrink-0;
-}
-
-.fc-roadmap__tag--shipped {
-  background: color-mix(in oklch, var(--teal) 12%, transparent);
-  color: var(--teal);
 }
 
 .fc-roadmap__tag--planned {
@@ -100,6 +177,14 @@
 
   .fc-roadmap__h1 {
     @apply text-[28px];
+  }
+
+  .fc-roadmap__entry-header {
+    @apply flex-col items-start gap-1;
+  }
+
+  .fc-roadmap__change {
+    @apply flex-col gap-1;
   }
 
   .fc-roadmap__item {
