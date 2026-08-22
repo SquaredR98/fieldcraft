@@ -4,10 +4,31 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { Checkbox } from "../ui/checkbox";
 
+type ConsentValue = boolean | { agreed: boolean; version?: string; timestamp?: string };
+
 export function ConsentField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as ConsentConfig | undefined;
-  const checked = value === true;
+  const needsEnriched = !!(config?.consentVersion || config?.recordTimestamp);
+
+  const checked = needsEnriched
+    ? (value as { agreed?: boolean } | undefined)?.agreed === true
+    : value === true;
+
   const [expanded, setExpanded] = useState(false);
+
+  const handleChange = (val: boolean) => {
+    if (needsEnriched) {
+      const enriched: ConsentValue = {
+        agreed: val,
+        ...(config?.consentVersion ? { version: config.consentVersion } : {}),
+        ...(config?.recordTimestamp && val ? { timestamp: new Date().toISOString() } : {}),
+      };
+      onChange(enriched);
+    } else {
+      onChange(val);
+    }
+    onBlur();
+  };
 
   return (
     <FieldWrapper field={field} error={error} touched={touched} hideLabel>
@@ -17,7 +38,7 @@ export function ConsentField({ field, value, error, touched, disabled, readonly,
             id={field.id}
             checked={checked}
             disabled={disabled || readonly}
-            onCheckedChange={(val) => { onChange(val === true); onBlur(); }}
+            onCheckedChange={(val) => handleChange(val === true)}
             onFocus={onFocus}
             aria-required={field.required ? true : undefined}
             className="mt-0.5"

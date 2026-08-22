@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { format, parse, isValid } from "date-fns";
+import { format, parse, isValid, differenceInCalendarDays, addDays } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import type { DateRangeConfig } from "@squaredr/fieldcraft-core";
@@ -14,6 +14,7 @@ export function DateRangeField({ field, value, error, touched, disabled, readonl
   const config = field.config as DateRangeConfig | undefined;
   const hasError = !!(touched && error?.length);
   const [open, setOpen] = useState(false);
+  const [rangeClampedMsg, setRangeClampedMsg] = useState<string | null>(null);
 
   const range = (value as { start?: string; end?: string }) ?? {};
 
@@ -74,12 +75,21 @@ export function DateRangeField({ field, value, error, touched, disabled, readonl
             endMonth={new Date(new Date().getFullYear() + 10, 11)}
             selected={selected}
             onSelect={(range) => {
+              setRangeClampedMsg(null);
+              let from = range?.from;
+              let to = range?.to;
+              if (from && to && config?.maxRangeDays && config.maxRangeDays > 0) {
+                const diff = differenceInCalendarDays(to, from);
+                if (diff > config.maxRangeDays) {
+                  to = addDays(from, config.maxRangeDays);
+                  setRangeClampedMsg(`Range limited to ${config.maxRangeDays} days`);
+                }
+              }
               onChange({
-                start: range?.from ? format(range.from, "yyyy-MM-dd") : undefined,
-                end: range?.to ? format(range.to, "yyyy-MM-dd") : undefined,
+                start: from ? format(from, "yyyy-MM-dd") : undefined,
+                end: to ? format(to, "yyyy-MM-dd") : undefined,
               });
-              // Close popover when both dates are selected
-              if (range?.from && range?.to) {
+              if (from && to) {
                 setOpen(false);
               }
             }}
@@ -90,6 +100,9 @@ export function DateRangeField({ field, value, error, touched, disabled, readonl
           />
         </PopoverContent>
       </Popover>
+      {rangeClampedMsg && (
+        <p className="text-xs text-muted-foreground mt-1">{rangeClampedMsg}</p>
+      )}
     </FieldWrapper>
   );
 }

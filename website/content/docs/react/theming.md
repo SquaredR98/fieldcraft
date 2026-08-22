@@ -1,32 +1,32 @@
 ---
 title: Theming
-description: Customise colours, typography, spacing, and shape with theme objects, 6 built-in presets, and CSS custom properties.
+description: Customise colours, typography, spacing, and shape with theme objects, CSS custom properties, and auto-inherited host page styles.
 ---
 
-## Using a preset
+## How theming works
 
-Pass a built-in preset to `FormRenderer`:
+FieldCraft's renderer uses **CSS custom properties** (`--background`, `--foreground`, `--primary`, etc.) to control visual appearance. There are three ways to theme a form, from simplest to most flexible:
+
+1. **Auto-inherit** — if your host page defines shadcn-style CSS variables at `:root`, the renderer picks them up automatically. No code needed.
+2. **Theme object** — pass a `FormEngineTheme` to the `theme` prop for explicit control.
+3. **CSS overrides** — target `--fc-*` variables in your own stylesheets.
+
+## Auto-inherit from host page
+
+If your page already defines CSS custom properties like `--background`, `--foreground`, `--primary`, `--border`, etc. (the standard shadcn/ui pattern), `FormRenderer` inherits them automatically:
 
 ```tsx
-import { FormRenderer, cleanPreset } from '@squaredr/fieldcraft-react'
+import { FormRenderer } from '@squaredr/fieldcraft-react'
 
-<FormRenderer schema={schema} theme={cleanPreset} onSubmit={handleSubmit} />
+// No theme prop needed — inherits from your page's CSS variables
+<FormRenderer schema={schema} onSubmit={handleSubmit} />
 ```
 
-## Available presets
-
-| Preset | Description |
-|--------|-------------|
-| `cleanPreset` | Minimal, light. Neutral colours, comfortable spacing. |
-| `modernPreset` | Contemporary styling with rounded corners. |
-| `darkPreset` | Dark background with light text. |
-| `highContrastPreset` | Accessibility-focused. Strong borders, large text. |
-| `clinicalPreset` | Professional/medical. Clean lines, clinical feel. |
-| `playfulPreset` | Friendly and colourful. Larger radii, warmer tones. |
+This also applies to [FieldCraft Pro](/pro) components (FormBuilder, ResponseViewer, ThemeEditor) — they all auto-inherit from the host page's CSS variables and follow dark/light mode changes.
 
 ## Custom theme object
 
-Build a `FormEngineTheme` to control every visual aspect. All properties are optional — undefined values use the preset defaults.
+Build a `FormEngineTheme` to control every visual aspect. All properties are optional — undefined values fall back to the host page's CSS variables or built-in defaults.
 
 ```ts
 import type { FormEngineTheme } from '@squaredr/fieldcraft-react'
@@ -80,25 +80,30 @@ const myTheme: FormEngineTheme = {
 }
 ```
 
-## Extending a preset
+Pass it to the renderer:
 
-Spread a preset and override specific properties:
+```tsx
+<FormRenderer schema={schema} theme={myTheme} onSubmit={handleSubmit} />
+```
 
-```ts
-import { cleanPreset } from '@squaredr/fieldcraft-react'
+## Presets (Pro)
 
-const branded = {
-  ...cleanPreset,
-  colors: {
-    ...cleanPreset.colors,
-    primary: '#8b5cf6',
-    borderFocus: '#8b5cf6',
-  },
-  typography: {
-    ...cleanPreset.typography,
-    fontFamily: 'Satoshi, sans-serif',
-  },
-}
+Five ready-made preset families with light and dark variants are available in [FieldCraft Pro](/pro):
+
+| Preset family | Description |
+|---------------|-------------|
+| Clean | Minimal, neutral colours, comfortable spacing. |
+| Modern | Contemporary styling with rounded corners. |
+| High Contrast | Accessibility-focused. Strong borders, large text. |
+| Clinical | Professional/medical. Clean lines, clinical feel. |
+| Playful | Friendly and colourful. Larger radii, warmer tones. |
+
+```tsx
+import { PRESET_FAMILIES } from '@squaredr/fieldcraft-pro'
+
+// Each family has .light and .dark variants
+const theme = PRESET_FAMILIES.modern.light
+const darkTheme = PRESET_FAMILIES.modern.dark
 ```
 
 ## CSS custom properties
@@ -116,10 +121,11 @@ The theme is converted to CSS custom properties (`--fc-*`) on the form root elem
 ### How the CSS variable chain works
 
 ```
-Your theme object (FormEngineTheme)
+Host page :root CSS variables (--background, --primary, etc.)
+    → Inherited by FormRenderer automatically
+    → theme prop overrides specific values via inline styles
     → themeToCssVars() converts to --fc-* variables
-    → Applied as inline styles on the form root
-    → shadcn/Radix components read --fc-* variables
+    → shadcn/Radix components read these variables
     → Your custom CSS can also read them
 ```
 

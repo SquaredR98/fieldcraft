@@ -1,9 +1,8 @@
 import { createContext, useContext, useMemo } from "react";
 import type { FormEngineTheme } from "@squaredr/fieldcraft-core";
 import { themeToCssVars } from "./theme-to-css-vars";
-import { cleanPreset } from "./presets/clean";
 
-const ThemeContext = createContext<FormEngineTheme>(cleanPreset);
+const ThemeContext = createContext<FormEngineTheme>({});
 
 export function useTheme(): FormEngineTheme {
   return useContext(ThemeContext);
@@ -16,7 +15,7 @@ export function FormEngineThemeProvider({
   theme?: FormEngineTheme;
   children: React.ReactNode;
 }) {
-  const resolved = theme ?? cleanPreset;
+  const resolved = theme ?? {};
   const cssVars = useMemo(() => themeToCssVars(resolved), [resolved]);
 
   return (

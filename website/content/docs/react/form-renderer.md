@@ -90,7 +90,6 @@ export default function ContactPage() {
 ```tsx
 import {
   FormRenderer,
-  cleanPreset,
   defaultRegistry,
 } from '@squaredr/fieldcraft-react'
 import { createSupabaseAdapter } from '@squaredr/fieldcraft-adapters'
@@ -108,7 +107,6 @@ export default function IntakePage() {
   return (
     <FormRenderer
       schema={schema}
-      theme={cleanPreset}
       adapters={adapter}
       components={{ ...defaultRegistry, pain_scale: PainScaleField }}
       validators={validators}

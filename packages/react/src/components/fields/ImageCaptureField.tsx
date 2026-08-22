@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import type { ImageCaptureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
@@ -9,10 +9,17 @@ export function ImageCaptureField({ field, value, error, touched, disabled, read
   const inputRef = useRef<HTMLInputElement>(null);
   const imageUrl = value as string | undefined;
   const allowGallery = config?.allowGallery !== false;
+  const [sizeError, setSizeError] = useState<string | null>(null);
 
   const handleFile = (fileList: FileList | null) => {
     if (!fileList || fileList.length === 0) return;
     const file = fileList[0];
+    const maxSizeMb = config?.maxSizeMb;
+    if (maxSizeMb && maxSizeMb > 0 && file.size > maxSizeMb * 1024 * 1024) {
+      setSizeError(`File exceeds ${maxSizeMb} MB limit`);
+      return;
+    }
+    setSizeError(null);
     const reader = new FileReader();
     reader.onload = () => {
       onChange(reader.result as string);
@@ -57,6 +64,9 @@ export function ImageCaptureField({ field, value, error, touched, disabled, read
           >
             {allowGallery ? "Take photo or choose from gallery" : "Take photo"}
           </Button>
+        )}
+        {sizeError && (
+          <p className="text-xs text-destructive">{sizeError}</p>
         )}
       </div>
     </FieldWrapper>

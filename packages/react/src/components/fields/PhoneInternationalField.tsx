@@ -10,8 +10,9 @@ import {
   SelectValue,
 } from "../ui/select";
 import { COUNTRIES } from "../../data/countries";
+import { useMemo } from "react";
 
-const COUNTRY_CODES = COUNTRIES.map((c) => ({
+const ALL_COUNTRY_CODES = COUNTRIES.map((c) => ({
   code: c.code,
   dial: c.phone,
   label: `${c.phone} (${c.code})`,
@@ -21,6 +22,15 @@ export function PhoneInternationalField({ field, value, error, touched, disabled
   const config = field.config as PhoneInternationalConfig | undefined;
   const hasError = !!(touched && error?.length);
   const phoneValue = (value as { countryCode?: string; number?: string }) ?? {};
+
+  const countryCodes = useMemo(() => {
+    const priority = config?.priorityCountries;
+    if (!priority || priority.length === 0) return ALL_COUNTRY_CODES;
+    const prioritySet = new Set(priority.map((c) => c.toUpperCase()));
+    const priorityItems = ALL_COUNTRY_CODES.filter((c) => prioritySet.has(c.code));
+    const rest = ALL_COUNTRY_CODES.filter((c) => !prioritySet.has(c.code));
+    return [...priorityItems, ...rest];
+  }, [config?.priorityCountries]);
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
@@ -32,15 +42,20 @@ export function PhoneInternationalField({ field, value, error, touched, disabled
           }
           disabled={disabled || readonly}
         >
-          <SelectTrigger className="w-32 shrink-0" aria-label="Country code">
+          <SelectTrigger className="w-32 shrink-0" aria-label="Country code" onFocus={onFocus}>
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {COUNTRY_CODES.map((c) => (
-              <SelectItem key={c.code} value={c.code}>
-                {c.label}
-              </SelectItem>
-            ))}
+            {countryCodes.map((c, i) => {
+              const priority = config?.priorityCountries;
+              const showSeparator = priority && priority.length > 0 && i === priority.length;
+              return (
+                <div key={c.code}>
+                  {showSeparator && <div className="my-1 h-px bg-border" role="separator" />}
+                  <SelectItem value={c.code}>{c.label}</SelectItem>
+                </div>
+              );
+            })}
           </SelectContent>
         </Select>
         <Input

@@ -22,7 +22,7 @@ export function LongTextField({ field, value, error, touched, disabled, readonly
         onBlur={onBlur}
         onFocus={onFocus}
       />
-      {config?.maxLength && (
+      {config?.showCharCount !== false && config?.maxLength && (
         <span className="text-xs text-muted-foreground text-right">
           {text.length} / {config.maxLength}
         </span>

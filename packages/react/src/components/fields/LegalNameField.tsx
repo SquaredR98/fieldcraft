@@ -7,8 +7,9 @@ import { Label } from "../ui/label";
 export function LegalNameField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as LegalNameConfig | undefined;
   const hasError = !!(touched && error?.length);
-  const nameValue = (value as { first?: string; middle?: string; last?: string }) ?? {};
+  const nameValue = (value as { first?: string; middle?: string; last?: string; suffix?: string }) ?? {};
   const showMiddle = config?.showMiddleName !== false;
+  const showSuffix = config?.showSuffix === true;
 
   const update = (part: string, val: string) => {
     onChange({ ...nameValue, [part]: val });
@@ -40,6 +41,7 @@ export function LegalNameField({ field, value, error, touched, disabled, readonl
               Middle name
             </Label>
             <Input
+              {...fieldAria(field, hasError)}
               id={`${field.id}-middle`}
               type="text"
               value={nameValue.middle ?? ""}
@@ -47,6 +49,7 @@ export function LegalNameField({ field, value, error, touched, disabled, readonl
               readOnly={readonly}
               onChange={(e) => update("middle", e.target.value)}
               onBlur={onBlur}
+              onFocus={onFocus}
               autoComplete="additional-name"
             />
           </div>
@@ -56,6 +59,7 @@ export function LegalNameField({ field, value, error, touched, disabled, readonl
             Last name
           </Label>
           <Input
+            {...fieldAria(field, hasError)}
             id={`${field.id}-last`}
             type="text"
             value={nameValue.last ?? ""}
@@ -63,9 +67,30 @@ export function LegalNameField({ field, value, error, touched, disabled, readonl
             readOnly={readonly}
             onChange={(e) => update("last", e.target.value)}
             onBlur={onBlur}
+            onFocus={onFocus}
             autoComplete="family-name"
           />
         </div>
+        {showSuffix && (
+          <div className="flex flex-col gap-1.5 w-24">
+            <Label htmlFor={`${field.id}-suffix`} className="text-xs">
+              Suffix
+            </Label>
+            <Input
+              {...fieldAria(field, hasError)}
+              id={`${field.id}-suffix`}
+              type="text"
+              placeholder="Jr., Sr., III"
+              value={nameValue.suffix ?? ""}
+              disabled={disabled}
+              readOnly={readonly}
+              onChange={(e) => update("suffix", e.target.value)}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              autoComplete="honorific-suffix"
+            />
+          </div>
+        )}
       </div>
     </FieldWrapper>
   );

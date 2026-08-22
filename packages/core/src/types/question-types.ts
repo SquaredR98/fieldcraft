@@ -263,13 +263,23 @@ export type TimeConfig = {
   minuteStep?: number;
 };
 
-/** Config for `appointment` fields. Date + time slot picker with availability. @since 1.0.0 */
+/** Config for `appointment` fields. Date + time slot picker with availability. Supports static slots, API URLs, embeds (Calendly/Cal.com), and callbacks via customProps. @since 1.0.0 */
 export type AppointmentConfig = {
   type: "appointment";
-  slotsUrl?: string;
+  /** Static slots (simplest — works without any backend). */
   slots?: { date: string; times: string[] }[];
+  /** URL to fetch available slots from (SaaS mode — component fetches). @since 1.6.0 */
+  slotsUrl?: string;
+  /** Embed URL for third-party booking (Calendly, Cal.com). Renders in iframe. @since 1.6.0 */
+  embedUrl?: string;
+  /** Embed provider for postMessage integration. @since 1.6.0 */
+  embedProvider?: "calendly" | "cal_com" | "custom";
+  /** IANA timezone string for display and API requests. */
   timezone?: string;
+  /** Appointment duration in minutes (displayed as badge). */
   duration?: number;
+  /** Date display format. Defaults to locale-aware formatting via Intl. @since 1.6.0 */
+  dateFormat?: string;
 };
 
 // ---- Media & Input ----
@@ -311,15 +321,17 @@ export type AddressConfig = {
   defaultCountry?: string;
 };
 
-/** Config for `payment` fields. Stripe or PayPal payment collection. @since 1.0.0 */
+/** Config for `payment` fields. Payment collection via Stripe, PayPal, or Razorpay. Real payment UI requires Pro or a custom field override. @since 1.0.0 */
 export type PaymentConfig = {
   type: "payment";
-  provider: "stripe" | "paypal";
+  provider: "stripe" | "paypal" | "razorpay";
   publicKey: string;
   amount?: number;
   amountField?: string;
   currency?: string;
   description?: string;
+  /** Server URL for creating payment intent (SaaS mode). POST with amount/currency/provider. @since 1.6.0 */
+  serverUrl?: string;
 };
 
 /** Config for `matrix` fields. Grid of rows x columns (radio, checkbox, or text inputs). @since 1.0.0 */

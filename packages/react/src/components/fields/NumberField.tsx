@@ -7,9 +7,22 @@ export function NumberField({ field, value, error, touched, disabled, readonly, 
   const config = field.config as NumberConfig | undefined;
   const hasError = !!(touched && error?.length);
 
+  const handleBlur = () => {
+    if (config?.decimalPlaces != null && value != null && value !== "") {
+      const num = Number(value);
+      if (!isNaN(num)) {
+        onChange(Number(num.toFixed(config.decimalPlaces)));
+      }
+    }
+    onBlur();
+  };
+
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
       <div className="flex items-center gap-2">
+        {config?.prefix && (
+          <span className="text-sm text-muted-foreground shrink-0">{config.prefix}</span>
+        )}
         <Input
           {...fieldAria(field, hasError)}
           type="number"
@@ -24,7 +37,7 @@ export function NumberField({ field, value, error, touched, disabled, readonly, 
             const raw = e.target.value;
             onChange(raw === "" ? undefined : Number(raw));
           }}
-          onBlur={onBlur}
+          onBlur={handleBlur}
           onFocus={onFocus}
         />
         {config?.suffix && (

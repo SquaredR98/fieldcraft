@@ -3,10 +3,18 @@ import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { cn } from "../../utils/cn";
 
+const ICON_PATHS: Record<string, string> = {
+  star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
+  heart: "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z",
+  circle: "M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z",
+};
+
 export function RatingField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as RatingConfig | undefined;
   const max = config?.max ?? 5;
   const current = (value as number) ?? 0;
+  const iconPath = ICON_PATHS[config?.icon ?? "star"] ?? ICON_PATHS.star;
+  const showLabels = config?.showLabels === true;
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
     if (disabled || readonly) return;
@@ -46,24 +54,28 @@ export function RatingField({ field, value, error, touched, disabled, readonly, 
           const n = i + 1;
           const selected = n <= current;
           return (
-            <button
-              key={n}
-              type="button"
-              tabIndex={n === (current || 1) ? 0 : -1}
-              className={cn(
-                "rounded-md p-1 transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50",
-                selected ? "text-primary" : "text-muted-foreground",
+            <div key={n} className="flex flex-col items-center gap-0.5">
+              <button
+                type="button"
+                tabIndex={n === (current || 1) ? 0 : -1}
+                className={cn(
+                  "rounded-md p-1 transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50",
+                  selected ? "text-primary" : "text-muted-foreground",
+                )}
+                disabled={disabled || readonly}
+                onClick={() => { onChange(n); onBlur(); }}
+                aria-label={`${n} of ${max}`}
+                aria-checked={n === current}
+                role="radio"
+              >
+                <svg viewBox="0 0 24 24" fill={selected ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5} width={28} height={28}>
+                  <path d={iconPath} />
+                </svg>
+              </button>
+              {showLabels && (
+                <span className="text-[10px] text-muted-foreground">{n}</span>
               )}
-              disabled={disabled || readonly}
-              onClick={() => { onChange(n); onBlur(); }}
-              aria-label={`${n} of ${max}`}
-              aria-checked={n === current}
-              role="radio"
-            >
-              <svg viewBox="0 0 24 24" fill={selected ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5} width={28} height={28}>
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-            </button>
+            </div>
           );
         })}
       </div>

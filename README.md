@@ -82,7 +82,7 @@ function App() {
 - **Validation** -- required, regex, min/max, custom sync/async validators
 - **Computed fields** -- derive values automatically from other responses
 - **Draft persistence** -- save and resume in-progress forms
-- **Theme system** -- CSS custom properties + 6 built-in presets (clean, modern, dark, high-contrast, clinical, playful)
+- **Theme system** -- CSS custom properties with auto-inherit from host page; 5 preset families available in Pro
 - **Pluggable fields** -- swap any field component via the field registry
 - **Type-safe** -- full TypeScript types for schemas, configs, and responses
 

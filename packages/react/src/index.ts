@@ -33,14 +33,6 @@ export { useFieldOptions, type FieldOption } from "./hooks/useFieldOptions";
 export { FormEngineThemeProvider, useTheme } from "./theme/ThemeProvider";
 export { themeToCssVars } from "./theme/theme-to-css-vars";
 
-// Theme presets
-export { cleanPreset } from "./theme/presets/clean";
-export { modernPreset } from "./theme/presets/modern";
-export { darkPreset } from "./theme/presets/dark";
-export { highContrastPreset } from "./theme/presets/high-contrast";
-export { clinicalPreset } from "./theme/presets/clinical";
-export { playfulPreset } from "./theme/presets/playful";
-
 // ---- Registry ----
 export {
   type FieldProps,

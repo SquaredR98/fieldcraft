@@ -13,13 +13,15 @@ export function SignatureField({ field, value, error, touched, disabled, readonl
   // Restore signature from data URL
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || !value) return;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    ctx.clearRect(0, 0, width, height);
+    if (!value) return;
     const img = new Image();
     img.onload = () => ctx.drawImage(img, 0, 0);
     img.src = value as string;
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [value, width, height]);
 
   const startDraw = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
@@ -80,7 +82,7 @@ export function SignatureField({ field, value, error, touched, disabled, readonl
           ref={canvasRef}
           width={width}
           height={height}
-          className="rounded-md border border-input cursor-crosshair touch-none"
+          className={`rounded-md border border-input touch-none ${disabled || readonly ? "cursor-not-allowed opacity-50" : "cursor-crosshair"}`}
           style={{ backgroundColor: config?.backgroundColor ?? "#ffffff" }}
           onMouseDown={startDraw}
           onMouseMove={draw}
@@ -91,7 +93,6 @@ export function SignatureField({ field, value, error, touched, disabled, readonl
           onTouchEnd={endDraw}
           onFocus={onFocus}
           aria-label={`${field.label} signature pad`}
-          role="img"
         />
         <button
           type="button"

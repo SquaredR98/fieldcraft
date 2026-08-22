@@ -9,7 +9,9 @@ export function OpinionScaleField({ field, value, error, touched, disabled, read
   const max = config?.max ?? 5;
   const current = value as number | undefined;
 
-  const steps = Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  const step = config?.step && config.step > 0 ? config.step : 1;
+  const steps: number[] = [];
+  for (let n = min; n <= max; n += step) steps.push(n);
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>

@@ -29,7 +29,9 @@ export function SliderField({ field, value, error, touched, disabled, readonly, 
         />
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>{config?.minLabel ?? min}</span>
-          <span className="font-medium text-foreground">{current}</span>
+          {config?.showValue !== false && (
+            <span className="font-medium text-foreground">{current}</span>
+          )}
           <span>{config?.maxLabel ?? max}</span>
         </div>
       </div>
