@@ -7,7 +7,6 @@ const groups: Group[] = [
   { title: 'Form Builder', items: ['Drag-and-drop field placement', 'Section and step management', 'Conditional logic editor', 'Validation rule builder', 'Undo / redo history', 'Keyboard shortcuts', 'JSON import and export', 'Live schema preview', 'Duplicate and reorder fields'] },
   { title: 'Response Viewer', items: ['Table, card, detail and split views', 'Full-text search', 'Column filters and sorting', 'Bulk select and delete', 'CSV and JSON export', 'Per-response detail pane', 'Computed score columns', 'Pagination and page size', 'Column visibility control'] },
   { title: 'Theme Editor', items: ['Token-level colour editing', 'Typography scale control', 'Density and radius presets', 'Live form preview', 'Palette generator', 'CSS variable export', 'Theme object export', 'Six built-in presets'] },
-  { title: 'Telehealth', items: ['PHQ-9 with severity bands', 'GAD-7 scoring', 'PSS-10 subscales', 'Pain scale field', 'Body region selector', 'Vitals with reference ranges', '14 clinical templates'] },
   { title: 'Developer Experience', items: ['Full TypeScript types', 'Tree-shakeable ESM build', 'SSR and RSC compatible', 'Headless hooks for custom UI', 'Documented component API', 'Zero required config'] },
   { title: 'Licensing', items: ['One-time $199 payment', 'One production domain', 'Unlimited dev and staging', 'Client project use permitted', '12 months of updates', 'Private issue tracker'] },
 ];

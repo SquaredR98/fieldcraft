@@ -28,7 +28,6 @@ const contactSchema: FormEngineSchema = {
           options: [
             { label: 'Join the Pro waitlist', value: 'waitlist' },
             { label: 'Licensing question', value: 'licensing' },
-            { label: 'Telehealth module', value: 'telehealth' },
             { label: 'Agency / multi-project use', value: 'agency' },
             { label: 'Something else', value: 'other' },
           ],
@@ -67,8 +66,8 @@ export function ProContact() {
             </div>
             <h2 className="fc-pro-h2">Questions before launch?</h2>
             <p className="fc-pro-contact__desc">
-              Licensing edge cases, roadmap, or whether the Telehealth module
-              covers your instrument &mdash; ask. Replies come from the maintainer.
+              Licensing edge cases, roadmap, or integration questions &mdash;
+              ask. Replies come from the maintainer.
             </p>
             <div className="fc-pro-contact__dogfood">
               <div className="fc-pro-contact__dogfood-label">Dogfood</div>

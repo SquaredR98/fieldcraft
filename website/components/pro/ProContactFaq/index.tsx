@@ -12,11 +12,7 @@ import './styles.css';
 const faqs = [
   {
     q: 'What\u2019s included in a Pro licence?',
-    a: 'Everything: FormBuilder (drag-drop designer), ResponseViewer (table/card/detail/timeline views with export), ThemeEditor (visual customiser with live preview), and the full Telehealth module (clinical instruments, healthcare fields, templates). Plus twelve months of updates.',
-  },
-  {
-    q: 'Is Telehealth a separate purchase?',
-    a: 'No. Telehealth is bundled into every Pro licence at no extra cost. Clinical instruments (PHQ-9, GAD-7, etc.), healthcare field components, and clinical templates are all included in the $199 price.',
+    a: 'Everything: FormBuilder (drag-drop designer), ResponseViewer (table/card/detail/timeline views with export), and ThemeEditor (visual customiser with live preview). Plus twelve months of updates.',
   },
   {
     q: 'Can I use one licence for multiple projects?',
@@ -84,7 +80,6 @@ const contactSchema: FormEngineSchema = {
           options: [
             { label: 'Join the Pro waitlist', value: 'waitlist' },
             { label: 'Licensing question', value: 'licensing' },
-            { label: 'Telehealth module', value: 'telehealth' },
             { label: 'Agency / multi-project use', value: 'agency' },
             { label: 'Something else', value: 'other' },
           ],
@@ -133,9 +128,8 @@ export function ProContactFaq() {
             </div>
             <h2 className="fc-pro-h2">Before you ask</h2>
             <p className="fc-pro-contactfaq__desc">
-              Licensing edge cases, roadmap, or whether the Telehealth module
-              covers your instrument &mdash; ask. Replies come from the
-              maintainer.
+              Licensing edge cases, roadmap, or integration questions &mdash;
+              ask. Replies come from the maintainer.
             </p>
 
             {/* FAQ accordion */}

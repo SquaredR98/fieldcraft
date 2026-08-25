@@ -39,7 +39,7 @@ export function ProCodeSnippet() {
               <span className="fc-pro-code__chrome-file">app/admin/forms/page.tsx</span>
               <span className="fc-pro-code__chrome-copy">Copy</span>
             </div>
-            <pre className="fc-pro-code__pre"><M>{`'use client'`}</M>{'\n'}<M>import</M>{' { FieldCraftProProvider, FormBuilder } '}<M>from</M>{' '}<S>{`'@squaredr/fieldcraft-pro'`}</S>{'\n\n'}<M>export default function</M>{' '}<T>FormsAdmin</T>{'() {\n  '}<M>return</M>{' (\n    <'}<T>FieldCraftProProvider</T>{' licenseKey={process.env.NEXT_PUBLIC_FC_KEY}>\n      <'}<T>FormBuilder</T>{'\n        schema={schema}\n        onSave={(next) => saveSchema(next)}\n        modules={['}<S>{`'telehealth'`}</S>{']}\n      />\n    </'}<T>FieldCraftProProvider</T>{'>\n  )\n}'}</pre>
+            <pre className="fc-pro-code__pre"><M>{`'use client'`}</M>{'\n'}<M>import</M>{' { FieldCraftProProvider, FormBuilder } '}<M>from</M>{' '}<S>{`'@squaredr/fieldcraft-pro'`}</S>{'\n\n'}<M>export default function</M>{' '}<T>FormsAdmin</T>{'() {\n  '}<M>return</M>{' (\n    <'}<T>FieldCraftProProvider</T>{' licenseKey={process.env.NEXT_PUBLIC_FC_KEY}>\n      <'}<T>FormBuilder</T>{'\n        schema={schema}\n        onSave={(next) => saveSchema(next)}\n      />\n    </'}<T>FieldCraftProProvider</T>{'>\n  )\n}'}</pre>
           </div>
         </div>
       </div>

@@ -7,11 +7,7 @@ import './styles.css';
 const faqs = [
   {
     q: 'What\u2019s included in a Pro licence?',
-    a: 'Everything: FormBuilder (drag-drop designer), ResponseViewer (table/card/detail/timeline views with export), ThemeEditor (visual customiser with live preview), and the full Telehealth module (clinical instruments, healthcare fields, templates). Plus twelve months of updates.',
-  },
-  {
-    q: 'Is Telehealth a separate purchase?',
-    a: 'No. Telehealth is bundled into every Pro licence at no extra cost. Clinical instruments (PHQ-9, GAD-7, etc.), healthcare field components, and clinical templates are all included in the $199 price.',
+    a: 'Everything: FormBuilder (drag-drop designer), ResponseViewer (table/card/detail/timeline views with export), and ThemeEditor (visual customiser with live preview). Plus twelve months of updates.',
   },
   {
     q: 'Can I use one licence for multiple projects?',

@@ -52,7 +52,7 @@ export const legalPages: LegalPage[] = [
 <p>If you deploy to a second unrelated production domain (e.g. <code>anotherclient.com</code>), you need a second licence.</p>
 
 <h3 id="free-evaluation">4.3 Free Evaluation</h3>
-<p>FieldCraft Pro is designed to be fully evaluated before purchase. You may install the package from npm, use every component, render forms, test the builder, viewer, theme editor, and telehealth modules on <code>localhost</code> and any non-production environment without a licence key and without any time limit. The only restriction is production deployment.</p>
+<p>FieldCraft Pro is designed to be fully evaluated before purchase. You may install the package from npm, use every component, render forms, test the builder, viewer, and theme editor on <code>localhost</code> and any non-production environment without a licence key and without any time limit. The only restriction is production deployment.</p>
 
 <h3>4.4 Authentication and Credentials</h3>
 <p>Your licence key is your sole credential for accessing FieldCraft Pro services (licence dashboard, support, and production validation). There are no email-based accounts or passwords.</p>
@@ -95,7 +95,7 @@ export const legalPages: LegalPage[] = [
 <p>This policy exists because FieldCraft Pro is intentionally designed to be fully tested before purchase:</p>
 <ul>
 <li>The complete package is available on npm for free installation.</li>
-<li>Every component (FormBuilder, ResponseViewer, ThemeEditor, Telehealth) works fully on <code>localhost</code> and non-production environments.</li>
+<li>Every component (FormBuilder, ResponseViewer, ThemeEditor) works fully on <code>localhost</code> and non-production environments.</li>
 <li>There is no time limit on evaluation. You can test for days, weeks, or months before deciding to buy.</li>
 <li>Live interactive demos are available on this website at <a href="/pro">/pro</a>.</li>
 <li>Full documentation and API reference are available at <a href="/docs">/docs</a>.</li>
@@ -124,7 +124,7 @@ export const legalPages: LegalPage[] = [
 <li>Complying with all laws and regulations that apply to your use case, including data protection and privacy laws (GDPR, CCPA, HIPAA, India DPDP Act, and any other applicable regulation).</li>
 <li>Ensuring your applications are lawful and do not infringe the rights of others.</li>
 </ul>
-<p>SquaredR is not a party to the relationship between you and your users. We have no access to, control over, or responsibility for data collected through forms you build with FieldCraft. If you use the Telehealth module to collect clinical or health-related data, compliance with healthcare regulations (including but not limited to HIPAA, HITECH, and local health data laws) is solely your responsibility.</p>
+<p>SquaredR is not a party to the relationship between you and your users. We have no access to, control over, or responsibility for data collected through forms you build with FieldCraft.</p>
 
 <h2>8. Intellectual Property</h2>
 <p>The FieldCraft name, logo, and brand assets are the property of SquaredR. The MIT License grants rights to the open-source software but does not grant rights to use SquaredR trademarks, except as needed to accurately describe the origin of the software (e.g. &ldquo;built with FieldCraft&rdquo;).</p>
