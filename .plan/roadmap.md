@@ -1,8 +1,9 @@
 # FieldCraft OSS — Roadmap
 
 > All shippable items for the OSS packages. Updated as tasks complete.
-> Start: June 13, 2026 · Daily effort: 2-4 hours
+> Start: June 13, 2026 · Updated: 2026-08-25
 > This plan covers: core, react, adapters, templates-free, website, docs, blog, community.
+> Current versions: core 1.6.0, react 1.6.0, adapters 1.0.1, templates-free 1.1.1
 
 ---
 
@@ -11,14 +12,7 @@
 - ✅ Done
 - 🔄 In Progress
 - ⬚ Pending
-- 🚫 Deferred (not in v1.4.0 release)
-
----
-
-## v1.4.0 Release Plan
-
-All items below marked ✅ have shipped in core 1.4.0, react 1.3.0.
-Items marked 🚫 are deferred to future releases (post-Pro).
+- 🚫 Deferred
 
 ---
 
@@ -185,9 +179,9 @@ Items marked 🚫 are deferred to future releases (post-Pro).
 | B1.01 | ✅ | Full 250+ country list in CountrySelectField | patch |
 | B1.02 | ✅ | Update PhoneInternationalField with full country codes | patch |
 | B1.03 | ✅ | Error boundary wraps field rendering | patch |
-| B1.04 | ⬚ | Verify aria-label on all 44 field components | patch |
-| B1.05 | ⬚ | Verify aria-describedby for help text | patch |
-| B1.06 | ⬚ | Verify aria-invalid + aria-errormessage for errors | patch |
+| B1.04 | ✅ | Verify aria-label on all 44 field components (centralized via `fieldAria()` in FieldWrapper) | patch |
+| B1.05 | ✅ | Verify aria-describedby for help text (centralized via `fieldAria()` in FieldWrapper) | patch |
+| B1.06 | ✅ | Verify aria-invalid + aria-errormessage for errors (centralized via `fieldAria()` in FieldWrapper) | patch |
 | B1.07 | ✅ | Keyboard navigation for RatingField | patch |
 | B1.08 | ✅ | Keyboard navigation for SliderField | patch |
 | B1.09 | ✅ | Placeholder support on all text inputs | patch |
@@ -226,54 +220,54 @@ Items marked 🚫 are deferred to future releases (post-Pro).
 |---|--------|------|---------|
 | B4.01-B4.10 | 🚫 | Dark theme, minimal theme, compact theme, accessible theme, CSS docs, ThemeProvider, useTheme, override support, print styles, responsive breakpoints | patch/minor |
 
-### B5. Display Modes & Layout (🔄 Unblocks Pro)
+### B5. Display Modes & Layout (✅ Shipped in core 1.6.0 + react 1.6.0)
 
-> **Priority: HIGH.** Pro FormBuilder preview depends on the renderer supporting all 3 display modes.
-> Must publish core 1.5.0 + react 1.4.0 before Pro can use these.
+> Shipped ahead of schedule. Core question-level navigation, all 3 display modes, and Pro integration are live.
+> Two minor items remain: `prefers-reduced-motion` media query (B5.B05) and auto-advance on selection fields (B5.B06).
 
-#### B5-A. Core Engine — Question-Level Navigation (core 1.5.0)
-
-| # | Status | Item |
-|---|--------|------|
-| B5.A01 | ⬚ | Add `currentQuestionId`, `currentQuestionIndex`, `totalVisibleQuestions` to `NavigationState` |
-| B5.A02 | ⬚ | Add `resolveNextQuestionId()` and `resolvePrevQuestionId()` to navigation module |
-| B5.A03 | ⬚ | Add `nextQuestion()` and `prevQuestion()` methods to state-manager / engine |
-| B5.A04 | ⬚ | Add question-level progress: `questionProgressPercent` to FormState |
-| B5.A05 | ⬚ | Validate single question on `nextQuestion()` (not entire section) |
-| B5.A06 | ⬚ | Update `displayMode` Zod enum in schema-validator to accept `conversational` |
-| B5.A07 | ⬚ | Export question-level nav types from core index |
-| B5.A08 | ⬚ | Tests for question-level navigation (next/prev/boundary/showIf skip) |
-| B5.A09 | ⬚ | Bump core to 1.5.0, update CHANGELOG |
-
-#### B5-B. React Renderer — Display Mode Branching (react 1.4.0)
+#### B5-A. Core Engine — Question-Level Navigation (shipped in core 1.6.0)
 
 | # | Status | Item |
 |---|--------|------|
-| B5.B01 | ⬚ | Refactor `FormEngineRenderer` — read `schema.settings?.displayMode` and branch |
-| B5.B02 | ⬚ | `classic` mode — render ALL visible sections at once, no navigation buttons, validate on submit |
-| B5.B03 | ⬚ | `stepped` mode — current behavior (one section at a time), extract into clean component |
-| B5.B04 | ⬚ | `conversational` mode — one question at a time, centered layout, animated transitions |
-| B5.B05 | ⬚ | Conversational: CSS transitions for question enter/exit (slide + fade, respect `prefers-reduced-motion`) |
+| B5.A01 | ✅ | Add `currentQuestionId`, `currentQuestionIndex`, `totalVisibleQuestions` to `NavigationState` |
+| B5.A02 | ✅ | Add `resolveNextQuestionId()` and `resolvePrevQuestionId()` to navigation module |
+| B5.A03 | ✅ | Add `nextQuestion()` and `prevQuestion()` methods to state-manager / engine |
+| B5.A04 | ✅ | Add question-level progress: `questionProgressPercent` to FormState |
+| B5.A05 | ✅ | Validate single question on `nextQuestion()` (not entire section) |
+| B5.A06 | ✅ | Update `displayMode` Zod enum in schema-validator to accept `conversational` |
+| B5.A07 | ✅ | Export question-level nav types from core index |
+| B5.A08 | ✅ | Tests for question-level navigation (next/prev/boundary/showIf skip) |
+| B5.A09 | ✅ | Bump core version, update CHANGELOG (shipped as 1.6.0, exceeded planned 1.5.0) |
+
+#### B5-B. React Renderer — Display Mode Branching (shipped in react 1.6.0)
+
+| # | Status | Item |
+|---|--------|------|
+| B5.B01 | ✅ | Refactor `FormEngineRenderer` — read `schema.settings?.displayMode` and branch |
+| B5.B02 | ✅ | `classic` mode — render ALL visible sections at once (ClassicModeRenderer) |
+| B5.B03 | ✅ | `stepped` mode — one section at a time (SteppedModeContent) |
+| B5.B04 | ✅ | `conversational` mode — one question at a time (ConversationalRenderer) |
+| B5.B05 | ⬚ | Conversational: add `prefers-reduced-motion` media query (transitions exist but no reduced-motion check) |
 | B5.B06 | ⬚ | Conversational: auto-advance on selection fields (yes/no, radio, dropdown) |
-| B5.B07 | ⬚ | Conversational: keyboard Enter to advance on text/number fields |
-| B5.B08 | ⬚ | Respect `settings.showProgress` — hide progress bar when false |
-| B5.B09 | ⬚ | Respect `settings.progressStyle` — bar (current), steps (step indicators), percentage (text) |
-| B5.B10 | ⬚ | Respect `settings.navigation` — showBack, showSectionList, custom labels, allowSkip |
-| B5.B11 | ⬚ | CSS: `.fc-mode-classic`, `.fc-mode-stepped`, `.fc-mode-conversational` on form root |
-| B5.B12 | ⬚ | Bump react to 1.4.0, update CHANGELOG |
+| B5.B07 | ✅ | Conversational: keyboard Enter to advance on text/number fields |
+| B5.B08 | ✅ | Respect `settings.showProgress` — hide progress bar when false |
+| B5.B09 | ✅ | Respect `settings.progressStyle` — bar, steps, percentage |
+| B5.B10 | ✅ | Respect `settings.navigation` — showBack, custom labels |
+| B5.B11 | ✅ | CSS: `.fc-mode-classic`, `.fc-mode-stepped`, `.fc-mode-conversational` on form root |
+| B5.B12 | ✅ | Bump react version, update CHANGELOG (shipped as 1.6.0, exceeded planned 1.4.0) |
 
-#### B5-C. Publish & Pro Integration
+#### B5-C. Publish & Pro Integration (✅ All shipped)
 
 | # | Status | Item |
 |---|--------|------|
-| B5.C01 | ⬚ | Build + test core (all existing tests must pass + new navigation tests) |
-| B5.C02 | ⬚ | Build + test react |
-| B5.C03 | ⬚ | Publish core 1.5.0 to npm |
-| B5.C04 | ⬚ | Publish react 1.4.0 to npm |
-| B5.C05 | ⬚ | Update Pro peer deps to core ^1.5.0, react ^1.4.0 |
-| B5.C06 | ⬚ | Add display mode selector to Pro FormBuilder settings panel |
-| B5.C07 | ⬚ | Verify FormPreviewPanel renders correctly in all 3 modes |
-| B5.C08 | ⬚ | Bump Pro version, update Pro CHANGELOG |
+| B5.C01 | ✅ | Build + test core |
+| B5.C02 | ✅ | Build + test react |
+| B5.C03 | ✅ | Publish core to npm (shipped as 1.6.0) |
+| B5.C04 | ✅ | Publish react to npm (shipped as 1.6.0) |
+| B5.C05 | ✅ | Update Pro peer deps to core ^1.6.0, react ^1.6.0 |
+| B5.C06 | ✅ | Add display mode selector to Pro FormBuilder settings panel |
+| B5.C07 | ✅ | Verify FormPreviewPanel renders correctly in all 3 modes |
+| B5.C08 | ✅ | Bump Pro version (shipped as 1.6.4) |
 
 #### B5-D. Remaining Layout Components (Deferred)
 
@@ -360,12 +354,88 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 
 ✅ Website restructure complete. All docs in `website/content/docs/` as MDX.
 
-### H3. Blog Posts
+### H3. Blog Posts (12 published, calendar below)
 
 | # | Status | Item |
 |---|--------|------|
-| H3.01-H3.07 | ✅ | Multi-step survey, schema vs code, validation pipeline, conversational forms, cost of building, self-hosted vs cloud, accessible forms |
-| H3.08-H3.25 | 🚫 | Remaining blog posts — deferred to post-launch |
+| H3.01 | ✅ | Introducing FieldCraft |
+| H3.02 | ✅ | FieldCraft Adapters Now Open Source |
+| H3.03 | ✅ | Why Schema-Driven? Architecture Behind FieldCraft |
+| H3.04 | ✅ | 6 Hard-Won UX Lessons from Building a Form Engine |
+| H3.05 | ✅ | Build Forms Without Code: Introducing FormBuilder |
+| H3.06 | ✅ | Schema-Driven vs Code-Driven Forms |
+| H3.07 | ✅ | Build a Multi-Step Survey in 5 Minutes |
+| H3.08 | ✅ | How FieldCraft's Validation Pipeline Works |
+| H3.09 | ✅ | The Real Cost of Building Forms From Scratch |
+| H3.10 | ✅ | Self-Hosted vs Cloud Forms: Developer's Guide |
+| H3.11 | ✅ | Building Accessible Forms |
+| H3.12 | ✅ | Conversational Forms: One Question at a Time |
+
+### H4. Website — Technical SEO Fixes
+
+| # | Status | Item |
+|---|--------|------|
+| H4.01 | ⬚ | Add JSON-LD `TechArticle` structured data to docs pages |
+| H4.02 | ⬚ | Add OpenGraph metadata to docs pages |
+| H4.03 | ⬚ | Add canonical URLs to all pages |
+| H4.04 | ⬚ | Add BreadcrumbList structured data (homepage, blog, docs) |
+| H4.05 | ⬚ | Fix docs "Edit on GitHub" link (currently `#`) |
+| H4.06 | ⬚ | Submit sitemap to Google Search Console (manual) |
+| H4.07 | ⬚ | Submit sitemap to Bing Webmaster Tools (manual) |
+| H4.08 | ⬚ | Fix react console banner: shows v1.3.0, should be 1.6.0 |
+| H4.09 | ⬚ | npm README overhaul — add links to docs, blog, /pro page |
+| H4.10 | ⬚ | Cross-post top 3 existing blogs to Dev.to (with canonical URLs) |
+
+### H5. New Docs Pages
+
+| # | Status | Item | Ships After |
+|---|--------|------|-------------|
+| H5.01 | ⬚ | Pro: Getting Started (install → activate → render) | Pro QA sprint (Week 2) |
+| H5.02 | ⬚ | Migrating from Formik | Week 9 |
+| H5.03 | ⬚ | Migrating from React Hook Form | Week 11 |
+| H5.04 | ⬚ | Next.js Integration guide | Week 10 |
+| H5.05 | ⬚ | API Reference (FormEngine class) | Week 13 |
+| H5.06 | ⬚ | Performance & Bundle Size benchmarks | Week 14 |
+| H5.07 | ⬚ | i18n / Localization guide | Week 15 (after A9 ships) |
+| H5.08 | ⬚ | Telehealth: Clinical Fields reference | Week 12 |
+| H5.09 | ⬚ | Telehealth: Instruments & Scoring reference | Week 16 |
+| H5.10 | ⬚ | Telehealth: Intake Templates gallery | Week 16 |
+| H5.11 | ⬚ | Display Modes guide (classic/stepped/conversational) | B5 shipped — ready to write |
+
+### H6. Blog Calendar — Sequenced to Feature Releases
+
+**Rule:** A blog post about a feature must ship AFTER that feature is live. Posts about existing features can ship any time.
+
+**Pillar rotation:** Build (tutorial) → Solve (use case) → Build (tutorial) → Compare → repeat
+
+| Week | Pillar | Blog Post | Depends On | Feature shipped same week |
+|------|--------|-----------|------------|--------------------------|
+| 1 | — | *(QA sprint, no post)* | — | QA.01–QA.05 |
+| 2 | — | *(QA sprint, no post)* | — | QA.06–QA.09 |
+| 3 | Build | How FieldCraft Handles Form Validation — Schema to Error | Already shipped | H4.01–H4.04 (SEO fixes) |
+| 4 | Solve | Building HIPAA-Compliant Forms with FieldCraft Pro | Pro live (Week 2-3) | H4.05–H4.07 (SEO fixes) |
+| 5 | Build | Create a Theme-Aware Form with CSS Variables | Already shipped | D3.01–D3.02 (Pro templates) |
+| 6 | Compare | FieldCraft vs SurveyJS vs Form.io | Already shipped | D3.03–D3.04 (Pro templates) |
+| 7 | Build | Conversational Forms: One-Question-at-a-Time UX | Already shipped (blog exists, but new angle) | H4.09 (npm README overhaul) |
+| 8 | Build | Display Modes — Classic vs Stepped vs Conversational | Already shipped (B5) | H5.11 (Display Modes doc) |
+| 9 | Compare | Migrating from Formik to FieldCraft | Already shipped | H5.02 (Formik migration doc) |
+| 10 | Build | Building Forms in Next.js with FieldCraft | Already shipped | H5.04 (Next.js doc) |
+| 11 | Compare | Migrating from React Hook Form to FieldCraft | Already shipped | H5.03 (RHF migration doc) |
+| 12 | Solve | Clinical Instruments in React — PHQ-9, GAD-7 | Telehealth shipped | H5.08 (Telehealth clinical docs) |
+| 13 | Build | FieldCraft API Reference Deep Dive | Already shipped | H5.05 (API reference doc) |
+| 14 | Compare | React Form Library Bundle Sizes (2026) | Already shipped | H5.06 (Bundle size doc) |
+| 15 | Build | Internationalized Forms with FieldCraft | A9 i18n must ship first | A9.01–A9.05 (i18n) + H5.07 |
+| 16 | Solve | Patient Intake Forms for Telehealth Apps | Telehealth shipped | H5.09–H5.10 (Telehealth docs) |
+| 17 | Build | Self-Hosted vs Cloud Forms (updated) | Already shipped | — |
+| 18 | Build | Multi-Tenant Form Hosting Architecture | SaaS S1 must ship first | — |
+| 19 | Build | Embed a Form on Any Website | SaaS S3 must ship first | — |
+| 20 | Build | Zero-PII Form Submission Architecture | SaaS S4 must ship first | — |
+| 21 | Build | Custom Domains for Hosted Forms | SaaS S3.04 must ship first | — |
+| 22 | Compare | Webhooks vs Database — Form Submission Patterns | SaaS S4 must ship first | — |
+| 23 | Solve | Launching FieldCraft SaaS — Free Tier Live | SaaS S5 must ship first | — |
+| 24 | Build | From npm Package to SaaS Platform | SaaS live | — |
+
+**Note:** Weeks 18-24 depend on SaaS features shipping (tracked in `fieldcraft-pro/.plan/roadmap.md` Track 3). These posts must NOT be published before those features go live.
 
 ---
 
@@ -375,41 +445,23 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 |---|--------|------|
 | I1.06 | ✅ | FUNDING.yml |
 | I1.01-I1.05, I1.07-I1.08 | 🚫 | CI/CD, npm badges, deprecations — deferred |
-| I2.01-I2.12 | 🚫 | Community marketing — deferred to post-launch |
+
+### I2. Community Seeding (ongoing, with each blog post)
+
+| Platform | Frequency | Content |
+|----------|-----------|---------|
+| Dev.to | Every blog post | Cross-post with canonical URL back to fieldcraft.squaredr.tech |
+| Reddit r/reactjs | 2x/month | Tutorials only, not product pitches |
+| Reddit r/healthIT | 1x/month | Healthcare/telehealth posts |
+| X/Twitter | Every blog post | Thread format (hook → 3 key points → CTA) |
+| LinkedIn | 2x/month | Engineering deep dives |
+| Hacker News | 1x/month max | Only engineering deep dives, never product pitches |
+
+**Rule:** Never >1 link per platform per week. Be a community member, not a spammer.
 
 ---
 
-## Execution Order for v1.4.0
-
-Work sequentially through these groups:
-
-| Group | Items | Area |
-|-------|-------|------|
-| 1 | A1.12-A1.15, A1.06 | New validators |
-| 2 | A1.05 | Repeater circular import fix |
-| 3 | A3.04-A3.06, A3.08, A3.12, A3.16, A3.20 | Engine methods |
-| 4 | A7.11 | Readonly field state |
-| 5 | A3.17 | beforeSubmit hook |
-| 6 | A3.18 | onEvent analytics |
-| 7 | A3.13, A3.14, A3.19 | Draft improvements |
-| 8 | A3.15 | Data export |
-| 9 | A4.01-A4.05 | New condition operators |
-| 10 | A4.07-A4.09 | Expression functions |
-| 11 | A2.01-A2.02, A2.05-A2.08, A2.11 | Validator enhancements |
-| 12 | A6.03-A6.08 | HTTP adapter enhancements |
-| 13 | A7.01-A7.02, A7.04, A7.10, A7.12 | Schema metadata |
-| 14 | A7.05-A7.07, A8.01-A8.05, A8.07-A8.09, A8.11-A8.13 | Utilities |
-| 15 | A5.08-A5.10 | Type exports |
-| 16 | B1.16 | React onFocus |
-| 17 | B1.02, B1.04-B1.15 | React field fixes |
-| 18 | B3.05-B3.10 | React hooks |
-| 19 | H1.08-H1.16, H1.12, I1.06 | Community & docs |
-| 20 | — | Build + test + version bump |
-| 21 | — | Roadmap updates |
-
----
-
-## Version Target
+## Version History
 
 ### v1.4.x (shipped)
 
@@ -418,24 +470,17 @@ Work sequentially through these groups:
 | `@squaredr/fieldcraft-core` | 1.3.14 | 1.4.1 |
 | `@squaredr/fieldcraft-react` | 1.2.12 | 1.3.0 |
 
-### v1.5.0 (display modes — next)
+### v1.6.0 (shipped — includes display modes + all v1.4.x–v1.5.x features)
 
 | Package | From | To | Change |
 |---------|------|----|--------|
-| `@squaredr/fieldcraft-core` | 1.4.1 | 1.5.0 | Question-level navigation, displayMode enum fix |
-| `@squaredr/fieldcraft-react` | 1.3.0 | 1.4.0 | Classic/stepped/conversational renderer branching |
+| `@squaredr/fieldcraft-core` | 1.4.1 | 1.6.0 | Question-level navigation, displayMode enum, validators, utilities |
+| `@squaredr/fieldcraft-react` | 1.3.0 | 1.6.0 | Classic/stepped/conversational renderer, aria utilities, hooks |
 
-### Execution Order for v1.5.0
+### Remaining Patches (can ship in any 1.6.x)
 
-| Step | Items | Area |
-|------|-------|------|
-| 1 | B5.A01–A05 | Core: question-level navigation state + methods |
-| 2 | B5.A06–A07 | Core: schema validator fix + exports |
-| 3 | B5.A08 | Core: tests for question navigation |
-| 4 | B5.A09 | Core: version bump 1.5.0 + changelog |
-| 5 | B5.B01–B03 | React: renderer refactor, classic mode, stepped mode extraction |
-| 6 | B5.B04–B07 | React: conversational mode (one-at-a-time, transitions, auto-advance, keyboard) |
-| 7 | B5.B08–B10 | React: settings support (progress, navigation config) |
-| 8 | B5.B11–B12 | React: CSS mode classes + version bump 1.4.0 + changelog |
-| 9 | B5.C01–C04 | Build, test, publish both packages |
-| 10 | B5.C05–C08 | Pro: update peer deps, add mode selector, verify preview, bump Pro |
+| Item | Description |
+|------|-------------|
+| B5.B05 | Add `prefers-reduced-motion` media query to conversational transitions |
+| B5.B06 | Auto-advance on selection fields in conversational mode |
+| H4.08 | Fix console banner: core shows v1.5.1 (should be 1.6.0), react shows v1.3.0 (should be 1.6.0) |
