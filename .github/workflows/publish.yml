@@ -55,8 +55,8 @@ jobs:
           tar -czf "release-assets/fieldcraft-webhook-${TAG}.tar.gz" \
             -C packages/adapters/webhook src package.json
 
-          tar -czf "release-assets/fieldcraft-templates-free-${TAG}.tar.gz" \
-            -C packages/templates-free src package.json tsconfig.json
+          tar -czf "release-assets/fieldcraft-templates-${TAG}.tar.gz" \
+            -C packages/templates src package.json tsconfig.json
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1

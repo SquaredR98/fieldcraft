@@ -59,7 +59,7 @@ console.log(state.values); // { name: "Alice", email: "alice@example.com" }
 ## Features
 
 - **Schema-driven** — define forms with JSON/TypeScript schemas
-- **44 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
+- **42 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
 - **Conditional logic** — show/hide fields based on previous answers with AND/OR combinators
 - **Display modes** — stepped (wizard), classic (all-at-once), or conversational (one question at a time)
 - **Multi-section flows** — wizard-style forms with progress tracking
@@ -276,7 +276,7 @@ import { createValidatorRegistry } from "@squaredr/fieldcraft-core/validators";
 npm install @squaredr/fieldcraft-react
 ```
 
-The React package provides a ready-to-use `FormEngineRenderer` component with 44 field components built on shadcn/ui and Tailwind CSS.
+The React package provides a ready-to-use `FormEngineRenderer` component with 42 field components built on shadcn/ui and Tailwind CSS.
 
 ## Community
 

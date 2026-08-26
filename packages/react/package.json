@@ -1,7 +1,7 @@
 {
   "name": "@squaredr/fieldcraft-react",
-  "version": "1.6.0",
-  "description": "React renderer for @squaredr/fieldcraft-core — 44 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.",
+  "version": "1.7.0",
+  "description": "React renderer for @squaredr/fieldcraft-core — 42 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

@@ -40,13 +40,13 @@ pnpm add zod
 |---------|-------------|---------|
 | `@squaredr/fieldcraft-core` | Engine only — no React. Use this if you're building a custom renderer or running validation server-side. | MIT |
 | `@squaredr/fieldcraft-adapters` | Submission targets: HTTP, Supabase, Postgres, webhooks. Includes field-level encryption and retry logic. | MIT |
-| `@squaredr/fieldcraft-templates-free` | 16 production-ready form schemas across 7 categories — contact, feedback, NPS, job application, event registration, and more. Copy and edit. | MIT |
+| `@squaredr/fieldcraft-templates` | 16 production-ready form schemas across 7 categories — contact, feedback, NPS, job application, event registration, and more. Copy and edit. | MIT |
 | `@squaredr/fieldcraft-pro` | Drag-and-drop visual builder, schema editor, theme editor, response viewer. Coming soon. | Commercial |
 
 Install any combination:
 
 ```bash
-pnpm add @squaredr/fieldcraft-adapters @squaredr/fieldcraft-templates-free
+pnpm add @squaredr/fieldcraft-adapters @squaredr/fieldcraft-templates
 ```
 
 ## Verify the install

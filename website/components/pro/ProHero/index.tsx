@@ -20,7 +20,7 @@ export function ProHero() {
 
         <div className="fc-pro-hero__badges">
           <div className="fc-pro-hero__badge">React 18 &amp; 19</div>
-          <div className="fc-pro-hero__badge">44 field types</div>
+          <div className="fc-pro-hero__badge">42 field types</div>
           <div className="fc-pro-hero__badge">One-time purchase</div>
         </div>
 

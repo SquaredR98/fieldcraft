@@ -7,6 +7,7 @@ import { BatteriesIncluded } from '@/components/homepage/BatteriesIncluded';
 import { ProductionSchemas } from '@/components/homepage/ProductionSchemas';
 import { TemplateShowcase } from '@/components/homepage/TemplateShowcase';
 import { SubmissionPipeline } from '@/components/homepage/SubmissionPipeline';
+import { TrustStrip } from '@/components/homepage/TrustStrip';
 import { ComparisonTable } from '@/components/homepage/ComparisonTable';
 import { NpmStats } from '@/components/homepage/NpmStats';
 import { FormBuilderTeaser } from '@/components/homepage/FormBuilderTeaser';
@@ -33,6 +34,7 @@ export function HomepageView({ showcaseTemplates, npmStats }: HomepageViewProps)
       <ScrollReveal><ProductionSchemas /></ScrollReveal>
       <ScrollReveal><TemplateShowcase templates={showcaseTemplates} /></ScrollReveal>
       <ScrollReveal><SubmissionPipeline /></ScrollReveal>
+      <ScrollReveal><TrustStrip /></ScrollReveal>
       <ScrollReveal><ComparisonTable /></ScrollReveal>
       <ScrollReveal><NpmStats stats={npmStats} /></ScrollReveal>
       <ScrollReveal><FormBuilderTeaser /></ScrollReveal>

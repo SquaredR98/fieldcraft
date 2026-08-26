@@ -69,6 +69,15 @@
   @apply px-2.25 py-1.25;
 }
 
+.fc-hero__badge--gh {
+  @apply flex items-center gap-1.5 no-underline text-fc-muted;
+  transition: color var(--motion-hover), border-color var(--motion-hover);
+}
+
+.fc-hero__badge--gh:hover {
+  @apply text-fc-ink border-fc-ink;
+}
+
 /* ── Right column: hero card ── */
 
 .fc-hero-card {

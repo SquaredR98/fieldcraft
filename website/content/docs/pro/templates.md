@@ -5,10 +5,10 @@ description: 16 production-ready form schemas included with the free templates p
 
 ## Free templates
 
-`@squaredr/fieldcraft-templates-free` includes 16 production-ready schemas. These are MIT-licensed — use them in any project.
+`@squaredr/fieldcraft-templates` includes 16 production-ready schemas. These are MIT-licensed — use them in any project.
 
 ```bash
-pnpm add @squaredr/fieldcraft-templates-free
+pnpm add @squaredr/fieldcraft-templates
 ```
 
 ## Available templates
@@ -54,7 +54,7 @@ pnpm add @squaredr/fieldcraft-templates-free
 Each template exports a schema, metadata, and a combined template object:
 
 ```ts
-import { contactForm } from '@squaredr/fieldcraft-templates-free'
+import { contactForm } from '@squaredr/fieldcraft-templates'
 
 // The schema — pass directly to FormRenderer
 contactForm.schema   // FormEngineSchema
@@ -63,14 +63,14 @@ contactForm.schema   // FormEngineSchema
 contactForm.meta     // { id, name, description, category, fieldCount, sectionCount, tags }
 
 // Or import individually
-import { contactFormSchema, contactFormMeta } from '@squaredr/fieldcraft-templates-free'
+import { contactFormSchema, contactFormMeta } from '@squaredr/fieldcraft-templates'
 ```
 
 ### Render a template
 
 ```tsx
 import { FormRenderer } from '@squaredr/fieldcraft-react'
-import { contactForm } from '@squaredr/fieldcraft-templates-free'
+import { contactForm } from '@squaredr/fieldcraft-templates'
 
 export default function ContactPage() {
   return (
@@ -87,7 +87,7 @@ export default function ContactPage() {
 ### List all templates
 
 ```ts
-import { allTemplates } from '@squaredr/fieldcraft-templates-free'
+import { allTemplates } from '@squaredr/fieldcraft-templates'
 
 // allTemplates is Template[] — all 16 templates
 allTemplates.forEach((t) => {
@@ -113,7 +113,7 @@ type TemplateCategory =
 Templates are standard `FormEngineSchema` objects. Copy and modify them:
 
 ```ts
-import { contactForm } from '@squaredr/fieldcraft-templates-free'
+import { contactForm } from '@squaredr/fieldcraft-templates'
 
 const myContactForm = {
   ...contactForm.schema,

@@ -64,6 +64,9 @@ export type FormEngineRendererProps = {
 
   // Accessibility
   autoFocus?: boolean;
+
+  // Conversational mode
+  autoAdvance?: boolean;
 };
 
 export function FormEngineRenderer({
@@ -87,6 +90,7 @@ export function FormEngineRenderer({
   nextLabel,
   submitLabel,
   autoFocus,
+  autoAdvance,
 }: FormEngineRendererProps) {
   const engine = useFormEngine(schema, {
     adapters,
@@ -208,6 +212,7 @@ export function FormEngineRenderer({
                 engine={engine}
                 registry={registry}
                 autoFocus={autoFocus}
+                autoAdvance={autoAdvance}
                 prevLabel={prevLabel}
                 nextLabel={nextLabel}
                 submitLabel={submitLabel}
@@ -350,6 +355,7 @@ function ConversationalModeContent({
   engine,
   registry,
   autoFocus,
+  autoAdvance,
   prevLabel,
   nextLabel,
   submitLabel,
@@ -358,6 +364,7 @@ function ConversationalModeContent({
   engine: FormEngine;
   registry: FieldRegistry;
   autoFocus?: boolean;
+  autoAdvance?: boolean;
   prevLabel?: string;
   nextLabel?: string;
   submitLabel?: string;
@@ -370,6 +377,7 @@ function ConversationalModeContent({
       theme={theme}
       registry={registry}
       autoFocus={autoFocus}
+      autoAdvance={autoAdvance}
       prevLabel={prevLabel}
       nextLabel={nextLabel}
       submitLabel={submitLabel}

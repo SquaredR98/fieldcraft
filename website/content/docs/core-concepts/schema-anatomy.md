@@ -282,6 +282,6 @@ type FormResponse = {
 
 ## Next steps
 
-- [Field types](/docs/core-concepts/field-types) — all 44 types with their configs
+- [Field types](/docs/core-concepts/field-types) — all 42 types with their configs
 - [Conditional logic](/docs/core-concepts/conditional-logic) — `showIf`, operators, and compound conditions
 - [Validation](/docs/core-concepts/validation) — 19 built-in rule types plus custom and async validators

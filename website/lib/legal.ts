@@ -30,7 +30,7 @@ export const legalPages: LegalPage[] = [
 <h2>2. The Software</h2>
 <p>FieldCraft is a JSON-driven form engine distributed as npm packages. It includes:</p>
 <ul>
-<li><strong>Open-source packages</strong> (<code>@squaredr/fieldcraft-core</code>, <code>@squaredr/fieldcraft-react</code>, <code>@squaredr/fieldcraft-adapters</code>, <code>@squaredr/fieldcraft-templates-free</code>) released under the <a href="/legal/license">MIT License</a>.</li>
+<li><strong>Open-source packages</strong> (<code>@squaredr/fieldcraft-core</code>, <code>@squaredr/fieldcraft-react</code>, <code>@squaredr/fieldcraft-adapters</code>, <code>@squaredr/fieldcraft-templates</code>) released under the <a href="/legal/license">MIT License</a>.</li>
 <li><strong>Commercial packages</strong> (<code>@squaredr/fieldcraft-pro</code>) that require a paid licence for production use. The commercial software is licensed, not sold. All intellectual property rights remain with SquaredR.</li>
 </ul>
 

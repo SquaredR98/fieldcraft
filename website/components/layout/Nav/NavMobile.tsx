@@ -58,6 +58,15 @@ export function NavMobile() {
               {link.label}
             </Link>
           ))}
+          <a
+            href="https://github.com/SquaredR98/fieldcraft"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fc-nav__drawer-link"
+            onClick={() => setOpen(false)}
+          >
+            GitHub
+          </a>
           <Link
             href="/pro"
             className="fc-nav__drawer-cta"

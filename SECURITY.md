@@ -33,7 +33,7 @@ This policy covers:
 - `@squaredr/fieldcraft-core`
 - `@squaredr/fieldcraft-react`
 - `@squaredr/fieldcraft-adapters`
-- `@squaredr/fieldcraft-templates-free`
+- `@squaredr/fieldcraft-templates`
 
 ## Security Considerations
 

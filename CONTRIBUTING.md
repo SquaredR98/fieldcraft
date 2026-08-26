@@ -19,7 +19,7 @@ packages/
   core/              # @squaredr/fieldcraft-core — pure TypeScript
   react/             # @squaredr/fieldcraft-react — React components
   adapters/          # @squaredr/fieldcraft-adapters — storage adapters
-  templates-free/    # @squaredr/fieldcraft-templates-free — ready-made schemas
+  templates/         # @squaredr/fieldcraft-templates — ready-made schemas
 website/             # Marketing site + docs (not published to npm)
 ```
 
@@ -50,7 +50,7 @@ These boundaries are enforced and must not be violated:
 - **core** has zero UI dependencies. No React, no DOM.
 - **react** depends on core. Never import Pro or adapters.
 - **adapters** depends on core types only. No React.
-- **templates-free** depends on core types only.
+- **templates** depends on core types only.
 
 ## Pull Request Process
 

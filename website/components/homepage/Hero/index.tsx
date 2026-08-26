@@ -1,4 +1,5 @@
 import { CopyInstall } from '@/components/shared/CopyInstall';
+import { GitHubStars } from '@/components/shared/GitHubStars';
 import { HeroTabs } from './HeroTabs';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
@@ -37,6 +38,7 @@ export function Hero() {
             {badges.map((b) => (
               <div key={b} className="fc-hero__badge">{b}</div>
             ))}
+            <GitHubStars />
           </div>
         </div>
         <HeroTabs />

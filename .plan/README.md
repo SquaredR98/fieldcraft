@@ -6,16 +6,16 @@
 
 ## What is FieldCraft?
 
-A schema-driven headless form engine. You define forms as JSON, the engine handles state, validation, navigation, scoring, drafts, and submission. Pure TypeScript core with zero UI dependencies. React renderer with 44 field components, 3 display modes.
+A schema-driven headless form engine. You define forms as JSON, the engine handles state, validation, navigation, scoring, drafts, and submission. Pure TypeScript core with zero UI dependencies. React renderer with 42 field components, 3 display modes.
 
 **Four packages, one monorepo:**
 
 | Package | npm | Version | Description |
 |---------|-----|---------|-------------|
 | `@squaredr/fieldcraft-core` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-core) | 1.6.0 | Pure TypeScript engine. Zero UI deps. Only depends on Zod. |
-| `@squaredr/fieldcraft-react` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-react) | 1.6.0 | React renderer. 44 field components. 3 display modes. shadcn/ui + Tailwind. |
+| `@squaredr/fieldcraft-react` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-react) | 1.7.0 | React renderer. 42 field components. 3 display modes. shadcn/ui + Tailwind. |
 | `@squaredr/fieldcraft-adapters` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters) | 1.0.1 | Submission adapters. HTTP, Postgres, Supabase, Webhook. |
-| `@squaredr/fieldcraft-templates-free` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free) | 1.1.1 | 16 free form templates. |
+| `@squaredr/fieldcraft-templates` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-templates) | 1.1.1 | 16 free form templates. |
 
 All published. All in sync.
 

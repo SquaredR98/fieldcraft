@@ -13,7 +13,7 @@
     "@squaredr/fieldcraft-core": "workspace:*",
     "@squaredr/fieldcraft-pro": "^1.6.3",
     "@squaredr/fieldcraft-react": "workspace:*",
-    "@squaredr/fieldcraft-templates-free": "workspace:*",
+    "@squaredr/fieldcraft-templates": "workspace:*",
     "@types/mdx": "^2.0.14",
     "framer-motion": "^11.0",
     "fumadocs-core": "^16.14.0",

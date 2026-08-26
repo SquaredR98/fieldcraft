@@ -11,7 +11,7 @@ export function Architecture() {
         <p className="fc-arch__sub">
           Each layer is a separate package &mdash; install only what your project
           requires. The core engine has zero UI dependencies, and the React
-          renderer adds 44 pre-built components.
+          renderer adds 42 pre-built components.
         </p>
 
         <div className="fc-arch__grid">
@@ -68,6 +68,27 @@ export function Architecture() {
                 </div>
               </div>
             </div>
+
+            <div className="fc-arch__callout">
+              <div className="fc-arch__callout-title">
+                Built for React. Open to every framework.
+              </div>
+              <div className="fc-arch__callout-text">
+                The core engine is pure TypeScript with zero UI dependencies.
+                React is the official renderer, but the engine API is designed
+                for any framework. Vue, Svelte, Angular, Solid &mdash;
+                community renderers are welcome and the architecture supports
+                them out of the box.
+              </div>
+              <a
+                href="https://github.com/SquaredR98/fieldcraft"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fc-arch__contribute-link"
+              >
+                Contribute on GitHub &rarr;
+              </a>
+            </div>
           </div>
 
           {/* ── Right column: hairline-stacked sidebar ── */}
@@ -95,7 +116,7 @@ export function Architecture() {
 
             <div className="fc-arch__sidebar-item">
               <div className="fc-arch__sidebar-pkg">
-                @squaredr/fieldcraft-templates-free
+                @squaredr/fieldcraft-templates
               </div>
               <div className="fc-arch__sidebar-text">
                 Ready-made form schemas for common use cases &mdash; contact,
@@ -132,6 +153,7 @@ export function Architecture() {
                 </tbody>
               </table>
             </div>
+
           </div>
         </div>
       </div>

@@ -4,11 +4,24 @@ import type { FieldRegistry } from "../../registry/field-registry";
 import { FieldRenderer } from "../FieldRenderer";
 import { cn } from "../../utils/cn";
 
+/** Field types that auto-advance in conversational mode after selection. */
+const AUTO_ADVANCE_TYPES = new Set([
+  "single_select",
+  "boolean",
+  "rating",
+  "nps",
+  "opinion_scale",
+  "likert",
+  "dropdown",
+  "country_select",
+]);
+
 export type ConversationalRendererProps = {
   engine: FormEngine;
   theme: FormEngineTheme;
   registry: FieldRegistry;
   autoFocus?: boolean;
+  autoAdvance?: boolean;
   prevLabel?: string;
   nextLabel?: string;
   submitLabel?: string;
@@ -24,6 +37,7 @@ export function ConversationalRenderer({
   theme,
   registry,
   autoFocus = true,
+  autoAdvance = true,
   prevLabel = "Back",
   nextLabel = "Next",
   submitLabel = "Submit",
@@ -46,6 +60,34 @@ export function ConversationalRenderer({
   const handlePrev = useCallback(() => {
     engine.prevQuestion();
   }, [engine]);
+
+  // Auto-advance: after selecting a value on qualifying field types,
+  // advance to the next question after a short delay.
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
+
+  const handleChange = useCallback(
+    (fieldId: string, value: unknown) => {
+      engine.setValue(fieldId, value);
+
+      if (!autoAdvance || !currentQuestion) return;
+      if (!AUTO_ADVANCE_TYPES.has(currentQuestion.type)) return;
+      // Only advance if a value was actually selected (not cleared)
+      if (value === undefined || value === null || value === "") return;
+
+      if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+      autoAdvanceTimerRef.current = setTimeout(() => {
+        handleNext();
+      }, 350);
+    },
+    [engine, autoAdvance, currentQuestion, handleNext],
+  );
+
+  // Clean up timer on unmount or question change
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceTimerRef.current) clearTimeout(autoAdvanceTimerRef.current);
+    };
+  }, [state.currentQuestionId]);
 
   // Keyboard: Enter to advance
   useEffect(() => {
@@ -110,7 +152,7 @@ export function ConversationalRenderer({
           touched={!!state.touched[currentQuestion.id]}
           disabled={engine.isFieldDisabled(currentQuestion.id)}
           readonly={engine.isFieldReadonly(currentQuestion.id)}
-          onChange={(val) => engine.setValue(currentQuestion.id, val)}
+          onChange={(val) => handleChange(currentQuestion.id, val)}
           onBlur={() => engine.touchField(currentQuestion.id)}
           onFocus={() => engine.focusField(currentQuestion.id)}
           theme={theme}

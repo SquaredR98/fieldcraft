@@ -1,6 +1,6 @@
 # @squaredr/fieldcraft-react
 
-React renderer for `@squaredr/fieldcraft-core` — 44 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
+React renderer for `@squaredr/fieldcraft-core` — 42 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
 
 [![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
 [![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
@@ -92,7 +92,7 @@ All field components use semantic `.fc-*` CSS classes (FieldCraft namespace) def
 | `ErrorSummary` | Validation error list |
 | `CompletionScreen` | Post-submit confirmation |
 
-### Field Types (44)
+### Field Types (42)
 
 **Text:** ShortTextField, LongTextField, EmailField, PhoneField, PhoneInternationalField, UrlField, LegalNameField
 

@@ -25,7 +25,7 @@ const rows: Row[] = [
     label: 'Field types',
     hosted: 'Whatever the vendor ships',
     diy: 'Each one you write',
-    fc: '44 included, extensible',
+    fc: '42 included, extensible',
   },
   {
     label: 'Conditional logic',

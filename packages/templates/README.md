@@ -1,8 +1,8 @@
-# @squaredr/fieldcraft-templates-free
+# @squaredr/fieldcraft-templates
 
-[![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates-free.svg)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free)
-[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-templates-free)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free)
-[![license](https://img.shields.io/npm/l/@squaredr/fieldcraft-templates-free.svg)](https://github.com/SquaredR98/fieldcraft/blob/main/packages/templates-free/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates.svg)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates)
+[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-templates)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates)
+[![license](https://img.shields.io/npm/l/@squaredr/fieldcraft-templates.svg)](https://github.com/SquaredR98/fieldcraft/blob/main/packages/templates/LICENSE)
 
 16 free, production-ready form schemas for [FieldCraft](https://fieldcraft.squaredr.tech). Drop them into your app, customize, and ship.
 
@@ -11,7 +11,7 @@
 ## Install
 
 ```bash
-npm install @squaredr/fieldcraft-templates-free @squaredr/fieldcraft-core
+npm install @squaredr/fieldcraft-templates @squaredr/fieldcraft-core
 ```
 
 ## Template Catalog
@@ -62,7 +62,7 @@ npm install @squaredr/fieldcraft-templates-free @squaredr/fieldcraft-core
 ### Single template
 
 ```typescript
-import { contactFormSchema } from "@squaredr/fieldcraft-templates-free";
+import { contactFormSchema } from "@squaredr/fieldcraft-templates";
 
 // Pass directly to FormEngineRenderer
 <FormEngineRenderer schema={contactFormSchema} onSubmit={handleSubmit} />
@@ -71,7 +71,7 @@ import { contactFormSchema } from "@squaredr/fieldcraft-templates-free";
 ### With metadata
 
 ```typescript
-import { contactForm } from "@squaredr/fieldcraft-templates-free";
+import { contactForm } from "@squaredr/fieldcraft-templates";
 
 console.log(contactForm.meta);
 // {
@@ -90,7 +90,7 @@ console.log(contactForm.meta);
 ### Browse all templates
 
 ```typescript
-import { allTemplates } from "@squaredr/fieldcraft-templates-free";
+import { allTemplates } from "@squaredr/fieldcraft-templates";
 
 // List available templates
 allTemplates.forEach((t) => {
@@ -107,7 +107,7 @@ const likertTemplates = allTemplates.filter((t) => t.meta.tags.includes("likert"
 ### Customize a template
 
 ```typescript
-import { contactFormSchema } from "@squaredr/fieldcraft-templates-free";
+import { contactFormSchema } from "@squaredr/fieldcraft-templates";
 
 const customized = {
   ...contactFormSchema,

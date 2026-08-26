@@ -15,7 +15,7 @@ const PACKAGES = [
   { name: '@squaredr/fieldcraft-core', shortName: 'core' },
   { name: '@squaredr/fieldcraft-react', shortName: 'react' },
   { name: '@squaredr/fieldcraft-adapters', shortName: 'adapters' },
-  { name: '@squaredr/fieldcraft-templates-free', shortName: 'templates' },
+  { name: '@squaredr/fieldcraft-templates', shortName: 'templates' },
   { name: '@squaredr/fieldcraft-pro', shortName: 'pro' },
 ];
 
@@ -24,7 +24,7 @@ const FALLBACK_DOWNLOADS: Record<string, number> = {
   '@squaredr/fieldcraft-core': 359,
   '@squaredr/fieldcraft-react': 493,
   '@squaredr/fieldcraft-adapters': 54,
-  '@squaredr/fieldcraft-templates-free': 60,
+  '@squaredr/fieldcraft-templates': 60,
   '@squaredr/fieldcraft-pro': 260,
 };
 

@@ -374,6 +374,6 @@ export const contactFormSchema: FormEngineSchema = {
 ## Next steps
 
 - [Schema anatomy](/docs/core-concepts/schema-anatomy) — understand every property in the schema
-- [Field types](/docs/core-concepts/field-types) — all 44 field types with their configs
+- [Field types](/docs/core-concepts/field-types) — all 42 field types with their configs
 - [Conditional logic](/docs/core-concepts/conditional-logic) — `showIf`, jump rules, and conditional required
 - [Theming](/docs/react/theming) — customise colours, typography, spacing, and shape

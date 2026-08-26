@@ -1,6 +1,6 @@
 # FieldCraft
 
-A headless, pure TypeScript form engine with a React renderer. Define forms as JSON schemas, render them with 44 pre-built field components, and get multi-step flows, conditional visibility, validation, and computed fields out of the box.
+A headless, pure TypeScript form engine with a React renderer. Define forms as JSON schemas, render them with 42 pre-built field components, and get multi-step flows, conditional visibility, validation, and computed fields out of the box.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)]()
@@ -15,9 +15,9 @@ A headless, pure TypeScript form engine with a React renderer. Define forms as J
 | Package | Description | Version |
 |---------|-------------|---------|
 | [`@squaredr/fieldcraft-core`](packages/core) | Headless TypeScript engine — schema, validation, conditional visibility, state management | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core) |
-| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 44 field components, hooks, theming, pluggable field registry | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react) |
+| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 42 field components, hooks, theming, pluggable field registry | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react) |
 | [`@squaredr/fieldcraft-adapters`](packages/adapters) | Submission adapters — HTTP, Postgres, Supabase, Webhook | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-adapters)](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters) |
-| [`@squaredr/fieldcraft-templates-free`](packages/templates-free) | 16 free form templates — general, HR, and more | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates-free)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates-free) |
+| [`@squaredr/fieldcraft-templates`](packages/templates) | 16 free form templates — general, HR, and more | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates) |
 
 ## Install
 
@@ -74,7 +74,7 @@ function App() {
 ## Features
 
 - **Headless core** -- pure TypeScript engine with zero UI dependencies; bring your own renderer or use the React package
-- **44 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
+- **42 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
 - **JSON schemas** -- define entire forms as plain objects in TypeScript or JSON
 - **Display modes** -- stepped (wizard), classic (all-at-once), or conversational (one question at a time, Typeform-style)
 - **Multi-step flows** -- wizard-style sections with progress tracking and back/next navigation
@@ -122,10 +122,10 @@ import { createWebhookAdapter } from '@squaredr/fieldcraft-adapters/webhook'
 
 ## Templates
 
-16 production-ready form schemas included in [`@squaredr/fieldcraft-templates-free`](packages/templates-free):
+16 production-ready form schemas included in [`@squaredr/fieldcraft-templates`](packages/templates):
 
 ```bash
-npm install @squaredr/fieldcraft-templates-free
+npm install @squaredr/fieldcraft-templates
 ```
 
 Contact form, feedback survey, NPS, job application, event registration, bug report, employee onboarding, leave request, and more.
@@ -136,9 +136,9 @@ Contact form, feedback survey, NPS, job application, event registration, bug rep
 fieldcraft/
 ├── packages/
 │   ├── core/                  # Form engine (pure TypeScript)
-│   ├── react/                 # React renderer + 44 field components
+│   ├── react/                 # React renderer + 42 field components
 │   ├── adapters/              # Submission adapters (HTTP, Postgres, Supabase, Webhook)
-│   └── templates-free/        # 16 free form schemas
+│   └── templates/        # 16 free form schemas
 ├── website/                   # Docs site (fieldcraft.squaredr.tech)
 └── tooling/                   # Shared configs (TypeScript, Tailwind, ESLint)
 ```

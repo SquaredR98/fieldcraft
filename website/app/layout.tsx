@@ -55,13 +55,13 @@ export const metadata: Metadata = {
     siteName: 'FieldCraft',
     title: 'FieldCraft — Schema-driven form engine for React',
     description:
-      'Define a form once in JSON — 44 field types, conditional logic, multi-step navigation, validation, and submission. Open source, MIT licensed.',
+      'Define a form once in JSON — 42 field types, conditional logic, multi-step navigation, validation, and submission. Open source, MIT licensed.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'FieldCraft — Schema-driven form engine for React',
     description:
-      'Define a form once in JSON — 44 field types, conditional logic, multi-step navigation, validation, and submission. Open source, MIT licensed.',
+      'Define a form once in JSON — 42 field types, conditional logic, multi-step navigation, validation, and submission. Open source, MIT licensed.',
   },
 };
 

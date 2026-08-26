@@ -3,7 +3,7 @@ import './styles.css';
 
 const includes = [
   'FormBuilder, ResponseViewer and ThemeEditor components',
-  'All 44 field types plus the Pro-only advanced set',
+  'All 42 field types plus the Pro-only advanced set',
   'TypeScript types and full API reference',
   'Twelve months of updates, including new modules',
   'Private issue tracker with maintainer response',

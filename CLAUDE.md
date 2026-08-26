@@ -14,7 +14,7 @@ formengine/
 │   ├── core/              # @squaredr/fieldcraft-core — pure TypeScript, zero UI deps
 │   ├── react/             # @squaredr/fieldcraft-react — React + shadcn + Tailwind
 │   ├── adapters/          # @squaredr/fieldcraft-adapters — storage (Postgres, Supabase, Webhook)
-│   └── templates-free/    # @squaredr/fieldcraft-templates-free — ready-made schemas
+│   └── templates/         # @squaredr/fieldcraft-templates — ready-made schemas
 ├── website/               # FieldCraft marketing site + docs + blog (has its own CLAUDE.md)
 ├── tooling/               # Shared ESLint config
 ├── turbo.json             # Turborepo config

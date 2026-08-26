@@ -1,11 +1,11 @@
 ---
 title: Field types
-description: All 44 built-in field types organised into 8 categories, with their type-specific config options.
+description: All 42 built-in field types organised into 8 categories, with their type-specific config options.
 ---
 
 ## Overview
 
-FieldCraft ships with 44 field types in 8 categories. Each field type has a `type` string used in the schema and an optional `config` object with type-specific settings.
+FieldCraft ships with 42 field types in 8 categories. Each field type has a `type` string used in the schema and an optional `config` object with type-specific settings.
 
 The `QuestionType` union also accepts custom strings — you can register your own field types via the [field registry](/docs/react/custom-field-types) without modifying the core types.
 

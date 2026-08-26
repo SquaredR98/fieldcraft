@@ -1,5 +1,5 @@
-import { allTemplates } from '@squaredr/fieldcraft-templates-free';
-import type { Template, TemplateMeta, TemplateCategory } from '@squaredr/fieldcraft-templates-free';
+import { allTemplates } from '@squaredr/fieldcraft-templates';
+import type { Template, TemplateMeta, TemplateCategory } from '@squaredr/fieldcraft-templates';
 
 export type { Template, TemplateMeta, TemplateCategory };
 

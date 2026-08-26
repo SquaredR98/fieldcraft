@@ -1,7 +1,7 @@
 import './styles.css';
 
 const engineBullets = [
-  '44 field types',
+  '42 field types',
   'Validation and conditional logic',
   'Multi-step navigation and drafts',
   'Submission adapters',

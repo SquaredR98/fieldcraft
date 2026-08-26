@@ -17,7 +17,7 @@ const packages = [
     license: 'MIT',
   },
   {
-    name: '@squaredr/fieldcraft-templates-free',
+    name: '@squaredr/fieldcraft-templates',
     desc: 'Starter schemas for common forms',
     license: 'MIT',
   },

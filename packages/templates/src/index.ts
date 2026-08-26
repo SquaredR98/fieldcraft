@@ -1,4 +1,4 @@
-// @squaredr/fieldcraft-templates-free
+// @squaredr/fieldcraft-templates
 // 16 free, production-ready form schemas for FieldCraft
 
 // Types

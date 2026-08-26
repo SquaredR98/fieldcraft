@@ -53,12 +53,12 @@ FieldCraft Pro is fully self-hosted. Your data never leaves your infrastructure:
 
 ## Open source + Pro
 
-The open-source packages (`core`, `react`, `adapters`, `templates-free`) are MIT-licensed and free forever. Pro is a commercial add-on — you don't need it to use FieldCraft.
+The open-source packages (`core`, `react`, `adapters`, `templates`) are MIT-licensed and free forever. Pro is a commercial add-on — you don't need it to use FieldCraft.
 
 | | Open source | Pro |
 |---|---|---|
 | Form rendering | Included | Included |
-| 44 field types | Included | Included |
+| 42 field types | Included | Included |
 | Validation, conditions, computed fields | Included | Included |
 | Theming, hooks, adapters | Included | Included |
 | Visual form builder | — | Included |

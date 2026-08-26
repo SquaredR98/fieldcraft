@@ -24,6 +24,15 @@
   @apply text-fc-ink;
 }
 
+.fc-nav__github {
+  @apply flex items-center text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-nav__github:hover {
+  @apply text-fc-ink;
+}
+
 .fc-nav__cta {
   @apply whitespace-nowrap shrink-0 no-underline;
   @apply bg-fc-teal text-fc-teal-on;

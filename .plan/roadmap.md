@@ -1,9 +1,9 @@
 # FieldCraft OSS — Roadmap
 
 > All shippable items for the OSS packages. Updated as tasks complete.
-> Start: June 13, 2026 · Updated: 2026-08-25
-> This plan covers: core, react, adapters, templates-free, website, docs, blog, community.
-> Current versions: core 1.6.0, react 1.6.0, adapters 1.0.1, templates-free 1.1.1
+> Start: June 13, 2026 · Updated: 2026-08-26
+> This plan covers: core, react, adapters, templates, website, docs, blog, community.
+> Current versions: core 1.6.0, react 1.7.0, adapters 1.0.1, templates 1.1.1
 
 ---
 
@@ -50,7 +50,7 @@
 | A2.06 | ✅ | `validateOnBlur` vs `validateOnChange` field-level config | patch |
 | A2.07 | ✅ | Validator registry `listAll()` method | patch |
 | A2.08 | ✅ | Validator registry `getMetadata(name)` method | patch |
-| A2.09 | 🚫 | Debounced validation support | patch |
+| A2.09 | 🚫 | Debounced validation support — `debounceMs` exists in schema type but not wired. Intentionally deferred: consumers can debounce in onChange. Wire when A2.03 (async validators) ships. | patch |
 | A2.10 | 🚫 | Cross-field validation groups | minor |
 | A2.11 | ✅ | Validation error severity levels (error/warning/info) | minor |
 | A2.12 | 🚫 | Schema-level validation utility | minor |
@@ -223,7 +223,7 @@
 ### B5. Display Modes & Layout (✅ Shipped in core 1.6.0 + react 1.6.0)
 
 > Shipped ahead of schedule. Core question-level navigation, all 3 display modes, and Pro integration are live.
-> Two minor items remain: `prefers-reduced-motion` media query (B5.B05) and auto-advance on selection fields (B5.B06).
+> B5.B05 (prefers-reduced-motion) and B5.B06 (auto-advance) shipped in react 1.7.0.
 
 #### B5-A. Core Engine — Question-Level Navigation (shipped in core 1.6.0)
 
@@ -247,8 +247,8 @@
 | B5.B02 | ✅ | `classic` mode — render ALL visible sections at once (ClassicModeRenderer) |
 | B5.B03 | ✅ | `stepped` mode — one section at a time (SteppedModeContent) |
 | B5.B04 | ✅ | `conversational` mode — one question at a time (ConversationalRenderer) |
-| B5.B05 | ⬚ | Conversational: add `prefers-reduced-motion` media query (transitions exist but no reduced-motion check) |
-| B5.B06 | ⬚ | Conversational: auto-advance on selection fields (yes/no, radio, dropdown) |
+| B5.B05 | ✅ | Conversational: add `prefers-reduced-motion` media query — global reset in `formengine.css` |
+| B5.B06 | ✅ | Conversational: auto-advance on selection fields (single_select, boolean, rating, nps, opinion_scale, likert, dropdown, country_select) — 350ms delay, `autoAdvance` prop |
 | B5.B07 | ✅ | Conversational: keyboard Enter to advance on text/number fields |
 | B5.B08 | ✅ | Respect `settings.showProgress` — hide progress bar when false |
 | B5.B09 | ✅ | Respect `settings.progressStyle` — bar, steps, percentage |
@@ -286,6 +286,16 @@
 | # | Status | Item | Version |
 |---|--------|------|---------|
 | B7.01-B7.05 | 🚫 | Embed IIFE build, CSS scoping, Auto-GTAG, multiple instances, bundle size budget | minor |
+
+### B8. React Performance & Compatibility
+
+| # | Status | Item | Version |
+|---|--------|------|---------|
+| B8.01 | 🚫 | ~~`React.memo` on field components~~ — Not needed. Fields are stateless, parent re-renders regardless. `useSyncExternalStore` on full state is intentional. Optimize only if real perf issues on 100+ field forms. | — |
+| B8.02 | 🚫 | ~~`"use client"` directives~~ — Not needed. Standard library pattern: consumer adds `"use client"`, not the library. Adding would prevent tree-shaking in non-RSC apps. | — |
+| B8.03 | 🚫 | Scroll-to-first-error — deferred. `firstErrorFieldId` is computed but not wired. Wait for community requests or contributor PRs. | patch |
+| B8.04 | 🚫 | ~~`forwardRef` on field components~~ — Not needed. `engine.focusField(fieldId)` via querySelector is cleaner. Ref would point to wrapper div, not inner input. | — |
+| B8.05 | 🚫 | Section transition animations — deferred to focus on higher-priority features. | minor |
 
 ---
 
@@ -382,7 +392,7 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 | H4.05 | ⬚ | Fix docs "Edit on GitHub" link (currently `#`) |
 | H4.06 | ⬚ | Submit sitemap to Google Search Console (manual) |
 | H4.07 | ⬚ | Submit sitemap to Bing Webmaster Tools (manual) |
-| H4.08 | ⬚ | Fix react console banner: shows v1.3.0, should be 1.6.0 |
+| H4.08 | ✅ | Fix console banners: core v1.5.1→1.6.0, react v1.3.0→1.6.0. Also fixed field count 44→42, removed stale telemetry line from core. |
 | H4.09 | ⬚ | npm README overhaul — add links to docs, blog, /pro page |
 | H4.10 | ⬚ | Cross-post top 3 existing blogs to Dev.to (with canonical URLs) |
 
@@ -437,6 +447,27 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 
 **Note:** Weeks 18-24 depend on SaaS features shipping (tracked in `fieldcraft-pro/.plan/roadmap.md` Track 3). These posts must NOT be published before those features go live.
 
+### H7. Website — Developer Attraction & Positioning
+
+> Goal: Make the website the obvious choice for a React developer evaluating form libraries.
+> Positioning: Open-source, React-first (community adapters for other frameworks welcome), self-hosted, MIT licensed.
+
+| # | Status | Item |
+|---|--------|------|
+| H7.01 | ✅ | **Hero rewrite** — Added `GitHubStars` async server component (fetches star count at build time, 1h ISR). GitHub icon badge in hero badges row. GitHub icon link in nav + mobile drawer. |
+| H7.02 | ✅ | **Data ownership & trust strip** — Added `TrustStrip` section between SubmissionPipeline and ComparisonTable: 4 cards covering data ownership, no tracking, HIPAA/GDPR-ready, MIT auditable source. Open-source messaging is also in hero eyebrow, badges, and footer. |
+| H7.03 | ⬚ | **Interactive playground page** (`/playground`) — Live form editor: JSON schema on left, rendered form on right. Let devs try before installing. (shadcn has a theme playground, Radix has live examples.) |
+| H7.04 | ⬚ | **"Why FieldCraft" page** (`/why`) — Feature grid comparing FieldCraft vs building from scratch vs hosted services vs SurveyJS-style tools. Focus on: bundle size, data ownership, field type count, React-native DX, one-time pricing vs recurring. Use your own data, not their branding. |
+| H7.05 | ✅ | **Framework contribution callout** — Added to Architecture section sidebar: "Built for React. Open to every framework." callout with teal accent, explains core is framework-free, links to GitHub for contributions. |
+| H7.06 | ⬚ | **Code-first hero demo** — Replace or supplement HeroTabs with a 10-line code snippet showing schema → rendered form. Devs want to see code, not prose. |
+| H7.07 | ⬚ | **Feature stats strip** — Homepage strip with live-from-source numbers: "42 field types · 19 validators · 25 condition operators · 3 display modes · 4 adapters". Update via M3 rule. |
+| H7.08 | ⬚ | **"Used by" / social proof section** — Even if early, show GitHub contributor avatars, npm download chart, or community Discord member count. SurveyJS shows G2 badges — you show GitHub activity. |
+| H7.09 | ✅ | **Quick start on homepage** — Already exists in HowItWorks section (3-step: install → schema → render with inline code), plus CopyInstall button in hero. No changes needed. |
+| H7.10 | ⬚ | **Comparison page** (`/compare`) — Standalone page: FieldCraft vs React Hook Form vs Formik vs SurveyJS. Feature table with honest ticks/crosses. Note: Compare categories (bundle size, field types, schema-driven, builder, i18n, pricing), never use competitor logos or copy their text. |
+| H7.11 | ⬚ | **Bundle size badge** — Add minified+gzip size to hero or SpecStrip. Developers care about this. Show it proudly if it's small. |
+| H7.12 | ✅ | **"Contribute" nav link** — GitHub icon in nav + mobile drawer links to repo. Footer already has GitHub/npm/Discord column. Separate "Contribute" link not needed — repo README links to CONTRIBUTING.md. |
+| H7.13 | ⬚ | **Docs: "Extend for other frameworks"** — Doc page explaining how core is headless, how the React renderer works, and how someone could build a Vue/Svelte/Angular renderer. Architecture diagram. |
+
 ---
 
 ## Category I: Infrastructure & Community
@@ -475,12 +506,12 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 | Package | From | To | Change |
 |---------|------|----|--------|
 | `@squaredr/fieldcraft-core` | 1.4.1 | 1.6.0 | Question-level navigation, displayMode enum, validators, utilities |
-| `@squaredr/fieldcraft-react` | 1.3.0 | 1.6.0 | Classic/stepped/conversational renderer, aria utilities, hooks |
+| `@squaredr/fieldcraft-react` | 1.3.0 | 1.7.0 | Classic/stepped/conversational renderer, aria utilities, hooks, auto-advance, reduced-motion |
 
 ### Remaining Patches (can ship in any 1.6.x)
 
-| Item | Description |
-|------|-------------|
-| B5.B05 | Add `prefers-reduced-motion` media query to conversational transitions |
-| B5.B06 | Auto-advance on selection fields in conversational mode |
-| H4.08 | Fix console banner: core shows v1.5.1 (should be 1.6.0), react shows v1.3.0 (should be 1.6.0) |
+| Item | Status | Description |
+|------|--------|-------------|
+| B5.B05 | ✅ | `prefers-reduced-motion` media query — shipped in react 1.7.0 |
+| B5.B06 | ✅ | Auto-advance on selection fields — shipped in react 1.7.0 |
+| H4.08 | ✅ | Fix console banner: core v1.5.1→1.6.0, react v1.3.0→1.6.0 — shipped |

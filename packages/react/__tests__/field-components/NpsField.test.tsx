@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { NpsField } from "../../src/components/fields/NpsField";
-import { cleanPreset } from "../../src/theme/presets/clean";
 import type { FieldProps } from "../../src/registry/field-registry";
 import type { Question } from "@squaredr/fieldcraft-core";
 
@@ -18,7 +17,7 @@ function makeProps(overrides?: Partial<FieldProps>): FieldProps {
     disabled: false,
     onChange: vi.fn(),
     onBlur: vi.fn(),
-    theme: cleanPreset,
+    theme: {},
     ...overrides,
   };
 }

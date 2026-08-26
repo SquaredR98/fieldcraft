@@ -119,6 +119,33 @@
   @apply font-mono text-xs text-fc-teal mb-1.5;
 }
 
+/* ── Framework callout (left column) ── */
+
+.fc-arch__callout {
+  @apply border border-fc-teal-border p-5 mt-4;
+  background: color-mix(in srgb, var(--teal) 4%, var(--surface));
+}
+
+.fc-arch__callout-title {
+  @apply font-display text-[15px] font-semibold;
+  @apply tracking-[-0.01em] text-fc-ink-strong mb-2;
+}
+
+.fc-arch__callout-text {
+  @apply text-sm leading-[1.65] text-fc-muted;
+}
+
+.fc-arch__contribute-link {
+  @apply inline-block mt-3 no-underline;
+  @apply font-mono text-[11px] tracking-[0.08em] uppercase;
+  @apply text-fc-teal;
+  transition: color var(--motion-hover);
+}
+
+.fc-arch__contribute-link:hover {
+  @apply text-fc-ink;
+}
+
 /* ── Entry point table ── */
 
 .fc-arch__entry-table {
