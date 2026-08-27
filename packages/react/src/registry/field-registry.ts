@@ -13,6 +13,8 @@ export type FieldProps = {
   onFocus: () => void;
   theme: FormEngineTheme;
   customProps?: Record<string, unknown>;
+  /** All current field values in the form. Available for fields that need cross-field access (e.g., AppointmentField reading a timezone selector). @since 1.8.0 */
+  fieldValues?: Record<string, unknown>;
 };
 
 /** A React component that renders a single field. */

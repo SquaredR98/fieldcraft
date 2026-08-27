@@ -112,6 +112,7 @@ export function SectionRenderer({
                 onFocus={() => engine.focusField(field.id)}
                 theme={theme}
                 registry={registry}
+                fieldValues={state.values}
               />
             );
           }
@@ -139,6 +140,7 @@ export function SectionRenderer({
                   onFocus={() => engine.focusField(field.id)}
                   theme={theme}
                   registry={registry}
+                  fieldValues={state.values}
                 />
               ))}
             </div>

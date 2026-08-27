@@ -12,8 +12,8 @@ A schema-driven headless form engine. You define forms as JSON, the engine handl
 
 | Package | npm | Version | Description |
 |---------|-----|---------|-------------|
-| `@squaredr/fieldcraft-core` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-core) | 1.6.0 | Pure TypeScript engine. Zero UI deps. Only depends on Zod. |
-| `@squaredr/fieldcraft-react` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-react) | 1.7.0 | React renderer. 42 field components. 3 display modes. shadcn/ui + Tailwind. |
+| `@squaredr/fieldcraft-core` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-core) | 1.7.0 | Pure TypeScript engine. Zero UI deps. Only depends on Zod. |
+| `@squaredr/fieldcraft-react` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-react) | 1.8.0 | React renderer. 42 field components. 3 display modes. shadcn/ui + Tailwind. |
 | `@squaredr/fieldcraft-adapters` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters) | 1.0.1 | Submission adapters. HTTP, Postgres, Supabase, Webhook. |
 | `@squaredr/fieldcraft-templates` | [npm](https://www.npmjs.com/package/@squaredr/fieldcraft-templates) | 1.1.1 | 16 free form templates. |
 

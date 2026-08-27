@@ -1,9 +1,9 @@
 # FieldCraft OSS — Roadmap
 
 > All shippable items for the OSS packages. Updated as tasks complete.
-> Start: June 13, 2026 · Updated: 2026-08-26
+> Start: June 13, 2026 · Updated: 2026-08-28
 > This plan covers: core, react, adapters, templates, website, docs, blog, community.
-> Current versions: core 1.6.0, react 1.7.0, adapters 1.0.1, templates 1.1.1
+> Current versions: core 1.7.0, react 1.8.0, adapters 1.0.1, templates 1.1.1
 
 ---
 
@@ -508,7 +508,14 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 | `@squaredr/fieldcraft-core` | 1.4.1 | 1.6.0 | Question-level navigation, displayMode enum, validators, utilities |
 | `@squaredr/fieldcraft-react` | 1.3.0 | 1.7.0 | Classic/stepped/conversational renderer, aria utilities, hooks, auto-advance, reduced-motion |
 
-### Remaining Patches (can ship in any 1.6.x)
+### v1.7.0 / v1.8.0 (shipped — timezone support + fieldValues plumbing)
+
+| Package | From | To | Change |
+|---------|------|----|--------|
+| `@squaredr/fieldcraft-core` | 1.6.0 | 1.7.0 | `timezoneField` on AppointmentConfig |
+| `@squaredr/fieldcraft-react` | 1.7.0 | 1.8.0 | Predefined TIMEZONES data, `fieldValues` on FieldProps, dynamic timezone resolution in AppointmentField |
+
+### Remaining Patches (all shipped)
 
 | Item | Status | Description |
 |------|--------|-------------|

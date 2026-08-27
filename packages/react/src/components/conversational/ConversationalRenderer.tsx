@@ -157,6 +157,7 @@ export function ConversationalRenderer({
           onFocus={() => engine.focusField(currentQuestion.id)}
           theme={theme}
           registry={registry}
+          fieldValues={state.values}
         />
       </div>
 

@@ -4,7 +4,7 @@
 // Dev console banner — runs once in development mode
 // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 if (typeof globalThis !== "undefined" && typeof (globalThis as any).process !== "undefined" && (globalThis as any).process.env?.NODE_ENV !== "production") {
-  const _fc_banner = `\n%c FieldCraft React %c v1.7.0\n\n%c42 field components · Tailwind/shadcn · WCAG accessible\n\nDocs      → https://fieldcraft.squaredr.tech/docs\nGitHub    → https://github.com/SquaredR98/fieldcraft\nDiscord   → https://discord.gg/FK8pszp5z\n`;
+  const _fc_banner = `\n%c FieldCraft React %c v1.8.0\n\n%c42 field components · Tailwind/shadcn · WCAG accessible\n\nDocs      → https://fieldcraft.squaredr.tech/docs\nGitHub    → https://github.com/SquaredR98/fieldcraft\nDiscord   → https://discord.gg/FK8pszp5z\n`;
   console.log(
     _fc_banner,
     "background:#2563eb;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px 0 0 3px",
@@ -139,6 +139,9 @@ export {
 export { Textarea } from "./components/ui/textarea";
 export { Toggle, toggleVariants } from "./components/ui/toggle";
 export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
+
+// ---- Data ----
+export { TIMEZONES, type Timezone } from "./data/timezones";
 
 // ---- Utils ----
 export { cn } from "./utils/cn";

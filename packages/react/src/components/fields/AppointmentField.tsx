@@ -19,6 +19,37 @@ function resolveMode(config: AppointmentConfig | undefined, customProps: Record<
   return "setup";
 }
 
+/**
+ * Resolve the effective timezone using a priority chain:
+ * 1. customProps.timezone (runtime override)
+ * 2. fieldValues[config.timezoneField] (dynamic from another field)
+ * 3. config.timezone (static schema config)
+ * 4. Browser default via Intl
+ */
+function resolveTimezone(
+  config: AppointmentConfig | undefined,
+  customProps: Record<string, unknown> | undefined,
+  fieldValues: Record<string, unknown> | undefined,
+): string | undefined {
+  if (typeof customProps?.timezone === "string" && customProps.timezone) {
+    return customProps.timezone;
+  }
+  if (config?.timezoneField && fieldValues) {
+    const v = fieldValues[config.timezoneField];
+    if (typeof v === "string" && v) {
+      return v;
+    }
+  }
+  if (config?.timezone) {
+    return config.timezone;
+  }
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return undefined;
+  }
+}
+
 function formatDate(dateStr: string, _dateFormat?: string, timezone?: string): string {
   try {
     const date = new Date(dateStr + "T00:00:00");
@@ -33,10 +64,11 @@ function formatDate(dateStr: string, _dateFormat?: string, timezone?: string): s
   }
 }
 
-export function AppointmentField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus, customProps }: FieldProps) {
+export function AppointmentField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus, customProps, fieldValues }: FieldProps) {
   const config = field.config as AppointmentConfig | undefined;
   const mode = resolveMode(config, customProps);
   const selected = value as AppointmentValue | undefined;
+  const timezone = resolveTimezone(config, customProps, fieldValues);
 
   if (mode === "setup") {
     return (
@@ -55,6 +87,7 @@ export function AppointmentField({ field, value, error, touched, disabled, reado
       <EmbedMode
         field={field}
         config={config!}
+        timezone={timezone}
         value={selected}
         error={error}
         touched={touched}
@@ -67,6 +100,7 @@ export function AppointmentField({ field, value, error, touched, disabled, reado
     <SlotPickerMode
       field={field}
       config={config}
+      timezone={timezone}
       mode={mode}
       value={selected}
       error={error}
@@ -86,6 +120,7 @@ export function AppointmentField({ field, value, error, touched, disabled, reado
 function EmbedMode({
   field,
   config,
+  timezone,
   value,
   error,
   touched,
@@ -93,6 +128,7 @@ function EmbedMode({
 }: {
   field: FieldProps["field"];
   config: AppointmentConfig;
+  timezone: string | undefined;
   value: AppointmentValue | undefined;
   error: FieldProps["error"];
   touched: FieldProps["touched"];
@@ -133,7 +169,7 @@ function EmbedMode({
               date: e.data.date,
               time: e.data.time,
               bookingId: e.data.bookingId,
-              timezone: config.timezone,
+              timezone,
             });
           }
         }
@@ -144,7 +180,7 @@ function EmbedMode({
 
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
-  }, [config.embedProvider, config.timezone, onChange, value]);
+  }, [config.embedProvider, timezone, onChange, value]);
 
   const confirmed = !!value?.bookingId;
 
@@ -184,6 +220,7 @@ function EmbedMode({
 function SlotPickerMode({
   field,
   config,
+  timezone,
   mode,
   value,
   error,
@@ -197,6 +234,7 @@ function SlotPickerMode({
 }: {
   field: FieldProps["field"];
   config: AppointmentConfig | undefined;
+  timezone: string | undefined;
   mode: "callback" | "url" | "static";
   value: AppointmentValue | undefined;
   error: FieldProps["error"];
@@ -227,11 +265,11 @@ function SlotPickerMode({
       setFetchError(null);
       try {
         if (mode === "callback" && onFetchSlots) {
-          const result = await onFetchSlots({ timezone: config?.timezone });
+          const result = await onFetchSlots({ timezone });
           setSlots(result.slots ?? []);
         } else if (mode === "url" && config?.slotsUrl) {
           const url = new URL(config.slotsUrl);
-          if (config?.timezone) url.searchParams.set("timezone", config.timezone);
+          if (timezone) url.searchParams.set("timezone", timezone);
           const res = await fetch(url.toString());
           if (!res.ok) throw new Error(`Failed to fetch slots (${res.status})`);
           const data = await res.json();
@@ -245,7 +283,7 @@ function SlotPickerMode({
     };
 
     fetchSlots();
-  }, [mode, config?.slotsUrl, config?.timezone, onFetchSlots]);
+  }, [mode, config?.slotsUrl, timezone, onFetchSlots]);
 
   // Fetch times for selected date (callback or URL mode)
   const fetchTimesForDate = useCallback(async (date: string) => {
@@ -254,7 +292,7 @@ function SlotPickerMode({
     setFetchError(null);
     try {
       if (mode === "callback" && onFetchSlots) {
-        const result = await onFetchSlots({ date, timezone: config?.timezone });
+        const result = await onFetchSlots({ date, timezone });
         setSlots((prev) => {
           const others = prev.filter((s) => s.date !== date);
           const newSlot = result.slots?.find((s) => s.date === date);
@@ -263,7 +301,7 @@ function SlotPickerMode({
       } else if (mode === "url" && config?.slotsUrl) {
         const url = new URL(config.slotsUrl);
         url.searchParams.set("date", date);
-        if (config?.timezone) url.searchParams.set("timezone", config.timezone);
+        if (timezone) url.searchParams.set("timezone", timezone);
         const res = await fetch(url.toString());
         if (!res.ok) throw new Error(`Failed to fetch times (${res.status})`);
         const data = await res.json();
@@ -278,25 +316,25 @@ function SlotPickerMode({
     } finally {
       setLoading(false);
     }
-  }, [mode, config?.slotsUrl, config?.timezone, onFetchSlots]);
+  }, [mode, config?.slotsUrl, timezone, onFetchSlots]);
 
   const handleDateSelect = (date: string) => {
     setSelectedDate(date);
     setBookingError(null);
-    onChange({ date, time: undefined, timezone: config?.timezone });
+    onChange({ date, time: undefined, timezone });
     if (mode !== "static") {
       fetchTimesForDate(date);
     }
   };
 
   const handleTimeSelect = async (time: string) => {
-    const newValue: AppointmentValue = { date: selectedDate, time, timezone: config?.timezone };
+    const newValue: AppointmentValue = { date: selectedDate, time, timezone };
 
     if (onBookSlot && selectedDate) {
       setBooking(true);
       setBookingError(null);
       try {
-        const result = await onBookSlot({ date: selectedDate, time, timezone: config?.timezone });
+        const result = await onBookSlot({ date: selectedDate, time, timezone });
         if (result.confirmed) {
           newValue.bookingId = result.bookingId;
         } else {
@@ -342,7 +380,7 @@ function SlotPickerMode({
               setFetchError(null);
               if (mode === "callback" && onFetchSlots) {
                 setLoading(true);
-                onFetchSlots({ timezone: config?.timezone })
+                onFetchSlots({ timezone })
                   .then((r) => setSlots(r.slots ?? []))
                   .catch((e) => setFetchError(e.message))
                   .finally(() => setLoading(false));
@@ -391,7 +429,7 @@ function SlotPickerMode({
                   onFocus={onFocus}
                   onClick={() => handleDateSelect(slot.date)}
                 >
-                  {formatDate(slot.date, config?.dateFormat, config?.timezone)}
+                  {formatDate(slot.date, config?.dateFormat, timezone)}
                 </button>
               ))}
             </div>
@@ -443,7 +481,7 @@ function SlotPickerMode({
           <div className="rounded-md bg-muted/50 border border-input p-3">
             <p className="text-sm text-foreground font-medium">Booking confirmed</p>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {formatDate(value.date!, config?.dateFormat, config?.timezone)} at {value.time}
+              {formatDate(value.date!, config?.dateFormat, timezone)} at {value.time}
             </p>
           </div>
         )}

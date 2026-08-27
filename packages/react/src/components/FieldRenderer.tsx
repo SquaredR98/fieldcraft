@@ -14,6 +14,7 @@ export type FieldRendererProps = {
   onFocus: () => void;
   theme: FormEngineTheme;
   registry: FieldRegistry;
+  fieldValues?: Record<string, unknown>;
 };
 
 const widthMap: Record<string, string> = {
@@ -33,6 +34,7 @@ export function FieldRenderer({
   onFocus,
   theme,
   registry,
+  fieldValues,
 }: FieldRendererProps) {
   const Component = registry[field.type];
 
@@ -66,6 +68,7 @@ export function FieldRenderer({
         onFocus={onFocus}
         theme={theme}
         customProps={field.customProps}
+        fieldValues={fieldValues}
       />
     </div>
   );
