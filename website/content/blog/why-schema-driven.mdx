@@ -81,7 +81,7 @@ FieldCraft has two layers that never touch each other directly.
 |-------|---------|-----------------|
 | **Schema** | JSON object | Defines fields, types, validation, conditions, sections |
 | **Core Engine** | `@squaredr/fieldcraft-core` | Validates fields, evaluates `showIf`, manages navigation, handles draft persistence |
-| **React Renderer** | `@squaredr/fieldcraft-react` | Renders 42 field types, manages focus and keyboard nav, displays errors and progress |
+| **React Renderer** | `@squaredr/fieldcraft-react` | Renders 44 field types, manages focus and keyboard nav, displays errors and progress |
 
 > **The core doesn't know about React. The renderer doesn't know about validation rules.** They communicate through a well-defined state interface — and that separation is the whole point.
 
@@ -165,7 +165,7 @@ Schema-driven forms are not the right choice for everything. If you have a singl
 
 FieldCraft works best when you have multiple forms that share common patterns. Contact forms, surveys, onboarding flows, intake forms, feedback forms, checkout forms. The forms that make up 90% of what most web apps need.
 
-The engine supports 42 field types out of the box. For the remaining edge cases, you can register custom field types through the field registry and they'll work with all the same validation, conditional logic, and persistence features.
+The engine supports 44 field types out of the box. For the remaining edge cases, you can register custom field types through the field registry and they'll work with all the same validation, conditional logic, and persistence features.
 
 ## Try It
 

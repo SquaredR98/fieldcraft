@@ -21,6 +21,18 @@ export const changelog: ChangelogEntry[] = [
   // ── Core ──────────────────────────────────────────────
 
   {
+    version: '1.7.0',
+    date: '2026-08-27',
+    package: 'core',
+    packageLabel: '@squaredr/fieldcraft-core',
+    changes: [
+      { type: 'added', text: 'Repeater aggregate functions: SUM(), AVG(), COUNT(), MIN(), MAX() with dot-notation sub-field references' },
+      { type: 'added', text: 'Per-row expressions inside aggregates: SUM({items.price} * {items.qty})' },
+      { type: 'added', text: 'extractFieldRefs() now returns repeater parent IDs from dot-notation references' },
+      { type: 'changed', text: 'Dev console banner version is now injected dynamically from package.json at build time' },
+    ],
+  },
+  {
     version: '1.6.0',
     date: '2026-08-21',
     package: 'core',

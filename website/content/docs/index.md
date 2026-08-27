@@ -36,7 +36,7 @@ Two packages, each depending only on the one beneath it. Take the layer you need
 | Layer | Package | What it does |
 |-------|---------|-------------|
 | Core | `@squaredr/fieldcraft-core` | Schema parsing, state management, condition evaluation, validation, expression engine, navigation. No UI, no React. |
-| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 42 field components, 10 hooks, CSS variable theming with auto-inherit, draft persistence, step navigation. |
+| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 44 field components, 10 hooks, CSS variable theming with auto-inherit, draft persistence, step navigation. |
 
 Core is framework-agnostic. You could build a Vue or Svelte renderer on top of it — the engine API is the same. React is the official renderer that ships with the project.
 
@@ -47,7 +47,7 @@ Core is framework-agnostic. You could build a Vue or Svelte renderer on top of i
 | **Conditional visibility** | Any field or section can declare `showIf` — a condition expression evaluated against current form values. Hidden fields are excluded from validation and submission. |
 | **Validation** | 19 built-in rule types (required, min/max, minLength/maxLength, pattern, email, phone, URL, date, file size, file type, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField) plus custom sync and async validators. Conditional validation with `applyIf` and severity levels. Validation runs on blur, on section change, and on submit. |
 | **Multi-step navigation** | Sections become steps. The engine tracks which sections are visible, which have been visited, and whether the current section is valid before allowing forward navigation. |
-| **Computed fields** | Expressions like `{price} * {quantity}` are parsed and evaluated safely — no `eval()`. Dependencies are tracked so computed fields update when their inputs change. |
+| **Computed fields** | Expressions like `{price} * {quantity}` are parsed and evaluated safely — no `eval()`. Aggregate functions (SUM, AVG, COUNT, MIN, MAX) work across repeater rows. Dependencies are tracked so computed fields update when their inputs change. |
 | **Draft persistence** | Answers survive a page refresh with zero configuration. Drafts are keyed by schema ID + session token, stored in localStorage by default, or sent to a server via a draft adapter. |
 | **Schema validation at boot** | A malformed schema throws `FormEngineSchemaError` at engine creation time — not on the user's first keystroke. Duplicate field IDs, invalid conditions, and missing required properties are caught before rendering. |
 | **Scoring** | Fields can carry numeric scores. The engine aggregates them and maps totals to named ranges (e.g., "Low risk", "Medium risk", "High risk"). |

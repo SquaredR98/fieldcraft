@@ -1,11 +1,11 @@
 ---
 title: Custom field types
-description: Register your own field components alongside the 42 built-ins using the field registry.
+description: Register your own field components alongside the 44 built-ins using the field registry.
 ---
 
 ## The field registry
 
-Every field type maps to a React component via the registry. The default registry contains all 42 built-in field components. You can add your own types or override existing ones.
+Every field type maps to a React component via the registry. The default registry contains all 44 built-in field components. You can add your own types or override existing ones.
 
 ```ts
 import { defaultRegistry } from '@squaredr/fieldcraft-react'
@@ -187,4 +187,4 @@ const combined = mergeRegistries(defaultRegistry, medical)
 
 - [Theming](/docs/react/theming) — style your custom fields with theme tokens
 - [FormRenderer](/docs/react/form-renderer) — pass the registry to the renderer
-- [Field types](/docs/core-concepts/field-types) — the 42 built-in types for reference
+- [Field types](/docs/core-concepts/field-types) — the 44 built-in types for reference

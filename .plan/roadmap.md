@@ -1,9 +1,9 @@
 # FieldCraft OSS — Roadmap
 
 > All shippable items for the OSS packages. Updated as tasks complete.
-> Start: June 13, 2026 · Updated: 2026-08-26
+> Start: June 13, 2026 · Updated: 2026-08-27
 > This plan covers: core, react, adapters, templates, website, docs, blog, community.
-> Current versions: core 1.6.0, react 1.7.0, adapters 1.0.1, templates 1.1.1
+> Current versions: core 1.7.0, react 1.7.0, adapters 1.0.1, templates 1.1.1
 
 ---
 
@@ -460,7 +460,7 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 | H7.04 | ⬚ | **"Why FieldCraft" page** (`/why`) — Feature grid comparing FieldCraft vs building from scratch vs hosted services vs SurveyJS-style tools. Focus on: bundle size, data ownership, field type count, React-native DX, one-time pricing vs recurring. Use your own data, not their branding. |
 | H7.05 | ✅ | **Framework contribution callout** — Added to Architecture section sidebar: "Built for React. Open to every framework." callout with teal accent, explains core is framework-free, links to GitHub for contributions. |
 | H7.06 | ⬚ | **Code-first hero demo** — Replace or supplement HeroTabs with a 10-line code snippet showing schema → rendered form. Devs want to see code, not prose. |
-| H7.07 | ⬚ | **Feature stats strip** — Homepage strip with live-from-source numbers: "42 field types · 19 validators · 25 condition operators · 3 display modes · 4 adapters". Update via M3 rule. |
+| H7.07 | ⬚ | **Feature stats strip** — Homepage strip with live-from-source numbers: "44 field types · 19 validators · 25 condition operators · 3 display modes · 4 adapters". Update via M3 rule. |
 | H7.08 | ⬚ | **"Used by" / social proof section** — Even if early, show GitHub contributor avatars, npm download chart, or community Discord member count. SurveyJS shows G2 badges — you show GitHub activity. |
 | H7.09 | ✅ | **Quick start on homepage** — Already exists in HowItWorks section (3-step: install → schema → render with inline code), plus CopyInstall button in hero. No changes needed. |
 | H7.10 | ⬚ | **Comparison page** (`/compare`) — Standalone page: FieldCraft vs React Hook Form vs Formik vs SurveyJS. Feature table with honest ticks/crosses. Note: Compare categories (bundle size, field types, schema-driven, builder, i18n, pricing), never use competitor logos or copy their text. |
@@ -500,6 +500,12 @@ React component tests, adapter tests, infrastructure tests — deferred to post-
 |---------|------|----|
 | `@squaredr/fieldcraft-core` | 1.3.14 | 1.4.1 |
 | `@squaredr/fieldcraft-react` | 1.2.12 | 1.3.0 |
+
+### v1.7.0 (shipping — repeater aggregates)
+
+| Package | From | To | Change |
+|---------|------|----|--------|
+| `@squaredr/fieldcraft-core` | 1.6.0 | 1.7.0 | Repeater aggregate functions (SUM/AVG/COUNT/MIN/MAX), dot-notation sub-field refs, dynamic version banner |
 
 ### v1.6.0 (shipped — includes display modes + all v1.4.x–v1.5.x features)
 

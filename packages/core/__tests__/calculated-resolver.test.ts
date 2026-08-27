@@ -86,6 +86,83 @@ describe("evaluateExpression", () => {
   });
 });
 
+describe("evaluateExpression — repeater aggregates", () => {
+  const values = {
+    items: [
+      { name: "Widget", price: 10, qty: 3 },
+      { name: "Gadget", price: 25, qty: 2 },
+      { name: "Doohickey", price: 5, qty: 10 },
+    ],
+  };
+
+  it("SUM of a single repeater sub-field", () => {
+    const result = evaluateExpression("SUM({items.price})", values);
+    expect(result.value).toBe(40); // 10 + 25 + 5
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("SUM of product expression across repeater rows", () => {
+    const result = evaluateExpression("SUM({items.price} * {items.qty})", values);
+    expect(result.value).toBe(130); // (10*3) + (25*2) + (5*10) = 30 + 50 + 50
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("AVG of a repeater sub-field", () => {
+    const result = evaluateExpression("AVG({items.price})", values);
+    expect(result.value).toBeCloseTo(13.33, 1); // (10+25+5)/3
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("COUNT of a repeater sub-field", () => {
+    const result = evaluateExpression("COUNT({items.price})", values);
+    expect(result.value).toBe(3);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("MIN of a repeater sub-field", () => {
+    const result = evaluateExpression("MIN({items.price})", values);
+    expect(result.value).toBe(5);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("MAX of a repeater sub-field", () => {
+    const result = evaluateExpression("MAX({items.qty})", values);
+    expect(result.value).toBe(10);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("aggregate combined with simple field ref", () => {
+    const result = evaluateExpression("SUM({items.price} * {items.qty}) * 1.085", values);
+    expect(result.value).toBeCloseTo(141.05, 1); // 130 * 1.085
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("returns 0 for SUM of empty repeater", () => {
+    const result = evaluateExpression("SUM({items.price})", { items: [] });
+    expect(result.value).toBe(0);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("returns 0 for SUM when repeater is not an array", () => {
+    const result = evaluateExpression("SUM({items.price})", { items: "not-an-array" });
+    expect(result.value).toBe(0);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("chained calculation: SUM feeds into another calculated field", () => {
+    const vals = {
+      items: [
+        { price: 10, qty: 2 },
+        { price: 20, qty: 1 },
+      ],
+      subtotal: 40, // pre-computed: SUM(price*qty) = 20 + 20 = 40
+    };
+    const result = evaluateExpression("{subtotal} * 0.085", vals);
+    expect(result.value).toBeCloseTo(3.4, 1);
+    expect(result.warning).toBeUndefined();
+  });
+});
+
 describe("extractFieldRefs", () => {
   it("extracts single field reference", () => {
     expect(extractFieldRefs("{name}")).toEqual(["name"]);
@@ -101,5 +178,16 @@ describe("extractFieldRefs", () => {
 
   it("returns empty for no references", () => {
     expect(extractFieldRefs("2 + 3")).toEqual([]);
+  });
+
+  it("extracts repeater parent IDs from dot-notation refs", () => {
+    const refs = extractFieldRefs("SUM({items.price} * {items.qty})");
+    expect(refs).toContain("items");
+  });
+
+  it("extracts both simple and repeater refs", () => {
+    const refs = extractFieldRefs("SUM({items.price}) + {tax_rate}");
+    expect(refs).toContain("items");
+    expect(refs).toContain("tax_rate");
   });
 });

@@ -9,6 +9,6 @@ export default async function OgImage() {
     eyebrow: 'Open Source',
     title: 'Schema-driven form engine for React.',
     description:
-      '42 field types, validation, conditional logic, multi-step navigation, and draft persistence. One JSON schema.',
+      '44 field types, validation, conditional logic, multi-step navigation, and draft persistence. One JSON schema.',
   });
 }
