@@ -11,7 +11,7 @@ export function Architecture() {
         <p className="fc-arch__sub">
           Each layer is a separate package &mdash; install only what your project
           requires. The core engine has zero UI dependencies, and the React
-          renderer adds 42 pre-built components.
+          renderer adds 44 pre-built components.
         </p>
 
         <div className="fc-arch__grid">

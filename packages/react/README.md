@@ -1,6 +1,6 @@
 # @squaredr/fieldcraft-react
 
-React renderer for `@squaredr/fieldcraft-core` — 42 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
+React renderer for `@squaredr/fieldcraft-core` — 44 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.
 
 [![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
 [![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react)
@@ -223,7 +223,7 @@ const customRegistry = mergeRegistries(defaultRegistry, {
 
 - `react` ^18 || ^19
 - `react-dom` ^18 || ^19
-- `@squaredr/fieldcraft-core` ^1.5.0
+- `@squaredr/fieldcraft-core` ^1.7.0
 
 ## Community
 

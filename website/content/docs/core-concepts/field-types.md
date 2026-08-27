@@ -93,7 +93,7 @@ The `QuestionType` union also accepts custom strings — you can register your o
 | `date` | Date picker | `minDate`, `maxDate`, `disablePast`, `disableFuture`, `format` |
 | `date_range` | Start + end date | `minDate`, `maxDate`, `maxRangeDays` |
 | `time` | Time picker | `format` ("12h" \| "24h"), `minuteStep` |
-| `appointment` | Date + time slot picker | `slotsUrl` (API), `slots` (static), `timezone`, `duration` |
+| `appointment` | Date + time slot picker | `slotsUrl` (API), `slots` (static), `timezone`, `timezoneField`, `duration` |
 
 ```ts
 {
@@ -108,6 +108,35 @@ The `QuestionType` union also accepts custom strings — you can register your o
   },
 }
 ```
+
+```ts
+// Appointment with dynamic timezone — the timezone dropdown
+// drives the appointment field via timezoneField
+{
+  id: 'timezone',
+  type: 'dropdown',
+  label: 'Your timezone',
+  required: true,
+  // Use TIMEZONES from @squaredr/fieldcraft-react for options
+}
+
+{
+  id: 'call',
+  type: 'appointment',
+  label: 'Schedule a call',
+  required: true,
+  config: {
+    type: 'appointment',
+    slotsUrl: '/api/slots',
+    timezoneField: 'timezone', // reads the timezone field's value
+    duration: 30,
+  },
+}
+```
+
+The `timezoneField` property links to another field by ID. When the user picks a timezone, the appointment field re-fetches slots for that timezone. Priority order: `customProps.timezone` → `timezoneField` value → static `timezone` → browser default.
+
+`@squaredr/fieldcraft-react` exports a `TIMEZONES` constant — an array of ~100 IANA timezone entries with `value`, `label`, `offset`, and `region` properties. Use it to populate a dropdown or single\_select field.
 
 ## Media fields (3)
 
