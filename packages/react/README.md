@@ -223,7 +223,7 @@ const customRegistry = mergeRegistries(defaultRegistry, {
 
 - `react` ^18 || ^19
 - `react-dom` ^18 || ^19
-- `@squaredr/fieldcraft-core` ^1.7.0
+- `@squaredr/fieldcraft-core` ^1.7.1
 
 ## Community
 
