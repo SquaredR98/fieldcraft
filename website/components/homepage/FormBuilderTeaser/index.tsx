@@ -24,7 +24,7 @@ export function FormBuilderTeaser() {
             See all Pro components &rarr;
           </a>
           <p className="fc-builder-teaser__note">
-            $199 one-time &middot; includes FormBuilder, ResponseViewer, ThemeEditor &amp; Telehealth.
+            $199 one-time &middot; includes FormBuilder, ResponseViewer &amp; ThemeEditor.
           </p>
         </div>
         <div className="fc-builder-teaser__form">

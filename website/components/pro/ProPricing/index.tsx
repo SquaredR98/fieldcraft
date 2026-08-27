@@ -3,7 +3,7 @@ import './styles.css';
 
 const includes = [
   'FormBuilder, ResponseViewer and ThemeEditor components',
-  'All 42 field types plus the Pro-only advanced set',
+  'All 44 field types plus the Pro-only advanced set',
   'TypeScript types and full API reference',
   'Twelve months of updates, including new modules',
   'Private issue tracker with maintainer response',
@@ -39,8 +39,13 @@ export function ProPricing() {
                   </div>
                 </div>
                 <div className="fc-pro-pricing__cta-area">
-                  <a href="#contact" className="fc-pro-pricing__cta">
-                    Coming soon &mdash; join the waitlist
+                  <a
+                    href="https://buy.fieldcraftpro.squaredr.tech"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="fc-pro-pricing__cta"
+                  >
+                    Buy now &mdash; $199
                   </a>
                   <p className="fc-pro-pricing__legal">
                     One licence per production domain. Unlimited development and

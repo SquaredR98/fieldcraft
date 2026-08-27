@@ -11,7 +11,7 @@ const jsonLd = {
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Any',
   description:
-    'A self-hosted, schema-driven form engine for React. 42 field types, validation, conditional logic, multi-step navigation, and draft persistence.',
+    'A self-hosted, schema-driven form engine for React. 44 field types, validation, conditional logic, multi-step navigation, and draft persistence.',
   url: 'https://fieldcraft.squaredr.tech',
   author: {
     '@type': 'Organization',

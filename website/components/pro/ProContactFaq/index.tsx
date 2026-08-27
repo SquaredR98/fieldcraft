@@ -78,7 +78,7 @@ const contactSchema: FormEngineSchema = {
           label: 'Interest',
           required: true,
           options: [
-            { label: 'Join the Pro waitlist', value: 'waitlist' },
+            { label: 'Pre-purchase question', value: 'pre-purchase' },
             { label: 'Licensing question', value: 'licensing' },
             { label: 'Agency / multi-project use', value: 'agency' },
             { label: 'Something else', value: 'other' },
@@ -212,8 +212,7 @@ export function ProContactFaq() {
                     Thanks &mdash; that landed.
                   </div>
                   <p className="fc-pro-contactfaq__success-desc">
-                    You are on the waitlist and you&rsquo;ll hear from us before
-                    launch.
+                    We&rsquo;ll get back to you shortly.
                   </p>
                   <button
                     type="button"

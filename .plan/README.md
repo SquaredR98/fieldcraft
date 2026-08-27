@@ -6,7 +6,7 @@
 
 ## What is FieldCraft?
 
-A schema-driven headless form engine. You define forms as JSON, the engine handles state, validation, navigation, scoring, drafts, and submission. Pure TypeScript core with zero UI dependencies. React renderer with 42 field components, 3 display modes.
+A schema-driven headless form engine. You define forms as JSON, the engine handles state, validation, navigation, scoring, drafts, and submission. Pure TypeScript core with zero UI dependencies. React renderer with 44 field components, 3 display modes.
 
 **Four packages, one monorepo:**
 

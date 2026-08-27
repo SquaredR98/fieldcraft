@@ -59,7 +59,7 @@ console.log(state.values); // { name: "Alice", email: "alice@example.com" }
 ## Features
 
 - **Schema-driven** — define forms with JSON/TypeScript schemas
-- **42 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
+- **44 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
 - **Conditional logic** — show/hide fields based on previous answers with AND/OR combinators
 - **Display modes** — stepped (wizard), classic (all-at-once), or conversational (one question at a time)
 - **Multi-section flows** — wizard-style forms with progress tracking
@@ -236,6 +236,31 @@ Use expression syntax to derive values from other fields:
 
 Supported math: `+`, `-`, `*`, `/`, `^`, parentheses, `FLOOR()`, `CEIL()`, `ROUND()`, `MIN()`, `MAX()`, `ABS()`.
 
+### Repeater Aggregates
+
+Aggregate functions operate on repeater sub-fields using dot-notation:
+
+```typescript
+// Sum all unit prices across repeater rows
+{ expression: "SUM({order_items.unit_price})" }
+
+// Sum the product of two sub-fields per row
+{ expression: "SUM({order_items.unit_price} * {order_items.quantity})" }
+
+// Average, count, min, max
+{ expression: "AVG({line_items.price})" }
+{ expression: "COUNT({line_items.price})" }
+{ expression: "MIN({line_items.price})" }
+{ expression: "MAX({line_items.quantity})" }
+
+// Combine aggregates with simple field refs
+{ expression: "SUM({order_items.unit_price} * {order_items.quantity}) * (1 + {tax_rate} / 100)" }
+```
+
+Supported aggregates: `SUM()`, `AVG()`, `COUNT()`, `MIN()`, `MAX()`. All references inside an aggregate must belong to the same repeater. Empty repeaters return `0`.
+
+### Other Functions
+
 String functions: `UPPER()`, `LOWER()`, `TRIM()`, `LEN()`, `CONCAT()`.
 
 Date functions: `TODAY()`, `DATEDIFF()`, `DATEADD()`.
@@ -276,7 +301,7 @@ import { createValidatorRegistry } from "@squaredr/fieldcraft-core/validators";
 npm install @squaredr/fieldcraft-react
 ```
 
-The React package provides a ready-to-use `FormEngineRenderer` component with 42 field components built on shadcn/ui and Tailwind CSS.
+The React package provides a ready-to-use `FormEngineRenderer` component with 44 field components built on shadcn/ui and Tailwind CSS.
 
 ## Community
 

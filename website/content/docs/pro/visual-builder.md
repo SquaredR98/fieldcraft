@@ -20,7 +20,7 @@ FormBuilder inherits CSS custom properties from your host page automatically. No
 | **Drag-and-drop** | Add fields by dragging from a palette. Reorder by dragging within the form. |
 | **Schema editor** | Edit the raw JSON schema alongside the visual builder. Changes sync in both directions. |
 | **Live preview** | The form renders live as you build it — exactly as users will see it. |
-| **All 42 field types** | Every built-in field type is available in the palette. |
+| **All 44 field types** | Every built-in field type is available in the palette. |
 | **Conditional logic UI** | Configure `showIf` conditions, jump rules, and conditional required through a visual interface. |
 | **Validation UI** | Add validation rules from a dropdown — no JSON editing required. |
 | **Logic flow map** | Visual branching logic map showing conditional paths between fields. |
@@ -98,7 +98,7 @@ When `schemaUrl` is provided, it overrides `initialSchema` if the fetch succeeds
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `questionTypes` | `Record<string, QuestionTypeInfo>` | — | Additional question type metadata. Merged with built-in defaults (e.g. telehealth fields). |
+| `questionTypes` | `Record<string, QuestionTypeInfo>` | — | Additional question type metadata. Merged with built-in defaults. |
 | `palette` | `PaletteCategory[]` | — | Additional palette categories. Appended to the built-in palette. |
 | `templates` | `FormBuilderTemplate[]` | — | Templates to show in the template gallery. |
 | `preview` | `FormBuilderPreviewProps` | — | Configuration for the built-in preview renderer (theme, custom components, callbacks). |

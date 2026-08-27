@@ -1,6 +1,6 @@
 ---
 title: Computed fields
-description: Auto-calculate values from expressions like {price} * {quantity}. The engine parses them safely — no eval() — and tracks dependencies so computed fields update when their inputs change.
+description: Auto-calculate values from expressions like {price} * {quantity}, with aggregate functions (SUM, AVG, COUNT, MIN, MAX) for repeater fields. The engine parses them safely — no eval() — and tracks dependencies so computed fields update when their inputs change.
 ---
 
 ## How computed fields work
@@ -53,9 +53,78 @@ expression: '({score_1} + {score_2} + {score_3}) / 3'
 expression: '{completed} / {total_items} * 100'
 ```
 
+## Repeater aggregates
+
+Aggregate functions let you compute values across rows in a [repeater](/docs/core-concepts/field-types) field. Use dot-notation to reference sub-fields: `{repeaterId.subFieldId}`.
+
+| Function | Description | Example |
+|----------|-------------|---------|
+| `SUM()` | Sum of values | `SUM({items.price})` |
+| `AVG()` | Average of values | `AVG({items.score})` |
+| `COUNT()` | Number of rows | `COUNT({items.price})` |
+| `MIN()` | Minimum value | `MIN({items.price})` |
+| `MAX()` | Maximum value | `MAX({items.quantity})` |
+
+### Per-row expressions
+
+You can combine sub-fields inside an aggregate to compute per-row, then aggregate:
+
+```ts
+// Multiply price × quantity per row, then sum all rows
+expression: 'SUM({order_items.unit_price} * {order_items.quantity})'
+
+// Combine an aggregate with a simple field reference
+expression: 'SUM({items.price} * {items.qty}) * (1 + {tax_rate} / 100)'
+```
+
+All dot-notation references inside a single aggregate must belong to the same repeater. Empty repeaters return `0`.
+
+### Example: order total with tax
+
+```ts
+// Subtotal — sum of each item's line total
+{
+  id: 'subtotal',
+  type: 'calculated',
+  config: {
+    type: 'calculated',
+    expression: 'SUM({order_items.unit_price} * {order_items.quantity})',
+    format: 'currency',
+    decimalPlaces: 2,
+    prefix: '$',
+  },
+}
+
+// Tax — 8.5% of subtotal
+{
+  id: 'tax',
+  type: 'calculated',
+  config: {
+    type: 'calculated',
+    expression: '{subtotal} * 0.085',
+    format: 'currency',
+    decimalPlaces: 2,
+    prefix: '$',
+  },
+}
+
+// Order total — subtotal + tax
+{
+  id: 'order_total',
+  type: 'calculated',
+  config: {
+    type: 'calculated',
+    expression: '{subtotal} + {tax}',
+    format: 'currency',
+    decimalPlaces: 2,
+    prefix: '$',
+  },
+}
+```
+
 ## Safety
 
-Expressions are parsed by the expression parser — not evaluated with `eval()` or `new Function()`. The parser understands numeric literals, field references, and arithmetic operators. Anything else is rejected.
+Expressions are parsed by the expression parser — not evaluated with `eval()` or `new Function()`. The parser understands numeric literals, field references, aggregate functions, and arithmetic operators. Anything else is rejected.
 
 This means you cannot inject arbitrary code through an expression. A schema loaded from an untrusted source (user input, CMS, API) is safe from expression-based attacks.
 

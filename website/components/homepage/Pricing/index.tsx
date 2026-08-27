@@ -1,7 +1,7 @@
 import './styles.css';
 
 const engineBullets = [
-  '42 field types',
+  '44 field types',
   'Validation and conditional logic',
   'Multi-step navigation and drafts',
   'Submission adapters',
@@ -12,7 +12,6 @@ const proBullets = [
   'Drag-and-drop form builder',
   'Response viewer with export and charts',
   'Theme editor with live preview',
-  'Telehealth module with clinical instruments',
   'TypeScript types and full API reference',
 ];
 
@@ -24,8 +23,8 @@ export function Pricing() {
         <h2 className="fc-pricing__h2">Free forever, or paid once.</h2>
         <p className="fc-pricing__sub">
           The engine and the React renderer are MIT and always free. Pro is a
-          one-time purchase — FormBuilder, ResponseViewer, ThemeEditor and
-          Telehealth, all included.
+          one-time purchase — FormBuilder, ResponseViewer and ThemeEditor,
+          all included.
         </p>
 
         {/* ── Main cards ── */}

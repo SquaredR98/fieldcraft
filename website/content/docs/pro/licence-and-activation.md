@@ -5,26 +5,19 @@ description: FieldCraft Pro licensing, activation, and what's included.
 
 ## What's included
 
-FieldCraft Pro is a single commercial package (`@squaredr/fieldcraft-pro`) with four major components:
+FieldCraft Pro is a single commercial package (`@squaredr/fieldcraft-pro`) with three major components:
 
 | Component | Description |
 |-----------|-------------|
 | **FormBuilder** | Drag-and-drop form designer with schema editor, live preview, and template gallery. |
 | **ThemeEditor** | Visual theme customizer with presets, palette generator, CSS/JSON export, and comparison view. |
 | **ResponseViewer** | Response browser with table/card/detail/timeline views, search, filter, export, and statistics. |
-| **Telehealth** | Clinical field components, validated instruments with scoring engine, and healthcare templates. |
 
-All four components auto-inherit your host page's CSS custom properties. No theme configuration required for basic usage.
+All three components auto-inherit your host page's CSS custom properties. No theme configuration required for basic usage.
 
-## Licence tiers
+## Licence
 
-| Tier | What you get |
-|------|-------------|
-| **Indie** | 1 developer, 1 project. For solo developers and freelancers. |
-| **Team** | Up to 5 developers, unlimited projects. For small teams. |
-| **Enterprise** | Unlimited developers, unlimited projects. Priority support. |
-
-All tiers include the same features. The difference is the number of developers and projects covered.
+FieldCraft Pro is a one-time purchase at **$199** (per production domain). One licence key covers one production domain, with unlimited development and localhost use. Twelve months of updates included.
 
 ## Installation
 
@@ -58,13 +51,12 @@ The open-source packages (`core`, `react`, `adapters`, `templates`) are MIT-lice
 | | Open source | Pro |
 |---|---|---|
 | Form rendering | Included | Included |
-| 42 field types | Included | Included |
+| 44 field types | Included | Included |
 | Validation, conditions, computed fields | Included | Included |
 | Theming, hooks, adapters | Included | Included |
 | Visual form builder | — | Included |
 | Theme editor | — | Included |
 | Response viewer | — | Included |
-| Telehealth clinical fields | — | Included |
 
 ## Next steps
 
