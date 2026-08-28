@@ -49,6 +49,22 @@ export function ScoringField({ field, value, error, touched, disabled, readonly,
           );
         })}
       </RadioGroup>
+      {current && config?.scoreRanges?.length ? (() => {
+        const selectedOpt = options.find((o) => o.value === current);
+        if (!selectedOpt) return null;
+        const score = selectedOpt.score;
+        const range = config.scoreRanges.find((r) => score >= r.min && score <= r.max);
+        if (!range) return null;
+        return (
+          <div
+            className="mt-3 rounded-md border px-3 py-2 text-sm"
+            style={range.color ? { borderColor: range.color, color: range.color } : undefined}
+          >
+            <span className="font-medium">{range.label}</span>
+            {range.description && <span className="text-muted-foreground ml-2">— {range.description}</span>}
+          </div>
+        );
+      })() : null}
     </FieldWrapper>
   );
 }

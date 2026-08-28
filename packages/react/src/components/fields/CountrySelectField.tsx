@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { COUNTRIES } from "../../data/countries";
+import { COUNTRIES } from "@squaredr/fieldcraft-core";
 
 /** Convert a 2-letter country code to its flag emoji (regional indicator symbols). */
 function codeToFlag(code: string): string {

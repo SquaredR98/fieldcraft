@@ -129,6 +129,10 @@ export type { ValidatorRegistry, ValidatorMetadata } from "./validators/registry
 // Schema Validation
 export { validateSchema, FormEngineSchemaError } from "./schema/schema-validator";
 
+// Data
+export { COUNTRIES, type Country } from "./data/countries";
+export { TIMEZONES, type Timezone } from "./data/timezones";
+
 // Utils
 export { deepEqual } from "./utils/deep-equal";
 export { generateSessionToken } from "./utils/session-token";

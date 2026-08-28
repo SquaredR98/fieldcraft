@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { RepeaterConfig, Question } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
@@ -16,6 +17,18 @@ export function RepeaterField({ field, value, error, touched, disabled, readonly
   const theme = useTheme();
   const minEntries = config?.minEntries ?? 0;
   const maxEntries = config?.maxEntries ?? Infinity;
+
+  // Seed default entries on first render when value is empty
+  const seeded = useRef(false);
+  useEffect(() => {
+    if (seeded.current) return;
+    seeded.current = true;
+    const defaultEntries = config?.defaultEntries ?? 0;
+    if (entries.length === 0 && defaultEntries > 0) {
+      const count = Math.min(defaultEntries, maxEntries);
+      onChange(Array.from({ length: count }, () => ({})));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const addEntry = () => {
     if (entries.length >= maxEntries) return;

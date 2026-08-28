@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-react",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "description": "React renderer for @squaredr/fieldcraft-core — 44 pre-built form fields, hooks, theming, and a pluggable field registry. Styled with Tailwind CSS via shadcn/ui primitives.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -20,7 +20,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts && npx @tailwindcss/cli -i src/styles/formengine.css -o dist/styles.css --minify",
+    "build": "tsup --format cjs,esm --dts && npx @tailwindcss/cli -i src/styles/formengine.css -o dist/styles.css --minify",
     "build:css": "npx @tailwindcss/cli -i src/styles/formengine.css -o dist/styles.css --minify",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "test": "vitest run",
@@ -36,7 +36,7 @@
     "radix-ui": "^1.4.3"
   },
   "peerDependencies": {
-    "@squaredr/fieldcraft-core": "^1.7.1",
+    "@squaredr/fieldcraft-core": "^1.8.0",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
   },

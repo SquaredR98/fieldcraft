@@ -1,3 +1,4 @@
+import type { LikertConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
@@ -5,7 +6,10 @@ import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
 
 export function LikertField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
-  const options = field.options ?? [];
+  const config = field.config as LikertConfig | undefined;
+  // Support both field.options (standard) and config.labels (builder shorthand)
+  const options = (field.options?.length ? field.options : undefined)
+    ?? (config?.labels ?? []).map((label, i) => ({ label, value: String(i + 1) }));
   const current = value as string | number | undefined;
   const hasError = touched && !!error?.length;
 

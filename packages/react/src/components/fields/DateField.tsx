@@ -56,7 +56,7 @@ export function DateField({ field, value, error, touched, disabled, readonly, on
             onFocus={onFocus}
           >
             <CalendarIcon className="mr-2 size-4" />
-            {validSelected ? format(validSelected, "PPP") : (field.placeholder ?? "Pick a date")}
+            {validSelected ? format(validSelected, config?.format || "PPP") : (field.placeholder ?? "Pick a date")}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">

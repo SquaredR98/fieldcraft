@@ -1,6 +1,7 @@
 import type { Question, Section, FormEngineSchema } from "../types/schema";
 import type { ConditionExpression } from "../types/conditions";
 import type { ValidationResult } from "./create-engine";
+import type { MatrixConfig, MultiSelectConfig } from "../types/question-types";
 import { runBuiltInRule } from "../validators/built-in";
 import { evaluate } from "./condition-evaluator";
 import type { ValidatorRegistry } from "../validators/registry";
@@ -80,6 +81,45 @@ export function validateField(
       const error = runBuiltInRule(rule, value, allValues);
       if (error) {
         errors.push(error);
+      }
+    }
+  }
+
+  // ── Config-driven validation (derived from field config, not explicit rules) ──
+
+  // Matrix: config.required ("all" | "any" | "none")
+  if (field.type === "matrix") {
+    const matrixConfig = field.config as MatrixConfig | undefined;
+    const requiredMode = matrixConfig?.required;
+    if (requiredMode && requiredMode !== "none") {
+      const rows = matrixConfig?.rows ?? [];
+      const matrixValue = (value as Record<string, unknown>) ?? {};
+      if (requiredMode === "all") {
+        const emptyRows = rows.filter(
+          (row) => matrixValue[row.value] === undefined || matrixValue[row.value] === null || matrixValue[row.value] === "",
+        );
+        if (emptyRows.length > 0) {
+          errors.push(`All rows must be answered (${emptyRows.length} remaining)`);
+        }
+      } else if (requiredMode === "any") {
+        const hasAny = rows.some(
+          (row) => matrixValue[row.value] !== undefined && matrixValue[row.value] !== null && matrixValue[row.value] !== "",
+        );
+        if (!hasAny) {
+          errors.push("At least one row must be answered");
+        }
+      }
+    }
+  }
+
+  // MultiSelect: config.minSelections
+  if (field.type === "multi_select") {
+    const msConfig = field.config as MultiSelectConfig | undefined;
+    const min = msConfig?.minSelections;
+    if (min != null && min > 0) {
+      const count = Array.isArray(value) ? value.length : 0;
+      if (count < min) {
+        errors.push(`Select at least ${min} option${min === 1 ? "" : "s"}`);
       }
     }
   }

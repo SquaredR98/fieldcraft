@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { COUNTRIES } from "../../data/countries";
+import { COUNTRIES } from "@squaredr/fieldcraft-core";
 import { useMemo } from "react";
 
 const ALL_COUNTRY_CODES = COUNTRIES.map((c) => ({

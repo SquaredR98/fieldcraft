@@ -107,6 +107,17 @@ export { ScoringField } from "./components/fields/ScoringField";
 // Structural
 export { ConsentField } from "./components/fields/ConsentField";
 export { InfoBlockField } from "./components/fields/InfoBlockField";
+export { SectionHeaderField } from "./components/fields/SectionHeaderField";
+export { PageBreakField } from "./components/fields/PageBreakField";
+
+// Content & Visual
+export { WelcomeScreenField } from "./components/fields/WelcomeScreenField";
+export { ThankYouScreenField } from "./components/fields/ThankYouScreenField";
+export { RichTextField } from "./components/fields/RichTextField";
+export { ImageField } from "./components/fields/ImageField";
+export { VideoField } from "./components/fields/VideoField";
+export { DividerField } from "./components/fields/DividerField";
+export { SpacerField } from "./components/fields/SpacerField";
 
 // ---- Shared ----
 export { FieldWrapper, fieldAria } from "./components/fields/FieldWrapper";
@@ -143,8 +154,9 @@ export { Textarea } from "./components/ui/textarea";
 export { Toggle, toggleVariants } from "./components/ui/toggle";
 export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group";
 
-// ---- Data ----
-export { TIMEZONES, type Timezone } from "./data/timezones";
+// ---- Data (re-exported from core for convenience) ----
+export { COUNTRIES, type Country } from "@squaredr/fieldcraft-core";
+export { TIMEZONES, type Timezone } from "@squaredr/fieldcraft-core";
 
 // ---- Utils ----
 export { cn } from "./utils/cn";

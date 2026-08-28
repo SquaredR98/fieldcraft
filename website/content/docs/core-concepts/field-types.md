@@ -117,7 +117,7 @@ The `QuestionType` union also accepts custom strings — you can register your o
   type: 'dropdown',
   label: 'Your timezone',
   required: true,
-  // Use TIMEZONES from @squaredr/fieldcraft-react for options
+  // Use TIMEZONES from @squaredr/fieldcraft-core for options
 }
 
 {
@@ -136,7 +136,7 @@ The `QuestionType` union also accepts custom strings — you can register your o
 
 The `timezoneField` property links to another field by ID. When the user picks a timezone, the appointment field re-fetches slots for that timezone. Priority order: `customProps.timezone` → `timezoneField` value → static `timezone` → browser default.
 
-`@squaredr/fieldcraft-react` exports a `TIMEZONES` constant — an array of ~100 IANA timezone entries with `value`, `label`, `offset`, and `region` properties. Use it to populate a dropdown or single\_select field.
+`@squaredr/fieldcraft-core` exports `TIMEZONES` and `COUNTRIES` constants. `TIMEZONES` is an array of ~120 IANA timezone entries with `value`, `label`, `offset`, and `region` properties — use it to populate a dropdown or single\_select field. Both are also re-exported from `@squaredr/fieldcraft-react` for convenience, but importing from core is recommended for server components (no React or browser globals).
 
 ## Media fields (3)
 
