@@ -152,3 +152,4 @@ export {
 export type { SchemaDiff } from "./utils/schema-utils";
 export { flattenFormValues, unflattenFormValues } from "./utils/form-utils";
 export { validateResponse, formatResponseValues, flattenResponse } from "./utils/response-utils";
+export { validateFormValues } from "./utils/form-validation";
