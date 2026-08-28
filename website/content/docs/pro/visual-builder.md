@@ -109,6 +109,17 @@ When `schemaUrl` is provided, it overrides `initialSchema` if the fetch succeeds
 |------|------|---------|-------------|
 | `theme` | `FormBuilderTheme` | — | Override CSS variables for the builder UI (panels, toolbar, canvas). |
 
+## Config editor
+
+Selecting a field in the builder opens the config editor panel on the right. Every field type has a tailored config form — for example, the `appointment` field shows mode switching (static slots, URL-based, or embed), and the `payment` field exposes `serverUrl`, `responseMapping`, and all Stripe/PayPal settings.
+
+Key capabilities:
+
+- **Batched updates** — changing multiple config fields in one action (e.g. switching appointment modes) applies all changes atomically, preventing data loss.
+- **Phone international** — configure `defaultCountry` and `priorityCountries` (comma-separated country codes).
+- **Payment** — configure `provider`, `publicKey`, `amount`, `currency`, `amountField`, `buttonLabel`, `serverUrl`, and `responseMapping.clientSecretPath`.
+- **Allow Other cleanup** — toggling off "Allow Other" on select fields automatically clears the custom `otherLabel`.
+
 ## Keyboard shortcuts
 
 | Shortcut | Action |

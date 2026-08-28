@@ -48,6 +48,43 @@ const resumed = await engine.loadDraft()  // Load draft — returns true if foun
 engine.clearDraft()            // Delete the draft
 ```
 
+### Restoring drafts via `onReady`
+
+When you have a custom wrapper around `FormEngineRenderer` (e.g. adding payment intents or analytics), use the `onReady` callback to restore drafts after the engine mounts:
+
+```tsx
+import { useState, useCallback } from 'react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
+import type { FormEngine } from '@squaredr/fieldcraft-core'
+
+function PublicForm({ schema }) {
+  const [draftRestored, setDraftRestored] = useState(false)
+
+  const handleReady = useCallback((engine: FormEngine) => {
+    engine.loadDraft().then((restored) => {
+      if (restored) setDraftRestored(true)
+    })
+  }, [])
+
+  return (
+    <>
+      {draftRestored && (
+        <div className="draft-banner">
+          Your previous progress has been restored.
+        </div>
+      )}
+      <FormEngineRenderer
+        schema={schema}
+        onReady={handleReady}
+        onSubmit={handleSubmit}
+      />
+    </>
+  )
+}
+```
+
+This pattern is useful when you need the `FormEngine` instance for other purposes (e.g. updating payment field props) and want draft restoration to happen alongside your own setup logic.
+
 ### Server-side drafts
 
 For drafts that persist across devices, use a `DraftAdapter`:

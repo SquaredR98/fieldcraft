@@ -166,12 +166,35 @@ The `timezoneField` property links to another field by ID. When the user picks a
 | Type | Description | Key config |
 |------|-------------|-----------|
 | `address` | Structured address input | `provider` ("google" \| "mapbox" \| "none"), `apiKey`, `fields`, `defaultCountry` |
-| `payment` | Stripe/PayPal payment | `provider` (required), `publicKey` (required), `amount` \| `amountField`, `currency` |
+| `payment` | Stripe/PayPal payment | `provider` (required), `publicKey` (required), `amount` \| `amountField`, `currency`, `serverUrl`, `responseMapping` |
 | `matrix` | Grid of rows × columns | `rows` (required), `columns` (required), `inputType` ("radio" \| "checkbox" \| "text" \| "number") |
 | `repeater` | Dynamic list of sub-fields | `fields` (required), `minEntries`, `maxEntries`, `addLabel`, `removeLabel` |
 | `calculated` | Auto-computed value | `expression` (required), `format` ("number" \| "currency" \| "percentage"), `decimalPlaces`, `prefix`, `suffix`, `visible` |
 | `hidden` | Invisible metadata field | `defaultValue`, `source` ("url_param" \| "cookie" \| "referrer" \| "static"), `paramName` |
 | `scoring` | Options with numeric scores | `options` with `score` values, `showScore`, `scoreRanges` (min/max/label/color) |
+
+```ts
+// Payment field example — Stripe payment with server-side intent creation
+{
+  id: 'payment',
+  type: 'payment',
+  label: 'Payment',
+  required: true,
+  config: {
+    type: 'payment',
+    provider: 'stripe',
+    publicKey: 'pk_test_...',
+    amount: 4900,
+    currency: 'USD',
+    serverUrl: '/api/payment-intents',       // Endpoint that creates a PaymentIntent
+    responseMapping: {
+      clientSecretPath: 'clientSecret',      // Dot-notation path to clientSecret in the API response
+    },
+  },
+}
+```
+
+The `serverUrl` is the endpoint your server exposes to create a PaymentIntent (or equivalent). The payment field POSTs `{ amount, currency, description }` to this URL and expects a JSON response containing the `clientSecret`. Use `responseMapping.clientSecretPath` to specify where in the response JSON the client secret lives (e.g. `"data.client_secret"` for nested responses).
 
 ```ts
 // Calculated field example — auto-compute BMI

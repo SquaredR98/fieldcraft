@@ -38,10 +38,23 @@ Users toggle between modes using the view-mode switcher in the toolbar.
 
 | Mode | Description |
 |------|-------------|
-| **Table** | Spreadsheet-style table with sortable columns, pagination, and search. Default view. |
+| **Table** | Summary table with fixed metadata columns (Submitted, Completion Time, Fields Answered, Score), pagination, and search. Click a row to see full field values in Detail view. Default view. |
 | **Card** | Card grid showing a summary of each response. Good for visual scanning. |
 | **Detail** | Full single-response view with all field values displayed in order. |
 | **Timeline** | Chronological timeline of responses with timestamps. |
+
+### Table columns
+
+The table view shows four fixed metadata columns for every form, regardless of which fields the form contains:
+
+| Column | Description |
+|--------|-------------|
+| **Submitted** | Timestamp of when the response was submitted, formatted using `toLocaleString()`. |
+| **Completion Time** | How long the user spent filling out the form (e.g. "2m 34s"). Derived from `completionTimeMs` on the response. |
+| **Fields Answered** | Ratio of answered fields to total fields, e.g. "8/12". Display-only fields (welcome screens, dividers, etc.) are excluded from the count. |
+| **Score** | Total score if the form uses scoring fields. Shows "—" when no score is present. |
+
+To see all individual field values for a response, click the row to open Detail view.
 
 ## Features
 
@@ -52,8 +65,7 @@ Users toggle between modes using the view-mode switcher in the toolbar.
 | **CSV/JSON export** | Export all or selected responses. |
 | **Statistics dashboard** | Summary stats and charts for numeric and choice fields. |
 | **Bulk operations** | Select multiple responses for delete or export. |
-| **Custom field renderers** | Override how specific field types display in the viewer. |
-| **Column label customization** | Override CSV/table column headers per question. |
+| **Custom field renderers** | Override how specific field types display in the detail and card views. |
 | **Configurable page size** | 10, 25, 50, or 100 responses per page. |
 
 ## Props
@@ -91,7 +103,6 @@ Users toggle between modes using the view-mode switcher in the toolbar.
 | `fieldRenderers` | `Record<string, FieldRenderer>` | — | Custom per-type field renderers. Keys are field type strings. |
 | `filename` | `string` | `"responses"` | Base filename for CSV/JSON downloads. |
 | `dateFormat` | `"locale" \| "iso"` | `"locale"` | Date format for export. `"locale"` uses `toLocaleString()`, `"iso"` uses `toISOString()`. |
-| `columnLabels` | `Record<string, string>` | — | Override column headers. Maps question ID to display label. |
 
 ## Custom field renderers
 
