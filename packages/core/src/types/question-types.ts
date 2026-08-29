@@ -386,7 +386,7 @@ export type CalculatedConfig = {
   type: "calculated";
   /** Expression string using field references (e.g., `"{quantity} * {price}"`). */
   expression: string;
-  format?: "number" | "currency" | "percentage";
+  format?: "number" | "currency" | "percentage" | "text" | "date";
   decimalPlaces?: number;
   prefix?: string;
   suffix?: string;

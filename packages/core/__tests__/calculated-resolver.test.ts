@@ -266,3 +266,261 @@ describe("evaluateExpression — edge cases", () => {
     expect(result.warning).toContain("multiple repeaters");
   });
 });
+
+// ---- Function expression support ----
+
+describe("evaluateExpression — string functions", () => {
+  it("UPPER converts field value to uppercase", () => {
+    const result = evaluateExpression('UPPER({name})', { name: "hello" });
+    expect(result.value).toBe("HELLO");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("LOWER converts field value to lowercase", () => {
+    const result = evaluateExpression('LOWER({name})', { name: "HELLO" });
+    expect(result.value).toBe("hello");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("TRIM removes whitespace", () => {
+    const result = evaluateExpression('TRIM({name})', { name: "  hello  " });
+    expect(result.value).toBe("hello");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("LEN returns string length as number", () => {
+    const result = evaluateExpression('LEN({name})', { name: "hello" });
+    expect(result.value).toBe(5);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("CONCAT joins multiple field values", () => {
+    const result = evaluateExpression('CONCAT({first}, " ", {last})', { first: "John", last: "Doe" });
+    expect(result.value).toBe("John Doe");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("CONCAT with single argument", () => {
+    const result = evaluateExpression('CONCAT({name})', { name: "Alice" });
+    expect(result.value).toBe("Alice");
+    expect(result.warning).toBeUndefined();
+  });
+});
+
+describe("evaluateExpression — date functions", () => {
+  it("TODAY returns current date string", () => {
+    const result = evaluateExpression('TODAY()', {});
+    expect(result.value).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("DATEDIFF calculates days between dates", () => {
+    const result = evaluateExpression('DATEDIFF({start}, {end}, "days")', {
+      start: "2024-01-01",
+      end: "2024-01-31",
+    });
+    expect(result.value).toBe(30);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("DATEADD adds days to a date", () => {
+    const result = evaluateExpression('DATEADD({start}, 7, "days")', {
+      start: "2024-01-01",
+    });
+    expect(result.value).toBe("2024-01-08");
+    expect(result.warning).toBeUndefined();
+  });
+});
+
+describe("evaluateExpression — IF conditional", () => {
+  it("IF with boolean field — true branch", () => {
+    const result = evaluateExpression('IF({toggle}, {a}, {b})', {
+      toggle: true, a: 100, b: 200,
+    });
+    expect(result.value).toBe(100);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with boolean field — false branch", () => {
+    const result = evaluateExpression('IF({toggle}, {a}, {b})', {
+      toggle: false, a: 100, b: 200,
+    });
+    expect(result.value).toBe(200);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with string equality comparison", () => {
+    const result = evaluateExpression('IF({type} = "legal", 200, 100)', {
+      type: "legal",
+    });
+    expect(result.value).toBe(200);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with string equality — non-matching", () => {
+    const result = evaluateExpression('IF({type} = "legal", 200, 100)', {
+      type: "medical",
+    });
+    expect(result.value).toBe(100);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with != comparison", () => {
+    const result = evaluateExpression('IF({type} != "legal", {rate} * 2, {rate})', {
+      type: "medical", rate: 50,
+    });
+    expect(result.value).toBe(100);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with > comparison", () => {
+    const result = evaluateExpression('IF({age} > 18, "adult", "minor")', {
+      age: 21,
+    });
+    expect(result.value).toBe("adult");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with > comparison — false branch", () => {
+    const result = evaluateExpression('IF({age} > 18, "adult", "minor")', {
+      age: 16,
+    });
+    expect(result.value).toBe("minor");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with <= comparison", () => {
+    const result = evaluateExpression('IF({score} <= 50, "fail", "pass")', {
+      score: 50,
+    });
+    expect(result.value).toBe("fail");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with >= comparison", () => {
+    const result = evaluateExpression('IF({score} >= 90, "A", "B")', {
+      score: 95,
+    });
+    expect(result.value).toBe("A");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with < comparison", () => {
+    const result = evaluateExpression('IF({temp} < 0, "freezing", "above zero")', {
+      temp: -5,
+    });
+    expect(result.value).toBe("freezing");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with == comparison", () => {
+    const result = evaluateExpression('IF({status} == "active", "yes", "no")', {
+      status: "active",
+    });
+    expect(result.value).toBe("yes");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with math in branches", () => {
+    const result = evaluateExpression('IF({premium}, {price} * 1.1, {price} * 0.9)', {
+      premium: true, price: 100,
+    });
+    expect(result.value).toBeCloseTo(110);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with math in false branch", () => {
+    const result = evaluateExpression('IF({premium}, {price} * 1.1, {price} * 0.9)', {
+      premium: false, price: 100,
+    });
+    expect(result.value).toBeCloseTo(90);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with field reference branches returning numbers", () => {
+    const result = evaluateExpression('IF({type} = "legal", {legal_rate}, {standard_rate})', {
+      type: "legal", legal_rate: 250, standard_rate: 150,
+    });
+    expect(result.value).toBe(250);
+    expect(result.warning).toBeUndefined();
+  });
+});
+
+describe("evaluateExpression — nested functions", () => {
+  it("UPPER inside CONCAT", () => {
+    const result = evaluateExpression('CONCAT(UPPER({first}), " ", UPPER({last}))', {
+      first: "john", last: "doe",
+    });
+    expect(result.value).toBe("JOHN DOE");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("LOWER inside CONCAT", () => {
+    const result = evaluateExpression('CONCAT(LOWER({first}), ".", LOWER({last}))', {
+      first: "John", last: "Doe",
+    });
+    expect(result.value).toBe("john.doe");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("TRIM inside UPPER", () => {
+    const result = evaluateExpression('UPPER(TRIM({name}))', { name: "  hello  " });
+    expect(result.value).toBe("HELLO");
+    expect(result.warning).toBeUndefined();
+  });
+});
+
+describe("evaluateExpression — backward compatibility with function expressions", () => {
+  it("pure math still works unchanged", () => {
+    const result = evaluateExpression("{a} + {b} * 2", { a: 3, b: 5 });
+    expect(result.value).toBe(13);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("aggregate + math still works unchanged", () => {
+    const result = evaluateExpression("SUM({items.price}) * 1.1", {
+      items: [{ price: 10 }, { price: 20 }],
+    });
+    expect(result.value).toBeCloseTo(33);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("missing field in math still returns proper warning", () => {
+    const result = evaluateExpression("{a} + {missing}", { a: 5 });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("no value");
+  });
+
+  it("non-numeric field in math still returns proper warning", () => {
+    const result = evaluateExpression("{a} + {b}", { a: 5, b: "hello" });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("not a number");
+  });
+});
+
+describe("evaluateExpression — function error cases", () => {
+  it("UPPER on missing field returns empty string (coerces undefined)", () => {
+    const result = evaluateExpression('UPPER({missing})', {});
+    expect(result.value).toBe("");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("IF with missing field in condition evaluates undefined comparison", () => {
+    // undefined = "x" is false, so the false branch (2) is returned
+    const result = evaluateExpression('IF({missing} = "x", 1, 2)', {});
+    expect(result.value).toBe(2);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("returns warning for IF with too few arguments", () => {
+    const result = evaluateExpression('IF({a}, {b})', { a: true, b: 1 });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("3 argument");
+  });
+
+  it("returns warning for missing field in math within function branch", () => {
+    const result = evaluateExpression('IF({toggle}, {missing} + 1, 0)', { toggle: true });
+    expect(result.value).toBeNull();
+    expect(result.warning).toBeDefined();
+  });
+});

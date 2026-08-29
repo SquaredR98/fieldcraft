@@ -6,7 +6,7 @@ export function CalculatedField({ field, value, error, touched, disabled: _disab
   const config = field.config as CalculatedConfig | undefined;
   if (config?.visible === false) return null;
 
-  const formatted = formatValue(value as number | null, config);
+  const formatted = formatValue(value, config);
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
@@ -19,10 +19,14 @@ export function CalculatedField({ field, value, error, touched, disabled: _disab
   );
 }
 
-function formatValue(val: number | null | undefined, config?: CalculatedConfig): string {
+function formatValue(val: unknown, config?: CalculatedConfig): string {
   if (val == null) return "\u2014";
-  const decimals = config?.decimalPlaces ?? 2;
-  if (config?.format === "percentage") return `${val.toFixed(decimals)}%`;
-  if (config?.format === "currency") return val.toFixed(decimals);
-  return val.toFixed(decimals);
+  if (typeof val === "string") return val;
+  if (typeof val === "number") {
+    const decimals = config?.decimalPlaces ?? 2;
+    if (config?.format === "percentage") return `${val.toFixed(decimals)}%`;
+    if (config?.format === "currency") return val.toFixed(decimals);
+    return val.toFixed(decimals);
+  }
+  return String(val);
 }
