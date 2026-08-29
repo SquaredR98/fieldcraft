@@ -61,7 +61,7 @@ export function getRequiredFieldIds(schema: FormEngineSchema): string[] {
  * @since 1.4.0
  */
 export function cloneSchema(schema: FormEngineSchema): FormEngineSchema {
-  return JSON.parse(JSON.stringify(schema));
+  return structuredClone(schema);
 }
 
 /**

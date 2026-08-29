@@ -122,8 +122,15 @@ export function createDraftManager(config: DraftManagerConfig) {
     const draftVersion = data.schemaVersion;
     if (config.schemaVersion && draftVersion && draftVersion !== config.schemaVersion) {
       if (migrations && migrations[draftVersion]) {
-        snapshot = migrations[draftVersion](snapshot);
-        snapshot.schemaVersion = config.schemaVersion;
+        try {
+          snapshot = migrations[draftVersion](snapshot);
+          snapshot.schemaVersion = config.schemaVersion;
+        } catch (error) {
+          console.error(
+            `[FieldCraft] Draft migration from v${draftVersion} failed:`, error,
+          );
+          return null;
+        }
       } else {
         // eslint-disable-next-line no-console
         console.warn(

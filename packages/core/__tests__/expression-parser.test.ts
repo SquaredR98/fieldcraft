@@ -22,6 +22,21 @@ describe("evaluateMathExpression", () => {
     it("raises to a power", () => {
       expect(evaluateMathExpression("2 ^ 10")).toBe(1024);
     });
+
+    it("modulo", () => {
+      expect(evaluateMathExpression("10 % 3")).toBe(1);
+      expect(evaluateMathExpression("15 % 5")).toBe(0);
+      expect(evaluateMathExpression("7 % 2")).toBe(1);
+    });
+
+    it("modulo by zero throws", () => {
+      expect(() => evaluateMathExpression("10 % 0")).toThrow("Division by zero");
+    });
+
+    it("modulo has same precedence as multiplication/division", () => {
+      // 2 + 10 % 3 = 2 + 1 = 3 (% before +)
+      expect(evaluateMathExpression("2 + 10 % 3")).toBe(3);
+    });
   });
 
   describe("operator precedence", () => {

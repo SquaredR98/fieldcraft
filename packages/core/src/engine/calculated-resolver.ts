@@ -73,7 +73,7 @@ function resolveAggregates(
 
     // Find all repeater.sub references inside this aggregate
     const dotRefs: Array<{ repeaterId: string; subFieldId: string; fullRef: string }> = [];
-    const dotPattern = /\{(\w+)\.(\w+)\}/g;
+    const dotPattern = /\{([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\}/g;
     let dotMatch: RegExpExecArray | null;
     while ((dotMatch = dotPattern.exec(innerExpr)) !== null) {
       dotRefs.push({
@@ -182,6 +182,14 @@ export function evaluateExpression(
   expression: string,
   values: Record<string, unknown>,
 ): CalculatedResult {
+  const MAX_EXPRESSION_LENGTH = 10_000;
+  if (expression.length > MAX_EXPRESSION_LENGTH) {
+    return {
+      value: null,
+      warning: `Expression exceeds maximum length (${MAX_EXPRESSION_LENGTH} chars)`,
+    };
+  }
+
   // Step 1: Resolve aggregate functions (SUM, AVG, etc.) over repeater sub-fields
   const { result: afterAggregates, warning: aggWarning } = resolveAggregates(expression, values);
   if (aggWarning) {
@@ -189,7 +197,7 @@ export function evaluateExpression(
   }
 
   // Step 2: Resolve remaining simple field references: {fieldId}
-  const fieldRefPattern = /\{(\w+)\}/g;
+  const fieldRefPattern = /\{([a-zA-Z0-9_-]+)\}/g;
   let substituted = afterAggregates;
   let match: RegExpExecArray | null;
 

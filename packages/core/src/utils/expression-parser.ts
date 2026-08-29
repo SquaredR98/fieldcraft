@@ -3,7 +3,7 @@
  * No `eval()` — tokenizes, converts to postfix (RPN), and evaluates.
  *
  * Supports:
- * - Arithmetic: `+`, `-`, `*`, `/`, `^` (power)
+ * - Arithmetic: `+`, `-`, `*`, `/`, `%` (modulo), `^` (power)
  * - Grouping: parentheses `()`
  * - Unary minus: `-5`, `(-3 + 2)`
  * - Functions: `floor`, `ceil`, `round`, `abs`, `min`, `max`
@@ -28,6 +28,7 @@ const OPERATORS: Record<string, { precedence: number; assoc: "left" | "right" }>
   "-": { precedence: 1, assoc: "left" },
   "*": { precedence: 2, assoc: "left" },
   "/": { precedence: 2, assoc: "left" },
+  "%": { precedence: 2, assoc: "left" },
   "^": { precedence: 3, assoc: "right" },
 };
 
@@ -230,6 +231,11 @@ function evaluatePostfix(postfix: Token[]): number {
         case "/": {
           if (b === 0) throw new Error("Division by zero");
           stack.push(a / b);
+          break;
+        }
+        case "%": {
+          if (b === 0) throw new Error("Division by zero");
+          stack.push(a % b);
           break;
         }
         case "^": stack.push(Math.pow(a, b)); break;

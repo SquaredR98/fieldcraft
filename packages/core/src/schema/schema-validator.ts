@@ -21,8 +21,12 @@ const NON_INPUT_TYPES = [
 const conditionOperator = z.enum([
   "eq", "neq", "gt", "gte", "lt", "lte",
   "in", "notIn", "exists", "notExists",
+  "isEmpty", "isNotEmpty",
   "contains", "notContains", "startsWith", "endsWith",
-  "between", "matches",
+  "between", "matches", "matchesRegex",
+  "dateAfter", "dateBefore",
+  "arrayContains", "arrayNotContains",
+  "lengthGreaterThan", "lengthLessThan",
 ]);
 
 const conditionExpression: z.ZodType<unknown> = z.lazy(() =>

@@ -236,4 +236,188 @@ describe("condition-evaluator", () => {
     expect(evaluate(expr, { country: "UK", age: 18 })).toBe(true);
     expect(evaluate(expr, { country: "UK", age: 15 })).toBe(false);
   });
+
+  // ---- matchesRegex operator ----
+
+  it("matchesRegex: regex match (alias for matches)", () => {
+    expect(evaluate({ field: "zip", operator: "matchesRegex", value: "^\\d{5}$" }, { zip: "10001" })).toBe(true);
+    expect(evaluate({ field: "zip", operator: "matchesRegex", value: "^\\d{5}$" }, { zip: "1000" })).toBe(false);
+  });
+
+  it("matchesRegex: returns false for invalid regex", () => {
+    expect(evaluate({ field: "x", operator: "matchesRegex", value: "[unclosed" }, { x: "test" })).toBe(false);
+  });
+
+  it("matchesRegex: coerces non-string field values", () => {
+    expect(evaluate({ field: "num", operator: "matchesRegex", value: "^42$" }, { num: 42 })).toBe(true);
+  });
+
+  // ---- dateAfter / dateBefore operators ----
+
+  it("dateAfter: field date is after condition date", () => {
+    expect(evaluate({ field: "d", operator: "dateAfter", value: "2024-01-01" }, { d: "2024-06-15" })).toBe(true);
+    expect(evaluate({ field: "d", operator: "dateAfter", value: "2024-06-15" }, { d: "2024-01-01" })).toBe(false);
+  });
+
+  it("dateAfter: equal dates return false (strictly after)", () => {
+    expect(evaluate({ field: "d", operator: "dateAfter", value: "2024-01-01" }, { d: "2024-01-01" })).toBe(false);
+  });
+
+  it("dateAfter: returns false for invalid field date", () => {
+    expect(evaluate({ field: "d", operator: "dateAfter", value: "2024-01-01" }, { d: "not-a-date" })).toBe(false);
+  });
+
+  it("dateAfter: returns false for invalid condition date", () => {
+    expect(evaluate({ field: "d", operator: "dateAfter", value: "not-a-date" }, { d: "2024-01-01" })).toBe(false);
+  });
+
+  it("dateAfter: returns false when field value is null", () => {
+    expect(evaluate({ field: "d", operator: "dateAfter", value: "2024-01-01" }, { d: null })).toBe(false);
+  });
+
+  it("dateBefore: field date is before condition date", () => {
+    expect(evaluate({ field: "d", operator: "dateBefore", value: "2024-06-15" }, { d: "2024-01-01" })).toBe(true);
+    expect(evaluate({ field: "d", operator: "dateBefore", value: "2024-01-01" }, { d: "2024-06-15" })).toBe(false);
+  });
+
+  it("dateBefore: equal dates return false (strictly before)", () => {
+    expect(evaluate({ field: "d", operator: "dateBefore", value: "2024-01-01" }, { d: "2024-01-01" })).toBe(false);
+  });
+
+  it("dateBefore: returns false for invalid dates", () => {
+    expect(evaluate({ field: "d", operator: "dateBefore", value: "invalid" }, { d: "2024-01-01" })).toBe(false);
+    expect(evaluate({ field: "d", operator: "dateBefore", value: "2024-01-01" }, { d: "invalid" })).toBe(false);
+  });
+
+  it("dateAfter: works with ISO 8601 timestamps", () => {
+    expect(evaluate(
+      { field: "d", operator: "dateAfter", value: "2024-01-01T00:00:00Z" },
+      { d: "2024-01-01T12:00:00Z" },
+    )).toBe(true);
+  });
+
+  // ---- arrayContains / arrayNotContains operators ----
+
+  it("arrayContains: array field contains value", () => {
+    expect(evaluate({ field: "tags", operator: "arrayContains", value: "web" }, { tags: ["web", "mobile"] })).toBe(true);
+    expect(evaluate({ field: "tags", operator: "arrayContains", value: "desktop" }, { tags: ["web", "mobile"] })).toBe(false);
+  });
+
+  it("arrayContains: returns false for non-array field", () => {
+    expect(evaluate({ field: "name", operator: "arrayContains", value: "a" }, { name: "abc" })).toBe(false);
+    expect(evaluate({ field: "num", operator: "arrayContains", value: 1 }, { num: 1 })).toBe(false);
+  });
+
+  it("arrayContains: works with number arrays", () => {
+    expect(evaluate({ field: "ids", operator: "arrayContains", value: 3 }, { ids: [1, 2, 3] })).toBe(true);
+    expect(evaluate({ field: "ids", operator: "arrayContains", value: 4 }, { ids: [1, 2, 3] })).toBe(false);
+  });
+
+  it("arrayNotContains: array field does not contain value", () => {
+    expect(evaluate({ field: "tags", operator: "arrayNotContains", value: "desktop" }, { tags: ["web", "mobile"] })).toBe(true);
+    expect(evaluate({ field: "tags", operator: "arrayNotContains", value: "web" }, { tags: ["web", "mobile"] })).toBe(false);
+  });
+
+  it("arrayNotContains: returns true for non-array field", () => {
+    expect(evaluate({ field: "name", operator: "arrayNotContains", value: "x" }, { name: "test" })).toBe(true);
+  });
+
+  it("arrayContains: empty array never contains", () => {
+    expect(evaluate({ field: "tags", operator: "arrayContains", value: "x" }, { tags: [] })).toBe(false);
+  });
+
+  it("arrayNotContains: empty array always does not contain", () => {
+    expect(evaluate({ field: "tags", operator: "arrayNotContains", value: "x" }, { tags: [] })).toBe(true);
+  });
+
+  // ---- lengthGreaterThan / lengthLessThan operators ----
+
+  it("lengthGreaterThan: string length", () => {
+    expect(evaluate({ field: "name", operator: "lengthGreaterThan", value: 3 }, { name: "John" })).toBe(true);
+    expect(evaluate({ field: "name", operator: "lengthGreaterThan", value: 4 }, { name: "John" })).toBe(false);
+    expect(evaluate({ field: "name", operator: "lengthGreaterThan", value: 5 }, { name: "John" })).toBe(false);
+  });
+
+  it("lengthGreaterThan: array length", () => {
+    expect(evaluate({ field: "tags", operator: "lengthGreaterThan", value: 1 }, { tags: ["a", "b", "c"] })).toBe(true);
+    expect(evaluate({ field: "tags", operator: "lengthGreaterThan", value: 3 }, { tags: ["a", "b", "c"] })).toBe(false);
+  });
+
+  it("lengthGreaterThan: non-string/array returns length 0", () => {
+    expect(evaluate({ field: "num", operator: "lengthGreaterThan", value: 0 }, { num: 42 })).toBe(false);
+    expect(evaluate({ field: "flag", operator: "lengthGreaterThan", value: 0 }, { flag: true })).toBe(false);
+  });
+
+  it("lengthLessThan: string length", () => {
+    expect(evaluate({ field: "name", operator: "lengthLessThan", value: 5 }, { name: "John" })).toBe(true);
+    expect(evaluate({ field: "name", operator: "lengthLessThan", value: 4 }, { name: "John" })).toBe(false);
+  });
+
+  it("lengthLessThan: array length", () => {
+    expect(evaluate({ field: "tags", operator: "lengthLessThan", value: 5 }, { tags: ["a", "b"] })).toBe(true);
+    expect(evaluate({ field: "tags", operator: "lengthLessThan", value: 2 }, { tags: ["a", "b"] })).toBe(false);
+  });
+
+  it("lengthLessThan: empty string has length 0", () => {
+    expect(evaluate({ field: "s", operator: "lengthLessThan", value: 1 }, { s: "" })).toBe(true);
+  });
+
+  // ---- isEmpty / isNotEmpty operators ----
+
+  it("isEmpty: empty values", () => {
+    expect(evaluate({ field: "x", operator: "isEmpty" }, { x: "" })).toBe(true);
+    expect(evaluate({ field: "x", operator: "isEmpty" }, { x: null })).toBe(true);
+    expect(evaluate({ field: "x", operator: "isEmpty" }, {})).toBe(true);
+  });
+
+  it("isEmpty: non-empty values", () => {
+    expect(evaluate({ field: "x", operator: "isEmpty" }, { x: "hello" })).toBe(false);
+    expect(evaluate({ field: "x", operator: "isEmpty" }, { x: 0 })).toBe(false);
+    expect(evaluate({ field: "x", operator: "isEmpty" }, { x: false })).toBe(false);
+  });
+
+  it("isNotEmpty: non-empty values", () => {
+    expect(evaluate({ field: "x", operator: "isNotEmpty" }, { x: "hello" })).toBe(true);
+    expect(evaluate({ field: "x", operator: "isNotEmpty" }, { x: 0 })).toBe(true);
+    expect(evaluate({ field: "x", operator: "isNotEmpty" }, { x: false })).toBe(true);
+  });
+
+  it("isNotEmpty: empty values", () => {
+    expect(evaluate({ field: "x", operator: "isNotEmpty" }, { x: "" })).toBe(false);
+    expect(evaluate({ field: "x", operator: "isNotEmpty" }, { x: null })).toBe(false);
+    expect(evaluate({ field: "x", operator: "isNotEmpty" }, {})).toBe(false);
+  });
+
+  // ---- Unknown operator ----
+
+  it("unknown operator returns false", () => {
+    expect(evaluate({ field: "x", operator: "bogus" as any, value: 1 }, { x: 1 })).toBe(false);
+  });
+
+  // ---- Edge: empty conditions array ----
+
+  it("empty conditions array evaluates to true", () => {
+    const expr: ConditionExpression = { combine: "AND", conditions: [] };
+    expect(evaluate(expr, {})).toBe(true);
+  });
+
+  // ---- Edge: between with non-numeric field ----
+
+  it("between: non-numeric field coerces to 0", () => {
+    expect(evaluate({ field: "x", operator: "between", value: [-1, 1] }, { x: "abc" })).toBe(true);
+    expect(evaluate({ field: "x", operator: "between", value: [1, 5] }, { x: "abc" })).toBe(false);
+  });
+
+  // ---- Edge: notIn with non-array condition ----
+
+  it("notIn: returns true when conditionValue is not an array", () => {
+    expect(evaluate({ field: "x", operator: "notIn", value: "not-array" }, { x: "a" })).toBe(true);
+  });
+
+  // ---- Edge: contains with non-string field ----
+
+  it("contains: coerces non-string field to string", () => {
+    expect(evaluate({ field: "num", operator: "contains", value: "4" }, { num: 42 })).toBe(true);
+    expect(evaluate({ field: "num", operator: "contains", value: "5" }, { num: 42 })).toBe(false);
+  });
 });

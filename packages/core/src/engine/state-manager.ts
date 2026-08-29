@@ -406,16 +406,17 @@ export function createStateManager(config: StateManagerConfig) {
     currentSectionId: string,
     visitedSectionIds: string[],
   ): void {
-    navigation.restoreVisited(visitedSectionIds);
-
+    // Restore values first so visibility can be evaluated
     state = {
       ...state,
       values: { ...values },
       isDirty: false,
     };
 
-    // Navigate to the restored section
+    // Filter visited sections to only those currently visible
     const visibleIds = navigation.getVisibleSectionIds(state.values);
+    const validVisitedIds = visitedSectionIds.filter(id => visibleIds.includes(id));
+    navigation.restoreVisited(validVisitedIds);
     const effectiveSectionId = visibleIds.includes(currentSectionId)
       ? currentSectionId
       : (visibleIds[0] ?? schema.sections[0]?.id ?? "");
@@ -444,9 +445,17 @@ export function createStateManager(config: StateManagerConfig) {
     // Create a new state reference so useSyncExternalStore detects the change
     state = { ...state };
     for (const listener of listeners) {
-      listener(state);
+      try {
+        listener(state);
+      } catch (error) {
+        console.error("[FieldCraft] Subscriber error:", error);
+      }
     }
-    config.onStateChange?.(state);
+    try {
+      config.onStateChange?.(state);
+    } catch (error) {
+      console.error("[FieldCraft] onStateChange error:", error);
+    }
   }
 
   function recomputeDerivedState(): void {

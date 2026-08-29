@@ -839,10 +839,14 @@ export function createEngine(
       return questionMap.get(questionId);
     },
 
+    /**
+     * Tears down the engine: stops auto-save timers, clears subscriptions.
+     * MUST be called when the form is unmounted or discarded.
+     * Failure to call destroy() when autoSaveIntervalMs is set will leak timers.
+     */
     destroy() {
       destroyed = true;
       draftManager.stopAutoSave();
-      // Allow GC
     },
   };
 

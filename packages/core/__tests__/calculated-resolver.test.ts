@@ -191,3 +191,78 @@ describe("extractFieldRefs", () => {
     expect(refs).toContain("tax_rate");
   });
 });
+
+// ---- Edge cases for OSS fixes ----
+
+describe("evaluateExpression — edge cases", () => {
+  it("rejects expressions exceeding MAX_EXPRESSION_LENGTH (10,000 chars)", () => {
+    const longExpr = "{a} + " + "1 + ".repeat(3000) + "0";
+    expect(longExpr.length).toBeGreaterThan(10_000);
+    const result = evaluateExpression(longExpr, { a: 1 });
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("maximum length");
+  });
+
+  it("accepts expressions just under the length limit", () => {
+    const expr = "{a} + " + "1 + ".repeat(2490) + "0"; // ~9,966 chars
+    expect(expr.length).toBeLessThan(10_000);
+    const result = evaluateExpression(expr, { a: 0 });
+    expect(result.value).toBeTypeOf("number");
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("handles hyphenated field IDs", () => {
+    const result = evaluateExpression("{my-field} + {other-field}", { "my-field": 10, "other-field": 5 });
+    expect(result.value).toBe(15);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("handles hyphenated field IDs in repeater aggregates", () => {
+    const values = {
+      "line-items": [
+        { "unit-price": 10, qty: 2 },
+        { "unit-price": 20, qty: 3 },
+      ],
+    };
+    const result = evaluateExpression("SUM({line-items.unit-price})", values);
+    expect(result.value).toBe(30);
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("handles hyphenated IDs in complex repeater aggregates", () => {
+    const values = {
+      "order-items": [
+        { "unit-price": 10, "item-qty": 3 },
+        { "unit-price": 25, "item-qty": 2 },
+      ],
+    };
+    const result = evaluateExpression("SUM({order-items.unit-price} * {order-items.item-qty})", values);
+    expect(result.value).toBe(80); // (10*3) + (25*2)
+    expect(result.warning).toBeUndefined();
+  });
+
+  it("handles underscore-only field IDs", () => {
+    const result = evaluateExpression("{field_a} + {field_b}", { field_a: 7, field_b: 3 });
+    expect(result.value).toBe(10);
+  });
+
+  it("returns null for empty expression", () => {
+    const result = evaluateExpression("", {});
+    expect(result.value).toBeNull();
+  });
+
+  it("handles modulo operator", () => {
+    const result = evaluateExpression("{a} % {b}", { a: 10, b: 3 });
+    expect(result.value).toBe(1);
+  });
+
+  it("returns warning when aggregate references multiple repeaters", () => {
+    const values = {
+      items: [{ price: 10 }],
+      other: [{ qty: 5 }],
+    };
+    const result = evaluateExpression("SUM({items.price} * {other.qty})", values);
+    expect(result.value).toBeNull();
+    expect(result.warning).toContain("multiple repeaters");
+  });
+});

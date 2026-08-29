@@ -1,5 +1,8 @@
 import type { ConditionExpression, ConditionOperator } from "../types/conditions";
 
+// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+const __DEV__ = typeof globalThis !== "undefined" && typeof (globalThis as any).process !== "undefined" && (globalThis as any).process.env?.NODE_ENV !== "production";
+
 /**
  * Evaluates a condition expression against current form values.
  * Used by the engine to determine field/section visibility (`showIf`).
@@ -49,6 +52,12 @@ export function evaluate(
   // Leaf node: evaluate field + operator
   if (expression.field !== undefined && expression.operator !== undefined) {
     const fieldValue = values[expression.field];
+    if (__DEV__ && fieldValue === undefined && !(expression.field in values)) {
+      console.warn(
+        `[FieldCraft] Condition references unknown field "${expression.field}". ` +
+        `Check for typos in showIf expressions.`,
+      );
+    }
     return evaluateOperator(expression.operator, fieldValue, expression.value);
   }
 
