@@ -90,6 +90,8 @@ export function createStateManager(config: StateManagerConfig) {
   };
 
   // Compute initial derived state
+  recomputeAllCalculatedFields();
+  recomputeScores();
   recomputeDerivedState();
 
   // ---- Public methods ----
@@ -513,34 +515,85 @@ export function createStateManager(config: StateManagerConfig) {
     }
   }
 
-  function recomputeCalculatedFields(changedFieldId: string): void {
-    const dependents = dependencyGraph.get(changedFieldId);
-    if (!dependents) return;
+  function evaluateCalculatedSubset(fieldIds: Set<string>): void {
+    if (fieldIds.size === 0) return;
 
-    for (const depId of dependents) {
-      const question = questionMap.get(depId);
-      if (!question || question.type !== "calculated") continue;
-      const calcConfig = question.config as CalculatedConfig | undefined;
-      if (!calcConfig?.expression) continue;
+    // Filter to only calculated fields with expressions
+    const calcQuestions: Question[] = [];
+    const calcQuestionIds = new Set<string>();
 
-      const { value, warning } = evaluateExpression(calcConfig.expression, state.values);
-      const newWarnings = { ...state.warnings };
-      if (warning) {
-        newWarnings[depId] = warning;
-      } else {
-        delete newWarnings[depId];
+    for (const id of fieldIds) {
+      const q = questionMap.get(id);
+      if (q && q.type === "calculated") {
+        const calcConfig = q.config as CalculatedConfig | undefined;
+        if (calcConfig?.expression) {
+          calcQuestions.push(q);
+          calcQuestionIds.add(id);
+        }
       }
-      state = {
-        ...state,
-        values: { ...state.values, ...(value !== null ? { [depId]: value } : {}) },
-        warnings: newWarnings,
-      };
     }
-  }
 
-  function recomputeAllCalculatedFields(): void {
-    for (const [id, question] of questionMap) {
-      if (question.type !== "calculated") continue;
+    if (calcQuestions.length === 0) return;
+
+    // Topological sort (Kahn's algorithm) among the subset
+    const inDegree = new Map<string, number>();
+    const adj = new Map<string, Set<string>>();
+
+    for (const id of calcQuestionIds) {
+      inDegree.set(id, 0);
+      adj.set(id, new Set());
+    }
+
+    for (const q of calcQuestions) {
+      const calcConfig = q.config as CalculatedConfig;
+      const refs = extractFieldRefs(calcConfig.expression);
+      for (const ref of refs) {
+        if (calcQuestionIds.has(ref) && ref !== q.id) {
+          // ref -> q.id (q depends on ref)
+          const neighbors = adj.get(ref)!;
+          if (!neighbors.has(q.id)) {
+            neighbors.add(q.id);
+            inDegree.set(q.id, (inDegree.get(q.id) ?? 0) + 1);
+          }
+        }
+      }
+    }
+
+    const queue: string[] = [];
+    for (const [id, deg] of inDegree.entries()) {
+      if (deg === 0) {
+        queue.push(id);
+      }
+    }
+
+    const sortedIds: string[] = [];
+    while (queue.length > 0) {
+      const current = queue.shift()!;
+      sortedIds.push(current);
+      const neighbors = adj.get(current);
+      if (neighbors) {
+        for (const neighbor of neighbors) {
+          const newDeg = (inDegree.get(neighbor) ?? 1) - 1;
+          inDegree.set(neighbor, newDeg);
+          if (newDeg === 0) {
+            queue.push(neighbor);
+          }
+        }
+      }
+    }
+
+    // Append any circular / remaining nodes to guarantee they get evaluated
+    if (sortedIds.length < calcQuestions.length) {
+      for (const id of calcQuestionIds) {
+        if (!sortedIds.includes(id)) {
+          sortedIds.push(id);
+        }
+      }
+    }
+
+    for (const id of sortedIds) {
+      const question = questionMap.get(id);
+      if (!question || question.type !== "calculated") continue;
       const calcConfig = question.config as CalculatedConfig | undefined;
       if (!calcConfig?.expression) continue;
 
@@ -551,12 +604,56 @@ export function createStateManager(config: StateManagerConfig) {
       } else {
         delete newWarnings[id];
       }
+
+      const newValues = { ...state.values };
+      if (value !== null) {
+        newValues[id] = value;
+      } else {
+        delete newValues[id];
+      }
+
       state = {
         ...state,
-        values: { ...state.values, ...(value !== null ? { [id]: value } : {}) },
+        values: newValues,
         warnings: newWarnings,
       };
     }
+  }
+
+  function recomputeCalculatedFields(changedFieldId: string): void {
+    // Collect all transitive dependents of changedFieldId
+    const affected = new Set<string>();
+    const toVisit = [changedFieldId];
+    const visited = new Set<string>([changedFieldId]);
+
+    while (toVisit.length > 0) {
+      const current = toVisit.shift()!;
+      const dependents = dependencyGraph.get(current);
+      if (dependents) {
+        for (const depId of dependents) {
+          const q = questionMap.get(depId);
+          if (q && q.type === "calculated") {
+            affected.add(depId);
+          }
+          if (!visited.has(depId)) {
+            visited.add(depId);
+            toVisit.push(depId);
+          }
+        }
+      }
+    }
+
+    evaluateCalculatedSubset(affected);
+  }
+
+  function recomputeAllCalculatedFields(): void {
+    const allCalculatedIds = new Set<string>();
+    for (const [id, question] of questionMap) {
+      if (question.type === "calculated") {
+        allCalculatedIds.add(id);
+      }
+    }
+    evaluateCalculatedSubset(allCalculatedIds);
   }
 
   function recomputeScores(): void {
@@ -707,9 +804,14 @@ export function createStateManager(config: StateManagerConfig) {
     state = { ...state, errors: newErrors };
   }
 
+  function clearSubscribers(): void {
+    listeners.clear();
+  }
+
   return {
     getState,
     subscribe,
+    clearSubscribers,
     setValue,
     setValues,
     touchField,

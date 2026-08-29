@@ -65,7 +65,7 @@ export function DropdownField({ field, value, error, touched, disabled, readonly
   }
 
   // Standard non-searchable Select
-  const current = (value as string) || undefined;
+  const current = value !== undefined && value !== null && value !== "" ? String(value) : undefined;
   const isOtherSelected = allowOther && current != null && !options.some((o) => String(o.value) === current);
 
   return (

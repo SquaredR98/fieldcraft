@@ -539,6 +539,22 @@ function validateMaxItems(value: unknown, max: number, message?: string): string
  * @param message - Custom error message.
  * @since 1.4.0
  */
+function toComparable(val: unknown): number | string {
+  if (typeof val === "number") return val;
+  if (val instanceof Date) return val.getTime();
+  if (typeof val === "string") {
+    const trimmed = val.trim();
+    if (trimmed !== "") {
+      const num = Number(trimmed);
+      if (!isNaN(num)) return num;
+      const parsedDate = Date.parse(trimmed);
+      if (!isNaN(parsedDate)) return parsedDate;
+    }
+    return val;
+  }
+  return Number(val);
+}
+
 function validateCompareToField(
   value: unknown,
   fieldId: string,
@@ -558,14 +574,17 @@ function validateCompareToField(
     lte: "less than or equal to",
   };
 
+  const a = toComparable(value);
+  const b = toComparable(otherValue);
+
   let passes = false;
   switch (operator) {
     case "eq": passes = value === otherValue; break;
     case "neq": passes = value !== otherValue; break;
-    case "gt": passes = Number(value) > Number(otherValue); break;
-    case "gte": passes = Number(value) >= Number(otherValue); break;
-    case "lt": passes = Number(value) < Number(otherValue); break;
-    case "lte": passes = Number(value) <= Number(otherValue); break;
+    case "gt": passes = a > b; break;
+    case "gte": passes = a >= b; break;
+    case "lt": passes = a < b; break;
+    case "lte": passes = a <= b; break;
   }
 
   if (!passes) {

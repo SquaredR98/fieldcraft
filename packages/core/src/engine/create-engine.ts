@@ -529,8 +529,24 @@ export function createEngine(
     : [];
 
   // Check for existing draft
-  if (schema.settings?.allowDraftSave !== false && draftManager.hasDraft()) {
-    stateManager.setDraftState(true);
+  const draftInfo = draftManager.getDraftInfo();
+  if (schema.settings?.allowDraftSave !== false && draftInfo.hasDraft) {
+    stateManager.setDraftState(true, draftInfo.savedAt);
+  }
+
+  // Start auto-save if configured
+  const autoSaveIntervalMs = options?.autoSaveIntervalMs;
+  if (schema.settings?.allowDraftSave !== false && autoSaveIntervalMs && autoSaveIntervalMs > 0) {
+    draftManager.startAutoSave(() => {
+      const state = stateManager.getState();
+      return {
+        values: state.values,
+        currentSectionId: state.currentSectionId,
+        visitedSectionIds: state.visitedSectionIds,
+        savedAt: new Date().toISOString(),
+        schemaVersion: schema.version,
+      };
+    });
   }
 
   // Cleanup tracking
@@ -796,7 +812,9 @@ export function createEngine(
             }],
           };
         }
-        finalResponse = hookResult;
+        if (hookResult && typeof hookResult === "object") {
+          finalResponse = hookResult;
+        }
       }
 
       // Run submission pipeline
@@ -847,6 +865,7 @@ export function createEngine(
     destroy() {
       destroyed = true;
       draftManager.stopAutoSave();
+      stateManager.clearSubscribers();
     },
   };
 

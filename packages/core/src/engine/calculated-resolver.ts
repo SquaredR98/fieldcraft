@@ -514,14 +514,14 @@ export function extractFieldRefs(expression: string): string[] {
   const refs = new Set<string>();
 
   // Simple refs: {fieldId}
-  const simplePattern = /\{(\w+)\}/g;
+  const simplePattern = /\{([a-zA-Z0-9_-]+)\}/g;
   let match: RegExpExecArray | null;
   while ((match = simplePattern.exec(expression)) !== null) {
     refs.add(match[1]);
   }
 
   // Repeater refs: {repeaterId.subFieldId} → add repeaterId as dependency
-  const dotPattern = /\{(\w+)\.(\w+)\}/g;
+  const dotPattern = /\{([a-zA-Z0-9_-]+)\.([a-zA-Z0-9_-]+)\}/g;
   while ((match = dotPattern.exec(expression)) !== null) {
     refs.add(match[1]);
   }

@@ -48,6 +48,9 @@ export function unflattenFormValues(flat: Record<string, unknown>): Record<strin
 
   for (const [key, value] of Object.entries(flat)) {
     const parts = key.split(".");
+    if (parts.some((p) => p === "__proto__" || p === "constructor" || p === "prototype")) {
+      continue;
+    }
     let current = result;
 
     for (let i = 0; i < parts.length - 1; i++) {

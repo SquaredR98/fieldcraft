@@ -18,19 +18,19 @@ const LAYOUT_CLASSES: Record<string, string> = {
 export function SingleSelectField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as SingleSelectConfig | undefined;
   const options = field.options ?? [];
-  const current = value as string | undefined;
+  const current = value !== undefined && value !== null && value !== "" ? String(value) : undefined;
   const hasError = touched && !!error?.length;
   const layout = config?.layout ?? "vertical";
   const allowOther = config?.allowOther === true;
   const otherLabel = config?.otherLabel ?? "Other";
 
-  const isOtherSelected = current != null && !options.some((opt) => String(opt.value) === current);
+  const isOtherSelected = allowOther && current != null && !options.some((opt) => String(opt.value) === current);
   const [otherText, setOtherText] = useState(isOtherSelected ? current : "");
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
       <RadioGroup
-        value={isOtherSelected ? OTHER_VALUE : (current || undefined)}
+        value={isOtherSelected ? OTHER_VALUE : current}
         onValueChange={(val) => {
           if (val === OTHER_VALUE) {
             onChange(otherText || "");

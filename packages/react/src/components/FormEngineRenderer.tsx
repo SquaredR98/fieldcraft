@@ -52,6 +52,15 @@ export type FormEngineRendererProps = {
 
   // Draft
   sessionToken?: string;
+  draftAdapter?: import("@squaredr/fieldcraft-core").DraftAdapter;
+  autoSaveIntervalMs?: number;
+  draftMigrations?: Record<string, (draft: import("@squaredr/fieldcraft-core").DraftSnapshot) => import("@squaredr/fieldcraft-core").DraftSnapshot>;
+
+  // Submission hooks & analytics
+  beforeSubmit?: (response: FormResponse) => FormResponse | false | Promise<FormResponse | false>;
+  analytics?: import("@squaredr/fieldcraft-core").AnalyticsAdapter;
+  onEvent?: (event: import("@squaredr/fieldcraft-core").FieldCraftEvent) => void;
+  metadata?: Record<string, unknown>;
 
   // Custom validators
   validators?: Record<string, CustomValidator>;
@@ -84,6 +93,13 @@ export function FormEngineRenderer({
   onValidationError,
   onStateChange,
   sessionToken,
+  draftAdapter,
+  autoSaveIntervalMs,
+  draftMigrations,
+  beforeSubmit,
+  analytics,
+  onEvent,
+  metadata,
   validators,
   asyncValidators,
   prevLabel,
@@ -103,6 +119,13 @@ export function FormEngineRenderer({
     validators,
     asyncValidators,
     sessionToken,
+    draftAdapter,
+    autoSaveIntervalMs,
+    draftMigrations,
+    beforeSubmit,
+    analytics,
+    onEvent,
+    metadata,
   });
 
   const { state } = engine;

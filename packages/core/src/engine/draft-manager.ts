@@ -154,13 +154,17 @@ export function createDraftManager(config: DraftManagerConfig) {
   }
 
   function hasDraft(): boolean {
+    return getDraftInfo().hasDraft;
+  }
+
+  function getDraftInfo(): { hasDraft: boolean; savedAt?: string } {
     if (config.storage === "local" || config.storage === "both") {
       const data = loadFromLocalStorage(localKey);
       if (data && !isExpired(data.savedAt, config.ttlHours)) {
-        return true;
+        return { hasDraft: true, savedAt: data.savedAt };
       }
     }
-    return false;
+    return { hasDraft: false };
   }
 
   /**
@@ -191,7 +195,7 @@ export function createDraftManager(config: DraftManagerConfig) {
     }
   }
 
-  return { save, load, clear, hasDraft, startAutoSave, stopAutoSave };
+  return { save, load, clear, hasDraft, getDraftInfo, startAutoSave, stopAutoSave };
 }
 
 // ---- localStorage helpers ----

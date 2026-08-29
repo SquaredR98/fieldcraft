@@ -98,21 +98,24 @@ export function createNavigation(schema: FormEngineSchema) {
     const currentSection = schema.sections.find((s) => s.id === currentSectionId);
     if (!currentSection) return null;
 
+    const visibleIds = getVisibleSectionIds(values);
+
     // Check jump rules
     if (currentSection.onExit) {
       for (const rule of currentSection.onExit.rules) {
         if (evaluate(rule.condition, values)) {
-          return rule.jumpTo;
+          if (visibleIds.includes(rule.jumpTo)) {
+            return rule.jumpTo;
+          }
         }
       }
-      // Use default if no rule matched
-      if (currentSection.onExit.default) {
+      // Use default if no rule matched or matched rule target was hidden
+      if (currentSection.onExit.default && visibleIds.includes(currentSection.onExit.default)) {
         return currentSection.onExit.default;
       }
     }
 
     // No jump logic — go to next visible section
-    const visibleIds = getVisibleSectionIds(values);
     const currentIndex = visibleIds.indexOf(currentSectionId);
     if (currentIndex >= 0 && currentIndex < visibleIds.length - 1) {
       return visibleIds[currentIndex + 1];
