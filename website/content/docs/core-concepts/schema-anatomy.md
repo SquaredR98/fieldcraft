@@ -282,6 +282,11 @@ type FormResponse = {
 
 ## Next steps
 
-- [Field types](/docs/core-concepts/field-types) — all 42 types with their configs
+- [Field types](/docs/core-concepts/field-types) — all 44 types with their configs
 - [Conditional logic](/docs/core-concepts/conditional-logic) — `showIf`, operators, and compound conditions
 - [Validation](/docs/core-concepts/validation) — 19 built-in rule types plus custom and async validators
+
+## Related reading
+
+- [Why Schema-Driven? The Architecture Behind FieldCraft](/blog/why-schema-driven) — why the schema is the source of truth
+- [Schema-Driven vs Code-Driven Forms](/blog/schema-vs-code-driven-forms) — when each approach fits

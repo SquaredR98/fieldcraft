@@ -166,3 +166,8 @@ function ProgressHeader({ engine }) {
 - [FormRenderer](/docs/react/form-renderer) — the main component and its props
 - [Hooks](/docs/react/hooks) — useFormEngine, useFieldValue, useSectionProgress
 - [Drafts & prefill](/docs/submission/drafts-and-prefill) — persist answers across sessions
+
+## Related reading
+
+- [Build a Multi-Step Survey in 5 Minutes](/blog/build-multi-step-survey) — hands-on tutorial building a 3-step survey
+- [Conversational Forms: One Question at a Time](/blog/conversational-forms) — the conversational display mode

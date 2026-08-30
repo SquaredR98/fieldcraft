@@ -1,6 +1,18 @@
+import type { Metadata } from 'next';
 import { HomepageView } from '@/components/homepage/HomepageView';
 import { getTemplateById } from '@/lib/templates';
 import { getNpmStats } from '@/lib/npm-stats';
+
+export const metadata: Metadata = {
+  title: 'FieldCraft — Open-source form engine for React',
+  description:
+    'Self-hosted, schema-driven form engine for React. 44 field types, conditional logic, multi-step forms, validation, and draft persistence. Define once in JSON, render anywhere. MIT licensed.',
+  openGraph: {
+    title: 'FieldCraft — Open-source form engine for React',
+    description:
+      'Self-hosted form engine with 44 field types, conditional logic, multi-step navigation, and validation. Define forms in JSON, own your data. MIT licensed.',
+  },
+};
 
 const showcaseIds = ['contact-form', 'feedback-survey', 'job-application'];
 

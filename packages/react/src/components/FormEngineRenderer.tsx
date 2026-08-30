@@ -76,6 +76,13 @@ export type FormEngineRendererProps = {
 
   // Conversational mode
   autoAdvance?: boolean;
+
+  /** When true, built-in navigation buttons are hidden. Use `onReady` to get
+   *  the engine instance, then call `engine.nextSection()`,
+   *  `engine.prevSection()`, `engine.submit()` from your own UI.
+   *  Pair with `onStateChange` to read `canGoNext`, `canGoPrev`,
+   *  `isSubmitting`, `currentSectionIndex`, `totalVisibleSections`, etc. */
+  hideNavigation?: boolean;
 };
 
 export function FormEngineRenderer({
@@ -107,6 +114,7 @@ export function FormEngineRenderer({
   submitLabel,
   autoFocus,
   autoAdvance,
+  hideNavigation,
 }: FormEngineRendererProps) {
   const engine = useFormEngine(schema, {
     adapters,
@@ -210,6 +218,7 @@ export function FormEngineRenderer({
                 autoFocus={autoFocus}
                 submitLabel={submitLabel}
                 onSubmit={handleSubmit}
+                hideNavigation={hideNavigation}
               />
             )}
 
@@ -227,6 +236,7 @@ export function FormEngineRenderer({
                 progressPosition={theme?.layout?.progressPosition}
                 showProgress={schema.settings?.showProgress}
                 showBack={schema.settings?.navigation?.showBack}
+                hideNavigation={hideNavigation}
               />
             )}
 
@@ -240,6 +250,7 @@ export function FormEngineRenderer({
                 nextLabel={nextLabel}
                 submitLabel={submitLabel}
                 onSubmit={handleSubmit}
+                hideNavigation={hideNavigation}
               />
             )}
           </FormErrorBoundary>
@@ -259,6 +270,7 @@ function ClassicModeContent({
   autoFocus,
   submitLabel = "Submit",
   onSubmit,
+  hideNavigation,
 }: {
   engine: FormEngine;
   state: import("@squaredr/fieldcraft-core").FormState;
@@ -267,6 +279,7 @@ function ClassicModeContent({
   autoFocus?: boolean;
   submitLabel?: string;
   onSubmit: () => void;
+  hideNavigation?: boolean;
 }) {
   const theme = useTheme();
   return (
@@ -280,21 +293,23 @@ function ClassicModeContent({
         registry={registry}
         autoFocus={autoFocus}
       />
-      <div className="flex justify-end pt-2">
-        <button
-          type="button"
-          onClick={onSubmit}
-          disabled={state.isSubmitting}
-          className={cn(
-            "px-6 py-2 text-sm rounded-md",
-            "bg-primary text-primary-foreground",
-            "hover:bg-primary/90 transition-colors",
-            state.isSubmitting && "opacity-50 cursor-not-allowed",
-          )}
-        >
-          {state.isSubmitting ? "Submitting\u2026" : submitLabel}
-        </button>
-      </div>
+      {!hideNavigation && (
+        <div className="flex justify-end pt-2">
+          <button
+            type="button"
+            onClick={onSubmit}
+            disabled={state.isSubmitting}
+            className={cn(
+              "px-6 py-2 text-sm rounded-md",
+              "bg-primary text-primary-foreground",
+              "hover:bg-primary/90 transition-colors",
+              state.isSubmitting && "opacity-50 cursor-not-allowed",
+            )}
+          >
+            {state.isSubmitting ? "Submitting\u2026" : submitLabel}
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -312,6 +327,7 @@ function SteppedModeContent({
   progressPosition,
   showProgress = true,
   showBack = true,
+  hideNavigation,
 }: {
   engine: FormEngine;
   state: import("@squaredr/fieldcraft-core").FormState;
@@ -325,6 +341,7 @@ function SteppedModeContent({
   progressPosition?: string;
   showProgress?: boolean;
   showBack?: boolean;
+  hideNavigation?: boolean;
 }) {
   const theme = useTheme();
   const visibleSections = engine.getVisibleSections();
@@ -358,18 +375,20 @@ function SteppedModeContent({
         />
       )}
 
-      <NavigationButtons
-        canGoPrev={showBack ? state.canGoPrev : false}
-        canGoNext={state.canGoNext}
-        isLastSection={isLastSection}
-        isSubmitting={state.isSubmitting}
-        onPrev={() => engine.prevSection()}
-        onNext={() => engine.nextSection()}
-        onSubmit={onSubmit}
-        prevLabel={prevLabel}
-        nextLabel={nextLabel}
-        submitLabel={submitLabel}
-      />
+      {!hideNavigation && (
+        <NavigationButtons
+          canGoPrev={showBack ? state.canGoPrev : false}
+          canGoNext={state.canGoNext}
+          isLastSection={isLastSection}
+          isSubmitting={state.isSubmitting}
+          onPrev={() => engine.prevSection()}
+          onNext={() => engine.nextSection()}
+          onSubmit={onSubmit}
+          prevLabel={prevLabel}
+          nextLabel={nextLabel}
+          submitLabel={submitLabel}
+        />
+      )}
     </div>
   );
 }
@@ -383,6 +402,7 @@ function ConversationalModeContent({
   nextLabel,
   submitLabel,
   onSubmit,
+  hideNavigation,
 }: {
   engine: FormEngine;
   registry: FieldRegistry;
@@ -392,6 +412,7 @@ function ConversationalModeContent({
   nextLabel?: string;
   submitLabel?: string;
   onSubmit: () => void;
+  hideNavigation?: boolean;
 }) {
   const theme = useTheme();
   return (
@@ -405,6 +426,7 @@ function ConversationalModeContent({
       nextLabel={nextLabel}
       submitLabel={submitLabel}
       onSubmit={onSubmit}
+      hideNavigation={hideNavigation}
     />
   );
 }

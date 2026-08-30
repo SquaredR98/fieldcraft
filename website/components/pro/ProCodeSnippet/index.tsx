@@ -27,7 +27,8 @@ export function ProCodeSnippet() {
             <p className="fc-pro-sub">
               Wrap your admin route in the provider with your licence key. Every
               Pro component reads it from context — no per-component config, no
-              build step.
+              build step. On localhost, skip the key entirely — everything works
+              out of the box.
             </p>
             <div className="fc-pro-code__compat">
               Works with Next.js, Vite, Remix, and any React 18+ setup

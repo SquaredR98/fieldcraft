@@ -226,3 +226,8 @@ This lets your URL parameters or API data use different key names than your fiel
 
 - [Adapters overview](/docs/submission/adapters-overview) — submission targets and encryption
 - [Server validation](/docs/submission/server-validation) — validate schemas before rendering
+
+## Related reading
+
+- [6 Hard-Won UX Lessons](/blog/form-ux-lessons) — why silent auto-save matters
+- [The Real Cost of Building Forms From Scratch](/blog/real-cost-building-forms) — draft persistence as one of 8 core systems

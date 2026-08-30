@@ -206,3 +206,8 @@ type ValidationResult = {
 - [Computed fields](/docs/core-concepts/computed-fields) — auto-calculate values from expressions
 - [Multi-step forms](/docs/core-concepts/multi-step-forms) — section navigation and progress
 - [Server validation](/docs/submission/server-validation) — validate schemas on the server
+
+## Related reading
+
+- [How FieldCraft's Validation Pipeline Works Under the Hood](/blog/fieldcraft-validation-pipeline) — deep-dive into the validation architecture
+- [6 Hard-Won UX Lessons from Building a Form Engine](/blog/form-ux-lessons) — why validate on blur, not on change

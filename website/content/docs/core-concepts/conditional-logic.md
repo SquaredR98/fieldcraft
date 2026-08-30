@@ -164,3 +164,8 @@ This cascade happens synchronously and is fast — the condition evaluator is a 
 - [Validation](/docs/core-concepts/validation) — validate field values with 19 built-in rule types
 - [Computed fields](/docs/core-concepts/computed-fields) — derive values from expressions
 - [Multi-step forms](/docs/core-concepts/multi-step-forms) — navigation, progress, and jump rules
+
+## Related reading
+
+- [Build a Multi-Step Survey in 5 Minutes](/blog/build-multi-step-survey) — practical tutorial using `showIf` conditions
+- [6 Hard-Won UX Lessons](/blog/form-ux-lessons) — why conditional fields should hide, not disable

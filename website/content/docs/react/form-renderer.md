@@ -58,7 +58,6 @@ export default function ContactPage() {
 |------|------|-------------|
 | `prefill` | `Record<string, unknown>` | Initial values to prefill into the form. Keys are field IDs. |
 | `initialValues` | `Record<string, unknown>` | Same as `prefill` — alternative prop name. |
-| `sessionToken` | `string` | Custom session token. If not provided, a UUID is generated. Used to scope drafts. |
 
 ### Validators
 
@@ -66,6 +65,15 @@ export default function ContactPage() {
 |------|------|-------------|
 | `validators` | `Record<string, CustomValidator>` | Custom sync validators keyed by name. Referenced in schema via `{ type: 'custom', name: '...' }`. |
 | `asyncValidators` | `Record<string, AsyncValidator>` | Custom async validators keyed by name. Referenced in schema via `{ type: 'async', endpoint: '...' }`. |
+
+### Drafts
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `sessionToken` | `string` | Custom session token. If not provided, a UUID is generated. Used to scope drafts per user/session. |
+| `draftAdapter` | `DraftAdapter` | Server-side draft adapter (Supabase, Postgres, or custom). Enables cross-device draft persistence. |
+| `autoSaveIntervalMs` | `number` | Auto-save interval in milliseconds. When set, the engine saves drafts automatically at this interval. |
+| `draftMigrations` | `Record<string, (draft: DraftSnapshot) => DraftSnapshot>` | Migration functions keyed by schema version. Applied when loading a draft saved against an older schema version. |
 
 ### Labels
 
@@ -81,9 +89,26 @@ export default function ContactPage() {
 |------|------|-------------|
 | `onSectionChange` | `(sectionId: string, index: number) => void` | Called when the active section changes. |
 | `onFieldChange` | `(fieldId: string, value: unknown) => void` | Called when any field value changes. |
-| `onReady` | `() => void` | Called after the engine is initialised and the form is ready. |
+| `onReady` | `(engine: FormEngine) => void` | Called after the engine is initialised. Receives the engine instance — use it to call `engine.loadDraft()`, `engine.submit()`, or read state programmatically. |
 | `onValidationError` | `(errors: Record<string, string[]>) => void` | Called when validation fails (on section change or submit). |
 | `onStateChange` | `(state: FormState) => void` | Called on every state change. Use sparingly — this fires frequently. |
+| `onEvent` | `(event: FieldCraftEvent) => void` | Called on every engine event (field interaction, section change, submit, etc.). Useful for custom logging. |
+| `beforeSubmit` | `(response: FormResponse) => FormResponse \| false \| Promise<FormResponse \| false>` | Intercept submissions before they reach adapters. Return a modified response, or `false` to cancel the submission. |
+
+### Analytics
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `analytics` | `AnalyticsAdapter` | Analytics adapter for tracking form views, starts, field interactions, submissions, and abandonment. |
+| `metadata` | `Record<string, unknown>` | Arbitrary metadata attached to form responses and analytics events. Useful for tracking source, campaign, or user context. |
+
+### Behaviour
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `autoFocus` | `boolean` | When `true`, the first field in each section receives focus automatically on mount and section change. |
+| `autoAdvance` | `boolean` | Conversational mode only. When `true`, the form advances to the next question automatically after the user answers. |
+| `hideNavigation` | `boolean` | When `true`, built-in navigation buttons (Back, Next, Submit) are hidden across all display modes. Use `onReady` to get the engine instance, then call `engine.nextSection()`, `engine.prevSection()`, `engine.submit()` from your own UI. Pair with `onStateChange` to read `canGoNext`, `canGoPrev`, `isSubmitting`, and other state. |
 
 ## Full example
 
@@ -97,6 +122,7 @@ import { PainScaleField } from './custom-fields/PainScaleField'
 import { validators } from '@/lib/validators'
 import schema from './patient-intake.json'
 import { supabase } from '@/lib/supabase'
+import type { FormEngine } from '@squaredr/fieldcraft-core'
 
 const adapter = createSupabaseAdapter({
   client: supabase,
@@ -114,11 +140,68 @@ export default function IntakePage() {
       onSubmit={async (response) => {
         console.log('Submitted:', response.schemaId, response.values)
       }}
+      onReady={(engine: FormEngine) => {
+        console.log('Form ready:', engine.getSchema().title)
+      }}
       onSectionChange={(id, idx) => {
         console.log(`Section ${idx + 1}: ${id}`)
       }}
       submitLabel="Submit Intake Form"
+      autoFocus
     />
+  )
+}
+```
+
+## Headless / custom navigation
+
+Use `hideNavigation` with `onReady` and `onStateChange` to replace the built-in buttons with your own UI:
+
+```tsx
+import { useState, useCallback } from 'react'
+import { FormRenderer } from '@squaredr/fieldcraft-react'
+import type { FormEngine, FormState } from '@squaredr/fieldcraft-core'
+
+export default function CustomNavForm({ schema }) {
+  const [engine, setEngine] = useState<FormEngine | null>(null)
+  const [formState, setFormState] = useState<FormState | null>(null)
+
+  return (
+    <div>
+      <FormRenderer
+        schema={schema}
+        hideNavigation
+        onReady={setEngine}
+        onStateChange={setFormState}
+        onSubmit={(response) => console.log(response)}
+      />
+
+      {engine && formState && (
+        <div className="flex gap-2 mt-4">
+          <button
+            onClick={() => engine.prevSection()}
+            disabled={!formState.canGoPrev}
+          >
+            Back
+          </button>
+          {formState.currentSectionIndex < formState.totalVisibleSections - 1 ? (
+            <button
+              onClick={() => engine.nextSection()}
+              disabled={!formState.canGoNext}
+            >
+              Continue
+            </button>
+          ) : (
+            <button
+              onClick={() => engine.submit()}
+              disabled={formState.isSubmitting}
+            >
+              {formState.isSubmitting ? 'Sending…' : 'Send'}
+            </button>
+          )}
+        </div>
+      )}
+    </div>
   )
 }
 ```

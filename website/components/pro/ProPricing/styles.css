@@ -88,6 +88,25 @@
   @apply bg-fc-teal-hover text-fc-teal-on;
 }
 
+.fc-pro-pricing__trial {
+  @apply flex flex-col gap-1;
+  @apply border border-fc-amber-border bg-fc-amber-bg;
+  @apply px-4 py-3;
+}
+
+.fc-pro-pricing__trial-label {
+  @apply font-mono text-[10.5px] tracking-[0.12em];
+  @apply uppercase text-fc-amber-ink font-medium;
+}
+
+.fc-pro-pricing__trial-detail {
+  @apply text-[13px] leading-[1.55] text-fc-ink;
+}
+
+.fc-pro-pricing__trial-detail code {
+  @apply font-mono text-[12px] text-fc-amber-ink;
+}
+
 .fc-pro-pricing__legal {
   @apply text-[12.5px] leading-[1.6] text-fc-muted;
 }

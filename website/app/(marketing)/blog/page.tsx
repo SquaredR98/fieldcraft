@@ -6,7 +6,12 @@ import { BlogListView } from '@/components/blog/BlogListView';
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'Technical deep-dives, build logs, and lessons from building FieldCraft — a schema-driven form engine for React.',
+    'Tutorials, guides, and deep-dives on building forms with React. Multi-step wizards, conditional logic, validation patterns, and self-hosted form architecture.',
+  openGraph: {
+    title: 'FieldCraft Blog — React form engineering',
+    description:
+      'Tutorials, guides, and deep-dives on building forms with React. Multi-step wizards, conditional logic, validation patterns, and self-hosted form architecture.',
+  },
 };
 
 export default async function BlogPage({

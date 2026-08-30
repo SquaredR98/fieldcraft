@@ -26,6 +26,7 @@ export type ConversationalRendererProps = {
   nextLabel?: string;
   submitLabel?: string;
   onSubmit: () => void;
+  hideNavigation?: boolean;
 };
 
 /**
@@ -42,6 +43,7 @@ export function ConversationalRenderer({
   nextLabel = "Next",
   submitLabel = "Submit",
   onSubmit,
+  hideNavigation,
 }: ConversationalRendererProps) {
   const state = engine.getState();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -162,47 +164,51 @@ export function ConversationalRenderer({
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between gap-3 pt-4">
-        <button
-          type="button"
-          onClick={handlePrev}
-          disabled={!state.canGoPrevQuestion}
-          className={cn(
-            "px-4 py-2 text-sm rounded-md border border-border",
-            "transition-colors",
-            state.canGoPrevQuestion
-              ? "hover:bg-accent text-foreground"
-              : "text-muted-foreground opacity-50 cursor-not-allowed",
-          )}
-          aria-label={prevLabel}
-        >
-          {prevLabel}
-        </button>
+      {!hideNavigation && (
+        <>
+          <div className="flex justify-between gap-3 pt-4">
+            <button
+              type="button"
+              onClick={handlePrev}
+              disabled={!state.canGoPrevQuestion}
+              className={cn(
+                "px-4 py-2 text-sm rounded-md border border-border",
+                "transition-colors",
+                state.canGoPrevQuestion
+                  ? "hover:bg-accent text-foreground"
+                  : "text-muted-foreground opacity-50 cursor-not-allowed",
+              )}
+              aria-label={prevLabel}
+            >
+              {prevLabel}
+            </button>
 
-        <button
-          type="button"
-          onClick={handleNext}
-          disabled={state.isSubmitting}
-          className={cn(
-            "px-6 py-2 text-sm rounded-md",
-            "bg-primary text-primary-foreground",
-            "hover:bg-primary/90 transition-colors",
-            state.isSubmitting && "opacity-50 cursor-not-allowed",
-          )}
-          aria-label={isLastQuestion ? submitLabel : nextLabel}
-        >
-          {state.isSubmitting
-            ? "Submitting\u2026"
-            : isLastQuestion
-              ? submitLabel
-              : nextLabel}
-        </button>
-      </div>
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={state.isSubmitting}
+              className={cn(
+                "px-6 py-2 text-sm rounded-md",
+                "bg-primary text-primary-foreground",
+                "hover:bg-primary/90 transition-colors",
+                state.isSubmitting && "opacity-50 cursor-not-allowed",
+              )}
+              aria-label={isLastQuestion ? submitLabel : nextLabel}
+            >
+              {state.isSubmitting
+                ? "Submitting\u2026"
+                : isLastQuestion
+                  ? submitLabel
+                  : nextLabel}
+            </button>
+          </div>
 
-      {/* Keyboard hint */}
-      <p className="text-xs text-muted-foreground text-center">
-        Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px] font-mono">Enter</kbd> to continue
-      </p>
+          {/* Keyboard hint */}
+          <p className="text-xs text-muted-foreground text-center">
+            Press <kbd className="px-1.5 py-0.5 bg-muted rounded text-[10px] font-mono">Enter</kbd> to continue
+          </p>
+        </>
+      )}
     </div>
   );
 }

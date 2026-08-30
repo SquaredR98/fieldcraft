@@ -5,11 +5,11 @@ import { changelog, planned } from '@/lib/changelog';
 export const metadata: Metadata = {
   title: 'Changelog — FieldCraft',
   description:
-    'Version history and upcoming plans for FieldCraft core, react, and pro packages.',
+    'Release history for FieldCraft core, react, and pro packages. New field types, engine improvements, and upcoming features.',
   openGraph: {
     title: 'Changelog — FieldCraft',
     description:
-      'Version history and upcoming plans for FieldCraft core, react, and pro packages.',
+      'Release history for FieldCraft core, react, and pro packages. New field types, engine improvements, and upcoming features.',
     url: 'https://fieldcraft.squaredr.tech/roadmap',
   },
 };

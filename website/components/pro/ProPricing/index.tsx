@@ -47,6 +47,16 @@ export function ProPricing() {
                   >
                     Buy now &mdash; $199
                   </a>
+                  <div className="fc-pro-pricing__trial">
+                    <span className="fc-pro-pricing__trial-label">
+                      Or try it free first
+                    </span>
+                    <span className="fc-pro-pricing__trial-detail">
+                      Install <code>@squaredr/fieldcraft-pro</code> and use
+                      every component on localhost &mdash; no time limit, no
+                      licence key needed.
+                    </span>
+                  </div>
                   <p className="fc-pro-pricing__legal">
                     One licence per production domain. Unlimited development and
                     staging use.

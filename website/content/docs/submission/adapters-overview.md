@@ -204,3 +204,8 @@ const decrypted = decrypt(encrypted, key)
 
 - [Drafts & prefill](/docs/submission/drafts-and-prefill) — save and restore form progress
 - [Server validation](/docs/submission/server-validation) — validate schemas server-side
+
+## Related reading
+
+- [FieldCraft Storage Adapters Are Now Open Source](/blog/fieldcraft-adapters-now-open-source) — why adapters are MIT licensed
+- [Self-Hosted Forms vs Cloud Forms](/blog/self-hosted-vs-cloud-forms) — the case for owning your form data

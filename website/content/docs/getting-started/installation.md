@@ -104,3 +104,8 @@ import type { FormEngineSchema } from '@squaredr/fieldcraft-react'
 ## Next steps
 
 Build your first real form in [Your first form](/docs/getting-started/your-first-form), or jump to [Schema anatomy](/docs/core-concepts/schema-anatomy) to understand the full schema structure.
+
+## Related reading
+
+- [Introducing FieldCraft](/blog/introducing-fieldcraft) — what FieldCraft is and why it exists
+- [Why Schema-Driven?](/blog/why-schema-driven) — the architecture behind FieldCraft
