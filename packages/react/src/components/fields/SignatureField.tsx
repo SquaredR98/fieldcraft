@@ -2,6 +2,7 @@ import { useRef, useEffect, useCallback } from "react";
 import type { SignatureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Button } from "../ui/button";
 
 export function SignatureField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as SignatureConfig | undefined;
@@ -94,14 +95,16 @@ export function SignatureField({ field, value, error, touched, disabled, readonl
           onFocus={onFocus}
           aria-label={`${field.label} signature pad`}
         />
-        <button
+        <Button
           type="button"
-          className="self-end text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+          variant="ghost"
+          size="xs"
+          className="self-end text-xs text-muted-foreground hover:text-foreground"
           onClick={clear}
           disabled={disabled || readonly}
         >
-          Clear
-        </button>
+          Clear signature
+        </Button>
       </div>
     </FieldWrapper>
   );

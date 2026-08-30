@@ -4,7 +4,7 @@ import type { FormEngineSchema } from "../src/types/schema";
 
 // ---- Helper: minimal valid schema ----
 
-function minimalSchema(overrides?: Partial<FormEngineSchema>): unknown {
+function minimalSchema(overrides?: Partial<FormEngineSchema>): Record<string, unknown> {
   return {
     id: "test-form",
     version: "1.0.0",

@@ -51,6 +51,7 @@ export type {
   DateConfig,
   DateRangeConfig,
   TimeConfig,
+  AppointmentSlot,
   AppointmentConfig,
   FileUploadConfig,
   SignatureConfig,

@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { createStateManager } from "../src/engine/state-manager";
 import type { FormEngineSchema } from "../src/types/schema";
-import { createValidatorRegistry } from "../src/validators/registry";
 
 function makeSchema(overrides?: Partial<FormEngineSchema>): FormEngineSchema {
   return {

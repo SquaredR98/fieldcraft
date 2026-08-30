@@ -1,6 +1,7 @@
 import type { MatrixConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 
 type MatrixValue = Record<string, string | string[]>;
 
@@ -26,31 +27,31 @@ export function MatrixField({ field, value, error, touched, disabled, readonly, 
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="overflow-x-auto rounded-md border border-input" role="table" aria-label={field.label}>
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-input bg-muted/50">
-              <th className="p-3 text-left font-medium" />
+      <div className="overflow-x-auto rounded-md border border-input" role="region" aria-label={field.label}>
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50">
+              <TableHead className="w-1/3" />
               {columns.map((col) => (
-                <th key={col.value} className="p-3 text-center font-medium text-foreground" scope="col">
+                <TableHead key={col.value} className="text-center font-medium">
                   {col.label}
-                </th>
+                </TableHead>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((row, i) => (
-              <tr key={row.value} className={i < rows.length - 1 ? "border-b border-input" : ""}>
-                <th className="p-3 text-left font-normal text-foreground" scope="row">
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow key={row.value}>
+                <TableCell className="font-medium text-foreground">
                   {row.label}
-                </th>
+                </TableCell>
                 {columns.map((col) => {
                   const checked =
                     inputType === "checkbox"
                       ? ((matrix[row.value] as string[]) ?? []).includes(col.value)
                       : matrix[row.value] === col.value;
                   return (
-                    <td key={col.value} className="p-3 text-center">
+                    <TableCell key={col.value} className="text-center">
                       <input
                         type={inputType === "checkbox" ? "checkbox" : "radio"}
                         name={`${field.id}-${row.value}`}
@@ -58,16 +59,16 @@ export function MatrixField({ field, value, error, touched, disabled, readonly, 
                         disabled={disabled || readonly}
                         onChange={() => updateCell(row.value, col.value)}
                         onFocus={onFocus}
-                        className="accent-primary h-4 w-4"
+                        className="accent-primary h-4 w-4 cursor-pointer disabled:cursor-not-allowed"
                         aria-label={`${row.label}: ${col.label}`}
                       />
-                    </td>
+                    </TableCell>
                   );
                 })}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     </FieldWrapper>
   );

@@ -15,8 +15,10 @@ function makeProps(overrides?: Partial<FieldProps>): FieldProps {
     error: undefined,
     touched: false,
     disabled: false,
+    readonly: false,
     onChange: vi.fn(),
     onBlur: vi.fn(),
+    onFocus: vi.fn(),
     theme: {},
     ...overrides,
   };

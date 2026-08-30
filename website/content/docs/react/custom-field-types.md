@@ -34,10 +34,13 @@ type FieldProps = {
   error?: string[]              // Validation errors (if any)
   touched: boolean              // Whether the user has interacted with this field
   disabled: boolean             // Whether the field is disabled
+  readonly: boolean             // Whether the field is read-only
   onChange: (value: unknown) => void    // Call this when the value changes
   onBlur: () => void            // Call this when the field loses focus
+  onFocus: () => void           // Call this when the field gains focus
   theme: FormEngineTheme        // Current theme
   customProps?: Record<string, unknown>  // Custom props from schema
+  fieldValues?: Record<string, unknown>  // All current form field values (cross-field access)
 }
 ```
 
@@ -160,16 +163,24 @@ function ColorPickerField({ field, value, onChange, onBlur }: FieldProps) {
 
 ## Overriding built-in fields
 
-You can replace any built-in field type:
+You can replace any built-in field type (or pass Pro extension fields):
 
 ```ts
-const registry = {
-  ...defaultRegistry,
-  rating: MyCustomRatingField,     // Replaces the built-in RatingField
-}
+import { defaultRegistry, mergeRegistries } from '@squaredr/fieldcraft-react'
+
+// Replace built-in rating or file upload with customized or Pro providers
+const registry = mergeRegistries(
+  defaultRegistry,
+  {
+    rating: MyCustomRatingField,
+    file_upload: ProS3FileUploadField,       // S3/R2 direct uploader
+    appointment: ProCalComAppointmentField,  // Cal.com / Calendly iframe bridge
+    payment: ProStripePaymentField,          // Live Stripe Elements checkout
+  }
+)
 ```
 
-Your replacement receives the same `FieldProps` — it's a drop-in swap.
+Your replacement receives the same `FieldProps` — it's a 100% backward-compatible, drop-in swap.
 
 ## Registry utilities
 
@@ -179,7 +190,7 @@ import { createFieldRegistry, mergeRegistries } from '@squaredr/fieldcraft-react
 // Create a new registry
 const medical = createFieldRegistry({ pain_scale: PainScaleField })
 
-// Merge registries — later ones override
+// Merge registries — later ones override earlier ones
 const combined = mergeRegistries(defaultRegistry, medical)
 ```
 

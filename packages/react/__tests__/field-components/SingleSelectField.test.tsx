@@ -23,6 +23,8 @@ function makeProps(overrides?: Partial<FieldProps>): FieldProps {
     readonly: false,
     onChange: vi.fn(),
     onBlur: vi.fn(),
+    onFocus: vi.fn(),
+    theme: {},
     ...overrides,
   };
 }

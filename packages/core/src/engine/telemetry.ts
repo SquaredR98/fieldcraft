@@ -151,8 +151,8 @@ export function collectTelemetryData(
   const usesConditions = allQuestions.some((q) => q.showIf != null) ||
     schema.sections.some((s) => s.showIf != null);
   const usesComputed = allQuestions.some((q) => q.type === "calculated");
-  const usesDrafts = schema.settings?.enableDraftSaving === true;
-  const usesScoring = allQuestions.some((q) => q.type === "scoring" || q.score != null);
+  const usesDrafts = schema.settings?.allowDraftSave === true || (schema.settings as Record<string, unknown> | undefined)?.enableDraftSaving === true;
+  const usesScoring = allQuestions.some((q) => q.type === "scoring" || (q as unknown as { score?: unknown }).score != null);
   const usesAdapters = options?.adapters != null;
   const usesPrefill = schema.settings?.prefill != null || options?.prefillValues != null;
 

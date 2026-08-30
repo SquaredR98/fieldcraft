@@ -1,6 +1,7 @@
 import type { NpsConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
 export function NpsField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
@@ -10,35 +11,26 @@ export function NpsField({ field, value, error, touched, disabled, readonly, onC
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
       <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label} onFocus={onFocus}>
-        <div className="flex gap-0.5">
+        <div className="flex gap-1">
           {Array.from({ length: 11 }, (_, i) => {
             const isSelected = current === i;
-            const colorClass = i <= 6
-              ? "border-red-300 hover:bg-red-50 text-red-700"
-              : i <= 8
-                ? "border-yellow-300 hover:bg-yellow-50 text-yellow-700"
-                : "border-green-300 hover:bg-green-50 text-green-700";
-            const activeClass = i <= 6
-              ? "bg-red-500 border-red-500 text-white"
-              : i <= 8
-                ? "bg-yellow-500 border-yellow-500 text-white"
-                : "bg-green-500 border-green-500 text-white";
-
             return (
-              <button
+              <Button
                 key={i}
                 type="button"
                 role="radio"
                 aria-checked={isSelected}
+                variant={isSelected ? "default" : "outline"}
+                size="sm"
                 className={cn(
-                  "flex-1 h-10 rounded-md border text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
-                  isSelected ? activeClass : colorClass,
+                  "flex-1 h-10 px-0 text-xs font-semibold",
+                  isSelected && "shadow-sm ring-1 ring-primary",
                 )}
                 disabled={disabled || readonly}
                 onClick={() => { onChange(i); onBlur(); }}
               >
                 {i}
-              </button>
+              </Button>
             );
           })}
         </div>

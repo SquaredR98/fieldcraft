@@ -263,36 +263,48 @@ export type TimeConfig = {
   minuteStep?: number;
 };
 
-/** Config for `appointment` fields. Date + time slot picker with availability. Supports static slots, API URLs, embeds (Calendly/Cal.com), and callbacks via customProps. @since 1.0.0 */
+export type AppointmentSlot = {
+  date: string; // "YYYY-MM-DD"
+  times: string[]; // ["09:00", "09:30", "10:00"]
+};
+
+/** Config for `appointment` fields. Native slot picker with optional Pro embed extensions. @since 1.0.0 */
 export type AppointmentConfig = {
   type: "appointment";
-  /** Static slots (simplest — works without any backend). */
-  slots?: { date: string; times: string[] }[];
-  /** URL to fetch available slots from (SaaS mode — component fetches). @since 1.6.0 */
-  slotsUrl?: string;
-  /** Embed URL for third-party booking (Calendly, Cal.com). Renders in iframe. @since 1.6.0 */
-  embedUrl?: string;
-  /** Embed provider for postMessage integration. @since 1.6.0 */
-  embedProvider?: "calendly" | "cal_com" | "custom";
-  /** IANA timezone string for display and API requests. */
-  timezone?: string;
-  /** Field ID whose current value supplies the timezone dynamically. Takes priority over static `timezone` when the referenced field has a value. @since 1.7.0 */
-  timezoneField?: string;
+  /** Static slots for native selection (simplest — works without any backend). */
+  slots?: AppointmentSlot[];
   /** Appointment duration in minutes (displayed as badge). */
   duration?: number;
+  /** IANA timezone string for display and API requests. */
+  timezone?: string;
   /** Date display format. Defaults to locale-aware formatting via Intl. @since 1.6.0 */
   dateFormat?: string;
+  /** URL to fetch available slots from (Pro / API mode). @since 1.6.0 */
+  slotsUrl?: string;
+  /** Embed URL for third-party booking (Calendly, Cal.com). Renders in Pro iframe bridge. @since 1.6.0 */
+  embedUrl?: string;
+  /** Embed provider for postMessage integration in Pro. @since 1.6.0 */
+  embedProvider?: "calendly" | "cal_com" | "custom";
+  /** Field ID whose current value supplies the timezone dynamically. @since 1.7.0 */
+  timezoneField?: string;
+  /** Auto advance to the next step once a slot is selected. @since 1.8.0 */
+  autoAdvance?: boolean;
+  [key: string]: unknown;
 };
 
 // ---- Media & Input ----
 
-/** Config for `file_upload` fields. File input with type/size constraints. @since 1.0.0 */
+/** Config for `file_upload` fields. Native file input with optional Pro cloud storage extensions. @since 1.0.0 */
 export type FileUploadConfig = {
   type: "file_upload";
   accept?: string[];
   maxSizeMb?: number;
   maxFiles?: number;
   uploadUrl?: string;
+  storageProvider?: "s3" | "r2" | "cloudinary" | "supabase" | "custom";
+  publicKey?: string;
+  headers?: Record<string, string>;
+  [key: string]: unknown;
 };
 
 /** Config for `signature` fields. Canvas-based signature pad. @since 1.0.0 */
@@ -302,6 +314,10 @@ export type SignatureConfig = {
   backgroundColor?: string;
   width?: number;
   height?: number;
+  requireTypedName?: boolean;
+  auditTrail?: boolean;
+  disclaimerText?: string;
+  [key: string]: unknown;
 };
 
 /** Config for `image_capture` fields. Camera capture with gallery fallback. @since 1.0.0 */
@@ -310,6 +326,7 @@ export type ImageCaptureConfig = {
   maxSizeMb?: number;
   camera?: "front" | "back" | "any";
   allowGallery?: boolean;
+  [key: string]: unknown;
 };
 
 // ---- Advanced ----
@@ -317,23 +334,31 @@ export type ImageCaptureConfig = {
 /** Config for `address` fields. Structured address input with optional autocomplete. @since 1.0.0 */
 export type AddressConfig = {
   type: "address";
-  provider?: "google" | "mapbox" | "none";
+  provider?: "google" | "mapbox" | "radar" | "none";
   apiKey?: string;
   fields?: ("street" | "street2" | "city" | "state" | "zip" | "country")[];
   defaultCountry?: string;
+  autocomplete?: boolean;
+  countryRestrictions?: string[];
+  [key: string]: unknown;
 };
 
-/** Config for `payment` fields. Payment collection via Stripe, PayPal, or Razorpay. Real payment UI requires Pro or a custom field override. @since 1.0.0 */
+/** Config for `payment` fields. Payment collection metadata and server intent configuration. @since 1.0.0 */
 export type PaymentConfig = {
   type: "payment";
-  provider: "stripe" | "paypal" | "razorpay";
-  publicKey: string;
+  provider?: "stripe" | "paypal" | "razorpay" | "custom" | (string & {});
+  publicKey?: string;
   amount?: number;
   amountField?: string;
   currency?: string;
   description?: string;
-  /** Server URL for creating payment intent (SaaS mode). POST with amount/currency/provider. @since 1.6.0 */
+  /** Server URL for creating payment intent (SaaS/Pro mode). POST with amount/currency/provider. @since 1.6.0 */
   serverUrl?: string;
+  responseMapping?: {
+    clientSecretPath?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
 };
 
 /** Config for `matrix` fields. Grid of rows x columns (radio, checkbox, or text inputs). @since 1.0.0 */

@@ -1,6 +1,7 @@
 import type { OpinionScaleConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
 export function OpinionScaleField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
@@ -16,25 +17,28 @@ export function OpinionScaleField({ field, value, error, touched, disabled, read
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
       <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label} onFocus={onFocus}>
-        <div className="flex gap-0.5">
-          {steps.map((n) => (
-            <button
-              key={n}
-              type="button"
-              role="radio"
-              aria-checked={current === n}
-              className={cn(
-                "flex-1 h-10 rounded-md border border-input text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50",
-                current === n
-                  ? "fc-option-filled"
-                  : "bg-transparent text-foreground hover:bg-accent",
-              )}
-              disabled={disabled || readonly}
-              onClick={() => { onChange(n); onBlur(); }}
-            >
-              {n}
-            </button>
-          ))}
+        <div className="flex gap-1">
+          {steps.map((n) => {
+            const isSelected = current === n;
+            return (
+              <Button
+                key={n}
+                type="button"
+                role="radio"
+                aria-checked={isSelected}
+                variant={isSelected ? "default" : "outline"}
+                size="sm"
+                className={cn(
+                  "flex-1 h-10 px-0 text-xs font-semibold",
+                  isSelected && "shadow-sm ring-1 ring-primary",
+                )}
+                disabled={disabled || readonly}
+                onClick={() => { onChange(n); onBlur(); }}
+              >
+                {n}
+              </Button>
+            );
+          })}
         </div>
         {(config?.minLabel || config?.maxLabel) && (
           <div className="flex justify-between text-xs text-muted-foreground">

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { resolvePrefill } from "../src/engine/prefill-resolver";
-import type { FormEngineSchema } from "../src/types/schema";
+import type { FormEngineSchema, Question } from "../src/types/schema";
 import type { PrefillConfig } from "../src/types/settings";
 
 // ---- helpers ----
@@ -22,7 +22,7 @@ function makeSchema(questions: Array<{
         type: "short_text" as const,
         label: q.id,
         prefillKey: q.prefillKey,
-        config: q.config,
+        config: q.config as Question["config"],
       })),
     }],
     submitAction: { type: "callback" },
@@ -39,7 +39,7 @@ function makeMultiSectionSchema(): FormEngineSchema {
         id: "s1",
         title: "Section 1",
         questions: [
-          { id: "name", type: "short_text", label: "Name", config: { defaultValue: "Default Name" } },
+          { id: "name", type: "short_text", label: "Name", config: { type: "short_text", defaultValue: "Default Name" } as Question["config"] },
           { id: "email", type: "email", label: "Email" },
         ],
       },
@@ -47,7 +47,7 @@ function makeMultiSectionSchema(): FormEngineSchema {
         id: "s2",
         title: "Section 2",
         questions: [
-          { id: "age", type: "number", label: "Age", prefillKey: "user_age", config: { defaultValue: 25 } },
+          { id: "age", type: "number", label: "Age", prefillKey: "user_age", config: { type: "number", defaultValue: 25 } as Question["config"] },
         ],
       },
     ],

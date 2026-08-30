@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { createAnalyticsEmitter } from "../src/engine/analytics-emitter";
 import type { FieldCraftEvent } from "../src/engine/analytics-emitter";
 

@@ -47,10 +47,18 @@ export function createStateManager(config: StateManagerConfig) {
   const initialQuestionId = isConversational
     ? navigation.getInitialQuestionId(config.initialValues)
     : "";
+  const initialValues: Record<string, unknown> = { ...config.initialValues };
+  for (const section of schema.sections) {
+    for (const question of section.questions) {
+      if (!(question.id in initialValues)) {
+        initialValues[question.id] = undefined;
+      }
+    }
+  }
   navigation.markVisited(initialSectionId);
 
   let state: FormState = {
-    values: { ...config.initialValues },
+    values: initialValues,
     errors: {},
     warnings: {},
     touched: {},

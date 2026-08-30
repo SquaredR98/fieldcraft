@@ -1,56 +1,21 @@
-import { useState, useEffect, useCallback, useRef } from "react";
-import type { AppointmentConfig } from "@squaredr/fieldcraft-core";
+import { useState, useCallback } from "react";
+import type { AppointmentConfig, AppointmentSlot } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Button } from "../ui/button";
+import { Badge } from "../ui/badge";
 import { cn } from "../../utils/cn";
 
-type Slot = { date: string; times: string[] };
-type AppointmentValue = { date?: string; time?: string; timezone?: string; bookingId?: string };
-type FetchSlotsCallback = (params: { date?: string; timezone?: string }) => Promise<{ slots: Slot[] }>;
-type BookSlotCallback = (params: { date: string; time: string; timezone?: string }) => Promise<{ confirmed: boolean; bookingId?: string }>;
+type AppointmentValue = {
+  date?: string;
+  time?: string;
+  timezone?: string;
+  status?: string;
+  bookingId?: string;
+  [key: string]: unknown;
+};
 
-type Mode = "callback" | "embed" | "url" | "static" | "setup";
-
-function resolveMode(config: AppointmentConfig | undefined, customProps: Record<string, unknown> | undefined): Mode {
-  if (customProps?.onFetchSlots) return "callback";
-  if (config?.embedUrl) return "embed";
-  if (config?.slotsUrl) return "url";
-  if (config?.slots && config.slots.length > 0) return "static";
-  return "setup";
-}
-
-/**
- * Resolve the effective timezone using a priority chain:
- * 1. customProps.timezone (runtime override)
- * 2. fieldValues[config.timezoneField] (dynamic from another field)
- * 3. config.timezone (static schema config)
- * 4. Browser default via Intl
- */
-function resolveTimezone(
-  config: AppointmentConfig | undefined,
-  customProps: Record<string, unknown> | undefined,
-  fieldValues: Record<string, unknown> | undefined,
-): string | undefined {
-  if (typeof customProps?.timezone === "string" && customProps.timezone) {
-    return customProps.timezone;
-  }
-  if (config?.timezoneField && fieldValues) {
-    const v = fieldValues[config.timezoneField];
-    if (typeof v === "string" && v) {
-      return v;
-    }
-  }
-  if (config?.timezone) {
-    return config.timezone;
-  }
-  try {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone;
-  } catch {
-    return undefined;
-  }
-}
-
-function formatDate(dateStr: string, _dateFormat?: string, timezone?: string): string {
+function formatDateLabel(dateStr: string, timezone?: string): string {
   try {
     const date = new Date(dateStr + "T00:00:00");
     return date.toLocaleDateString(undefined, {
@@ -64,164 +29,8 @@ function formatDate(dateStr: string, _dateFormat?: string, timezone?: string): s
   }
 }
 
-export function AppointmentField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus, customProps, fieldValues }: FieldProps) {
-  const config = field.config as AppointmentConfig | undefined;
-  const mode = resolveMode(config, customProps);
-  const selected = value as AppointmentValue | undefined;
-  const timezone = resolveTimezone(config, customProps, fieldValues);
-
-  if (mode === "setup") {
-    return (
-      <FieldWrapper field={field} error={error} touched={touched}>
-        <div className="rounded-lg border border-dashed border-input bg-muted/30 p-4">
-          <p className="text-sm text-muted-foreground">
-            No appointment slots configured. Provide <code className="text-xs bg-muted px-1 rounded">slots</code>, <code className="text-xs bg-muted px-1 rounded">slotsUrl</code>, <code className="text-xs bg-muted px-1 rounded">embedUrl</code>, or a <code className="text-xs bg-muted px-1 rounded">customProps.onFetchSlots</code> callback.
-          </p>
-        </div>
-      </FieldWrapper>
-    );
-  }
-
-  if (mode === "embed") {
-    return (
-      <EmbedMode
-        field={field}
-        config={config!}
-        timezone={timezone}
-        value={selected}
-        error={error}
-        touched={touched}
-        onChange={onChange}
-      />
-    );
-  }
-
-  return (
-    <SlotPickerMode
-      field={field}
-      config={config}
-      timezone={timezone}
-      mode={mode}
-      value={selected}
-      error={error}
-      touched={touched}
-      disabled={disabled}
-      readonly={readonly}
-      onChange={onChange}
-      onBlur={onBlur}
-      onFocus={onFocus}
-      customProps={customProps}
-    />
-  );
-}
-
-// ── Embed Mode ──
-
-function EmbedMode({
+export function AppointmentField({
   field,
-  config,
-  timezone,
-  value,
-  error,
-  touched,
-  onChange,
-}: {
-  field: FieldProps["field"];
-  config: AppointmentConfig;
-  timezone: string | undefined;
-  value: AppointmentValue | undefined;
-  error: FieldProps["error"];
-  touched: FieldProps["touched"];
-  onChange: FieldProps["onChange"];
-}) {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
-  useEffect(() => {
-    const handler = (e: MessageEvent) => {
-      try {
-        const provider = config.embedProvider ?? "custom";
-
-        if (provider === "calendly") {
-          // Calendly sends { event: "calendly.event_scheduled", payload: { event: { uri } } }
-          if (e.data?.event === "calendly.event_scheduled") {
-            const uri = e.data?.payload?.event?.uri;
-            onChange({
-              ...value,
-              bookingId: uri ?? "calendly-booked",
-              date: new Date().toISOString().split("T")[0],
-              time: new Date().toISOString().split("T")[1]?.slice(0, 5),
-            });
-          }
-        } else if (provider === "cal_com") {
-          // Cal.com sends { type: "Cal:event", data: { ... } }
-          if (e.data?.type === "Cal:event" || e.data?.event === "booking_created") {
-            onChange({
-              ...value,
-              bookingId: e.data?.data?.bookingId ?? "cal-booked",
-              date: e.data?.data?.date ?? new Date().toISOString().split("T")[0],
-              time: e.data?.data?.startTime ?? "",
-            });
-          }
-        } else {
-          // Custom provider — expects { type: "appointment_booked", date, time, bookingId }
-          if (e.data?.type === "appointment_booked") {
-            onChange({
-              date: e.data.date,
-              time: e.data.time,
-              bookingId: e.data.bookingId,
-              timezone,
-            });
-          }
-        }
-      } catch {
-        // Ignore malformed messages
-      }
-    };
-
-    window.addEventListener("message", handler);
-    return () => window.removeEventListener("message", handler);
-  }, [config.embedProvider, timezone, onChange, value]);
-
-  const confirmed = !!value?.bookingId;
-
-  return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2">
-        {config.duration && (
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={14} height={14}>
-              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-            </svg>
-            {config.duration} min
-          </span>
-        )}
-        {confirmed ? (
-          <div className="rounded-lg border border-input bg-muted/50 p-4">
-            <p className="text-sm text-foreground font-medium">Appointment booked</p>
-            {value?.date && <p className="text-xs text-muted-foreground mt-1">{value.date} {value.time && `at ${value.time}`}</p>}
-          </div>
-        ) : (
-          <iframe
-            ref={iframeRef}
-            src={config.embedUrl}
-            className="w-full rounded-md border border-input"
-            style={{ minHeight: 600 }}
-            title={`${field.label} booking`}
-            allow="payment"
-          />
-        )}
-      </div>
-    </FieldWrapper>
-  );
-}
-
-// ── Slot Picker Mode (callback, URL, or static) ──
-
-function SlotPickerMode({
-  field,
-  config,
-  timezone,
-  mode,
   value,
   error,
   touched,
@@ -231,164 +40,56 @@ function SlotPickerMode({
   onBlur,
   onFocus,
   customProps,
-}: {
-  field: FieldProps["field"];
-  config: AppointmentConfig | undefined;
-  timezone: string | undefined;
-  mode: "callback" | "url" | "static";
-  value: AppointmentValue | undefined;
-  error: FieldProps["error"];
-  touched: FieldProps["touched"];
-  disabled: boolean;
-  readonly: boolean;
-  onChange: FieldProps["onChange"];
-  onBlur: FieldProps["onBlur"];
-  onFocus: FieldProps["onFocus"];
-  customProps: FieldProps["customProps"];
-}) {
-  const [slots, setSlots] = useState<Slot[]>(mode === "static" ? (config?.slots ?? []) : []);
-  const [loading, setLoading] = useState(false);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string | undefined>(value?.date);
-  const [booking, setBooking] = useState(false);
-  const [bookingError, setBookingError] = useState<string | null>(null);
+  fieldValues,
+}: FieldProps) {
+  const config = field.config as AppointmentConfig | undefined;
+  const selected = value as AppointmentValue | undefined;
 
-  const onFetchSlots = customProps?.onFetchSlots as FetchSlotsCallback | undefined;
-  const onBookSlot = customProps?.onBookSlot as BookSlotCallback | undefined;
-
-  // Fetch slots on mount (callback or URL mode)
-  useEffect(() => {
-    if (mode === "static") return;
-
-    const fetchSlots = async () => {
-      setLoading(true);
-      setFetchError(null);
-      try {
-        if (mode === "callback" && onFetchSlots) {
-          const result = await onFetchSlots({ timezone });
-          setSlots(result.slots ?? []);
-        } else if (mode === "url" && config?.slotsUrl) {
-          const url = new URL(config.slotsUrl);
-          if (timezone) url.searchParams.set("timezone", timezone);
-          const res = await fetch(url.toString());
-          if (!res.ok) throw new Error(`Failed to fetch slots (${res.status})`);
-          const data = await res.json();
-          setSlots(data.slots ?? []);
-        }
-      } catch (err) {
-        setFetchError(err instanceof Error ? err.message : "Failed to load slots");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchSlots();
-  }, [mode, config?.slotsUrl, timezone, onFetchSlots]);
-
-  // Fetch times for selected date (callback or URL mode)
-  const fetchTimesForDate = useCallback(async (date: string) => {
-    if (mode === "static") return;
-    setLoading(true);
-    setFetchError(null);
+  // Resolve timezone
+  let timezone: string | undefined = config?.timezone;
+  if (typeof customProps?.timezone === "string" && customProps.timezone) {
+    timezone = customProps.timezone;
+  } else if (config?.timezoneField && fieldValues && typeof fieldValues[config.timezoneField] === "string") {
+    timezone = fieldValues[config.timezoneField] as string;
+  } else if (!timezone) {
     try {
-      if (mode === "callback" && onFetchSlots) {
-        const result = await onFetchSlots({ date, timezone });
-        setSlots((prev) => {
-          const others = prev.filter((s) => s.date !== date);
-          const newSlot = result.slots?.find((s) => s.date === date);
-          return newSlot ? [...others, newSlot] : others;
-        });
-      } else if (mode === "url" && config?.slotsUrl) {
-        const url = new URL(config.slotsUrl);
-        url.searchParams.set("date", date);
-        if (timezone) url.searchParams.set("timezone", timezone);
-        const res = await fetch(url.toString());
-        if (!res.ok) throw new Error(`Failed to fetch times (${res.status})`);
-        const data = await res.json();
-        setSlots((prev) => {
-          const others = prev.filter((s) => s.date !== date);
-          const newSlot = data.slots?.find((s: Slot) => s.date === date);
-          return newSlot ? [...others, newSlot] : others;
-        });
-      }
-    } catch (err) {
-      setFetchError(err instanceof Error ? err.message : "Failed to load times");
-    } finally {
-      setLoading(false);
+      timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    } catch {
+      timezone = undefined;
     }
-  }, [mode, config?.slotsUrl, timezone, onFetchSlots]);
-
-  const handleDateSelect = (date: string) => {
-    setSelectedDate(date);
-    setBookingError(null);
-    onChange({ date, time: undefined, timezone });
-    if (mode !== "static") {
-      fetchTimesForDate(date);
-    }
-  };
-
-  const handleTimeSelect = async (time: string) => {
-    const newValue: AppointmentValue = { date: selectedDate, time, timezone };
-
-    if (onBookSlot && selectedDate) {
-      setBooking(true);
-      setBookingError(null);
-      try {
-        const result = await onBookSlot({ date: selectedDate, time, timezone });
-        if (result.confirmed) {
-          newValue.bookingId = result.bookingId;
-        } else {
-          setBookingError("Booking was not confirmed. Please try another slot.");
-          return;
-        }
-      } catch (err) {
-        setBookingError(err instanceof Error ? err.message : "Booking failed");
-        return;
-      } finally {
-        setBooking(false);
-      }
-    }
-
-    onChange(newValue);
-    onBlur();
-  };
-
-  const timesForDate = slots.find((s) => s.date === selectedDate)?.times ?? [];
-
-  if (loading && slots.length === 0) {
-    return (
-      <FieldWrapper field={field} error={error} touched={touched}>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground p-4">
-          <svg className="animate-spin size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-            <circle cx="12" cy="12" r="10" strokeDasharray="60" strokeDashoffset="20" />
-          </svg>
-          Loading available slots...
-        </div>
-      </FieldWrapper>
-    );
   }
 
-  if (fetchError && slots.length === 0) {
+  const slots: AppointmentSlot[] = config?.slots ?? [];
+  const [activeDate, setActiveDate] = useState<string | null>(() => {
+    if (selected?.date) return selected.date;
+    return slots.length > 0 ? slots[0].date : null;
+  });
+
+  const handleDateSelect = useCallback((date: string) => {
+    setActiveDate(date);
+    onFocus?.();
+  }, [onFocus]);
+
+  const handleTimeSelect = useCallback((time: string) => {
+    if (!activeDate || disabled || readonly) return;
+    onChange({
+      date: activeDate,
+      time,
+      timezone,
+      status: "confirmed",
+    });
+    onBlur();
+  }, [activeDate, disabled, readonly, onChange, onBlur, timezone]);
+
+  const currentSlot = slots.find((s) => s.date === activeDate);
+
+  if (slots.length === 0) {
     return (
       <FieldWrapper field={field} error={error} touched={touched}>
-        <div className="rounded-lg border border-destructive/50 bg-destructive/5 p-4">
-          <p className="text-sm text-destructive">{fetchError}</p>
-          <button
-            type="button"
-            className="mt-2 text-xs text-primary hover:underline"
-            onClick={() => {
-              setFetchError(null);
-              if (mode === "callback" && onFetchSlots) {
-                setLoading(true);
-                onFetchSlots({ timezone })
-                  .then((r) => setSlots(r.slots ?? []))
-                  .catch((e) => setFetchError(e.message))
-                  .finally(() => setLoading(false));
-              }
-            }}
-          >
-            Retry
-          </button>
+        <div className="rounded-lg border border-dashed border-input bg-muted/30 p-4">
+          <p className="text-sm text-muted-foreground">
+            No appointment slots configured. Provide <code className="text-xs bg-muted px-1 rounded">slots</code> in the schema, or register a custom provider override.
+          </p>
         </div>
       </FieldWrapper>
     );
@@ -396,93 +97,79 @@ function SlotPickerMode({
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-4">
-        {config?.duration && (
-          <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={14} height={14}>
-              <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-            </svg>
-            {config.duration} min
-          </span>
-        )}
-
-        {/* Date selection */}
-        <div className="flex flex-col gap-2">
-          <p className="text-xs font-medium text-foreground">Select a date</p>
-          {slots.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No appointment slots available</p>
-          ) : (
-            <div className="flex flex-wrap gap-2" role="listbox" aria-label="Available dates">
-              {slots.map((slot) => (
-                <button
-                  key={slot.date}
-                  type="button"
-                  role="option"
-                  aria-selected={selectedDate === slot.date}
-                  className={cn(
-                    "px-3 py-2 rounded-md border text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50",
-                    selectedDate === slot.date
-                      ? "fc-option-active"
-                      : "border-input hover:bg-accent",
-                  )}
-                  disabled={disabled || readonly || booking}
-                  onFocus={onFocus}
-                  onClick={() => handleDateSelect(slot.date)}
-                >
-                  {formatDate(slot.date, config?.dateFormat, timezone)}
-                </button>
-              ))}
-            </div>
+      <div className="flex flex-col gap-3">
+        {/* Header Badges: Duration & Timezone */}
+        <div className="flex flex-wrap items-center gap-2">
+          {config?.duration && (
+            <Badge variant="outline" className="gap-1 text-xs font-normal">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={12} height={12}>
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+              {config.duration} min
+            </Badge>
+          )}
+          {timezone && (
+            <Badge variant="secondary" className="text-xs font-normal">
+              {timezone}
+            </Badge>
           )}
         </div>
 
-        {/* Time selection */}
-        {selectedDate && (
-          <div className="flex flex-col gap-2">
-            <p className="text-xs font-medium text-foreground">Select a time</p>
-            {loading ? (
-              <p className="text-sm text-muted-foreground">Loading times...</p>
-            ) : timesForDate.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No available times for this date</p>
-            ) : (
-              <div className="flex flex-wrap gap-2" role="listbox" aria-label="Available times">
-                {timesForDate.map((time) => (
-                  <button
+        {/* Date Selection Buttons */}
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Available appointment dates">
+          {slots.map((slot) => {
+            const isSelected = activeDate === slot.date;
+            return (
+              <Button
+                key={slot.date}
+                type="button"
+                variant={isSelected ? "default" : "outline"}
+                size="sm"
+                className={cn("text-xs font-medium", isSelected && "shadow-sm")}
+                disabled={disabled || readonly}
+                onClick={() => handleDateSelect(slot.date)}
+              >
+                {formatDateLabel(slot.date, timezone)}
+              </Button>
+            );
+          })}
+        </div>
+
+        {/* Time Selection Buttons for Active Date */}
+        {currentSlot && currentSlot.times.length > 0 && (
+          <div className="flex flex-col gap-1.5 pt-1">
+            <span className="text-xs text-muted-foreground font-medium">Available Times</span>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2" role="group" aria-label="Available appointment times">
+              {currentSlot.times.map((time: string) => {
+                const isSelected = selected?.date === activeDate && selected?.time === time;
+                return (
+                  <Button
                     key={time}
                     type="button"
-                    role="option"
-                    aria-selected={value?.time === time}
-                    className={cn(
-                      "px-3 py-2 rounded-md border text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-50",
-                      (value as AppointmentValue)?.time === time
-                        ? "fc-option-active"
-                        : "border-input hover:bg-accent",
-                    )}
-                    disabled={disabled || readonly || booking}
-                    onFocus={onFocus}
+                    variant={isSelected ? "default" : "outline"}
+                    size="sm"
+                    className={cn("text-xs", isSelected && "ring-2 ring-primary ring-offset-1")}
+                    disabled={disabled || readonly}
                     onClick={() => handleTimeSelect(time)}
                   >
                     {time}
-                  </button>
-                ))}
-              </div>
-            )}
+                  </Button>
+                );
+              })}
+            </div>
           </div>
         )}
 
-        {/* Booking status */}
-        {booking && (
-          <p className="text-sm text-muted-foreground">Confirming your booking...</p>
-        )}
-        {bookingError && (
-          <p className="text-sm text-destructive">{bookingError}</p>
-        )}
-        {value?.bookingId && (
-          <div className="rounded-md bg-muted/50 border border-input p-3">
-            <p className="text-sm text-foreground font-medium">Booking confirmed</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {formatDate(value.date!, config?.dateFormat, timezone)} at {value.time}
-            </p>
+        {/* Selected Confirmation Preview */}
+        {selected?.date && selected?.time && (
+          <div className="rounded-md border border-input bg-muted/40 px-3 py-2 text-xs flex items-center justify-between">
+            <span className="text-foreground font-medium">
+              Selected: {formatDateLabel(selected.date, timezone)} at {selected.time}
+            </span>
+            <Badge variant="default" className="text-[10px] uppercase">
+              Confirmed
+            </Badge>
           </div>
         )}
       </div>

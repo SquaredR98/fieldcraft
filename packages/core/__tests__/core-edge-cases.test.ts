@@ -104,9 +104,9 @@ describe("Core Edge Cases & Bug Validation", () => {
 
     let sideEffectRan = false;
     const engine = createEngine(schema, {
-      beforeSubmit: async () => {
+      beforeSubmit: async (resp) => {
         sideEffectRan = true;
-        // Intentionally returns void/undefined
+        return resp;
       },
     });
 

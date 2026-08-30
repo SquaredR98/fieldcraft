@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { createNavigation } from "../src/engine/navigation";
-import type { VisibleQuestion } from "../src/engine/navigation";
 import type { FormEngineSchema } from "../src/types/schema";
 
 function makeSchema(overrides?: Partial<FormEngineSchema>): FormEngineSchema {

@@ -1,6 +1,7 @@
 import type { RatingConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper } from "./FieldWrapper";
+import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
 const ICON_PATHS: Record<string, string> = {
@@ -55,12 +56,14 @@ export function RatingField({ field, value, error, touched, disabled, readonly, 
           const selected = n <= current;
           return (
             <div key={n} className="flex flex-col items-center gap-0.5">
-              <button
+              <Button
                 type="button"
+                variant="ghost"
+                size="icon"
                 tabIndex={n === (current || 1) ? 0 : -1}
                 className={cn(
-                  "rounded-md p-1 transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50",
-                  selected ? "text-primary" : "text-muted-foreground",
+                  "h-9 w-9 p-0 rounded-md transition-colors",
+                  selected ? "text-primary hover:text-primary/90" : "text-muted-foreground hover:text-foreground",
                 )}
                 disabled={disabled || readonly}
                 onClick={() => { onChange(n); onBlur(); }}
@@ -68,10 +71,10 @@ export function RatingField({ field, value, error, touched, disabled, readonly, 
                 aria-checked={n === current}
                 role="radio"
               >
-                <svg viewBox="0 0 24 24" fill={selected ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5} width={28} height={28}>
+                <svg viewBox="0 0 24 24" fill={selected ? "currentColor" : "none"} stroke="currentColor" strokeWidth={1.5} width={24} height={24}>
                   <path d={iconPath} />
                 </svg>
-              </button>
+              </Button>
               {showLabels && (
                 <span className="text-[10px] text-muted-foreground">{n}</span>
               )}

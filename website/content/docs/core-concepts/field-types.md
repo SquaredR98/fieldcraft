@@ -5,9 +5,9 @@ description: All 44 built-in field types organised into 8 categories, with their
 
 ## Overview
 
-FieldCraft ships with 44 field types in 8 categories. Each field type has a `type` string used in the schema and an optional `config` object with type-specific settings.
+FieldCraft ships with 44 field types in 8 categories. In `@squaredr/fieldcraft-react`, all field components are built on **shadcn/ui primitives** (Radix UI + Tailwind CSS) for full keyboard navigation, dark mode theming, and WAI-ARIA compliance.
 
-The `QuestionType` union also accepts custom strings — you can register your own field types via the [field registry](/docs/react/custom-field-types) without modifying the core types.
+The `QuestionType` union also accepts custom strings — you can register your own field types or override any default field via the [field registry](/docs/react/custom-field-types) without modifying core types.
 
 ## Text fields (7)
 
@@ -90,59 +90,35 @@ The `QuestionType` union also accepts custom strings — you can register your o
 
 | Type | Description | Key config |
 |------|-------------|-----------|
-| `date` | Date picker | `minDate`, `maxDate`, `disablePast`, `disableFuture`, `format` |
+| `date` | Date picker (Popover + Calendar) | `minDate`, `maxDate`, `disablePast`, `disableFuture`, `format` |
 | `date_range` | Start + end date | `minDate`, `maxDate`, `maxRangeDays` |
 | `time` | Time picker | `format` ("12h" \| "24h"), `minuteStep` |
-| `appointment` | Date + time slot picker | `slotsUrl` (API), `slots` (static), `timezone`, `timezoneField`, `duration` |
+| `appointment` | Native slot picker | `slots` (static array), `duration`, `timezone`, `timezoneField`, `slotsUrl` |
 
 ```ts
 {
-  id: 'dob',
-  type: 'date',
-  label: 'Date of birth',
-  required: true,
-  config: {
-    type: 'date',
-    disableFuture: true,
-    format: 'MM/DD/YYYY',
-  },
-}
-```
-
-```ts
-// Appointment with dynamic timezone — the timezone dropdown
-// drives the appointment field via timezoneField
-{
-  id: 'timezone',
-  type: 'dropdown',
-  label: 'Your timezone',
-  required: true,
-  // Use TIMEZONES from @squaredr/fieldcraft-core for options
-}
-
-{
-  id: 'call',
+  id: 'consultation',
   type: 'appointment',
-  label: 'Schedule a call',
+  label: 'Book Consultation',
   required: true,
   config: {
     type: 'appointment',
-    slotsUrl: '/api/slots',
-    timezoneField: 'timezone', // reads the timezone field's value
     duration: 30,
+    slots: [
+      { date: '2026-09-01', times: ['09:00', '10:00', '11:00'] },
+      { date: '2026-09-02', times: ['14:00', '15:00'] },
+    ],
   },
 }
 ```
 
-The `timezoneField` property links to another field by ID. When the user picks a timezone, the appointment field re-fetches slots for that timezone. Priority order: `customProps.timezone` → `timezoneField` value → static `timezone` → browser default.
-
-`@squaredr/fieldcraft-core` exports `TIMEZONES` and `COUNTRIES` constants. `TIMEZONES` is an array of ~120 IANA timezone entries with `value`, `label`, `offset`, and `region` properties — use it to populate a dropdown or single\_select field. Both are also re-exported from `@squaredr/fieldcraft-react` for convenience, but importing from core is recommended for server components (no React or browser globals).
+FieldCraft OSS renders an accessible native slot picker button grid without requiring third-party iframe embeds. Advanced integrations (Calendly / Cal.com iframe bridges and live slot polling) are supported via Pro or custom field overrides.
 
 ## Media fields (3)
 
 | Type | Description | Key config |
 |------|-------------|-----------|
-| `file_upload` | File input | `accept` (MIME types), `maxSizeMb`, `maxFiles`, `uploadUrl` |
+| `file_upload` | Native drag-and-drop file input | `accept` (MIME types), `maxSizeMb`, `maxFiles`, `storageProvider` |
 | `signature` | Canvas signature pad | `penColor`, `backgroundColor`, `width`, `height` |
 | `image_capture` | Camera/gallery photo | `maxSizeMb`, `camera` ("front" \| "back" \| "any"), `allowGallery` |
 
@@ -150,7 +126,7 @@ The `timezoneField` property links to another field by ID. When the user picks a
 {
   id: 'document',
   type: 'file_upload',
-  label: 'Upload your ID',
+  label: 'Upload your document',
   required: true,
   config: {
     type: 'file_upload',
@@ -161,12 +137,14 @@ The `timezoneField` property links to another field by ID. When the user picks a
 }
 ```
 
+FieldCraft OSS handles local client-side size and MIME validation cleanly. Cloud storage presigning (AWS S3, Cloudflare R2, Supabase) and client-side encryption can be seamlessly plugged in via Pro or `customFields`.
+
 ## Advanced fields (7)
 
 | Type | Description | Key config |
 |------|-------------|-----------|
-| `address` | Structured address input | `provider` ("google" \| "mapbox" \| "none"), `apiKey`, `fields`, `defaultCountry` |
-| `payment` | Stripe/PayPal payment | `provider` (required), `publicKey` (required), `amount` \| `amountField`, `currency`, `serverUrl`, `responseMapping` |
+| `address` | Structured address input | `provider` ("google" \| "mapbox" \| "radar" \| "none"), `apiKey`, `fields`, `defaultCountry` |
+| `payment` | Payment metadata preview | `provider`, `publicKey`, `amount` \| `amountField`, `currency`, `serverUrl` |
 | `matrix` | Grid of rows × columns | `rows` (required), `columns` (required), `inputType` ("radio" \| "checkbox" \| "text" \| "number") |
 | `repeater` | Dynamic list of sub-fields | `fields` (required), `minEntries`, `maxEntries`, `addLabel`, `removeLabel` |
 | `calculated` | Auto-computed value | `expression` (required), `format` ("number" \| "currency" \| "percentage"), `decimalPlaces`, `prefix`, `suffix`, `visible` |
@@ -174,25 +152,23 @@ The `timezoneField` property links to another field by ID. When the user picks a
 | `scoring` | Options with numeric scores | `options` with `score` values, `showScore`, `scoreRanges` (min/max/label/color) |
 
 ```ts
-// Payment field example — Stripe payment with server-side intent creation
+// Payment field configuration
 {
   id: 'payment',
   type: 'payment',
-  label: 'Payment',
+  label: 'Order Total',
   required: true,
   config: {
     type: 'payment',
     provider: 'stripe',
-    publicKey: 'pk_test_...',
-    amount: 4900,
+    amount: 49.00,
     currency: 'USD',
-    serverUrl: '/api/payment-intents',       // Endpoint that creates a PaymentIntent
-    responseMapping: {
-      clientSecretPath: 'clientSecret',      // Dot-notation path to clientSecret in the API response
-    },
+    description: 'Pro Subscription',
   },
 }
 ```
+
+FieldCraft OSS renders a clear payment summary card with provider badges. Live interactive checkouts (Stripe Elements, PayPal Smart Buttons) are handled by `@squaredr/fieldcraft-pro` or your own custom field component.
 
 The `serverUrl` is the endpoint your server exposes to create a PaymentIntent (or equivalent). The payment field POSTs `{ amount, currency, description }` to this URL and expects a JSON response containing the `clientSecret`. Use `responseMapping.clientSecretPath` to specify where in the response JSON the client secret lives (e.g. `"data.client_secret"` for nested responses).
 

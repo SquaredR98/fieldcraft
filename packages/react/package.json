@@ -55,6 +55,7 @@
     "@radix-ui/react-tooltip": "^1.0",
     "@squaredr/eslint-config": "workspace:*",
     "@squaredr/fieldcraft-core": "workspace:^",
+    "@squaredr/fieldcraft-templates": "workspace:*",
     "@squaredr/tailwind-config": "workspace:*",
     "@squaredr/tsconfig": "workspace:*",
     "@storybook/addon-essentials": "^8.6.14",
