@@ -1,21 +1,21 @@
 # FieldCraft
 
-A headless, pure TypeScript form engine with a React renderer. Define forms as JSON schemas, render them with 44 pre-built field components, and get multi-step flows, conditional visibility, validation, and computed fields out of the box.
+A headless, pure TypeScript form engine with a React renderer. Define forms as JSON schemas, render them with 41 pre-built field components, and get multi-step flows, conditional visibility, validation, and computed fields out of the box.
+
+I built this to learn how to publish and maintain npm packages. It works and I use it, but it's a spare-time project — releases are irregular and there are [known gaps](https://fieldcraft.squaredr.tech/#gaps). MIT, so it's yours if it's useful.
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5-blue)]()
 [![React](https://img.shields.io/badge/React-18%20%7C%2019-blue)]()
 [![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
-[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
 
-> **Website & docs:** [fieldcraft.squaredr.tech](https://fieldcraft.squaredr.tech) · **GitHub:** [github.com/SquaredR98/fieldcraft](https://github.com/SquaredR98/fieldcraft) · **Discord:** [Join](https://discord.gg/FK8pszp5z)
 
 ## Packages
 
 | Package | Description | Version |
 |---------|-------------|---------|
 | [`@squaredr/fieldcraft-core`](packages/core) | Headless TypeScript engine — schema, validation, conditional visibility, state management | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core) |
-| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 44 field components, hooks, theming, pluggable field registry | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react) |
+| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 41 field components, hooks, theming, pluggable field registry | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react) |
 | [`@squaredr/fieldcraft-adapters`](packages/adapters) | Submission adapters — HTTP, Postgres, Supabase, Webhook | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-adapters)](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters) |
 | [`@squaredr/fieldcraft-templates`](packages/templates) | 16 free form templates — general, HR, and more | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates) |
 
@@ -74,7 +74,7 @@ function App() {
 ## Features
 
 - **Headless core** -- pure TypeScript engine with zero UI dependencies; bring your own renderer or use the React package
-- **44 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
+- **41 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
 - **JSON schemas** -- define entire forms as plain objects in TypeScript or JSON
 - **Display modes** -- stepped (wizard), classic (all-at-once), or conversational (one question at a time, Typeform-style)
 - **Multi-step flows** -- wizard-style sections with progress tracking and back/next navigation
@@ -82,7 +82,7 @@ function App() {
 - **Validation** -- required, regex, min/max, custom sync/async validators
 - **Computed fields** -- derive values automatically from other responses, with aggregate functions (SUM, AVG, COUNT, MIN, MAX) for repeater fields
 - **Draft persistence** -- save and resume in-progress forms
-- **Theme system** -- CSS custom properties with auto-inherit from host page; 5 preset families available in Pro
+- **Theme system** -- CSS custom properties with auto-inherit from host page; drive it from your own design tokens
 - **Pluggable fields** -- swap any field component via the field registry
 - **Type-safe** -- full TypeScript types for schemas, configs, and responses
 
@@ -136,7 +136,7 @@ Contact form, feedback survey, NPS, job application, event registration, bug rep
 fieldcraft/
 ├── packages/
 │   ├── core/                  # Form engine (pure TypeScript)
-│   ├── react/                 # React renderer + 44 field components
+│   ├── react/                 # React renderer + 41 field components
 │   ├── adapters/              # Submission adapters (HTTP, Postgres, Supabase, Webhook)
 │   └── templates/        # 16 free form schemas
 ├── website/                   # Docs site (fieldcraft.squaredr.tech)
@@ -145,9 +145,8 @@ fieldcraft/
 
 ## Community
 
-- **Discord** — [Join the FieldCraft community](https://discord.gg/FK8pszp5z) for help, feature discussions, and showcasing your projects
 - **Docs** — [fieldcraft.squaredr.tech/docs](https://fieldcraft.squaredr.tech/docs)
-- **Feature requests** — Open an issue or post in our Discord #feature-requests channel
+- **Bugs and feature requests** — [Open an issue](https://github.com/SquaredR98/fieldcraft/issues). A schema that reproduces the problem is the most useful thing you can attach.
 
 ## Development
 
@@ -160,7 +159,7 @@ pnpm install
 # Build all packages
 pnpm build
 
-# Run tests (463 core + 74 react + 56 adapters = 593 passing)
+# Run tests (824 core + 271 react + 56 adapters = 1,151 passing)
 pnpm test
 
 # Start docs site
@@ -169,7 +168,7 @@ pnpm --filter @squaredr/fieldcraft-website dev
 
 ## Contributing
 
-Contributions are welcome. Please open an issue first to discuss what you'd like to change. Join our [Discord](https://discord.gg/FK8pszp5z) to chat with the team.
+Contributions are welcome. This is a spare-time project, so reviews can be slow — please open an issue first to agree on the approach before writing code. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

@@ -1,9 +1,9 @@
 const specs = [
-  { value: '44', label: 'Field types' },
-  { value: '1,267', label: 'Tests passing' },
-  { value: '19', label: 'Built-in validators' },
-  { value: '<15 KB', label: 'Core, minified' },
-  { value: '1', label: 'Dependency \u00b7 zod' },
+  { value: '1,151', label: 'Tests passing' },
+  { value: '27', label: 'Built-in validators' },
+  { value: '25', label: 'Condition operators' },
+  { value: '~27 KB', label: 'Core, gzipped' },
+  { value: '4', label: 'Packages' },
 ];
 
 export function SpecStrip() {

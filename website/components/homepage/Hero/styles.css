@@ -31,15 +31,21 @@
 }
 
 .fc-hero__h1 {
-  @apply font-display text-[60px] font-semibold;
-  @apply tracking-[-0.04em] leading-none;
+  @apply font-display font-semibold;
+  @apply tracking-[-0.035em] leading-[1.02];
   @apply m-0 text-fc-ink-strong;
+  font-size: clamp(36px, 4.6vw, 54px);
+  text-wrap: balance;
 }
 
 .fc-hero__sub {
-  @apply text-[17px] leading-[1.6] text-fc-muted;
-  @apply mt-5.5 max-w-125;
+  @apply text-[18px] leading-[1.6] text-fc-soft;
+  @apply mt-5.5 max-w-136;
   text-wrap: pretty;
+}
+
+.fc-hero__sub + .fc-hero__sub {
+  @apply mt-3.5;
 }
 
 .fc-hero__actions {
@@ -213,11 +219,16 @@
 
 .fc-spec-strip__inner {
   @apply grid mx-auto max-w-310 px-10;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 }
 
 .fc-spec-strip__cell {
   @apply py-5;
+  transition: background-color var(--motion-hover);
+}
+
+.fc-spec-strip__cell:hover {
+  background: var(--surface2);
 }
 
 .fc-spec-strip__cell + .fc-spec-strip__cell {
@@ -225,7 +236,8 @@
 }
 
 .fc-spec-strip__value {
-  @apply font-display text-2xl font-semibold tracking-[-0.02em];
+  @apply font-display text-2xl font-semibold tracking-fc-subhead;
+  @apply text-fc-ink-strong;
 }
 
 .fc-spec-strip__label {
@@ -239,10 +251,6 @@
   .fc-hero__inner {
     @apply px-6 pt-16 pb-14 gap-10;
     grid-template-columns: 1fr;
-  }
-
-  .fc-hero__h1 {
-    @apply text-[42px];
   }
 
   .fc-hero__sub {
@@ -259,10 +267,6 @@
 @media (max-width: 639px) {
   .fc-hero__inner {
     @apply px-5 pt-12 pb-10 gap-8;
-  }
-
-  .fc-hero__h1 {
-    @apply text-[32px];
   }
 
   .fc-hero__sub {

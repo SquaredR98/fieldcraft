@@ -22,9 +22,14 @@ Instead, please email **security@squaredr.tech** with:
 
 ## Response Timeline
 
-- **Acknowledgement**: Within 48 hours of receiving your report
-- **Initial assessment**: Within 5 business days
-- **Fix and disclosure**: We aim to release a patch within 14 days for critical issues
+FieldCraft is maintained by one person in their spare time, so I can't offer a
+guaranteed response window. I read security reports as a priority over other
+issues and will acknowledge yours as soon as I reasonably can. If a report is
+serious and I can't get to it quickly, I'd rather tell you that than leave you
+waiting.
+
+If you don't hear back within a couple of weeks, please follow up — it means
+the mail was missed, not ignored.
 
 ## Scope
 
@@ -40,7 +45,7 @@ This policy covers:
 FieldCraft is a client-side form engine. Key security notes:
 
 - **No server-side data processing**: FieldCraft runs entirely in the browser. Form data is handled by your application's submit adapters.
-- **XSS prevention**: All user-provided content is rendered through React's built-in escaping. Custom `dangerouslySetInnerHTML` is never used in field components.
+- **XSS prevention**: User-provided values are rendered through React's built-in escaping. The one exception is `RichTextField`, which renders author-supplied HTML via `dangerouslySetInnerHTML` after sanitising it with [DOMPurify](https://github.com/cure53/DOMPurify) against an allow-list of tags and attributes. If you render rich text from untrusted authors, treat that sanitiser as your boundary and review its configuration in `RichTextField.tsx`.
 - **Schema validation**: The `validateSchema()` function should be used to validate schemas from untrusted sources before passing them to `createEngine()`.
 - **HTTP Adapter**: When using `createHttpAdapter()`, always use HTTPS endpoints and validate CORS configuration on your server.
 

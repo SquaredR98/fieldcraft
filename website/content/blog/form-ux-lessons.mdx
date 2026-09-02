@@ -2,8 +2,7 @@
 title: "6 Hard-Won UX Lessons from Building a Form Engine"
 slug: "form-ux-lessons"
 date: "2026-05-17"
-description: "After building 44 field types and hundreds of test forms, these are the UX decisions that actually moved completion rates."
-author: "ravi"
+description: "After building 41 field types and hundreds of test forms, these are the UX decisions that actually moved completion rates."
 category: "Patterns"
 tags: ["ux", "forms", "fieldcraft", "frontend"]
 ---
@@ -26,7 +25,7 @@ In FieldCraft, every field validates when the user leaves it. Not before. The `t
 }
 ```
 
-We tried showing errors on submit-only (no inline feedback). Completion rates dropped. People would fill out 15 fields, hit submit, see 4 errors, and leave. On-blur validation catches mistakes early without being hostile.
+I tried showing errors on submit-only (no inline feedback). Completion rates dropped. People would fill out 15 fields, hit submit, see 4 errors, and leave. On-blur validation catches mistakes early without being hostile.
 
 ## 2. Show All Errors, Not Just the First
 
@@ -46,7 +45,7 @@ errors: [
 ]
 ```
 
-Yes, it looks like more red on the screen. But it's honest. Users fix everything once instead of playing whack-a-mole with validation messages. Our test forms saw fewer round-trips between field and submit button when all errors were visible.
+Yes, it looks like more red on the screen. But it's honest. Users fix everything once instead of playing whack-a-mole with validation messages. My test forms saw fewer round-trips between field and submit button when all errors were visible.
 
 ## 3. Section Boundaries Reduce Abandonment
 
@@ -103,7 +102,7 @@ FieldCraft saves to `localStorage` on every field change with a debounce. When t
 
 The key is that saving is silent and automatic. The user never has to think about saving. The restore prompt is minimal and non-blocking — it's a single question, not a modal dialog.
 
-One important detail: drafts need an expiration. A 6-month-old draft of a form that's since been redesigned will cause confusing validation errors. We default to 72 hours. Long enough to survive a weekend, short enough to avoid stale data.
+One important detail: drafts need an expiration. A 6-month-old draft of a form that's since been redesigned will cause confusing validation errors. I default to 72 hours. Long enough to survive a weekend, short enough to avoid stale data.
 
 ## 6. The Submit Button Should Never Be Disabled
 
@@ -138,6 +137,6 @@ Forms are where users give you their information. The least you can do is not ma
 
 ## Further Reading
 
-- [Validation docs](/docs/core-concepts/validation) — the 19 built-in validators and when they trigger
+- [Validation docs](/docs/core-concepts/validation) — the 27 built-in validators and when they trigger
 - [Multi-step forms](/docs/core-concepts/multi-step-forms) — section navigation, progress, and branching
 - [Drafts & prefill](/docs/submission/drafts-and-prefill) — auto-save and draft restoration

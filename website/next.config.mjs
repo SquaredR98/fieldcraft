@@ -4,6 +4,12 @@ import { createMDX } from 'fumadocs-mdx/next';
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@squaredr/fieldcraft-core', '@squaredr/fieldcraft-react'],
+  async redirects() {
+    return [
+      // /roadmap became /changelog — keep old links and search results working.
+      { source: '/roadmap', destination: '/changelog', permanent: true },
+    ];
+  },
 };
 
 const withMDX = createMDX();

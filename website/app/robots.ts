@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/'],
+        disallow: ['/api/', '/pro'],
       },
     ],
     sitemap: 'https://fieldcraft.squaredr.tech/sitemap.xml',

@@ -1,7 +1,6 @@
 # @squaredr/fieldcraft-templates
 
 [![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates.svg)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates)
-[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-templates)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates)
 [![license](https://img.shields.io/npm/l/@squaredr/fieldcraft-templates.svg)](https://github.com/SquaredR98/fieldcraft/blob/main/packages/templates/LICENSE)
 
 16 free, production-ready form schemas for [FieldCraft](https://fieldcraft.squaredr.tech). Drop them into your app, customize, and ship.
@@ -146,7 +145,6 @@ Plus:
 
 ## Community
 
-- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
 - [Docs](https://fieldcraft.squaredr.tech/docs) — Full documentation
 - [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 

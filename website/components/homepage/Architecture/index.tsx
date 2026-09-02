@@ -4,34 +4,20 @@ export function Architecture() {
   return (
     <section id="layers" className="fc-arch">
       <div className="fc-arch__inner">
-        <div className="fc-arch__eyebrow">03 &middot; Architecture</div>
+        <div className="fc-arch__eyebrow">Architecture</div>
         <h2 className="fc-arch__h2">
-          Two layers. Take the one you need, leave the rest.
+          Two layers, four packages.
         </h2>
         <p className="fc-arch__sub">
-          Each layer is a separate package &mdash; install only what your project
-          requires. The core engine has zero UI dependencies, and the React
-          renderer adds 44 pre-built components.
+          The engine is plain TypeScript with no UI dependencies. The React
+          renderer sits on top of it and adds the field components. Install
+          whichever one you need.
         </p>
 
         <div className="fc-arch__grid">
           {/* ── Left column: nested layer diagram ── */}
           <div>
-            <div className="fc-arch__layer fc-arch__layer--pro" style={{ opacity: 0.55 }}>
-              <div className="fc-arch__layer-header">
-                <span className="fc-arch__layer-label">
-                  Layer 03 &middot; Pro &middot; coming soon
-                </span>
-                <span className="fc-arch__layer-badge fc-arch__layer-badge--amber">
-                  UI
-                </span>
-              </div>
-              <div className="fc-arch__layer-title">FieldCraft Pro</div>
-              <div className="fc-arch__layer-desc">
-                Visual form builder, theme editor, and submission dashboard.
-                Coming soon.
-              </div>
-
+            {/* PRO: layer hidden 2026-09-02 — restore when revisiting Pro */}
               <div className="fc-arch__layer fc-arch__layer--react" style={{ opacity: 1 }}>
                 <div className="fc-arch__layer-header">
                   <span className="fc-arch__layer-label">
@@ -67,7 +53,6 @@ export function Architecture() {
                   </div>
                 </div>
               </div>
-            </div>
 
             <div className="fc-arch__callout">
               <div className="fc-arch__callout-title">
@@ -143,6 +128,7 @@ export function Architecture() {
                       of the box.
                     </td>
                   </tr>
+                  {/* PRO: hidden 2026-09-02 — restore when revisiting Pro
                   <tr className="fc-arch__entry-row" style={{ opacity: 0.55 }}>
                     <td>Pro</td>
                     <td>
@@ -150,6 +136,7 @@ export function Architecture() {
                       renderer. Coming soon.
                     </td>
                   </tr>
+                  */}
                 </tbody>
               </table>
             </div>

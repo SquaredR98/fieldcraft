@@ -3,12 +3,11 @@ title: "Build Forms Without Code: Introducing FieldCraft FormBuilder"
 slug: "build-forms-without-code"
 date: "2026-05-22"
 description: "Drag fields, set validation, add conditional logic, and export a production-ready JSON schema. No React knowledge needed."
-author: "ravi"
 category: "Release"
 tags: ["fieldcraft", "form-builder", "no-code", "open-source", "react"]
 ---
 
-> **TL;DR** — FormBuilder is a visual drag-and-drop interface that outputs valid FieldCraft JSON schemas. Non-developers can create production-ready forms without writing code. Part of FieldCraft Pro.
+> **TL;DR** — FormBuilder is a visual drag-and-drop interface that outputs valid FieldCraft JSON schemas. Non-developers can create production-ready forms without writing code. It runs on localhost today; it is not published as an installable package.
 
 ## The Gap Between Developers and Everyone Else
 
@@ -28,7 +27,7 @@ FormBuilder is a visual, drag-and-drop interface for creating FieldCraft schemas
 
 ### The Canvas
 
-The left side of the screen is a palette of all 44 field types. Short text, email, phone, dropdown, date picker, file upload, rating, signature pad, Likert scale, NPS. You drag a field type from the palette onto the canvas and it appears as a block you can reorder, duplicate, or delete.
+The left side of the screen is a palette of all 41 field types. Short text, email, phone, dropdown, date picker, file upload, rating, signature pad, Likert scale, NPS. You drag a field type from the palette onto the canvas and it appears as a block you can reorder, duplicate, or delete.
 
 Fields live inside sections. You can have a single section or split your form into multiple steps. Sections can be reordered by dragging them, and you can duplicate an entire section with its fields if you need a similar structure repeated.
 
@@ -38,7 +37,7 @@ Click any field on the canvas and the right panel shows its configuration. The b
 
 A dropdown field shows an options editor where you can add, remove, and reorder choices. A number field shows min/max range inputs. A file upload field shows accepted file types and size limits. A rating field shows the scale range.
 
-Every one of the 44 field types has a dedicated configuration UI. This isn't a generic "enter JSON" fallback. The panel knows what each field type supports and shows exactly those options.
+Every one of the 41 field types has a dedicated configuration UI. This isn't a generic "enter JSON" fallback. The panel knows what each field type supports and shows exactly those options.
 
 ### Validation Rules
 
@@ -85,7 +84,7 @@ When you're done, FormBuilder exports a `FormEngineSchema` object. It's the same
 
 FormBuilder is a React component. You drop it into your app and it handles everything internally.
 
-> **Note:** FormBuilder is part of FieldCraft Pro, which is not yet published. The code examples below show the planned API.
+> **Note:** FormBuilder runs locally but is not published to npm, so the imports below will not resolve in your project. They show the API as it exists in the local build.
 
 ```tsx
 import { FormBuilder } from '@squaredr/fieldcraft-pro/form-builder'
@@ -118,7 +117,7 @@ If you want to load an existing schema for editing:
 FormBuilder exposes a `toolbarExtra` prop that lets you inject custom buttons into its toolbar. The most common use is a Builder/Preview toggle:
 
 ```tsx
-// Pro API preview — @squaredr/fieldcraft-pro is not yet published
+// Not published to npm — this is the local build's API
 import { FormBuilder } from '@squaredr/fieldcraft-pro/form-builder'
 import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 
@@ -156,9 +155,11 @@ FormBuilder is built for two audiences:
 
 **Developers** who want to prototype quickly. Instead of writing a 200-line schema by hand, you can drag-and-drop a rough version in a few minutes, export the JSON, and refine it in your editor. It's faster than writing from scratch, especially for forms with complex conditional logic.
 
-## Part of FieldCraft Pro (Coming Soon)
+## Where this actually stands
 
-FormBuilder will be part of the FieldCraft Pro toolkit alongside SchemaEditor and ResponseViewer. Pro is currently in development — star the [GitHub repo](https://github.com/SquaredR98/fieldcraft) to get notified when it ships.
+Honest status: the builder runs on localhost. I use it myself to draft schemas, and it does what this post describes. What it isn't yet is something you can install and depend on — that's a different amount of work, and I'll only take it on if people actually want it.
+
+So this post describes a tool that exists but isn't distributed. If a visual builder is the thing that would make FieldCraft useful to you, [say so in an issue](https://github.com/SquaredR98/fieldcraft/issues) — that's the signal I'd act on. In the meantime, schemas are written by hand or copied from a [template](/templates), and the engine itself is fully published and MIT.
 
 ---
 

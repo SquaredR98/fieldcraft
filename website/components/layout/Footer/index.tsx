@@ -16,23 +16,21 @@ interface FooterColumn {
 
 const columns: FooterColumn[] = [
   {
-    title: 'Product',
+    title: 'The project',
     links: [
       { label: 'Documentation', href: '/docs' },
-      { label: 'Architecture', href: '/#layers' },
       { label: 'Demos', href: '/#demos' },
       { label: 'Templates', href: '/templates' },
-      { label: 'Pro', href: '/pro' },
-      { label: 'Changelog', href: '/roadmap' },
+      { label: 'Known gaps', href: '/#gaps' },
+      { label: 'Changelog', href: '/changelog' },
       { label: 'Blog', href: '/blog' },
     ],
   },
   {
-    title: 'Open source',
+    title: 'Code',
     links: [
       { label: 'GitHub', href: 'https://github.com/SquaredR98/fieldcraft', external: true },
       { label: 'npm packages', href: 'https://www.npmjs.com/org/squaredr', external: true },
-      { label: 'Discord', href: 'https://discord.gg/FK8pszp5z', external: true },
       { label: 'Report an issue', href: 'https://github.com/SquaredR98/fieldcraft/issues', external: true },
     ],
   },
@@ -55,7 +53,8 @@ export function Footer() {
             <Logo />
           </div>
           <div className="fc-footer__brand-desc">
-            A self-hosted form engine for React. Open source, MIT licensed, yours to keep.
+            A schema-driven form engine for React. Built to learn, shared in
+            case it&rsquo;s useful.
           </div>
           <div className="fc-footer__brand-url">fieldcraft.squaredr.tech</div>
         </div>
@@ -81,6 +80,7 @@ export function Footer() {
       <div className="fc-footer__bottom">
         <div className="fc-footer__bottom-inner">
           <div>&copy; 2026 SquaredR &middot; MIT licensed</div>
+          <div className="fc-footer__bottom-note">Built in my spare time</div>
           <ThemeToggle />
         </div>
       </div>

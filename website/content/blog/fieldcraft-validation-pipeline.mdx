@@ -3,7 +3,6 @@ title: "How FieldCraft's Validation Pipeline Works Under the Hood"
 slug: "fieldcraft-validation-pipeline"
 date: "2026-06-26"
 description: "A technical deep-dive into FieldCraft's three-layer validation pipeline: field-level sync, cross-field custom validators, and the submit guard that prevents bad data from reaching your backend."
-author: "ravi"
 category: "Engineering"
 tags: ["fieldcraft", "validation", "architecture", "typescript", "deep-dive"]
 ---
@@ -36,7 +35,7 @@ The flow is always **Layer 1 → Layer 2 → Layer 3**. Each layer can produce e
 
 ### Layer 1: Built-in Rules
 
-FieldCraft ships 19 built-in validators that cover the most common cases:
+FieldCraft ships 27 built-in validators that cover the most common cases:
 
 | Rule | What It Checks |
 |------|---------------|
@@ -278,17 +277,17 @@ The error disappears as soon as the value becomes valid. No "submit to clear err
 
 ## What's Next
 
-This covers synchronous validation. Async validators (for server-side checks like "is this email already registered?") are registered separately and run outside the synchronous pipeline. We'll cover that in a future post.
+This covers synchronous validation. Async validators (for server-side checks like "is this email already registered?") are registered separately and run outside the synchronous pipeline. I'll cover that in a future post.
 
 If you want to explore the source, the relevant files are:
 
 - `validation-runner.ts` — the pipeline orchestrator
-- `built-in.ts` — all 19 built-in validators
+- `built-in.ts` — all 27 built-in validators
 - `registry.ts` — custom and async validator registry
 - `create-engine.ts` — where validation integrates with the engine lifecycle
 
 ## Further Reading
 
-- [Validation docs](/docs/core-concepts/validation) — full reference for all 19 built-in rule types, custom validators, and async validators
+- [Validation docs](/docs/core-concepts/validation) — full reference for all 27 built-in rule types, custom validators, and async validators
 - [Server validation](/docs/submission/server-validation) — validating schemas on the server before rendering
 - [6 Hard-Won UX Lessons from Building a Form Engine](/blog/form-ux-lessons) — the UX principles behind validate-on-blur

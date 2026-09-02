@@ -77,7 +77,6 @@ The adapter uses Drizzle ORM and expects a `formengine_responses` table. A Drizz
 
 ## Community
 
-- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
 - [Docs](https://fieldcraft.squaredr.tech/docs/submission/adapters-overview) — Adapter documentation
 - [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 

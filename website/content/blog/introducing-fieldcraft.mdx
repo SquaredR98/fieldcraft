@@ -3,12 +3,11 @@ title: "Introducing FieldCraft: A Schema-Driven Form Engine for React"
 slug: "introducing-fieldcraft"
 date: "2026-05-10"
 description: "Define forms as JSON. Get validation, conditional logic, multi-step, theming, and draft persistence — without writing a single input component."
-author: "ravi"
 category: "Release"
 tags: ["fieldcraft", "react", "forms", "open-source"]
 ---
 
-> **TL;DR** — FieldCraft is a schema-driven form engine for React. Define your form as JSON, get validation, conditional logic, multi-step flows, draft persistence, and 44 field types — without writing form state code.
+> **TL;DR** — FieldCraft is a schema-driven form engine for React. Define your form as JSON, get validation, conditional logic, multi-step flows, draft persistence, and 41 field types — without writing form state code.
 
 ## The Problem
 
@@ -82,7 +81,7 @@ That's a working form with validation, error messages, and keyboard navigation. 
 
 ## What You Get
 
-### 44 Field Types
+### 41 Field Types
 
 Text, email, number, phone, select, multi-select, checkbox, radio, toggle, rating, slider, date, time, file upload, signature pad, and more. Each field type handles its own rendering, validation, and accessibility.
 
@@ -167,7 +166,7 @@ The renderer auto-inherits CSS custom properties from your host page (`--backgro
 />
 ```
 
-Five preset families (Clean, Modern, Clinical, Playful, High Contrast) with light/dark variants are available in [FieldCraft Pro](/pro).
+Theming goes through CSS custom properties and the `FormEngineThemeProvider`, so you can drive it from your own design tokens. See [Theming](/docs/react/theming) for the full reference.
 
 ### Custom Field Types
 

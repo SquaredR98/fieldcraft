@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 import { HomepageView } from '@/components/homepage/HomepageView';
 import { getTemplateById } from '@/lib/templates';
-import { getNpmStats } from '@/lib/npm-stats';
+import { changelog } from '@/lib/changelog';
 
 export const metadata: Metadata = {
   title: 'FieldCraft — Open-source form engine for React',
   description:
-    'Self-hosted, schema-driven form engine for React. 44 field types, conditional logic, multi-step forms, validation, and draft persistence. Define once in JSON, render anywhere. MIT licensed.',
+    'Self-hosted, schema-driven form engine for React. 41 field types, conditional logic, multi-step forms, validation, and draft persistence. Define once in JSON, render anywhere. MIT licensed.',
   openGraph: {
     title: 'FieldCraft — Open-source form engine for React',
     description:
-      'Self-hosted form engine with 44 field types, conditional logic, multi-step navigation, and validation. Define forms in JSON, own your data. MIT licensed.',
+      'Self-hosted form engine with 41 field types, conditional logic, multi-step navigation, and validation. Define forms in JSON, own your data. MIT licensed.',
   },
 };
 
@@ -23,7 +23,7 @@ const jsonLd = {
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Any',
   description:
-    'A self-hosted, schema-driven form engine for React. 44 field types, validation, conditional logic, multi-step navigation, and draft persistence.',
+    'A self-hosted, schema-driven form engine for React. 41 field types, validation, conditional logic, multi-step navigation, and draft persistence.',
   url: 'https://fieldcraft.squaredr.tech',
   author: {
     '@type': 'Organization',
@@ -44,7 +44,10 @@ export default async function HomePage() {
     .map((id) => getTemplateById(id))
     .filter((t) => t !== undefined);
 
-  const npmStats = await getNpmStats();
+  // Latest shipped release, newest first — drives the Status section.
+  const latest = [...changelog].sort((a, b) =>
+    b.date.localeCompare(a.date)
+  )[0];
 
   return (
     <>
@@ -52,7 +55,12 @@ export default async function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <HomepageView showcaseTemplates={showcaseTemplates} npmStats={npmStats} />
+      <HomepageView
+        showcaseTemplates={showcaseTemplates}
+        latestVersion={latest.version}
+        latestDate={latest.date}
+        latestPackage={latest.packageLabel}
+      />
     </>
   );
 }

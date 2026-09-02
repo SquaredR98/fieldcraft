@@ -29,15 +29,13 @@ export function FinalCta() {
       <div className="fc-cta__inner">
         {/* ── Left column ── */}
         <div>
-          <div className="fc-cta__eyebrow">11 &middot; Get started</div>
+          <div className="fc-cta__eyebrow">Try it</div>
           <h2 className="fc-cta__h2">
-            Install it, write a schema,
-            <br />
-            render your first form.
+            Install it, write a schema, render a form.
           </h2>
           <p className="fc-cta__sub">
-            Nothing to sign up for. Nothing to configure. The engine is on npm
-            and the source is on GitHub.
+            Nothing to sign up for. It&rsquo;s on npm, the source is on GitHub,
+            and the licence is MIT.
           </p>
           <div className="fc-cta__actions">
             <a href="/docs" className="fc-cta__btn-primary">

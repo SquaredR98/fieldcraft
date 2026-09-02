@@ -1,0 +1,61 @@
+@reference "../../../app/globals.css";
+
+.fc-learned {
+  @apply border-b border-fc-rule;
+}
+
+.fc-learned__inner {
+  @apply max-w-310 mx-auto px-10 py-19;
+}
+
+.fc-learned__eyebrow {
+  @apply font-mono text-[11px] tracking-fc-mono-md;
+  @apply uppercase text-fc-muted;
+}
+
+.fc-learned__h2 {
+  @apply font-display font-semibold;
+  @apply tracking-fc-heading leading-[1.12];
+  @apply mt-3.5 mb-0 text-fc-ink-strong;
+  font-size: clamp(26px, 3vw, 34px);
+}
+
+.fc-learned__sub {
+  @apply text-[18px] leading-[1.6] text-fc-soft;
+  @apply mt-4 mb-10 max-w-136;
+  text-wrap: pretty;
+}
+
+.fc-learned__grid {
+  @apply grid gap-8;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.fc-learned__item {
+  @apply relative pt-4.5;
+  border-top: 2px solid var(--rule);
+}
+
+/* Teal rule wipes across the top on hover. */
+.fc-learned__item::before {
+  content: '';
+  @apply absolute left-0 top-0 h-0.5 w-0;
+  background: var(--teal);
+  transition: width var(--motion-enter);
+  margin-top: -2px;
+}
+
+.fc-learned__item:hover::before {
+  @apply w-full;
+}
+
+.fc-learned__item-title {
+  @apply font-display text-[18px] font-semibold;
+  @apply tracking-fc-subhead text-fc-ink-strong;
+}
+
+.fc-learned__item-body {
+  @apply text-[15px] leading-[1.6] text-fc-soft;
+  @apply mt-2.5 mb-0;
+  text-wrap: pretty;
+}
