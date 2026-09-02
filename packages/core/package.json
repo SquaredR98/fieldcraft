@@ -1,6 +1,6 @@
 {
   "name": "@squaredr/fieldcraft-core",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Headless TypeScript form engine with zero UI dependencies. Define multi-section forms via JSON schemas with validation, conditional visibility, and computed fields.",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -24,11 +24,19 @@
   },
   "typesVersions": {
     "*": {
-      "validators": ["dist/validators.d.ts"],
-      "testing": ["dist/testing.d.ts"]
+      "validators": [
+        "dist/validators.d.ts"
+      ],
+      "testing": [
+        "dist/testing.d.ts"
+      ]
     }
   },
-  "files": ["dist", "LICENSE", "README.md"],
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup src/index.ts src/validators/index.ts src/testing/index.ts --format cjs,esm --dts",
@@ -37,7 +45,9 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "play": "vitest --config playground/vitest.config.ts",
+    "play:run": "vitest run --config playground/vitest.config.ts"
   },
   "dependencies": {
     "zod": "^3.23"

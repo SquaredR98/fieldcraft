@@ -19,33 +19,52 @@ const NON_INPUT_TYPES = [
 // ---- Condition Expression (recursive) ----
 
 const conditionOperator = z.enum([
-  "eq", "neq", "gt", "gte", "lt", "lte",
-  "in", "notIn", "exists", "notExists",
-  "isEmpty", "isNotEmpty",
-  "contains", "notContains", "startsWith", "endsWith",
-  "between", "matches", "matchesRegex",
-  "dateAfter", "dateBefore",
-  "arrayContains", "arrayNotContains",
-  "lengthGreaterThan", "lengthLessThan",
+  "eq",
+  "neq",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "in",
+  "notIn",
+  "exists",
+  "notExists",
+  "isEmpty",
+  "isNotEmpty",
+  "contains",
+  "notContains",
+  "startsWith",
+  "endsWith",
+  "between",
+  "matches",
+  "matchesRegex",
+  "dateAfter",
+  "dateBefore",
+  "arrayContains",
+  "arrayNotContains",
+  "lengthGreaterThan",
+  "lengthLessThan",
 ]);
 
 const conditionExpression: z.ZodType<unknown> = z.lazy(() =>
-  z.object({
-    combine: z.enum(["AND", "OR"]).optional(),
-    conditions: z.array(conditionExpression).optional(),
-    field: z.string().optional(),
-    operator: conditionOperator.optional(),
-    value: z.unknown().optional(),
-  }).refine(
-    (expr) => {
-      // Must be either a leaf (field+operator) or a group (conditions)
-      const isLeaf = expr.field !== undefined && expr.operator !== undefined;
-      const isGroup = expr.conditions !== undefined && expr.conditions.length > 0;
-      const isEmpty = expr.field === undefined && expr.conditions === undefined;
-      return isLeaf || isGroup || isEmpty;
-    },
-    { message: "Condition must be a leaf (field+operator), a group (conditions[]), or empty" }
-  )
+  z
+    .object({
+      combine: z.enum(["AND", "OR"]).optional(),
+      conditions: z.array(conditionExpression).optional(),
+      field: z.string().optional(),
+      operator: conditionOperator.optional(),
+      value: z.unknown().optional(),
+    })
+    .refine(
+      (expr) => {
+        // Must be either a leaf (field+operator) or a group (conditions)
+        const isLeaf = expr.field !== undefined && expr.operator !== undefined;
+        const isGroup = expr.conditions !== undefined && expr.conditions.length > 0;
+        const isEmpty = expr.field === undefined && expr.conditions === undefined;
+        return isLeaf || isGroup || isEmpty;
+      },
+      { message: "Condition must be a leaf (field+operator), a group (conditions[]), or empty" },
+    ),
 );
 
 // ---- Validation Rules ----
@@ -56,23 +75,49 @@ const validationRule = z.discriminatedUnion("type", [
   z.object({ type: z.literal("max"), value: z.number(), message: z.string().optional() }),
   z.object({ type: z.literal("minLength"), value: z.number(), message: z.string().optional() }),
   z.object({ type: z.literal("maxLength"), value: z.number(), message: z.string().optional() }),
-  z.object({ type: z.literal("pattern"), regex: z.string(), flags: z.string().optional(), message: z.string().optional() }),
+  z.object({
+    type: z.literal("pattern"),
+    regex: z.string(),
+    flags: z.string().optional(),
+    message: z.string().optional(),
+  }),
   z.object({ type: z.literal("email"), message: z.string().optional() }),
   z.object({ type: z.literal("phone"), message: z.string().optional() }),
   z.object({ type: z.literal("url"), message: z.string().optional() }),
-  z.object({ type: z.literal("date"), min: z.string().optional(), max: z.string().optional(), message: z.string().optional() }),
+  z.object({
+    type: z.literal("date"),
+    min: z.string().optional(),
+    max: z.string().optional(),
+    message: z.string().optional(),
+  }),
   z.object({ type: z.literal("fileSize"), maxMb: z.number(), message: z.string().optional() }),
-  z.object({ type: z.literal("fileType"), accept: z.array(z.string()), message: z.string().optional() }),
-  z.object({ type: z.literal("custom"), name: z.string(), params: z.record(z.unknown()).optional(), message: z.string().optional() }),
-  z.object({ type: z.literal("async"), endpoint: z.string(), debounceMs: z.number().optional(), message: z.string().optional() }),
+  z.object({
+    type: z.literal("fileType"),
+    accept: z.array(z.string()),
+    message: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("custom"),
+    name: z.string(),
+    params: z.record(z.unknown()).optional(),
+    message: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("async"),
+    endpoint: z.string(),
+    debounceMs: z.number().optional(),
+    message: z.string().optional(),
+  }),
 ]);
 
 // ---- Question Config (permissive — each type has its own shape but we validate loosely) ----
 // We use passthrough so extra fields from vertical packs are allowed.
 
-const questionConfig = z.object({
-  type: z.string(),
-}).passthrough();
+const questionConfig = z
+  .object({
+    type: z.string(),
+  })
+  .passthrough();
 
 // ---- Option ----
 
@@ -160,18 +205,22 @@ const formSettings = z.object({
   prefill: prefillConfig.optional(),
   noPiiInLogs: z.boolean().optional(),
   locale: z.string().optional(),
-  submitButton: z.object({
-    label: z.string().optional(),
-    loadingLabel: z.string().optional(),
-    successLabel: z.string().optional(),
-  }).optional(),
-  navigation: z.object({
-    showBack: z.boolean().optional(),
-    showSectionList: z.boolean().optional(),
-    nextLabel: z.string().optional(),
-    backLabel: z.string().optional(),
-    allowSkip: z.boolean().optional(),
-  }).optional(),
+  submitButton: z
+    .object({
+      label: z.string().optional(),
+      loadingLabel: z.string().optional(),
+      successLabel: z.string().optional(),
+    })
+    .optional(),
+  navigation: z
+    .object({
+      showBack: z.boolean().optional(),
+      showSectionList: z.boolean().optional(),
+      nextLabel: z.string().optional(),
+      backLabel: z.string().optional(),
+      allowSkip: z.boolean().optional(),
+    })
+    .optional(),
 });
 
 // ---- Submit / Complete actions ----
@@ -210,9 +259,7 @@ export class FormEngineSchemaError extends Error {
   public readonly issues: z.ZodIssue[];
 
   constructor(issues: z.ZodIssue[]) {
-    const messages = issues.map(
-      (i) => `  - ${i.path.join(".")}: ${i.message}`
-    );
+    const messages = issues.map((i) => `  - ${i.path.join(".")}: ${i.message}`);
     super(`Invalid FormEngine schema:\n${messages.join("\n")}`);
     this.name = "FormEngineSchemaError";
     this.issues = issues;
@@ -266,17 +313,14 @@ function validateCrossReferences(schema: FormEngineSchema): string[] {
         const rule = section.onExit.rules[i];
         if (!sectionIds.has(rule.jumpTo)) {
           errors.push(
-            `sections[${section.id}].onExit.rules[${i}].jumpTo: references unknown section "${rule.jumpTo}"`
+            `sections[${section.id}].onExit.rules[${i}].jumpTo: references unknown section "${rule.jumpTo}"`,
           );
         }
-        checkConditionRefs(
-          rule.condition,
-          `sections[${section.id}].onExit.rules[${i}].condition`
-        );
+        checkConditionRefs(rule.condition, `sections[${section.id}].onExit.rules[${i}].condition`);
       }
       if (section.onExit.default && !sectionIds.has(section.onExit.default)) {
         errors.push(
-          `sections[${section.id}].onExit.default: references unknown section "${section.onExit.default}"`
+          `sections[${section.id}].onExit.default: references unknown section "${section.onExit.default}"`,
         );
       }
     }
@@ -285,16 +329,17 @@ function validateCrossReferences(schema: FormEngineSchema): string[] {
       if (question.showIf) {
         checkConditionRefs(
           question.showIf,
-          `sections[${section.id}].questions[${question.id}].showIf`
+          `sections[${section.id}].questions[${question.id}].showIf`,
         );
       }
 
       // Validate select-type questions have options
       const selectTypes = ["single_select", "multi_select", "dropdown", "ranking"];
-      if (selectTypes.includes(question.type) && (!question.options || question.options.length === 0)) {
-        errors.push(
-          `questions[${question.id}]: type "${question.type}" requires options`
-        );
+      if (
+        selectTypes.includes(question.type) &&
+        (!question.options || question.options.length === 0)
+      ) {
+        errors.push(`questions[${question.id}]: type "${question.type}" requires options`);
       }
 
       // Validate config type matches question type (if config has a type field)
@@ -302,7 +347,7 @@ function validateCrossReferences(schema: FormEngineSchema): string[] {
         const configType = (question.config as { type: string }).type;
         if (configType !== question.type) {
           errors.push(
-            `questions[${question.id}]: config.type "${configType}" does not match question type "${question.type}"`
+            `questions[${question.id}]: config.type "${configType}" does not match question type "${question.type}"`,
           );
         }
       }
@@ -334,14 +379,16 @@ function validateCrossReferences(schema: FormEngineSchema): string[] {
           errors.push(`questions[${question.id}]: type "rich-text" requires config.content`);
         }
         if (!cfg.format || (cfg.format !== "markdown" && cfg.format !== "html")) {
-          errors.push(`questions[${question.id}]: type "rich-text" requires config.format ("markdown" or "html")`);
+          errors.push(
+            `questions[${question.id}]: type "rich-text" requires config.format ("markdown" or "html")`,
+          );
         }
       }
 
       // Warn if non-input type has 'required' field (doesn't make sense for content blocks)
       if (NON_INPUT_TYPES.includes(question.type) && question.required !== undefined) {
         errors.push(
-          `questions[${question.id}]: type "${question.type}" is a non-input field and should not have a 'required' property`
+          `questions[${question.id}]: type "${question.type}" is a non-input field and should not have a 'required' property`,
         );
       }
     }
@@ -374,7 +421,7 @@ export function validateSchema(schema: unknown): FormEngineSchema {
         code: "custom" as const,
         path: [],
         message,
-      }))
+      })),
     );
   }
 
