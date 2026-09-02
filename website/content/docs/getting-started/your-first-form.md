@@ -181,13 +181,13 @@ The `config` object holds type-specific settings. A `long_text` field has `rows`
 Create a page component that renders the form:
 
 ```tsx title="app/contact/page.tsx"
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 import { contactFormSchema } from '@/schemas/contact-form'
 
 export default function ContactPage() {
   return (
     <div style={{ maxWidth: 640, margin: '0 auto', padding: '2rem' }}>
-      <FormRenderer
+      <FormEngineRenderer
         schema={contactFormSchema}
         onSubmit={async (response) => {
           // response includes schemaId, schemaVersion, values, submittedAt, sessionToken
@@ -231,7 +231,7 @@ See [Validation](/docs/core-concepts/validation) for the complete reference.
 Pass a `FormEngineTheme` object to the `theme` prop to change the visual appearance:
 
 ```tsx
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 import type { FormEngineTheme } from '@squaredr/fieldcraft-core'
 
 const myTheme: FormEngineTheme = {
@@ -243,7 +243,7 @@ const myTheme: FormEngineTheme = {
   },
 }
 
-<FormRenderer
+<FormEngineRenderer
   schema={contactFormSchema}
   theme={myTheme}
   onSubmit={handleSubmit}
@@ -374,6 +374,6 @@ export const contactFormSchema: FormEngineSchema = {
 ## Next steps
 
 - [Schema anatomy](/docs/core-concepts/schema-anatomy) — understand every property in the schema
-- [Field types](/docs/core-concepts/field-types) — all 44 field types with their configs
+- [Field types](/docs/core-concepts/field-types) — all 41 field types with their configs
 - [Conditional logic](/docs/core-concepts/conditional-logic) — `showIf`, jump rules, and conditional required
 - [Theming](/docs/react/theming) — customise colours, typography, spacing, and shape

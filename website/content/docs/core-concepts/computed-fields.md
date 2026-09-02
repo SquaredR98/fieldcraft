@@ -189,4 +189,4 @@ State updated, React re-renders
 ## Next steps
 
 - [Multi-step forms](/docs/core-concepts/multi-step-forms) — section navigation and progress tracking
-- [FormRenderer](/docs/react/form-renderer) — component API and props
+- [FormEngineRenderer](/docs/react/form-renderer) — component API and props

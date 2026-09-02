@@ -8,12 +8,12 @@ description: FieldCraft is a schema-driven form engine for React. Define a form 
 You write a JSON schema that describes a form — its fields, sections, validation rules, conditional logic, and submission behaviour. FieldCraft reads that schema and renders a fully functional form with zero imperative code.
 
 ```tsx title="app/intake/page.tsx"
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 import schema from './patient-intake.json'
 
 export default function IntakePage() {
   return (
-    <FormRenderer
+    <FormEngineRenderer
       schema={schema}
       theme="clinical"
       onSubmit={async (response) => {
@@ -36,7 +36,7 @@ Two packages, each depending only on the one beneath it. Take the layer you need
 | Layer | Package | What it does |
 |-------|---------|-------------|
 | Core | `@squaredr/fieldcraft-core` | Schema parsing, state management, condition evaluation, validation, expression engine, navigation. No UI, no React. |
-| React | `@squaredr/fieldcraft-react` | `<FormRenderer />`, 44 field components, 10 hooks, CSS variable theming with auto-inherit, draft persistence, step navigation. |
+| React | `@squaredr/fieldcraft-react` | `<FormEngineRenderer />`, 41 field components, 10 hooks, CSS variable theming with auto-inherit, draft persistence, step navigation. |
 
 Core is framework-agnostic. You could build a Vue or Svelte renderer on top of it — the engine API is the same. React is the official renderer that ships with the project.
 
@@ -45,7 +45,7 @@ Core is framework-agnostic. You could build a Vue or Svelte renderer on top of i
 | Concern | How it works |
 |---------|-------------|
 | **Conditional visibility** | Any field or section can declare `showIf` — a condition expression evaluated against current form values. Hidden fields are excluded from validation and submission. |
-| **Validation** | 19 built-in rule types (required, min/max, minLength/maxLength, pattern, email, phone, URL, date, file size, file type, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField) plus custom sync and async validators. Conditional validation with `applyIf` and severity levels. Validation runs on blur, on section change, and on submit. |
+| **Validation** | 25 built-in rule types (required, min/max, minLength/maxLength, pattern, email, phone, url, date, fileSize, fileType, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField, eq/neq, gt/gte, lt/lte) plus custom sync and async validators. Conditional validation with `applyIf` and severity levels. Validation runs on blur, on section change, and on submit. |
 | **Multi-step navigation** | Sections become steps. The engine tracks which sections are visible, which have been visited, and whether the current section is valid before allowing forward navigation. |
 | **Computed fields** | Expressions like `{price} * {quantity}` are parsed and evaluated safely — no `eval()`. Aggregate functions (SUM, AVG, COUNT, MIN, MAX) work across repeater rows. Dependencies are tracked so computed fields update when their inputs change. |
 | **Draft persistence** | Answers survive a page refresh with zero configuration. Drafts are keyed by schema ID + session token, stored in localStorage by default, or sent to a server via a draft adapter. |

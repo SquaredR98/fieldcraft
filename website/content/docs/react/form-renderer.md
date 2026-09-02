@@ -1,17 +1,17 @@
 ---
-title: FormRenderer
+title: FormEngineRenderer
 description: The main component. It creates the engine, renders fields, handles navigation, validation, drafts and submission.
 ---
 
 ## Basic usage
 
 ```tsx
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 import schema from './contact-form.json'
 
 export default function ContactPage() {
   return (
-    <FormRenderer
+    <FormEngineRenderer
       schema={schema}
       onSubmit={async (response) => {
         await fetch('/api/submit', {
@@ -114,7 +114,7 @@ export default function ContactPage() {
 
 ```tsx
 import {
-  FormRenderer,
+  FormEngineRenderer,
   defaultRegistry,
 } from '@squaredr/fieldcraft-react'
 import { createSupabaseAdapter } from '@squaredr/fieldcraft-adapters'
@@ -131,7 +131,7 @@ const adapter = createSupabaseAdapter({
 
 export default function IntakePage() {
   return (
-    <FormRenderer
+    <FormEngineRenderer
       schema={schema}
       adapters={adapter}
       components={{ ...defaultRegistry, pain_scale: PainScaleField }}
@@ -159,7 +159,7 @@ Use `hideNavigation` with `onReady` and `onStateChange` to replace the built-in 
 
 ```tsx
 import { useState, useCallback } from 'react'
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 import type { FormEngine, FormState } from '@squaredr/fieldcraft-core'
 
 export default function CustomNavForm({ schema }) {
@@ -168,7 +168,7 @@ export default function CustomNavForm({ schema }) {
 
   return (
     <div>
-      <FormRenderer
+      <FormEngineRenderer
         schema={schema}
         hideNavigation
         onReady={setEngine}
@@ -208,7 +208,7 @@ export default function CustomNavForm({ schema }) {
 
 ## How it works internally
 
-`FormRenderer` is a wrapper that:
+`FormEngineRenderer` is a wrapper that:
 
 1. Creates a `FormEngine` instance via `useFormEngine(schema, options)`
 2. Subscribes to state changes via `useSyncExternalStore`
@@ -225,7 +225,7 @@ The engine lives in a `useRef` and is created once. React Strict Mode double-mou
 
 ## Using the engine directly
 
-If `FormRenderer` doesn't fit your layout, use `useFormEngine` to get the engine and build your own UI:
+If `FormEngineRenderer` doesn't fit your layout, use `useFormEngine` to get the engine and build your own UI:
 
 ```tsx
 import { useFormEngine } from '@squaredr/fieldcraft-react'

@@ -56,7 +56,7 @@ Each template exports a schema, metadata, and a combined template object:
 ```ts
 import { contactForm } from '@squaredr/fieldcraft-templates'
 
-// The schema — pass directly to FormRenderer
+// The schema — pass directly to FormEngineRenderer
 contactForm.schema   // FormEngineSchema
 
 // Metadata
@@ -69,12 +69,12 @@ import { contactFormSchema, contactFormMeta } from '@squaredr/fieldcraft-templat
 ### Render a template
 
 ```tsx
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 import { contactForm } from '@squaredr/fieldcraft-templates'
 
 export default function ContactPage() {
   return (
-    <FormRenderer
+    <FormEngineRenderer
       schema={contactForm.schema}
       onSubmit={async (response) => {
         await fetch('/api/submit', { method: 'POST', body: JSON.stringify(response) })

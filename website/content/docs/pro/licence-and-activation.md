@@ -51,7 +51,7 @@ The open-source packages (`core`, `react`, `adapters`, `templates`) are MIT-lice
 | | Open source | Pro |
 |---|---|---|
 | Form rendering | Included | Included |
-| 44 field types | Included | Included |
+| 41 field types | Included | Included |
 | Validation, conditions, computed fields | Included | Included |
 | Theming, hooks, adapters | Included | Included |
 | Visual form builder | — | Included |

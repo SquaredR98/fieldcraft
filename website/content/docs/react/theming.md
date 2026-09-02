@@ -13,13 +13,13 @@ FieldCraft's renderer uses **CSS custom properties** (`--background`, `--foregro
 
 ## Auto-inherit from host page
 
-If your page already defines CSS custom properties like `--background`, `--foreground`, `--primary`, `--border`, etc. (the standard shadcn/ui pattern), `FormRenderer` inherits them automatically:
+If your page already defines CSS custom properties like `--background`, `--foreground`, `--primary`, `--border`, etc. (the standard shadcn/ui pattern), `FormEngineRenderer` inherits them automatically:
 
 ```tsx
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 
 // No theme prop needed — inherits from your page's CSS variables
-<FormRenderer schema={schema} onSubmit={handleSubmit} />
+<FormEngineRenderer schema={schema} onSubmit={handleSubmit} />
 ```
 
 This also applies to [FieldCraft Pro](/pro) components (FormBuilder, ResponseViewer, ThemeEditor) — they all auto-inherit from the host page's CSS variables and follow dark/light mode changes.
@@ -83,7 +83,7 @@ const myTheme: FormEngineTheme = {
 Pass it to the renderer:
 
 ```tsx
-<FormRenderer schema={schema} theme={myTheme} onSubmit={handleSubmit} />
+<FormEngineRenderer schema={schema} theme={myTheme} onSubmit={handleSubmit} />
 ```
 
 ## Presets (Pro)
@@ -122,7 +122,7 @@ The theme is converted to CSS custom properties (`--fc-*`) on the form root elem
 
 ```
 Host page :root CSS variables (--background, --primary, etc.)
-    → Inherited by FormRenderer automatically
+    → Inherited by FormEngineRenderer automatically
     → theme prop overrides specific values via inline styles
     → themeToCssVars() converts to --fc-* variables
     → shadcn/Radix components read these variables
@@ -139,9 +139,9 @@ import { FormEngineThemeProvider } from '@squaredr/fieldcraft-react'
 function App() {
   return (
     <FormEngineThemeProvider theme={myTheme}>
-      {/* All FormRenderer instances inside inherit this theme */}
-      <FormRenderer schema={form1} onSubmit={handle1} />
-      <FormRenderer schema={form2} onSubmit={handle2} />
+      {/* All FormEngineRenderer instances inside inherit this theme */}
+      <FormEngineRenderer schema={form1} onSubmit={handle1} />
+      <FormEngineRenderer schema={form2} onSubmit={handle2} />
     </FormEngineThemeProvider>
   )
 }
@@ -161,4 +161,4 @@ function CustomComponent() {
 ## Next steps
 
 - [Custom field types](/docs/react/custom-field-types) — register your own field components
-- [FormRenderer](/docs/react/form-renderer) — all FormRenderer props
+- [FormEngineRenderer](/docs/react/form-renderer) — all FormEngineRenderer props

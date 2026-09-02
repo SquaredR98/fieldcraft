@@ -33,7 +33,7 @@ type DraftData = {
 
 ### Draft resume prompt
 
-When a user returns to a form with a saved draft, `FormRenderer` shows a `DraftResumePrompt`:
+When a user returns to a form with a saved draft, `FormEngineRenderer` shows a `DraftResumePrompt`:
 
 ```
 "You have a saved draft from 2 hours ago. Would you like to resume or start over?"
@@ -102,7 +102,7 @@ const draftAdapter = createSupabaseDraftAdapter({
 Pass it to the renderer:
 
 ```tsx
-<FormRenderer
+<FormEngineRenderer
   schema={schema}
   draftAdapter={draftAdapter}
   onSubmit={handleSubmit}
@@ -155,7 +155,7 @@ Pre-populate field values from external data. Three sources are supported.
 Pass values directly:
 
 ```tsx
-<FormRenderer
+<FormEngineRenderer
   schema={schema}
   prefill={{
     email: 'user@example.com',

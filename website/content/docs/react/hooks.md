@@ -184,4 +184,4 @@ function StepIndicator({ engine }) {
 
 - [Theming](/docs/react/theming) — customise colours, typography, and spacing
 - [Custom field types](/docs/react/custom-field-types) — build your own field components
-- [FormRenderer](/docs/react/form-renderer) — the all-in-one component
+- [FormEngineRenderer](/docs/react/form-renderer) — the all-in-one component

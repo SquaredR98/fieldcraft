@@ -103,7 +103,7 @@ const valid = signature === expected
 Pass an array to run multiple adapters in parallel:
 
 ```tsx
-<FormRenderer
+<FormEngineRenderer
   schema={schema}
   adapters={[httpAdapter, supabaseAdapter, webhookAdapter]}
   onSubmit={handleSubmit}
