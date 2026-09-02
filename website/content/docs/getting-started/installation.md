@@ -54,7 +54,7 @@ pnpm add @squaredr/fieldcraft-adapters @squaredr/fieldcraft-templates
 The engine validates schemas at creation time. The fastest way to verify the install is to render a minimal form:
 
 ```tsx title="app/test/page.tsx"
-import { FormRenderer } from '@squaredr/fieldcraft-react'
+import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
 
 const schema = {
   id: 'install-test',
@@ -79,7 +79,7 @@ const schema = {
 
 export default function TestPage() {
   return (
-    <FormRenderer
+    <FormEngineRenderer
       schema={schema}
       onSubmit={(response) => {
         console.log('Submitted:', response)

@@ -27,7 +27,7 @@ export const docsNav: DocNavSection[] = [
   {
     label: 'React',
     items: [
-      { title: '<FormRenderer />', href: `${base}/react/form-renderer` },
+      { title: '<FormEngineRenderer />', href: `${base}/react/form-renderer` },
       { title: 'Hooks', href: `${base}/react/hooks` },
       { title: 'Theming', href: `${base}/react/theming` },
       { title: 'Custom field types', href: `${base}/react/custom-field-types` },

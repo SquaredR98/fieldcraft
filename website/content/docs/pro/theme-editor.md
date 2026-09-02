@@ -5,7 +5,7 @@ description: Visual theme customizer for FieldCraft forms. Edit colours, typogra
 
 ## What it does
 
-ThemeEditor is a standalone React component for visually customizing FieldCraft form themes. It outputs a `FormEngineTheme` object — the same format used by `FormRenderer`'s `theme` prop.
+ThemeEditor is a standalone React component for visually customizing FieldCraft form themes. It outputs a `FormEngineTheme` object — the same format used by `FormEngineRenderer`'s `theme` prop.
 
 The ThemeEditor is part of `@squaredr/fieldcraft-pro`, which requires a commercial licence.
 

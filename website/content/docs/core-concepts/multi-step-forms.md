@@ -163,7 +163,7 @@ function ProgressHeader({ engine }) {
 
 ## Next steps
 
-- [FormRenderer](/docs/react/form-renderer) — the main component and its props
+- [FormEngineRenderer](/docs/react/form-renderer) — the main component and its props
 - [Hooks](/docs/react/hooks) — useFormEngine, useFieldValue, useSectionProgress
 - [Drafts & prefill](/docs/submission/drafts-and-prefill) — persist answers across sessions
 

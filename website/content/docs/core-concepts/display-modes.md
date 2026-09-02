@@ -155,5 +155,5 @@ const schema = useMemo(() => ({
 ## Next steps
 
 - [Multi-step forms](/docs/core-concepts/multi-step-forms) — section navigation, jump rules, progress tracking
-- [FormRenderer](/docs/react/form-renderer) — the main component and its props
+- [FormEngineRenderer](/docs/react/form-renderer) — the main component and its props
 - [Theming](/docs/react/theming) — customize the look of any display mode

@@ -1,11 +1,11 @@
 ---
 title: Field types
-description: All 44 built-in field types organised into 8 categories, with their type-specific config options.
+description: All 41 built-in field types organised into 8 categories, with their type-specific config options.
 ---
 
 ## Overview
 
-FieldCraft ships with 44 field types in 8 categories. In `@squaredr/fieldcraft-react`, all field components are built on **shadcn/ui primitives** (Radix UI + Tailwind CSS) for full keyboard navigation, dark mode theming, and WAI-ARIA compliance.
+FieldCraft ships with 41 field types in 8 categories. In `@squaredr/fieldcraft-react`, all field components are built on **shadcn/ui primitives** (Radix UI + Tailwind CSS) for full keyboard navigation, dark mode theming, and WAI-ARIA compliance.
 
 The `QuestionType` union also accepts custom strings — you can register your own field types or override any default field via the [field registry](/docs/react/custom-field-types) without modifying core types.
 
@@ -245,5 +245,5 @@ You can register any string as a field type via the [field registry](/docs/react
 ## Next steps
 
 - [Conditional logic](/docs/core-concepts/conditional-logic) — show, hide, and require fields based on answers
-- [Validation](/docs/core-concepts/validation) — 19 built-in rule types plus custom and async validators
+- [Validation](/docs/core-concepts/validation) — 25 built-in rule types plus custom and async validators
 - [Computed fields](/docs/core-concepts/computed-fields) — auto-calculate values from expressions

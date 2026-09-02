@@ -1,6 +1,6 @@
 ---
 title: Validation
-description: 19 built-in validation rule types, custom sync and async validators, and how validation triggers work.
+description: 25 built-in validation rule types, custom sync and async validators, and how validation triggers work.
 ---
 
 ## Validation rules
@@ -129,7 +129,7 @@ export const validators: Record<string, CustomValidator> = {
 **Pass validators to the renderer:**
 
 ```tsx
-<FormRenderer
+<FormEngineRenderer
   schema={schema}
   validators={validators}
   onSubmit={handleSubmit}
@@ -166,7 +166,7 @@ const asyncValidators: Record<string, AsyncValidator> = {
 ```
 
 ```tsx
-<FormRenderer
+<FormEngineRenderer
   schema={schema}
   asyncValidators={asyncValidators}
   onSubmit={handleSubmit}
