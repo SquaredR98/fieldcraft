@@ -5,9 +5,10 @@ import { NavMobile } from './NavMobile';
 import './styles.css';
 
 const links = [
-  { label: 'Layers', href: '/#layers' },
+  { label: 'Why I built it', href: '/#why' },
   { label: 'Demos', href: '/#demos' },
-  { label: 'Features', href: '/#features' },
+  { label: "What's missing", href: '/#gaps' },
+  { label: 'Status', href: '/#status' },
   { label: 'Docs', href: '/docs' },
   { label: 'Blog', href: '/blog' },
 ];
@@ -35,7 +36,9 @@ export function Nav() {
             </svg>
           </a>
           <ThemeToggle />
+          {/* PRO: hidden 2026-09-02 — restore when revisiting Pro
           <Link href="/pro" className="fc-nav__cta">Explore Pro →</Link>
+          */}
         </div>
         <div className="fc-nav__mobile-actions">
           <ThemeToggle />

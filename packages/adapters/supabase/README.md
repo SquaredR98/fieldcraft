@@ -86,7 +86,6 @@ The adapter is compatible with Supabase RLS policies. Configure your table's RLS
 
 ## Community
 
-- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
 - [Docs](https://fieldcraft.squaredr.tech/docs/submission/adapters-overview) — Adapter documentation
 - [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 

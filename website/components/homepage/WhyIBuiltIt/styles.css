@@ -1,0 +1,56 @@
+@reference "../../../app/globals.css";
+
+.fc-why {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-why__inner {
+  @apply max-w-310 mx-auto px-10 py-19;
+  @apply grid gap-13 items-start;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+/* Heading holds position while the prose scrolls past it. */
+.fc-why__heading {
+  @apply lg:sticky lg:top-26;
+}
+
+.fc-why__eyebrow {
+  @apply font-mono text-[11px] tracking-fc-mono-md;
+  @apply uppercase text-fc-muted;
+}
+
+.fc-why__h2 {
+  @apply font-display font-semibold;
+  @apply tracking-fc-heading leading-[1.12];
+  @apply mt-3.5 mb-0 text-fc-ink-strong;
+  font-size: clamp(26px, 3vw, 34px);
+  text-wrap: balance;
+}
+
+.fc-why__body {
+  @apply flex flex-col gap-4;
+  @apply text-[17px] leading-[1.65] text-fc-soft;
+}
+
+.fc-why__body p {
+  @apply m-0;
+  text-wrap: pretty;
+}
+
+/* Opening paragraph reads a step above the rest. */
+.fc-why__body p:first-child {
+  @apply text-[19px] text-fc-ink;
+}
+
+.fc-why__link {
+  @apply font-mono text-[12px] tracking-fc-mono-sm uppercase;
+  @apply text-fc-teal border-b border-fc-teal-border;
+  @apply pb-1 self-start no-underline;
+  transition: border-color var(--motion-hover), color var(--motion-hover);
+}
+
+.fc-why__link:hover {
+  @apply text-fc-teal-hover;
+  border-bottom-color: var(--teal);
+}

@@ -3,7 +3,6 @@
 Headless TypeScript form engine with zero UI dependencies. Define multi-section forms via JSON schemas with validation, conditional visibility, and computed fields.
 
 [![npm version](https://img.shields.io/npm/v/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
-[![npm downloads](https://img.shields.io/npm/dm/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core)
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](../../LICENSE)
 
 > **Website:** [fieldcraft.squaredr.tech](https://fieldcraft.squaredr.tech) · **Docs:** [fieldcraft.squaredr.tech/docs](https://fieldcraft.squaredr.tech/docs) · **GitHub:** [github.com/SquaredR98/fieldcraft](https://github.com/SquaredR98/fieldcraft)
@@ -59,7 +58,7 @@ console.log(state.values); // { name: "Alice", email: "alice@example.com" }
 ## Features
 
 - **Schema-driven** — define forms with JSON/TypeScript schemas
-- **44 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
+- **41 field types** — text, email, phone, date, file upload, rating, NPS, matrix, and more
 - **Conditional logic** — show/hide fields based on previous answers with AND/OR combinators
 - **Display modes** — stepped (wizard), classic (all-at-once), or conversational (one question at a time)
 - **Multi-section flows** — wizard-style forms with progress tracking
@@ -301,11 +300,10 @@ import { createValidatorRegistry } from "@squaredr/fieldcraft-core/validators";
 npm install @squaredr/fieldcraft-react
 ```
 
-The React package provides a ready-to-use `FormEngineRenderer` component with 44 field components built on shadcn/ui and Tailwind CSS.
+The React package provides a ready-to-use `FormEngineRenderer` component with 41 field components built on shadcn/ui and Tailwind CSS.
 
 ## Community
 
-- [Discord](https://discord.gg/FK8pszp5z) — Get help, share projects, request features
 - [Docs](https://fieldcraft.squaredr.tech/docs) — Full documentation
 - [GitHub](https://github.com/SquaredR98/fieldcraft) — Source code and issues
 

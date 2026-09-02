@@ -11,13 +11,13 @@ export function TemplateShowcase({ templates }: TemplateShowcaseProps) {
   return (
     <section id="templates" className="fc-showcase">
       <div className="fc-showcase__inner">
-        <div className="fc-showcase__eyebrow">07 &middot; Templates</div>
+        <div className="fc-showcase__eyebrow">Templates</div>
         <h2 className="fc-showcase__h2">
-          Start from a template, ship faster.
+          Or start from one of these.
         </h2>
         <p className="fc-showcase__sub">
-          Free, production-ready schemas. Copy one, tweak the fields, render
-          with FieldCraft.
+          Schemas I wrote for real forms, cleaned up. Copy one, change the
+          fields, render it.
         </p>
         <div className="fc-showcase__grid">
           {templates.map((t) => (

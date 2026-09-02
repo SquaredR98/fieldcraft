@@ -5,14 +5,13 @@ export function LiveDemos() {
   return (
     <section id="demos" className="fc-demos">
       <div className="fc-demos__inner">
-        <div className="fc-demos__eyebrow">04 &middot; Live demos</div>
+        <div className="fc-demos__eyebrow">Demos</div>
         <h2 className="fc-demos__h2">
-          What JSON can do. Running here, on this page.
+          Easier to show than to explain.
         </h2>
         <p className="fc-demos__sub">
-          These four demos are the engine&rsquo;s core behaviours &mdash;
-          multi-step navigation, conditional visibility, real-time validation
-          and computed fields &mdash; running live in your browser.
+          Four behaviours the engine handles for you, running here on this
+          page: steps, conditional fields, validation and computed values.
         </p>
         <LiveDemosTabs />
       </div>

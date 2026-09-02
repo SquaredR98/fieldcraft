@@ -1,4 +1,3 @@
-import { SubscribeCard } from '../SubscribeCard';
 import './styles.css';
 
 interface BlogMastheadProps {
@@ -19,11 +18,27 @@ export function BlogMasthead({ postCount }: BlogMastheadProps) {
           </h1>
           <p className="fc-blog-masthead__subtitle">
             Release notes, schema patterns and the reasoning behind the
-            engine&rsquo;s design decisions. Written by the people who maintain
-            it.
+            engine&rsquo;s design decisions. Written while building it, so the
+            posting is irregular.
           </p>
         </div>
-        <SubscribeCard />
+        <div className="fc-blog-masthead__links">
+          <a
+            href="https://github.com/SquaredR98/fieldcraft/releases"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Releases &rarr;
+          </a>
+          <a href="/changelog">Changelog &rarr;</a>
+          <a
+            href="https://github.com/SquaredR98/fieldcraft"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Source &rarr;
+          </a>
+        </div>
       </div>
     </div>
   );

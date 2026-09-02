@@ -1,0 +1,77 @@
+@reference "../../../app/globals.css";
+
+.fc-status {
+  @apply border-b border-fc-rule;
+}
+
+.fc-status__inner {
+  @apply max-w-310 mx-auto px-10 py-19;
+}
+
+.fc-status__eyebrow {
+  @apply font-mono text-[11px] tracking-fc-mono-md;
+  @apply uppercase text-fc-muted;
+}
+
+.fc-status__h2 {
+  @apply font-display font-semibold;
+  @apply tracking-fc-heading leading-[1.12];
+  @apply mt-3.5 mb-9 text-fc-ink-strong;
+  font-size: clamp(26px, 3vw, 34px);
+}
+
+.fc-status__grid {
+  @apply grid border border-fc-rule;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--rule);
+}
+
+.fc-status__card {
+  @apply relative bg-fc-surface px-5.5 py-6;
+  transition: background-color var(--motion-hover);
+}
+
+/* Teal rule wipes across the top edge on hover. */
+.fc-status__card::before {
+  content: '';
+  @apply absolute left-0 top-0 h-0.5 w-0;
+  background: var(--teal);
+  transition: width var(--motion-enter);
+}
+
+.fc-status__card:hover::before {
+  @apply w-full;
+}
+
+.fc-status__card:hover {
+  background: var(--surface2);
+}
+
+.fc-status__label {
+  @apply font-mono text-[11px] tracking-fc-mono;
+  @apply uppercase text-fc-muted;
+}
+
+.fc-status__version {
+  @apply font-mono text-[20px] text-fc-ink-strong;
+  @apply mt-3 mb-2;
+}
+
+.fc-status__meta {
+  @apply text-[14px] leading-[1.55] text-fc-soft;
+}
+
+.fc-status__body {
+  @apply text-[15px] leading-[1.6] text-fc-ink mt-3;
+  text-wrap: pretty;
+}
+
+.fc-status__links {
+  @apply flex flex-wrap gap-4 mt-3.5;
+  @apply font-mono text-[12px] tracking-[0.08em] uppercase;
+}
+
+.fc-status__links a {
+  @apply text-fc-teal no-underline;
+}

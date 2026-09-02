@@ -22,6 +22,7 @@
   --color-fc-surface2: var(--surface2);
   --color-fc-ink: var(--ink);
   --color-fc-ink-strong: var(--ink-strong);
+  --color-fc-soft: var(--soft);
   --color-fc-muted: var(--muted);
   --color-fc-rule: var(--rule);
   --color-fc-grid: var(--grid);
@@ -36,6 +37,9 @@
   --color-fc-wash: var(--wash);
   --color-fc-wash-rule: var(--wash-rule);
   --color-fc-danger: var(--danger);
+  --color-fc-code-key: var(--code-key);
+  --color-fc-code-str: var(--code-str);
+  --color-fc-code-punct: var(--code-punct);
   --color-fc-btn-line: var(--btn-line);
 
   /* shadcn/ui bridge — needed for FormEngineRenderer Tailwind classes */
@@ -105,8 +109,9 @@
   --surface: #FFFFFF;
   --surface2: #FAFCFC;
   --ink: #12222A;
-  --ink-strong: #12222A;
-  --muted: #6A7B85;
+  --ink-strong: #0B181E;
+  --soft: #4A5D67;
+  --muted: #5C6E78;
   --rule: #DCE4E8;
   --grid: #E3EAEC;
   --teal: #1F6B6E;
@@ -120,6 +125,9 @@
   --wash: #EDF3F2;
   --wash-rule: #D5E2DF;
   --danger: #B04A3C;
+  --code-key: #1F6B6E;
+  --code-str: #A06D22;
+  --code-punct: #4A5D67;
   --btn-line: #12222A;
   --focus-ring: 0 0 0 3px rgba(31, 107, 110, 0.14);
   --placeholder: #96A5AD;
@@ -158,7 +166,8 @@
   --surface2: #132026;
   --ink: #E8EFF1;
   --ink-strong: #F0F5F6;
-  --muted: #8CA1A9;
+  --soft: #B9C9CF;
+  --muted: #9AB0B8;
   --rule: #2A3B42;
   --grid: #1A2B32;
   --teal: #63BDB4;
@@ -172,6 +181,9 @@
   --wash: #182F31;
   --wash-rule: #24413F;
   --danger: #E08072;
+  --code-key: #63BDB4;
+  --code-str: #E0A94F;
+  --code-punct: #9AB0B8;
   --btn-line: #3D5259;
   --focus-ring: 0 0 0 3px rgba(99, 189, 180, 0.18);
   --placeholder: #5E7680;

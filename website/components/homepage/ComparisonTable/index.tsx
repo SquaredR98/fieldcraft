@@ -19,7 +19,7 @@ const rows: Row[] = [
     label: 'Recurring cost',
     hosted: 'Monthly, per volume',
     diy: 'None, but engineering time',
-    fc: 'None \u00b7 Pro is one-time',
+    fc: 'None',
   },
   {
     label: 'Field types',

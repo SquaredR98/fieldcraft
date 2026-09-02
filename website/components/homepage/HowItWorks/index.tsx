@@ -4,9 +4,9 @@ export function HowItWorks() {
   return (
     <section className="fc-how">
       <div className="fc-how__inner">
-        <div className="fc-how__eyebrow">02 &middot; How it works</div>
+        <div className="fc-how__eyebrow">How it works</div>
         <h2 className="fc-how__h2">
-          Three steps. One dependency. No account.
+          Three steps, and no account anywhere.
         </h2>
         <div className="fc-how__grid">
           {/* Step 01 */}
@@ -16,8 +16,11 @@ export function HowItWorks() {
               <div className="fc-how__step-title">Install</div>
             </div>
             <div className="fc-how__step-body">
-              One package pulls the engine and the React renderer. zod is the
-              only runtime dependency.
+              One package pulls the engine and the React renderer. The engine
+              depends only on zod. The renderer adds Radix for the accessible
+              primitives and dompurify for sanitising rich text &mdash;
+              deliberately, so I&rsquo;m not maintaining my own dropdown or
+              writing my own sanitiser.
             </div>
             <div className="fc-how__code">
               <span className="fc-how__code-muted">$</span> npm i
@@ -63,7 +66,7 @@ export function HowItWorks() {
             </div>
             <div className="fc-how__code">
               <div>
-                &lt;<span className="fc-how__code-key">FormRenderer</span>
+                &lt;<span className="fc-how__code-key">FormEngineRenderer</span>
               </div>
               <div className="pl-3.5">
                 <span className="fc-how__code-string">schema</span>

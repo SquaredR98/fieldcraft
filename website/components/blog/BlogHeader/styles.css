@@ -13,6 +13,20 @@
   @apply max-w-[620px];
 }
 
+.fc-blog-masthead__links {
+  @apply flex flex-col gap-2.5 shrink-0;
+  @apply font-mono uppercase text-fc-xs tracking-fc-mono-md;
+}
+
+.fc-blog-masthead__links a {
+  @apply text-fc-muted no-underline;
+  transition: color var(--motion-hover);
+}
+
+.fc-blog-masthead__links a:hover {
+  @apply text-fc-teal;
+}
+
 .fc-blog-masthead__eyebrow {
   @apply font-mono uppercase mb-4 text-fc-xs tracking-fc-mono-lg text-fc-muted;
 }

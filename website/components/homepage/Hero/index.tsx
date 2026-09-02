@@ -1,15 +1,9 @@
 import { CopyInstall } from '@/components/shared/CopyInstall';
-import { GitHubStars } from '@/components/shared/GitHubStars';
 import { HeroTabs } from './HeroTabs';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
 
-const badges = [
-  'MIT',
-  'One dependency \u00b7 zod',
-  'TypeScript native',
-  'React 18 & 19',
-];
+const badges = ['MIT', 'TypeScript', 'React 18 & 19'];
 
 export function Hero() {
   return (
@@ -18,27 +12,28 @@ export function Hero() {
         <div>
           <div className="fc-hero__eyebrow">
             <div className="fc-hero__eyebrow-dot" />
-            Open source &middot; MIT licensed &middot; self-hosted
+            A side project &middot; MIT licensed &middot; early
           </div>
           <h1 className="fc-hero__h1">
-            Forms are code.<br />
-            Treat them that way.
+            Forms are just code, so I wrote them that way.
           </h1>
           <p className="fc-hero__sub">
-            FieldCraft is a schema-driven form engine for React. Define a form
-            once in JSON — validation, conditional logic, multi-step navigation,
-            drafts and submission are handled. In your repo, on your
-            infrastructure, with your database.
+            FieldCraft is a schema-driven form engine for React. You describe a
+            form once in JSON and it handles validation, conditional logic,
+            multi-step navigation, drafts and submission.
+          </p>
+          <p className="fc-hero__sub">
+            I built it to learn how to publish and maintain npm packages. It
+            works, I use it, and the source is MIT if it&rsquo;s useful to you.
           </p>
           <div className="fc-hero__actions">
-            <a href="/docs" className="fc-hero__cta">Get started →</a>
+            <a href="/docs" className="fc-hero__cta">Read the docs →</a>
             <CopyInstall />
           </div>
           <div className="fc-hero__badges">
             {badges.map((b) => (
               <div key={b} className="fc-hero__badge">{b}</div>
             ))}
-            <GitHubStars />
           </div>
         </div>
         <HeroTabs />

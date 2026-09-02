@@ -3,7 +3,6 @@ title: "Conversational Forms: One Question at a Time"
 slug: "conversational-forms"
 date: "2026-07-05"
 description: "Why the one-question-at-a-time pattern works, how schema-driven architecture makes it trivial to implement, and what FieldCraft's conversational mode will look like."
-author: "ravi"
 category: "Patterns"
 tags: ["fieldcraft", "react", "forms", "ux", "conversational"]
 ---
@@ -105,9 +104,9 @@ The engine internally handles each mode differently:
 
 But from the schema author's perspective, there's nothing to learn. You already know how to write a FieldCraft schema. You just set `displayMode`.
 
-## Design Decisions We're Making
+## Design Decisions I'm Making
 
-Building conversational mode right means making deliberate UX choices. Here's what we're working through:
+Building conversational mode right means making deliberate UX choices. Here's what I'm working through:
 
 ### Auto-Advance
 
@@ -115,7 +114,7 @@ Some field types have a natural "done" signal. When you click an option in a sin
 
 Text fields are different. The user might type one word or three paragraphs. There's no way to know when they're done, so text fields always require an explicit Continue action (button click or Enter key).
 
-Our plan:
+My plan:
 
 | Field Type | Advance Behavior |
 |-----------|-----------------|
@@ -130,7 +129,7 @@ Auto-advance will include a brief delay (around 500ms) with a visual indicator, 
 
 ### Keyboard Navigation
 
-Conversational forms should feel fast. Mouse-only interaction kills the flow. We're planning:
+Conversational forms should feel fast. Mouse-only interaction kills the flow. I'm planning:
 
 - **Enter** — advance to next question
 - **Shift + Enter** — newline in long text fields (Enter still advances)
@@ -145,11 +144,11 @@ Optional keyboard shortcut hints will appear below each field, toggled via a `sh
 
 "Question 4 of 12" is straightforward until conditional logic enters the picture. If question 5 has a visibility condition that hides it based on the answer to question 3, is the total 12 or 11? And it can change mid-flow as answers are revised.
 
-We're planning dynamic progress that recalculates the total based on current visibility state. The progress indicator will show the actual number of remaining visible questions, not the total in the schema.
+I'm planning dynamic progress that recalculates the total based on current visibility state. The progress indicator will show the actual number of remaining visible questions, not the total in the schema.
 
 ### Transitions
 
-Questions will slide in with CSS transitions — smooth but not slow. We'll respect `prefers-reduced-motion` for users who have motion reduction enabled. All transition classes will follow the `fc-conversational-*` naming convention for easy customization.
+Questions will slide in with CSS transitions — smooth but not slow. I'll respect `prefers-reduced-motion` for users who have motion reduction enabled. All transition classes will follow the `fc-conversational-*` naming convention for easy customization.
 
 ## What This Means for Existing Users
 
@@ -167,7 +166,7 @@ No schema migration. No new components to learn. No breaking changes.
 
 ## When It Ships
 
-Conversational mode is on the FieldCraft roadmap for late 2026. We're building it in stages: core renderer first, then auto-advance, then keyboard navigation, then progress components.
+Conversational mode is on the FieldCraft roadmap for late 2026. I'm building it in stages: core renderer first, then auto-advance, then keyboard navigation, then progress components.
 
 Star the [GitHub repo](https://github.com/SquaredR98/fieldcraft) to get notified when the PR lands.
 

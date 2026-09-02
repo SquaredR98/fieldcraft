@@ -3,7 +3,6 @@ title: "The Real Cost of Building Forms From Scratch"
 slug: "real-cost-building-forms"
 date: "2026-07-05"
 description: "A breakdown of what it actually takes to build production-ready forms from scratch: validation, conditional logic, multi-step flows, file uploads, theming, and more. Then what happens when you don't."
-author: "ravi"
 category: "Engineering"
 tags: ["fieldcraft", "react", "forms", "engineering"]
 ---
@@ -29,7 +28,7 @@ Let's walk through what production-ready forms actually require. These aren't th
 **What it actually requires:**
 
 - A validation runner that applies multiple rules per field in sequence
-- 19 built-in validators (required, min, max, email, phone, URL, date, pattern, file size, file type, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField, length constraints)
+- 27 built-in validators (required, min, max, email, phone, URL, date, pattern, file size, file type, integer, positiveNumber, alphanumeric, noSpecialChars, minItems, maxItems, compareToField, length constraints)
 - Custom validator registration so teams can add business-specific rules
 - Async validators for server-side checks (email uniqueness, username availability) with debouncing
 - Conditional required — fields that become required based on other answers
@@ -218,7 +217,7 @@ function App() {
 }
 ```
 
-All eight systems — validation, conditional logic, multi-step, theming, adapters, prefill, draft persistence, and 44 field types — ship with that import. The schema defines your form. The engine handles everything else.
+All eight systems — validation, conditional logic, multi-step, theming, adapters, prefill, draft persistence, and 41 field types — ship with that import. The schema defines your form. The engine handles everything else.
 
 ## The Maintenance Tax
 

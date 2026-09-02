@@ -41,10 +41,14 @@
 }
 
 .fc-footer__bottom-inner {
-  @apply flex justify-between items-center mx-auto;
+  @apply flex justify-between items-center gap-4 mx-auto;
   @apply max-w-310 px-10 py-4.5;
   @apply font-mono text-[10.5px] tracking-[0.08em];
   @apply uppercase text-fc-muted;
+}
+
+.fc-footer__bottom-note {
+  @apply ml-auto mr-4;
 }
 
 /* ── Responsive: tablet ── */

@@ -1,0 +1,71 @@
+@reference "../../../app/globals.css";
+
+.fc-gaps {
+  @apply border-b border-fc-rule bg-fc-surface;
+}
+
+.fc-gaps__inner {
+  @apply max-w-310 mx-auto px-10 py-19;
+}
+
+.fc-gaps__eyebrow {
+  @apply font-mono text-[11px] tracking-fc-mono-md;
+  @apply uppercase text-fc-amber;
+}
+
+.fc-gaps__h2 {
+  @apply font-display font-semibold;
+  @apply tracking-fc-heading leading-[1.12];
+  @apply mt-3.5 mb-0 text-fc-ink-strong;
+  font-size: clamp(26px, 3vw, 34px);
+}
+
+.fc-gaps__sub {
+  @apply text-[18px] leading-[1.6] text-fc-soft;
+  @apply mt-4 mb-9 max-w-136;
+  text-wrap: pretty;
+}
+
+.fc-gaps__list {
+  @apply border border-fc-amber-border bg-fc-amber-bg;
+}
+
+.fc-gaps__row {
+  @apply relative px-6 py-5 grid gap-2;
+  border-bottom: 1px solid var(--amber-border);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  column-gap: 28px;
+  transition: background-color var(--motion-hover);
+}
+
+/* Left edge marker — grows from the centre on hover. */
+.fc-gaps__row::before {
+  content: '';
+  @apply absolute left-0 top-1/2 w-0.5;
+  background: var(--amber);
+  height: 0;
+  transform: translateY(-50%);
+  transition: height var(--motion-enter);
+}
+
+.fc-gaps__row:hover::before {
+  height: 100%;
+}
+
+.fc-gaps__row:hover {
+  background: color-mix(in srgb, var(--amber) 5%, transparent);
+}
+
+.fc-gaps__row:last-child {
+  @apply border-b-0;
+}
+
+.fc-gaps__row-title {
+  @apply font-display text-[17px] font-semibold;
+  @apply tracking-fc-subhead text-fc-ink-strong;
+}
+
+.fc-gaps__row-body {
+  @apply text-[15px] leading-[1.6] text-fc-soft;
+  text-wrap: pretty;
+}

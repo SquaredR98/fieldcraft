@@ -1,9 +1,8 @@
-import type { ChangelogEntry, ChangeType, PlannedGroup } from '@/lib/changelog';
+import type { ChangelogEntry, ChangeType } from '@/lib/changelog';
 import './styles.css';
 
 interface ChangelogViewProps {
   entries: ChangelogEntry[];
-  planned: PlannedGroup[];
 }
 
 const packageColors: Record<string, string> = {
@@ -43,7 +42,7 @@ function formatDate(iso: string): string {
   });
 }
 
-export function ChangelogView({ entries, planned }: ChangelogViewProps) {
+export function ChangelogView({ entries }: ChangelogViewProps) {
   const sorted = [...entries].sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
@@ -101,29 +100,6 @@ export function ChangelogView({ entries, planned }: ChangelogViewProps) {
           ))}
         </div>
 
-        {/* ── Planned ── */}
-        {planned.length > 0 && (
-          <div className="fc-roadmap__planned">
-            <h2 className="fc-roadmap__h2">Coming next</h2>
-            {planned.map((group) => (
-              <div key={group.period} className="fc-roadmap__group">
-                <div className="fc-roadmap__period">{group.period}</div>
-                <ul className="fc-roadmap__list">
-                  {group.items.map((item) => (
-                    <li key={item.title} className="fc-roadmap__item">
-                      <span className="fc-roadmap__item-title">
-                        {item.title}
-                      </span>
-                      <span className="fc-roadmap__tag fc-roadmap__tag--planned">
-                        Planned
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
