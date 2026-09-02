@@ -1,6 +1,6 @@
 // Dev console banner — runs once in development mode
 if (typeof process !== "undefined" && process.env?.NODE_ENV !== "production") {
-  const _fc_banner = `\n%c FieldCraft Adapters %c v1.0.1 \n\n%cPostgres · Supabase · Webhook\n\nDocs    → https://fieldcraft.squaredr.tech/docs/submission/adapters-overview\n`;
+  const _fc_banner = `\n%c FieldCraft Adapters %c v1.1.1\n\n%cPostgres · Supabase · Webhook\n\nDocs    → https://fieldcraft.squaredr.tech/docs/submission/adapters-overview\n`;
   console.log(
     _fc_banner,
     "background:#2563eb;color:#fff;font-weight:bold;padding:2px 6px;border-radius:3px 0 0 3px",
