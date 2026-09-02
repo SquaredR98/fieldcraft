@@ -45,3 +45,6 @@ pnpm-debug.log*
 *.key
 credentials.json
 .env.production
+
+# Learning scratch space (not part of the test suite)
+packages/core/playground/

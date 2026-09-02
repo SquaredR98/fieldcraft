@@ -590,14 +590,23 @@ export function createStateManager(config: StateManagerConfig) {
       }
     }
 
-    // Append any circular / remaining nodes to guarantee they get evaluated
+    // Append any circular / remaining nodes to guarantee they get evaluated.
+    // Uses a Set for O(1) membership instead of Array.includes (O(n) per check).
     if (sortedIds.length < calcQuestions.length) {
+      const sortedSet = new Set(sortedIds);
       for (const id of calcQuestionIds) {
-        if (!sortedIds.includes(id)) {
+        if (!sortedSet.has(id)) {
           sortedIds.push(id);
         }
       }
     }
+
+    // Clone once, mutate locally, commit once. Cloning `values`/`warnings` on
+    // every iteration made this O(n²) in the number of calculated fields —
+    // a 400-deep chain cost ~16ms per keystroke.
+    const nextValues = { ...state.values };
+    const nextWarnings = { ...state.warnings };
+    let changed = false;
 
     for (const id of sortedIds) {
       const question = questionMap.get(id);
@@ -605,25 +614,28 @@ export function createStateManager(config: StateManagerConfig) {
       const calcConfig = question.config as CalculatedConfig | undefined;
       if (!calcConfig?.expression) continue;
 
-      const { value, warning } = evaluateExpression(calcConfig.expression, state.values);
-      const newWarnings = { ...state.warnings };
+      // Read from nextValues so later fields see earlier results in the same pass.
+      const { value, warning } = evaluateExpression(calcConfig.expression, nextValues);
+
       if (warning) {
-        newWarnings[id] = warning;
+        nextWarnings[id] = warning;
       } else {
-        delete newWarnings[id];
+        delete nextWarnings[id];
       }
 
-      const newValues = { ...state.values };
       if (value !== null) {
-        newValues[id] = value;
+        nextValues[id] = value;
       } else {
-        delete newValues[id];
+        delete nextValues[id];
       }
+      changed = true;
+    }
 
+    if (changed) {
       state = {
         ...state,
-        values: newValues,
-        warnings: newWarnings,
+        values: nextValues,
+        warnings: nextWarnings,
       };
     }
   }
