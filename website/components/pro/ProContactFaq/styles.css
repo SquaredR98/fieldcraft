@@ -2,12 +2,15 @@
 
 /* ── Combined Contact + FAQ section ── */
 
+/* No bottom rule, no local ground — both come from .fc-pro-section--bg
+   on the element. */
 .fc-pro-contactfaq {
-  @apply border-b border-fc-rule bg-fc-surface;
+  @apply relative;
 }
 
 .fc-pro-contactfaq__inner {
-  @apply mx-auto px-10 py-20;
+  @apply mx-auto px-10;
+  padding-block: var(--fc-section-y);
   max-width: 1280px;
 }
 
@@ -31,7 +34,9 @@
 /* FAQ accordion */
 
 .fc-pro-contactfaq__faq {
-  @apply border border-fc-rule bg-fc-bg;
+  @apply border border-fc-rule;
+  background: var(--plate);
+  box-shadow: var(--e1);
 }
 
 .fc-pro-faq__item {

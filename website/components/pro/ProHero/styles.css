@@ -1,92 +1,91 @@
 @reference "../../../app/globals.css";
 
-/* ── Pro Hero ── */
+/* ── Pro Hero ──
+ * Matches the homepage hero: plated eyebrow badge, masked blueprint grid,
+ * a fluid headline, and the shared CTA primitives. It previously painted
+ * an unmasked grid edge-to-edge and rolled its own buttons.
+ */
 
 .fc-pro-hero {
-  @apply border-b border-fc-rule;
+  @apply relative overflow-hidden;
   background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
 }
 
 .fc-pro-hero__inner {
-  @apply mx-auto px-10;
+  @apply relative mx-auto px-10;
   max-width: 1280px;
-  padding-top: 88px;
-  padding-bottom: 76px;
+  padding-top: calc(var(--fc-section-y) * 1.1);
+  padding-bottom: var(--fc-section-y);
 }
 
+/* Plated badge, as on the homepage hero — a label sitting on the page
+   rather than floating text. */
 .fc-pro-hero__eyebrow {
-  @apply flex items-center gap-2.25 mb-5.5;
-  @apply font-mono text-[10.5px] tracking-[0.18em];
-  @apply uppercase text-fc-muted;
+  @apply inline-flex items-center gap-2 mb-5.5;
+  @apply border border-fc-teal-border px-2.5 py-1.5;
+  @apply font-mono text-[10px] tracking-[0.14em];
+  @apply uppercase text-fc-teal;
+  background: var(--lead-plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
 .fc-pro-hero__eyebrow-dot {
-  @apply w-1.5 h-1.5 bg-fc-teal;
+  @apply w-[5px] h-[5px] bg-fc-teal shrink-0;
 }
 
+/* Fluid rather than three fixed sizes with breakpoint overrides. */
 .fc-pro-hero__h1 {
   @apply font-display font-semibold;
   @apply m-0 text-fc-ink-strong;
-  font-size: 66px;
+  font-size: clamp(34px, 5.4vw, 62px);
   letter-spacing: -0.042em;
-  line-height: 1.0;
+  line-height: 1.02;
   max-width: 900px;
-  text-wrap: pretty;
+  text-wrap: balance;
+}
+
+.fc-pro-hero__tick {
+  @apply h-0.5 mt-6 mb-5;
+  width: 64px;
+  background: linear-gradient(90deg, var(--teal), transparent);
 }
 
 .fc-pro-hero__sub {
-  @apply text-fc-muted;
-  font-size: 18.5px;
+  @apply text-fc-soft m-0;
+  font-size: 17px;
   line-height: 1.6;
-  margin: 24px 0 0;
   max-width: 620px;
   text-wrap: pretty;
 }
 
+/* ── Badges ── */
+
 .fc-pro-hero__badges {
   @apply flex flex-wrap gap-2.5;
-  margin-top: 34px;
+  margin-top: 30px;
 }
 
 .fc-pro-hero__badge {
-  @apply font-mono text-[10.5px] tracking-[0.12em];
-  @apply uppercase text-fc-muted;
-  @apply border border-fc-rule bg-fc-surface;
-  @apply px-2.75 py-1.75;
+  @apply font-mono text-[10px] tracking-[0.1em];
+  @apply uppercase text-fc-soft;
+  @apply border border-fc-rule px-2 py-1.5;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
+/* The free-on-localhost badge is the one a developer acts on, so it keeps
+   the amber treatment — the page's single deliberate colour moment. */
 .fc-pro-hero__badge--amber {
-  @apply text-fc-amber-ink border-fc-amber-border bg-fc-amber-bg;
+  @apply text-fc-amber-ink border-fc-amber-border;
+  background: var(--amber-bg);
+  box-shadow: var(--inset);
 }
+
+/* ── Actions ── */
 
 .fc-pro-hero__actions {
-  @apply flex flex-wrap gap-3;
-  margin-top: 36px;
-}
-
-.fc-pro-hero__cta {
-  @apply no-underline;
-  @apply bg-fc-teal text-fc-teal-on;
-  @apply font-display text-[15px] font-medium;
-  @apply px-6 py-3.5;
-  transition: background var(--motion-hover);
-}
-
-.fc-pro-hero__cta:hover {
-  @apply bg-fc-teal-hover text-fc-teal-on;
-}
-
-.fc-pro-hero__cta--outline {
-  @apply bg-fc-surface text-fc-ink;
-  @apply border border-fc-btn-line;
-}
-
-.fc-pro-hero__cta--outline:hover {
-  @apply bg-fc-surface border-fc-teal text-fc-teal;
+  @apply flex flex-wrap items-center gap-3;
+  margin-top: 34px;
 }
 
 /* ── Responsive ── */
@@ -94,23 +93,23 @@
 @media (max-width: 1000px) {
   .fc-pro-hero__inner {
     @apply px-6;
-    padding-top: 56px;
-    padding-bottom: 48px;
-  }
-
-  .fc-pro-hero__h1 {
-    font-size: 44px;
   }
 }
 
 @media (max-width: 640px) {
   .fc-pro-hero__inner {
     @apply px-5;
-    padding-top: 40px;
-    padding-bottom: 36px;
   }
+}
 
-  .fc-pro-hero__h1 {
-    font-size: 34px;
+/* The "see it in action" arrow points down, so it nudges down rather
+   than right — the shared rule translates on X. */
+.fc-v2-cta:hover .fc-pro-hero__arrow-down {
+  transform: translateY(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-v2-cta:hover .fc-pro-hero__arrow-down {
+    transform: none;
   }
 }

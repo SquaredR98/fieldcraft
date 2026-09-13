@@ -1,0 +1,482 @@
+@reference "../../app/globals.css";
+
+/*
+ * Homepage v2 primitives — the engraved-plate visual system.
+ *
+ * Shared by every homepage section so the depth language stays consistent:
+ * plates catch light along their top edge, wells sink, and only the panel
+ * carrying the argument gets corner brackets. Nothing here is rounded —
+ * --radius is 0 site-wide and the drafting-instrument look depends on it.
+ */
+
+/* ── Section shell ───────────────────────────────────────────── */
+
+.fc-v2-section {
+  @apply border-b border-fc-rule;
+  background: var(--surface);
+}
+
+.fc-v2-section--bg {
+  background: var(--bg);
+}
+
+.fc-v2-section--plate {
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
+}
+
+/* ── Grounds ─────────────────────────────────────────────────────
+ * Eleven of twelve sections sat on the same white, so the middle of
+ * the page read as one continuous field and sections stopped
+ * separating. Three grounds alternate down the page: surface (the
+ * default), surface2 (a half-step down), and bg (the page ground,
+ * used where a section should read as a recess).
+ *
+ * Applied by class on the section element so the sequence is visible
+ * in HomepageView rather than buried in twelve stylesheets.
+ */
+
+.fc-ground-surface {
+  background: var(--surface);
+}
+
+.fc-ground-surface2 {
+  background: var(--surface2);
+}
+
+.fc-ground-bg {
+  background: var(--bg);
+}
+
+/* A recessed ground gets a top inset so the step down is legible
+   rather than just a flat colour change. */
+.fc-ground-bg {
+  box-shadow: inset 0 1px 2px rgba(18, 34, 42, 0.03);
+}
+
+:root[data-theme="dark"] .fc-ground-bg {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* Applied as an explicit class on each section element. Deliberately
+   not nth-child: that would silently rebreak whenever sections are
+   reordered, and the sequence is a design decision that should be
+   readable in HomepageView. These win over a section's own
+   bg-fc-surface because they land later in the cascade. */
+section.fc-ground-surface {
+  background: var(--surface);
+}
+
+section.fc-ground-bg {
+  background: var(--bg);
+}
+
+section.fc-ground-surface2 {
+  background: var(--ground-2);
+}
+
+/* ── Cells ───────────────────────────────────────────────────────
+ * The shared-border spec-sheet grid, used by any section presenting
+ * a set of peers. gap:1px over a rule-coloured ground gives cells a
+ * single shared edge instead of doubled borders.
+ */
+
+.fc-v2-cells {
+  @apply grid border border-fc-rule;
+  gap: 1px;
+  background: var(--rule);
+}
+
+.fc-v2-cell {
+  background: var(--surface);
+  transition: background-color var(--motion-hover);
+}
+
+/* On a non-white ground the cells still read as the lit surface. */
+.fc-ground-surface2 .fc-v2-cell,
+.fc-ground-bg .fc-v2-cell {
+  background: var(--surface);
+}
+
+.fc-v2-cell--hover:hover {
+  background: var(--wash);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-v2-cell {
+    transition: none;
+  }
+}
+
+.fc-v2-section__inner {
+  @apply mx-auto max-w-320 px-10;
+}
+
+/* Blueprint grid — 24px minor over 120px major, radial-masked so it
+   fades before it reaches the text. Decorative only. */
+.fc-v2-grid {
+  @apply absolute inset-0 pointer-events-none;
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+  background-size:
+    24px 24px,
+    24px 24px,
+    120px 120px,
+    120px 120px;
+  -webkit-mask-image: radial-gradient(
+    120% 80% at 76% 6%,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.28) 48%,
+    rgba(0, 0, 0, 0) 78%
+  );
+  mask-image: radial-gradient(
+    120% 80% at 76% 6%,
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.28) 48%,
+    rgba(0, 0, 0, 0) 78%
+  );
+}
+
+.fc-v2-grid--center {
+  -webkit-mask-image: radial-gradient(
+    100% 70% at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.2) 55%,
+    rgba(0, 0, 0, 0) 82%
+  );
+  mask-image: radial-gradient(
+    100% 70% at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.2) 55%,
+    rgba(0, 0, 0, 0) 82%
+  );
+}
+
+/* ── Eyebrow: mono label trailed by a rule that fades out ────── */
+
+.fc-v2-eyebrow {
+  @apply flex items-center gap-3 mb-3.5;
+}
+
+.fc-v2-eyebrow__text {
+  @apply font-mono text-[10.5px] tracking-[0.14em] uppercase text-fc-teal;
+}
+
+.fc-v2-eyebrow__rule {
+  @apply flex-1 h-px;
+  background: linear-gradient(90deg, var(--rule), transparent);
+}
+
+/* ── Type scale ──────────────────────────────────────────────────
+ * ONE section-heading size for the whole homepage. Sections had drifted
+ * into three (fixed 38px, a 26–36px clamp, and one 44px), and the fixed
+ * sizes did not scale down on small screens. Every section heading now
+ * resolves through these two custom properties, so changing the scale
+ * is a one-line edit rather than twelve.
+ */
+
+.fc-v2-h2,
+.fc-trust__h2,
+.fc-how__h2,
+.fc-batteries__h2,
+.fc-demos__h2,
+.fc-arch__h2,
+.fc-builder-teaser__h2,
+.fc-showcase__h2,
+.fc-status__h2,
+.fc-cta__h2,
+.fc-flow__h2,
+.fc-gaps__h2 {
+  @apply font-display font-semibold m-0 text-fc-ink-strong;
+  font-size: var(--fc-h2);
+  letter-spacing: var(--fc-h2-tracking);
+  line-height: var(--fc-h2-leading);
+  text-wrap: balance;
+}
+
+.fc-v2-sub {
+  @apply text-fc-soft m-0;
+  font-size: 15.5px;
+  line-height: 1.65;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+
+/* ── Heading block ───────────────────────────────────────────────
+ * Eyebrow → heading → subtitle → content, with one set of gaps.
+ * These had drifted to mt-3 / mt-3.5 / mt-4 with two sections having no
+ * subtitle at all and their headings sitting almost on the content.
+ * The spec's rhythm is a tight gap under the heading and a generous one
+ * before the content begins.
+ */
+
+/* Subtitle sits close under the heading. */
+.fc-v2-h2 + .fc-v2-sub,
+.fc-trust__h2 + .fc-trust__sub,
+.fc-how__h2 + .fc-how__sub,
+.fc-batteries__h2 + .fc-batteries__sub,
+.fc-demos__h2 + .fc-demos__sub,
+.fc-arch__h2 + .fc-arch__sub,
+.fc-showcase__h2 + .fc-showcase__sub,
+.fc-flow__h2 + .fc-flow__sub,
+.fc-gaps__h2 + .fc-gaps__sub {
+  margin-top: var(--fc-h2-gap);
+}
+
+/* Then a clear break before whatever the section is actually showing. */
+.fc-v2-block-gap {
+  margin-bottom: var(--fc-block-gap);
+}
+
+/* ── Section rhythm ──────────────────────────────────────────────
+ * Padding had drifted across py-19/20/22. One value, one variant.
+ */
+
+.fc-v2-rhythm {
+  padding-top: var(--fc-section-y);
+  padding-bottom: var(--fc-section-y);
+}
+
+
+/* Short teal underscore used to close a heading block. */
+.fc-v2-tick {
+  @apply h-0.5;
+  width: 48px;
+  background: linear-gradient(90deg, var(--teal), transparent);
+}
+
+/* ── Plates ──────────────────────────────────────────────────── */
+
+.fc-v2-plate {
+  @apply border border-fc-rule p-6;
+  background: var(--plate);
+  box-shadow: var(--e1);
+}
+
+/* The plate carrying the section's argument — teal edge, more lift. */
+.fc-v2-plate--lead {
+  @apply relative border-fc-teal-border;
+  background: var(--lead-plate);
+  box-shadow: var(--e2);
+}
+
+.fc-v2-plate--raised {
+  box-shadow: var(--e3);
+}
+
+/* Corner brackets. Reserved for lead plates — if everything is
+   bracketed, nothing reads as emphasised. */
+.fc-v2-bracket {
+  @apply absolute pointer-events-none;
+  width: 11px;
+  height: 11px;
+}
+
+.fc-v2-bracket--tl {
+  top: -1px;
+  left: -1px;
+  border-top: 2px solid var(--teal);
+  border-left: 2px solid var(--teal);
+}
+
+.fc-v2-bracket--br {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 2px solid var(--teal);
+  border-right: 2px solid var(--teal);
+}
+
+/* ── Wells: recessed surfaces for code and inputs ────────────── */
+
+.fc-v2-well {
+  @apply border border-fc-wash-rule p-3.5;
+  background: var(--wash);
+  box-shadow: var(--inset);
+}
+
+.fc-v2-well--surface {
+  background: var(--surface);
+}
+
+.fc-v2-code {
+  @apply font-mono text-fc-ink;
+  font-size: 11.5px;
+  line-height: 1.9;
+}
+
+.fc-v2-code .k {
+  color: var(--teal);
+}
+
+.fc-v2-code .s {
+  color: var(--amber-ink);
+}
+
+.fc-v2-code .p {
+  color: var(--muted);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+
+.fc-v2-cta {
+  @apply inline-flex items-center gap-2 font-display font-medium;
+  @apply px-5.5 py-3.5 text-sm;
+  background: var(--teal-plate);
+  color: var(--teal-on);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 2px rgba(18, 34, 42, 0.1),
+    var(--cta-glow);
+  transition: filter var(--motion-hover);
+}
+
+.fc-v2-cta:hover {
+  filter: brightness(1.06);
+}
+
+.fc-v2-btn {
+  @apply inline-flex items-center border border-fc-rule;
+  @apply font-display font-medium px-5.5 py-3.5 text-sm text-fc-ink;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
+  transition:
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-v2-btn:hover {
+  @apply border-fc-teal-border text-fc-teal;
+}
+
+/* Tertiary: a plated link for section-level CTAs. Quieter than the
+   solid CTA but still a button — the spec uses this treatment for
+   "Explore all templates →". */
+/* Deliberately restrained, matching .fc-v2-btn: the plate stays put, the
+   border warms to teal, the label follows, and the arrow advances. No
+   glow and no lift — --cta-glow is the primary CTA's signature, and
+   lending it to every section link made the secondary tier shout louder
+   than the thing it was supporting. */
+.fc-v2-link {
+  @apply inline-flex items-center gap-2 no-underline whitespace-nowrap;
+  @apply border border-fc-rule px-4.5 py-2.75;
+  @apply font-display text-[13.5px] font-medium text-fc-ink;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
+  transition:
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-v2-link:hover {
+  @apply border-fc-teal-border text-fc-teal;
+}
+
+/* The arrow advances on hover — the same gesture across every CTA. */
+.fc-v2-cta__arrow,
+.fc-v2-link__arrow {
+  @apply inline-block;
+  transition: transform var(--motion-hover);
+}
+
+/* Any control carrying an arrow advances it, so the gesture is the same
+   whether the CTA is a plate, a button or an inline text link. */
+.fc-v2-cta:hover .fc-v2-cta__arrow,
+.fc-v2-link:hover .fc-v2-link__arrow,
+a:hover > .fc-v2-link__arrow {
+  transform: translateX(2px);
+}
+
+/* Shared focus treatment: keyboard users get the same ring everywhere. */
+.fc-v2-cta:focus-visible,
+.fc-v2-btn:focus-visible,
+.fc-v2-link:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* ── Chips ───────────────────────────────────────────────────── */
+
+.fc-v2-chip {
+  @apply border border-fc-rule px-2 py-1.5;
+  @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-soft;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
+}
+
+.fc-v2-chip--teal {
+  @apply border-fc-teal-border text-fc-teal;
+  background: var(--wash);
+  box-shadow: var(--inset);
+}
+
+/* ── Live pip ────────────────────────────────────────────────── */
+
+.fc-v2-live {
+  @apply flex items-center gap-1.5;
+  @apply font-mono text-[9.5px] tracking-[0.12em] uppercase text-fc-teal;
+}
+
+.fc-v2-live__dot {
+  @apply w-[5px] h-[5px] bg-fc-teal;
+  box-shadow: 0 0 0 3px rgba(31, 107, 110, 0.16);
+}
+
+:root[data-theme="dark"] .fc-v2-live__dot {
+  box-shadow: 0 0 0 3px rgba(99, 189, 180, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-v2-cta,
+  .fc-v2-btn,
+  .fc-v2-link,
+  .fc-v2-cta__arrow,
+  .fc-v2-link__arrow {
+    transition: none;
+  }
+
+  .fc-v2-cta:hover .fc-v2-cta__arrow,
+  .fc-v2-link:hover .fc-v2-link__arrow,
+  a:hover > .fc-v2-link__arrow {
+    transform: none;
+  }
+}
+
+/* ── Eyebrow normalisation ─────────────────────────────────────
+ * Section eyebrows drifted into three colours and two sizes. The v2
+ * spec uses one treatment everywhere: teal, 10.5px, .14em tracking,
+ * trailed by a rule that fades out. These per-section selectors bring
+ * the existing markup onto it without rewriting every component.
+ */
+
+.fc-trust__eyebrow,
+.fc-batteries__eyebrow,
+.fc-demos__eyebrow,
+.fc-status__eyebrow,
+.fc-arch__eyebrow,
+.fc-builder-teaser__eyebrow,
+.fc-how__eyebrow,
+.fc-showcase__eyebrow,
+.fc-cta__eyebrow,
+.fc-templates__eyebrow {
+  @apply flex items-center gap-3 mb-3.5;
+  @apply font-mono text-[10.5px] tracking-[0.14em] uppercase;
+  @apply text-fc-teal;
+}
+
+.fc-trust__eyebrow::after,
+.fc-batteries__eyebrow::after,
+.fc-demos__eyebrow::after,
+.fc-status__eyebrow::after,
+.fc-arch__eyebrow::after,
+.fc-builder-teaser__eyebrow::after,
+.fc-how__eyebrow::after,
+.fc-showcase__eyebrow::after,
+.fc-cta__eyebrow::after,
+.fc-templates__eyebrow::after {
+  content: '';
+  @apply flex-1 h-px;
+  background: linear-gradient(90deg, var(--rule), transparent);
+}

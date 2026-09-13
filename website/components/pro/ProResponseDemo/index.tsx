@@ -38,7 +38,7 @@ const mockResponses: FormResponse[] = [
   { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-14T14:47:00Z', sessionToken: 'sess-002', values: { name: 'Marcus Rivera', email: 'marcus@clinic.io', rating: 10, category: 'feature', message: 'The response viewer is exactly what we needed for our admin panel. CSV export and filtering are solid.', subscribe: true } },
   { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-13T11:05:00Z', sessionToken: 'sess-003', values: { name: 'Priya Patel', email: 'priya@devstudio.com', rating: 8, category: 'feature', message: 'Would love a logic map visualiser for complex conditional flows.', subscribe: false } },
   { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-12T16:30:00Z', sessionToken: 'sess-004', values: { name: 'James O\u2019Brien', email: 'james@startup.co', rating: 7, category: 'bug', message: 'Minor rendering glitch on Safari when using the theme editor.', subscribe: true } },
-  { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-11T08:12:00Z', sessionToken: 'sess-005', values: { name: 'Elena Voss', email: 'elena@healthtech.de', rating: 9, category: 'general', message: 'Replaced our Typeform integration with FieldCraft. Data stays in our Postgres now.', subscribe: true } },
+  { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-11T08:12:00Z', sessionToken: 'sess-005', values: { name: 'Elena Voss', email: 'elena@healthtech.de', rating: 9, category: 'general', message: 'Moved off a hosted form service. Data stays in our own Postgres now.', subscribe: true } },
   { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-10T13:55:00Z', sessionToken: 'sess-006', values: { name: 'David Kim', email: 'dkim@agency.io', rating: 8, category: 'billing', message: 'Can we get volume licensing for 5 production domains?', subscribe: false } },
   { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-09T10:40:00Z', sessionToken: 'sess-007', values: { name: 'Aisha Mohammed', email: 'aisha@govtech.org', rating: 10, category: 'general', message: 'The self-hosted aspect was the deciding factor for our compliance team.', subscribe: true } },
   { schemaId: 'demo-feedback', schemaVersion: '1', submittedAt: '2026-08-08T15:20:00Z', sessionToken: 'sess-008', values: { name: 'Tom Novak', email: 'tom@freelance.dev', rating: 9, category: 'feature', message: 'Would pay extra for a Figma plugin that exports FieldCraft themes.', subscribe: true } },
@@ -73,7 +73,7 @@ export function ProResponseDemo() {
               <div className="fc-pro-demo__dot fc-pro-demo__dot--muted" />
             </div>
             <span className="fc-pro-demo__chrome-label">
-              ResponseViewer &middot; 8 submissions &middot; table view
+              ResponseViewer &middot; 8 sample submissions &middot; table view
             </span>
             <span className="fc-pro-demo__chrome-tag">Interactive</span>
           </div>

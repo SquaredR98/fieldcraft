@@ -1,16 +1,16 @@
 import type { Metadata } from 'next';
 import { HomepageView } from '@/components/homepage/HomepageView';
-import { getTemplateById } from '@/lib/templates';
+import { getAllTemplates, getTemplateById } from '@/lib/templates';
 import { changelog } from '@/lib/changelog';
 
 export const metadata: Metadata = {
-  title: 'FieldCraft — Open-source form engine for React',
+  title: 'FieldCraft — Self-hosted form engine for React',
   description:
-    'Self-hosted, schema-driven form engine for React. 41 field types, conditional logic, multi-step forms, validation, and draft persistence. Define once in JSON, render anywhere. MIT licensed.',
+    'Responses go straight from the browser to infrastructure you control — no vendor in the path. Schema-driven form engine for React with 41 field types, conditional logic, multi-step forms and validation. MIT licensed.',
   openGraph: {
-    title: 'FieldCraft — Open-source form engine for React',
+    title: 'FieldCraft — Self-hosted form engine for React',
     description:
-      'Self-hosted form engine with 41 field types, conditional logic, multi-step navigation, and validation. Define forms in JSON, own your data. MIT licensed.',
+      'Your forms, your database, nobody in the middle. 41 field types, conditional logic, multi-step navigation and validation, defined once in JSON. MIT licensed.',
   },
 };
 
@@ -44,6 +44,10 @@ export default async function HomePage() {
     .map((id) => getTemplateById(id))
     .filter((t) => t !== undefined);
 
+  // Counted, not hardcoded — the showcase footer states how many exist
+  // beyond the three shown. See Rule 1 in CLAUDE.md.
+  const templateCount = getAllTemplates().length;
+
   // Latest shipped release, newest first — drives the Status section.
   const latest = [...changelog].sort((a, b) =>
     b.date.localeCompare(a.date)
@@ -57,6 +61,7 @@ export default async function HomePage() {
       />
       <HomepageView
         showcaseTemplates={showcaseTemplates}
+        templateCount={templateCount}
         latestVersion={latest.version}
         latestDate={latest.date}
         latestPackage={latest.packageLabel}

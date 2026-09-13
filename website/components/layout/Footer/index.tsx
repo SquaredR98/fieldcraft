@@ -21,7 +21,8 @@ const columns: FooterColumn[] = [
       { label: 'Documentation', href: '/docs' },
       { label: 'Demos', href: '/#demos' },
       { label: 'Templates', href: '/templates' },
-      { label: 'Known gaps', href: '/#gaps' },
+      { label: 'Scope', href: '/#scope' },
+      { label: 'About', href: '/about' },
       { label: 'Changelog', href: '/changelog' },
       { label: 'Blog', href: '/blog' },
     ],
@@ -53,8 +54,8 @@ export function Footer() {
             <Logo />
           </div>
           <div className="fc-footer__brand-desc">
-            A schema-driven form engine for React. Built to learn, shared in
-            case it&rsquo;s useful.
+            A schema-driven form engine for React. Self-hosted, MIT licensed,
+            and yours to fork.
           </div>
           <div className="fc-footer__brand-url">fieldcraft.squaredr.tech</div>
         </div>

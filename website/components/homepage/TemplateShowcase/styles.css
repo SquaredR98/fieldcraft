@@ -1,58 +1,85 @@
 @reference "../../../app/globals.css";
 
+/* ── Templates ──
+ * Header runs heading-left / CTA-right as the v2 spec has it, rather
+ * than stranding the CTA under the grid where it reads as an
+ * afterthought. No bottom rule — the ground step separates the section.
+ */
+
 .fc-showcase {
-  @apply bg-fc-surface border-b border-fc-rule;
+  @apply relative;
 }
 
 .fc-showcase__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply max-w-320 mx-auto px-10;
+  padding-block: var(--fc-section-y);
 }
 
-.fc-showcase__eyebrow {
-  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+.fc-showcase__head {
+  @apply flex flex-wrap items-end justify-between gap-10;
+  margin-bottom: var(--fc-block-gap);
 }
 
 .fc-showcase__h2 {
-  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 max-w-160 text-fc-ink-strong mb-4;
+  @apply font-display font-semibold;
+  @apply m-0 max-w-160 text-fc-ink-strong;
 }
 
 .fc-showcase__sub {
-  @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0 mb-11;
-}
-
-.fc-showcase__grid {
-  @apply grid grid-cols-1 md:grid-cols-3 gap-4 mb-10;
+  @apply text-[15px] leading-[1.6] text-fc-soft m-0;
+  max-width: 480px;
+  text-wrap: pretty;
 }
 
 .fc-showcase__cta {
-  @apply inline-flex items-center font-mono text-[11px] tracking-[0.1em] uppercase text-fc-teal no-underline;
-  transition: opacity var(--motion-hover);
+  @apply shrink-0;
 }
 
-.fc-showcase__cta:hover {
-  @apply opacity-80;
+/* ── Grid ──
+ * Three cards, each its own plate. Not shared-border cells here: these
+ * are separate links to separate pages, so they should read as discrete
+ * objects rather than rows of one table.
+ */
+
+.fc-showcase__grid {
+  @apply grid gap-5;
+  grid-template-columns: repeat(3, 1fr);
 }
+
+/* Count line under the grid — says how many exist beyond these three. */
+.fc-showcase__foot {
+  @apply flex items-center gap-2.5 mt-6 pt-4;
+  @apply border-t border-fc-rule;
+  @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-muted;
+}
+
+.fc-showcase__foot-n {
+  @apply text-fc-teal;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Responsive ── */
 
 @media (max-width: 1023px) {
   .fc-showcase__inner {
-    @apply px-6 py-14;
+    @apply px-6;
   }
 
-  .fc-showcase__h2 {
-    @apply text-[30px];
+  .fc-showcase__grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 639px) {
   .fc-showcase__inner {
-    @apply px-5 py-12;
-  }
-
-  .fc-showcase__h2 {
-    @apply text-[26px];
+    @apply px-5;
   }
 
   .fc-showcase__grid {
-    @apply grid-cols-1;
+    grid-template-columns: 1fr;
+  }
+
+  .fc-showcase__head {
+    @apply items-start gap-6;
   }
 }

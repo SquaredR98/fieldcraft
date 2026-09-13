@@ -18,10 +18,16 @@ export function TemplateCard({ meta }: TemplateCardProps) {
       </div>
       <h3 className="fc-tpl-card__title">{meta.name}</h3>
       <p className="fc-tpl-card__desc">{meta.description}</p>
-      <div className="fc-tpl-card__tags">
-        {meta.tags.slice(0, 3).map((tag) => (
-          <span key={tag} className="fc-tpl-card__tag">{tag}</span>
-        ))}
+      <div className="fc-tpl-card__foot">
+        <div className="fc-tpl-card__tags">
+          {meta.tags.slice(0, 2).map((tag) => (
+            <span key={tag} className="fc-tpl-card__tag">{tag}</span>
+          ))}
+        </div>
+        <span className="fc-tpl-card__id">
+          <span className="fc-tpl-card__id-pip" aria-hidden="true" />
+          <span className="fc-tpl-card__id-text">{meta.id}</span>
+        </span>
       </div>
     </Link>
   );

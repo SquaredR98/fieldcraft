@@ -2,15 +2,19 @@ import './styles.css';
 
 export function HowItWorks() {
   return (
-    <section className="fc-how">
+    <section id="how" className="fc-how fc-ground-surface2">
       <div className="fc-how__inner">
         <div className="fc-how__eyebrow">How it works</div>
         <h2 className="fc-how__h2">
           Three steps, and no account anywhere.
         </h2>
+        <p className="fc-how__sub fc-v2-block-gap">
+          Step 02 is the one that matters &mdash; the schema is the whole
+          product.
+        </p>
         <div className="fc-how__grid">
           {/* Step 01 */}
-          <div>
+          <div className="fc-how__step">
             <div className="fc-how__step-header">
               <div className="fc-how__chip">01</div>
               <div className="fc-how__step-title">Install</div>
@@ -28,8 +32,9 @@ export function HowItWorks() {
             </div>
           </div>
 
-          {/* Step 02 */}
-          <div>
+          {/* Step 02 — the schema is the product, so this one leads. */}
+          <div className="fc-how__step fc-how__step--lead">
+            <div className="fc-v2-bracket fc-v2-bracket--tl" aria-hidden="true" />
             <div className="fc-how__step-header">
               <div className="fc-how__chip">02</div>
               <div className="fc-how__step-title">Describe the form</div>
@@ -55,7 +60,7 @@ export function HowItWorks() {
           </div>
 
           {/* Step 03 */}
-          <div>
+          <div className="fc-how__step">
             <div className="fc-how__step-header">
               <div className="fc-how__chip">03</div>
               <div className="fc-how__step-title">Render</div>

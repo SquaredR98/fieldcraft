@@ -33,16 +33,28 @@
   @apply text-fc-ink;
 }
 
+/* Primary tier, like .fc-v2-cta — solid teal plate with the inset
+   highlight. It was a flat fill, which read as a different button
+   system to the hero and final CTAs. */
 .fc-nav__cta {
+  @apply inline-flex items-center gap-1.5;
   @apply whitespace-nowrap shrink-0 no-underline;
-  @apply bg-fc-teal text-fc-teal-on;
+  @apply text-fc-teal-on;
   @apply font-display text-[13.5px] font-medium;
   @apply px-4 py-2.25;
-  transition: background var(--motion-hover);
+  background: var(--teal-plate);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: filter var(--motion-hover);
 }
 
 .fc-nav__cta:hover {
-  @apply bg-fc-teal-hover text-fc-teal-on;
+  @apply text-fc-teal-on;
+  filter: brightness(1.06);
+}
+
+.fc-nav__cta:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
 }
 
 /* ── Mobile actions (hamburger + theme toggle) ── */

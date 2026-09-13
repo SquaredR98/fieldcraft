@@ -1,76 +1,200 @@
 @reference "../../../app/globals.css";
 
+/* ── Batteries included ──
+ * The most technical content on the page, so it is presented as a spec
+ * sheet: shared-border cells, each carrying the schema that enables the
+ * behaviour and the cost of not having it.
+ *
+ * No bottom rule — the ground step separates this from its neighbours.
+ */
+
 .fc-batteries {
-  @apply border-b border-fc-rule;
+  @apply relative;
 }
 
 .fc-batteries__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
-}
-
-.fc-batteries__eyebrow {
-  @apply font-mono text-[10.5px] tracking-[0.16em];
-  @apply uppercase text-fc-muted mb-4;
+  @apply max-w-320 mx-auto px-10;
+  padding-block: var(--fc-section-y);
 }
 
 .fc-batteries__h2 {
-  @apply font-display text-[38px] font-semibold;
-  @apply tracking-[-0.03em] leading-[1.1];
-  @apply m-0 mb-11 max-w-160 text-fc-ink-strong;
+  @apply font-display font-semibold;
+  @apply m-0 max-w-160 text-fc-ink-strong;
 }
 
+.fc-batteries__sub {
+  @apply text-[15px] leading-[1.6] text-fc-soft m-0;
+  max-width: 560px;
+  text-wrap: pretty;
+}
+
+/* ── Grid: shared-border cells ── */
+
 .fc-batteries__grid {
-  @apply grid gap-px bg-fc-rule border border-fc-rule;
+  @apply grid border border-fc-rule;
   grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  box-shadow: var(--e1);
 }
 
 .fc-batteries__card {
-  @apply bg-fc-surface p-7.5;
+  @apply relative flex flex-col p-7;
+  background: var(--surface);
+  transition: background-color var(--motion-hover);
 }
 
-.fc-batteries__card-header {
-  @apply flex items-baseline justify-between mb-3;
+/* Edge marker grows from the top-left, matching DataFlow and TrustStrip
+   so every evidence grid on the page behaves the same way. */
+.fc-batteries__card::before {
+  content: '';
+  @apply absolute left-0 top-0 h-0.5;
+  width: 0;
+  background: var(--teal);
+  transition: width var(--motion-enter);
+}
+
+.fc-batteries__card:hover {
+  background: var(--wash);
+}
+
+.fc-batteries__card:hover::before {
+  width: 100%;
+}
+
+/* ── Card head: index, title, badge ── */
+
+.fc-batteries__card-head {
+  @apply flex items-baseline gap-3 mb-3;
+}
+
+/* Numbered because the subtitle counts them and each card names its own
+   index — not decoration. */
+.fc-batteries__n {
+  @apply font-mono text-[10px] text-fc-muted shrink-0;
+  font-variant-numeric: tabular-nums;
+  transition: color var(--motion-hover);
+}
+
+.fc-batteries__card:hover .fc-batteries__n {
+  @apply text-fc-teal;
 }
 
 .fc-batteries__card-title {
-  @apply font-display text-xl font-semibold tracking-[-0.02em];
+  @apply font-display text-[18px] font-semibold tracking-[-0.02em];
+  @apply text-fc-ink-strong;
 }
 
 .fc-batteries__badge {
-  @apply font-mono text-[9.5px] tracking-widest;
-  @apply uppercase text-fc-teal;
-  @apply border border-fc-teal-border;
-  @apply px-1.75 py-0.75;
+  @apply font-mono text-[9px] tracking-[0.1em] uppercase shrink-0 ml-auto;
+  @apply border border-fc-teal-border px-1.75 py-0.75 text-fc-teal;
+  background: var(--wash);
+  transition:
+    background-color var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-batteries__card:hover .fc-batteries__badge {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--teal-on);
 }
 
 .fc-batteries__card-body {
-  @apply text-[14.5px] leading-[1.65] text-fc-muted;
+  @apply text-[13.5px] leading-[1.65] text-fc-muted m-0 mb-5;
+  padding-left: 1.85rem;
+  transition: color var(--motion-hover);
 }
 
-/* ── Responsive: tablet ── */
+.fc-batteries__card:hover .fc-batteries__card-body {
+  @apply text-fc-soft;
+}
+
+/* ── The schema that turns it on ── */
+
+.fc-batteries__code {
+  @apply border border-fc-wash-rule px-3.5 py-3;
+  @apply font-mono text-[11px] leading-[1.9];
+  margin-left: 1.85rem;
+  background: var(--wash);
+  box-shadow: var(--inset);
+  overflow-x: auto;
+}
+
+.fc-batteries__code-line {
+  @apply whitespace-nowrap;
+}
+
+.fc-batteries__code-k {
+  @apply text-fc-teal;
+}
+
+.fc-batteries__code-v {
+  @apply text-fc-amber-ink;
+}
+
+.fc-batteries__code-p {
+  @apply text-fc-muted;
+}
+
+/* ── The cost of not having it ──
+ * Pushed to the cell foot so every card ends on the same note: this is
+ * work the engine is doing for you.
+ */
+
+.fc-batteries__cost {
+  @apply mt-auto pt-4;
+  @apply text-[12px] leading-[1.55] text-fc-muted;
+  margin-left: 1.85rem;
+}
+
+/* ── Responsive ── */
 
 @media (max-width: 1023px) {
   .fc-batteries__inner {
-    @apply px-6 py-14;
-  }
-
-  .fc-batteries__h2 {
-    @apply text-[30px];
+    @apply px-6;
   }
 }
 
-/* ── Responsive: mobile ── */
+@media (max-width: 767px) {
+  .fc-batteries__grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 @media (max-width: 639px) {
   .fc-batteries__inner {
-    @apply px-5 py-12;
+    @apply px-5;
   }
 
-  .fc-batteries__h2 {
-    @apply text-[26px];
+  .fc-batteries__card {
+    @apply p-5;
   }
 
-  .fc-batteries__grid {
-    grid-template-columns: 1fr;
+  /* Drop the hanging indent — too little width left for it to read. */
+  .fc-batteries__card-body,
+  .fc-batteries__code,
+  .fc-batteries__cost {
+    padding-left: 0;
+    margin-left: 0;
+  }
+
+  .fc-batteries__badge {
+    @apply hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-batteries__card,
+  .fc-batteries__card::before,
+  .fc-batteries__n,
+  .fc-batteries__badge,
+  .fc-batteries__card-body {
+    transition: none;
+  }
+
+  .fc-batteries__card:hover::before {
+    width: 100%;
   }
 }

@@ -13,7 +13,7 @@ function T({ children }: { children: React.ReactNode }) {
 
 export function ProCodeSnippet() {
   return (
-    <section className="fc-pro-section fc-pro-section--surface">
+    <section className="fc-pro-section fc-pro-section--bg">
       <div className="fc-pro-section__inner">
         <div className="fc-pro-code__grid fc-pro-2col">
           <div>

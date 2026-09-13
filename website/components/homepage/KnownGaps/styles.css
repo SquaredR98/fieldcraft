@@ -1,71 +1,174 @@
 @reference "../../../app/globals.css";
 
+/* ── Scope — the page's single amber moment ── */
+
+/* No bottom rule and no local ground — both come from the section's
+   .fc-ground-* class, as everywhere else. */
 .fc-gaps {
-  @apply border-b border-fc-rule bg-fc-surface;
+  @apply relative;
 }
 
+/* Asymmetric: framing anchored left, ledger runs right. The aside
+   stretches so the callout can sit against the foot of the ledger. */
 .fc-gaps__inner {
-  @apply max-w-310 mx-auto px-10 py-19;
+  @apply mx-auto max-w-320 px-10;
+  padding-block: var(--fc-section-y);
+  @apply grid items-stretch gap-14;
+  grid-template-columns: 1fr 1.5fr;
 }
 
+.fc-gaps__aside {
+  @apply flex flex-col;
+}
+
+/* The one amber eyebrow on the page — see the note at the top. */
 .fc-gaps__eyebrow {
-  @apply font-mono text-[11px] tracking-fc-mono-md;
-  @apply uppercase text-fc-amber;
+  @apply flex items-center gap-3 mb-3.5;
+  @apply font-mono text-[10.5px] tracking-[0.14em] uppercase;
+  @apply text-fc-amber-ink;
 }
 
+/* Amber rule rather than the teal one every other section gets, so the
+   section reads as deliberately set apart. */
+.fc-gaps__eyebrow::after {
+  content: '';
+  @apply flex-1 h-px;
+  background: linear-gradient(90deg, var(--amber-border), transparent);
+}
+
+/* Size and tracking come from the shared .fc-gaps__h2 rule in v2.css. */
 .fc-gaps__h2 {
-  @apply font-display font-semibold;
-  @apply tracking-fc-heading leading-[1.12];
-  @apply mt-3.5 mb-0 text-fc-ink-strong;
-  font-size: clamp(26px, 3vw, 34px);
-}
-
-.fc-gaps__sub {
-  @apply text-[18px] leading-[1.6] text-fc-soft;
-  @apply mt-4 mb-9 max-w-136;
+  @apply font-display font-semibold m-0 text-fc-ink-strong;
   text-wrap: pretty;
 }
 
-.fc-gaps__list {
-  @apply border border-fc-amber-border bg-fc-amber-bg;
+.fc-gaps__sub {
+  @apply text-[15px] leading-[1.65] text-fc-soft;
+  @apply mt-3.5 mb-5;
+}
+
+/* Sits against the foot of the ledger, not floating under the prose. */
+.fc-gaps__callout {
+  @apply mt-auto border border-fc-amber-border px-4.5 py-4;
+  @apply text-[13px] leading-[1.6] text-fc-soft;
+  background: var(--amber-bg);
+  box-shadow: var(--inset);
+}
+
+.fc-gaps__callout-label {
+  @apply font-mono text-[9.5px] tracking-[0.12em] uppercase;
+  @apply text-fc-amber-ink mb-2;
+}
+
+/* ── Ledger ── */
+
+.fc-gaps__ledger {
+  @apply border border-fc-rule;
+  background: var(--plate);
+  box-shadow: var(--e1);
 }
 
 .fc-gaps__row {
-  @apply relative px-6 py-5 grid gap-2;
-  border-bottom: 1px solid var(--amber-border);
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  column-gap: 28px;
-  transition: background-color var(--motion-hover);
-}
-
-/* Left edge marker — grows from the centre on hover. */
-.fc-gaps__row::before {
-  content: '';
-  @apply absolute left-0 top-1/2 w-0.5;
-  background: var(--amber);
-  height: 0;
-  transform: translateY(-50%);
-  transition: height var(--motion-enter);
-}
-
-.fc-gaps__row:hover::before {
-  height: 100%;
-}
-
-.fc-gaps__row:hover {
-  background: color-mix(in srgb, var(--amber) 5%, transparent);
+  @apply grid px-6 py-5.5 border-b border-fc-rule;
+  grid-template-columns: 44px 1fr;
+  gap: 18px;
 }
 
 .fc-gaps__row:last-child {
   @apply border-b-0;
 }
 
+/* Numbered because the callout counts them — the figure is the index
+   into this list, not decoration. */
+.fc-gaps__row-n {
+  @apply font-mono text-[11px] text-fc-amber-ink;
+  @apply border border-fc-amber-border grid place-items-center;
+  background: var(--amber-bg);
+  height: 24px;
+  font-variant-numeric: tabular-nums;
+}
+
 .fc-gaps__row-title {
-  @apply font-display text-[17px] font-semibold;
-  @apply tracking-fc-subhead text-fc-ink-strong;
+  @apply font-display text-[16.5px] font-semibold text-fc-ink-strong mb-1.5;
+  letter-spacing: -0.015em;
 }
 
 .fc-gaps__row-body {
-  @apply text-[15px] leading-[1.6] text-fc-soft;
+  @apply text-[14px] leading-[1.68] text-fc-muted m-0;
   text-wrap: pretty;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 900px) {
+  .fc-gaps__inner {
+    @apply gap-10;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .fc-gaps__inner {
+    @apply px-5;
+  }
+
+  .fc-gaps__row {
+    @apply px-4.5;
+    grid-template-columns: 32px 1fr;
+    gap: 14px;
+  }
+}
+
+/* ── Finishes ─────────────────────────────────────────────────────
+ * The ledger is scanned, not read straight through, so a row should
+ * respond when the eye lands on it.
+ */
+
+.fc-gaps__row {
+  transition: background-color var(--motion-hover);
+}
+
+.fc-gaps__row:hover {
+  background: var(--amber-bg);
+}
+
+/* The index chip fills in on hover — the row acknowledges the scan
+   without moving, which would disturb the ledger's alignment. */
+.fc-gaps__row-n {
+  transition:
+    background-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-gaps__row:hover .fc-gaps__row-n {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--surface);
+}
+
+:root[data-theme="dark"] .fc-gaps__row:hover .fc-gaps__row-n {
+  color: var(--bg);
+}
+
+/* Rows land in sequence, top to bottom, like a list being written. */
+.fc-scroll-reveal .fc-gaps__row {
+  opacity: 0;
+}
+
+.fc-revealed .fc-gaps__row {
+  opacity: 1;
+  transition: opacity 240ms ease-out;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-scroll-reveal .fc-gaps__row {
+    opacity: 1;
+  }
+
+  .fc-gaps__row,
+  .fc-gaps__row-n,
+  .fc-revealed .fc-gaps__row {
+    transition: none;
+  }
 }

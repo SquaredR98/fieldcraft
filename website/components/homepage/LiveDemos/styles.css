@@ -1,375 +1,214 @@
 @reference "../../../app/globals.css";
 
-/* ── Live Demos section ── */
+/* ── Live Demos section ──
+   The only place on the page a visitor can operate the real product,
+   so the whole section is treated as an instrument: a masked blueprint
+   ground, a bracketed lead plate around the working form, and a live
+   pip that says the thing is actually running. */
 
 .fc-demos {
-  @apply border-b border-fc-rule bg-fc-surface;
+  @apply relative overflow-hidden border-b border-fc-rule;
+  /* Ground comes from .fc-ground-bg on the section element. */
 }
 
 .fc-demos__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply relative max-w-310 mx-auto px-10;
+  padding-block: var(--fc-section-y);
 }
 
-.fc-demos__eyebrow {
-  @apply font-mono text-[10.5px] tracking-[0.16em];
-  @apply uppercase text-fc-muted mb-4;
+/* ── Header: heading left, running state right ── */
+
+.fc-demos__head {
+  @apply flex flex-wrap items-end justify-between gap-8 mb-9;
 }
 
 .fc-demos__h2 {
-  @apply font-display text-[38px] font-semibold;
-  @apply tracking-[-0.03em] leading-[1.1];
+  @apply font-display font-semibold;
   @apply m-0 max-w-160 text-fc-ink-strong;
 }
 
 .fc-demos__sub {
-  @apply text-base leading-[1.65] text-fc-muted;
-  @apply mt-4 mb-11 max-w-140;
+  @apply text-[15.5px] leading-[1.65] text-fc-soft;
+  @apply mt-3 mb-0 max-w-140;
+}
+
+/* A readout, not a badge: this is the real engine, and the figures
+   say which build is running it. */
+.fc-demos__readout {
+  @apply border border-fc-rule shrink-0;
+  background: var(--plate);
+  box-shadow: var(--e1);
+}
+
+.fc-demos__readout-row {
+  @apply flex items-center justify-between gap-6 px-3.5 py-2;
+  @apply border-b border-fc-rule;
+}
+
+.fc-demos__readout-row:last-child {
+  @apply border-b-0;
+}
+
+.fc-demos__readout-k {
+  @apply font-mono text-[9.5px] tracking-[0.12em] uppercase text-fc-muted;
+}
+
+.fc-demos__readout-v {
+  @apply font-mono text-[11px] text-fc-ink;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-demos__readout-v--teal {
+  @apply text-fc-teal;
 }
 
 /* ── Tab strip ── */
 
+/* Tabs sit on a plate and share borders with the body below, so the
+   whole thing reads as one instrument rather than a text row above a
+   box. The active tab lifts to the body's surface and loses its bottom
+   border, connecting the two. */
+
 .fc-demos__tabs {
-  @apply flex;
+  @apply flex relative;
   @apply border-t border-l border-r border-fc-rule;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
 .fc-demos__tab {
-  @apply font-mono text-[11px] tracking-[0.1em] uppercase;
+  @apply relative font-mono text-[11px] tracking-[0.1em] uppercase;
   @apply px-5 py-3.25 cursor-pointer text-fc-muted;
-  transition: color var(--motion-hover), background var(--motion-hover);
+  @apply border-r border-fc-rule bg-transparent;
+  transition:
+    color var(--motion-hover),
+    background-color var(--motion-hover);
+}
+
+.fc-demos__tab:last-child {
+  @apply border-r-0;
 }
 
 .fc-demos__tab--active {
-  @apply bg-fc-wash text-fc-teal;
-  box-shadow: inset 0 -2px 0 var(--teal);
+  @apply text-fc-teal;
+  background: var(--surface);
+  box-shadow: inset 0 2px 0 var(--teal);
+}
+
+/* Cover the body's top border so the active tab joins the panel. */
+.fc-demos__tab--active::after {
+  content: '';
+  @apply absolute left-0 right-0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--surface);
 }
 
 .fc-demos__tab:not(.fc-demos__tab--active):hover {
   @apply text-fc-ink;
+  background: var(--wash);
 }
 
-/* ── Body: two-column grid ── */
+.fc-demos__tab:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+/* ── Body: explanation left, working form right ──
+   Asymmetric on purpose: the form is the point of the section, so it
+   takes the wider column and the lead treatment. */
 
 .fc-demos__body {
-  @apply grid border border-fc-rule;
-  grid-template-columns: 1fr 1.1fr;
+  @apply relative grid border border-fc-teal-border;
+  grid-template-columns: 1fr 1.22fr;
+  background: var(--surface);
+  box-shadow: var(--e3);
 }
 
 /* ── Left column: explanation panel ── */
 
 .fc-demos__explain {
-  @apply border-r border-fc-rule px-7.5 py-8;
+  @apply flex flex-col border-r border-fc-teal-border px-7.5 py-8;
+  background: var(--plate);
 }
 
 .fc-demos__explain-title {
-  @apply font-display text-[22px] font-semibold;
+  @apply font-display text-[20px] font-semibold;
   @apply tracking-[-0.02em] text-fc-ink-strong;
 }
 
 .fc-demos__explain-body {
-  @apply text-[14.5px] leading-[1.7] text-fc-muted;
+  @apply text-[14.5px] leading-[1.7] text-fc-soft;
   @apply mt-3;
 }
 
+/* The schema lines that produce the behaviour on the right — a well,
+   syntax-coloured like every other code surface on the site, pushed to
+   the foot of the column so it sits against the form's controls. */
 .fc-demos__explain-code {
-  @apply font-mono text-[11.5px] leading-[1.9] text-fc-muted;
-  @apply border-l border-fc-rule pl-3.5 mt-5;
+  @apply font-mono text-[11.5px] leading-[1.9];
+  @apply border border-fc-wash-rule px-3.5 py-3 mt-6;
+  background: var(--wash);
+  box-shadow: var(--inset);
+  overflow-x: auto;
 }
 
-/* ── Right column: interactive demo ── */
+.fc-demos__explain-code-label {
+  @apply font-mono text-[9px] tracking-[0.12em] uppercase text-fc-muted;
+  @apply mb-2;
+}
+
+.fc-demos__explain-code-line {
+  @apply text-fc-muted whitespace-nowrap;
+}
+
+.fc-demos__explain-code-k {
+  @apply text-fc-teal;
+}
+
+.fc-demos__explain-code-v {
+  @apply text-fc-amber-ink;
+}
+
+.fc-demos__explain-foot {
+  @apply mt-auto pt-6;
+}
+
+/* ── Right column: the working form ── */
 
 .fc-demos__panel {
-  @apply bg-fc-bg px-7.5 py-8;
+  @apply relative px-7.5 py-8;
+  background: var(--bg);
+  box-shadow: var(--inset);
 }
 
-/* ── Shared demo card ── */
+/* ── Buttons ──
+   Only the outline button survives in markup: the demos render the real
+   FormEngineRenderer, which supplies its own controls. The hand-built
+   card/input/stepper styles that used to live here were dead — the demos
+   stopped being mockups when they were switched to the real renderer. */
 
-.fc-demos__card {
-  @apply border border-fc-rule bg-fc-surface;
-}
-
-.fc-demos__card-header {
-  @apply flex items-center justify-between;
-  @apply px-5 py-3.5;
-  @apply border-b border-fc-rule;
-  @apply font-mono text-[10px] tracking-[0.12em];
-  @apply uppercase text-fc-muted;
-}
-
-.fc-demos__card-body {
-  @apply px-5 py-5;
-}
-
-.fc-demos__card-body--tall {
-  @apply min-h-[250px];
-}
-
-.fc-demos__card-footer {
-  @apply flex items-center justify-end gap-2.5;
-  @apply px-5 py-3.5;
-  @apply border-t border-fc-rule;
-}
-
-/* ── Shared input styling ── */
-
-.fc-demos__input-label {
-  @apply text-[12.5px] font-semibold text-fc-ink;
-  @apply mb-1.5;
-}
-
-.fc-demos__input-required {
-  @apply text-fc-danger;
-}
-
-.fc-demos__input {
-  @apply w-full border border-fc-rule bg-fc-surface;
-  @apply px-3 py-2.75 text-sm text-fc-ink rounded-none;
-  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
-}
-
-.fc-demos__input::placeholder {
-  @apply text-fc-muted;
-}
-
-.fc-demos__input:focus {
-  @apply outline-none border-fc-teal;
-  box-shadow: var(--focus-ring);
-}
-
-.fc-demos__select {
-  @apply w-full border border-fc-rule bg-fc-surface;
-  @apply px-3 py-2.75 text-sm text-fc-ink;
-  @apply appearance-none cursor-pointer rounded-none;
-  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%236A7B85' stroke-width='1.2'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  padding-right: 28px;
-}
-
-.fc-demos__select:focus {
-  @apply outline-none border-fc-teal;
-  box-shadow: var(--focus-ring);
-}
-
-/* ── Buttons ── */
-
+/* Same restraint as .fc-v2-btn: plate stays, border warms, label
+   follows. It was transparent with a heavy ink border, which read as a
+   different button system to the rest of the page. */
 .fc-demos__btn-outline {
-  @apply border border-fc-btn-line;
-  @apply px-4.5 py-2.5 text-[13.5px] text-fc-muted;
-  @apply cursor-pointer bg-transparent;
-  @apply font-display font-medium;
-  transition: color var(--motion-hover), border-color var(--motion-hover);
+  @apply border border-fc-rule;
+  @apply px-4.5 py-2.5 text-[13.5px] text-fc-ink;
+  @apply cursor-pointer font-display font-medium;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
+  transition:
+    border-color var(--motion-hover),
+    color var(--motion-hover);
 }
 
 .fc-demos__btn-outline:hover {
-  @apply text-fc-ink;
+  @apply border-fc-teal-border text-fc-teal;
 }
 
-.fc-demos__btn-primary {
-  @apply bg-fc-teal text-fc-teal-on;
-  @apply px-4.5 py-2.5 text-[13.5px];
-  @apply font-display font-medium;
-  @apply cursor-pointer border-0;
-  transition: background var(--motion-hover);
-}
-
-.fc-demos__btn-primary:hover {
-  @apply bg-fc-teal-hover;
-}
-
-/* ── Multi-step: progress dots ── */
-
-.fc-demos__dot {
-  @apply w-1.5 h-1.5 rounded-full;
-  @apply border border-fc-rule;
-}
-
-.fc-demos__dot--filled {
-  @apply bg-fc-teal border-fc-teal;
-}
-
-/* ── Multi-step: review table ── */
-
-.fc-demos__review-table {
-  @apply w-full text-sm;
-  border-collapse: collapse;
-}
-
-.fc-demos__review-table td {
-  @apply py-2 align-top;
-  @apply border-b border-fc-rule;
-}
-
-.fc-demos__review-table td:first-child {
-  @apply font-mono text-[11px] tracking-[0.08em];
-  @apply uppercase text-fc-muted pr-4;
-  @apply whitespace-nowrap;
-}
-
-.fc-demos__review-table td:last-child {
-  @apply text-fc-ink;
-}
-
-/* ── Multi-step: step title ── */
-
-.fc-demos__step-title {
-  @apply font-display text-base font-semibold;
-  @apply text-fc-ink-strong mb-1;
-}
-
-.fc-demos__step-hint {
-  @apply text-[13px] text-fc-muted mb-4;
-}
-
-/* ── Conditional: checkbox row ── */
-
-.fc-demos__checkbox-row {
-  @apply flex items-center gap-2.5 cursor-pointer;
-}
-
-.fc-demos__checkbox {
-  @apply flex items-center justify-center shrink-0;
-  @apply w-4 h-4 text-[11px] leading-none;
-  @apply border border-fc-rule rounded-none;
-  transition: background var(--motion-hover), border-color var(--motion-hover);
-}
-
-.fc-demos__checkbox--checked {
-  @apply bg-fc-teal border-fc-teal text-fc-teal-on;
-}
-
-/* ── Conditional: revealed block ── */
-
-.fc-demos__conditional {
-  @apply pl-3.5 mt-3 border-l-2 border-fc-teal;
-}
-
-.fc-demos__conditional--amber {
-  @apply border-fc-amber;
-}
-
-.fc-demos__conditional-tag {
-  @apply font-mono text-[9.5px] tracking-[0.12em];
-  @apply uppercase text-fc-teal mb-2;
-}
-
-.fc-demos__conditional-tag--amber {
-  @apply text-fc-amber-ink;
-}
-
-/* ── Conditional: field counter ── */
-
-.fc-demos__field-counter {
-  @apply font-mono text-[10px] tracking-[0.12em];
-  @apply uppercase text-fc-muted;
-  @apply mt-5 pt-3 border-t border-fc-rule;
-}
-
-/* ── Validation: state classes ── */
-
-.fc-demos__input--valid {
-  @apply border-fc-teal;
-}
-
-.fc-demos__input--invalid {
-  @apply border-fc-danger;
-}
-
-.fc-demos__validation-msg {
-  @apply text-[12px] mt-1.5;
-}
-
-.fc-demos__validation-msg--valid {
-  @apply text-fc-teal;
-}
-
-.fc-demos__validation-msg--invalid {
-  @apply text-fc-danger;
-}
-
-.fc-demos__validation-code {
-  @apply font-mono text-[11px] leading-[1.8] text-fc-muted;
-  @apply border border-fc-rule bg-fc-surface2;
-  @apply px-3.5 py-3 mt-4;
-  @apply overflow-x-auto;
-}
-
-.fc-demos__validation-code-key {
-  @apply text-fc-teal;
-}
-
-.fc-demos__validation-code-string {
-  @apply text-fc-amber-ink;
-}
-
-/* ── Computed: stepper ── */
-
-.fc-demos__stepper {
-  @apply flex items-center gap-0;
-}
-
-.fc-demos__stepper-btn {
-  @apply flex items-center justify-center;
-  @apply w-9 h-9 border border-fc-rule;
-  @apply bg-fc-surface text-fc-ink;
-  @apply text-base font-mono cursor-pointer;
-  transition: background var(--motion-hover);
-}
-
-.fc-demos__stepper-btn:hover {
-  @apply bg-fc-wash;
-}
-
-.fc-demos__stepper-btn:first-child {
-  @apply rounded-none;
-}
-
-.fc-demos__stepper-btn:last-child {
-  @apply rounded-none;
-}
-
-.fc-demos__stepper-value {
-  @apply flex items-center justify-center;
-  @apply w-12 h-9 border-t border-b border-fc-rule;
-  @apply bg-fc-surface font-mono text-sm text-fc-ink;
-}
-
-/* ── Computed: summary box ── */
-
-.fc-demos__summary {
-  @apply border border-fc-wash-rule bg-fc-wash;
-  @apply px-4 py-3.5 mt-4;
-}
-
-.fc-demos__summary-row {
-  @apply flex items-center justify-between;
-  @apply text-sm text-fc-muted py-1;
-}
-
-.fc-demos__summary-total {
-  @apply flex items-center justify-between;
-  @apply pt-2.5 mt-2 border-t border-fc-wash-rule;
-}
-
-.fc-demos__summary-total-label {
-  @apply text-sm font-semibold text-fc-ink-strong;
-}
-
-.fc-demos__summary-total-value {
-  @apply font-display text-[22px] font-semibold;
-  @apply tracking-[-0.02em] text-fc-teal;
-}
-
-.fc-demos__expression {
-  @apply font-mono text-[11px] text-fc-muted;
-  @apply mt-3 pt-2.5 border-t border-fc-rule;
-}
-
-/* ── Field group spacing ── */
-
-.fc-demos__field-group {
-  @apply flex flex-col gap-4;
+.fc-demos__btn-outline:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
 }
 
 /* ── Live form wrapper (real FormEngineRenderer) ──
@@ -485,14 +324,19 @@
   box-shadow: none !important;
 }
 
-/* Primary button (Next / Submit) — explicit teal bg + white text */
+/* Primary button (Next / Submit) — the page's CTA plate, so the control
+   a visitor actually presses matches every other CTA on the site. */
 .fc-demos__live-form button[data-slot="button"][data-variant="default"] {
-  background-color: var(--teal) !important;
+  background: var(--teal-plate) !important;
   color: var(--teal-on) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    var(--cta-glow) !important;
+  transition: filter var(--motion-hover);
 }
 
 .fc-demos__live-form button[data-slot="button"][data-variant="default"]:hover:not(:disabled) {
-  background-color: var(--teal-hover) !important;
+  filter: brightness(1.06);
 }
 
 /* Outline button (Back) — transparent bg, ink border, visible text */
@@ -547,32 +391,45 @@
 
 /* ── Submission result display ── */
 
+/* The payoff: the actual FormResponse the engine produced. This is the
+   proof the demo is real, so it gets a proper readout treatment rather
+   than a bare <pre>. */
+
 .fc-demos__result {
-  @apply flex flex-col items-center gap-4;
-  @apply py-8;
+  @apply flex flex-col items-start gap-3.5;
+  @apply py-2;
 }
 
 .fc-demos__result-label {
-  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply flex items-center gap-2;
+  @apply font-mono text-[9.5px] tracking-[0.14em];
   @apply uppercase text-fc-teal;
 }
 
+.fc-demos__result-label::before {
+  content: '';
+  @apply w-[5px] h-[5px] bg-fc-teal;
+  box-shadow: 0 0 0 3px rgba(31, 107, 110, 0.16);
+}
+
+:root[data-theme="dark"] .fc-demos__result-label::before {
+  box-shadow: 0 0 0 3px rgba(99, 189, 180, 0.18);
+}
+
 .fc-demos__result-json {
-  @apply font-mono text-[11.5px] leading-[1.8] text-fc-muted;
-  @apply border border-fc-rule bg-fc-surface2;
+  @apply font-mono text-[11.5px] leading-[1.8] text-fc-ink;
+  @apply border border-fc-wash-rule;
   @apply px-4 py-3 w-full overflow-x-auto;
   @apply m-0;
+  background: var(--wash);
+  box-shadow: var(--inset);
 }
 
 /* ── Responsive: tablet ── */
 
 @media (max-width: 1023px) {
   .fc-demos__inner {
-    @apply px-6 py-14;
-  }
-
-  .fc-demos__h2 {
-    @apply text-[30px];
+    @apply px-6;
   }
 
   .fc-demos__body {
@@ -580,7 +437,13 @@
   }
 
   .fc-demos__explain {
-    @apply border-r-0 border-b border-fc-rule;
+    @apply border-r-0 border-b border-fc-teal-border;
+  }
+
+  /* The code well is pushed to the column foot by mt-auto on desktop;
+     once stacked there is no column height to push against. */
+  .fc-demos__explain-foot {
+    @apply mt-0;
   }
 
   .fc-demos__tabs {
@@ -590,17 +453,22 @@
   .fc-demos__tab {
     @apply whitespace-nowrap;
   }
+
+  /* Readout moves below the heading rather than beside it. */
+  .fc-demos__head {
+    @apply flex-col items-start gap-6;
+  }
+
+  .fc-demos__readout {
+    @apply w-full;
+  }
 }
 
 /* ── Responsive: mobile ── */
 
 @media (max-width: 639px) {
   .fc-demos__inner {
-    @apply px-5 py-12;
-  }
-
-  .fc-demos__h2 {
-    @apply text-[26px];
+    @apply px-5;
   }
 
   .fc-demos__explain {
@@ -614,4 +482,92 @@
   .fc-demos__tab {
     @apply px-3.5 text-[10px];
   }
+}
+
+/* ── Finishes ─────────────────────────────────────────────────────
+ * The section's job is to say "this is running, touch it". None of
+ * that can be shown on a static artboard, so it lives here.
+ */
+
+/* Panel chrome: names the running demo and carries the live pip. */
+.fc-demos__panel-head {
+  @apply flex items-center justify-between gap-4 mb-5;
+  @apply pb-3 border-b border-fc-rule;
+}
+
+.fc-demos__panel-label {
+  @apply font-mono text-[9.5px] tracking-[0.12em] uppercase text-fc-muted;
+}
+
+/* Pulses only while the form has not been submitted — once a visitor
+   has used it, the pip has made its point and stops competing. */
+.fc-demos__live {
+  @apply flex items-center gap-1.5 shrink-0;
+  @apply font-mono text-[9.5px] tracking-[0.12em] uppercase text-fc-teal;
+}
+
+.fc-demos__live-dot {
+  @apply w-[5px] h-[5px] bg-fc-teal;
+  box-shadow: 0 0 0 3px rgba(31, 107, 110, 0.16);
+  animation: fc-demos-pulse 2.4s ease-in-out infinite;
+}
+
+:root[data-theme="dark"] .fc-demos__live-dot {
+  box-shadow: 0 0 0 3px rgba(99, 189, 180, 0.18);
+}
+
+@keyframes fc-demos-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px rgba(31, 107, 110, 0.16);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(31, 107, 110, 0.06);
+  }
+}
+
+/* Hint that the panel is operable, shown until first interaction. */
+.fc-demos__hint {
+  @apply flex items-center gap-2 mt-5 pt-4;
+  @apply border-t border-fc-rule;
+  @apply font-mono text-[10px] tracking-[0.08em] uppercase text-fc-muted;
+}
+
+.fc-demos__hint-key {
+  @apply border border-fc-rule px-1.5 py-0.5 text-fc-soft;
+  background: var(--surface);
+  box-shadow: var(--e1);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Tabs reveal in sequence so the control reads as a set. */
+.fc-scroll-reveal .fc-demos__tab {
+  opacity: 0;
+}
+
+.fc-revealed .fc-demos__tab {
+  opacity: 1;
+  transition: opacity 200ms ease-out;
+  transition-delay: calc(var(--i, 0) * 55ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-demos__live-dot {
+    animation: none;
+  }
+
+  .fc-scroll-reveal .fc-demos__tab {
+    opacity: 1;
+  }
+
+  .fc-revealed .fc-demos__tab {
+    transition: none;
+  }
+}
+
+/* The explanation column paints a plate over the body's corners, so the
+   brackets need to sit above it. */
+.fc-demos__body > .fc-v2-bracket {
+  z-index: 1;
 }

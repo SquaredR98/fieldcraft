@@ -10,7 +10,7 @@ const badges = ['Live preview', 'CSS export', 'Palette generator', 'Built-in pre
 
 export function ProThemeDemo() {
   return (
-    <section className="fc-pro-section">
+    <section className="fc-pro-section fc-pro-section--surface2">
       <div className="fc-pro-section__inner">
         <div className="fc-pro-demo-header">
           <div style={{ maxWidth: 620 }}>

@@ -64,7 +64,7 @@ export function RenderedPanel() {
             className="fc-hero-rendered__input"
             value={gp}
             onChange={(e) => setGp(e.target.value)}
-            placeholder="Type a practice name\u2026"
+            placeholder="Type a practice name…"
           />
         </div>
       )}

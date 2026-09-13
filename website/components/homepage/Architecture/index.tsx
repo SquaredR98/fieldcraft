@@ -2,13 +2,13 @@ import './styles.css';
 
 export function Architecture() {
   return (
-    <section id="layers" className="fc-arch">
+    <section id="layers" className="fc-arch fc-ground-surface">
       <div className="fc-arch__inner">
         <div className="fc-arch__eyebrow">Architecture</div>
         <h2 className="fc-arch__h2">
           Two layers, four packages.
         </h2>
-        <p className="fc-arch__sub">
+        <p className="fc-arch__sub fc-v2-block-gap">
           The engine is plain TypeScript with no UI dependencies. The React
           renderer sits on top of it and adds the field components. Install
           whichever one you need.
@@ -69,9 +69,10 @@ export function Architecture() {
                 href="https://github.com/SquaredR98/fieldcraft"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="fc-arch__contribute-link"
+                className="fc-v2-link fc-arch__contribute-link"
               >
-                Contribute on GitHub &rarr;
+                Contribute on GitHub{' '}
+                <span className="fc-v2-link__arrow">&rarr;</span>
               </a>
             </div>
           </div>

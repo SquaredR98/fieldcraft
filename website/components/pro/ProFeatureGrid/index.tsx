@@ -13,15 +13,19 @@ const groups: Group[] = [
 
 export function ProFeatureGrid() {
   return (
-    <section className="fc-pro-section">
+    <section className="fc-pro-section fc-pro-section--surface">
       <div className="fc-pro-section__inner">
         <div className="fc-pro-eyebrow">
           <div className="fc-pro-eyebrow__dot" />
           Everything in the box
         </div>
-        <h2 className="fc-pro-h2" style={{ marginBottom: 36 }}>
+        <h2 className="fc-pro-h2">
           {groups.reduce((n, g) => n + g.items.length, 0)} features, one licence
         </h2>
+        <p className="fc-pro-sub fc-pro-block-gap">
+          Grouped by what you would be building yourself otherwise. Every
+          item ships in the package you install.
+        </p>
 
         <div className="fc-pro-grid-1px fc-pro-grid-1px--3col" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
           {groups.map((g) => (

@@ -4,12 +4,10 @@ import { useState } from 'react';
 import Link from 'next/link';
 
 const links = [
-  { label: 'Why I built it', href: '/#why' },
   { label: 'Demos', href: '/#demos' },
-  { label: "What's missing", href: '/#gaps' },
-  { label: 'Status', href: '/#status' },
   { label: 'Docs', href: '/docs' },
   { label: 'Blog', href: '/blog' },
+  { label: 'About', href: '/about' },
 ];
 
 export function NavMobile() {
@@ -68,7 +66,6 @@ export function NavMobile() {
           >
             GitHub
           </a>
-          {/* PRO: hidden 2026-09-02 — restore when revisiting Pro
           <Link
             href="/pro"
             className="fc-nav__drawer-cta"
@@ -76,7 +73,6 @@ export function NavMobile() {
           >
             Explore Pro →
           </Link>
-          */}
         </div>
       )}
     </>

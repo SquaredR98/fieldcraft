@@ -1,0 +1,422 @@
+@reference "../../../app/globals.css";
+
+/* ── Data flow ── */
+
+/* No bottom rule and no local ground: the section's ground comes from
+   .fc-ground-surface2 on the element, and the step between grounds is
+   what separates it from its neighbours. A border as well would be the
+   same signal twice. */
+.fc-flow {
+  @apply relative overflow-hidden;
+}
+
+/* Anchored framing left, drawing right — the v2 editorial split.
+   The aside stretches so the delta readout can sit against the foot of
+   the drawing rather than leaving a void under the paragraph. */
+.fc-flow__inner {
+  @apply relative mx-auto max-w-320 px-10;
+  padding-top: var(--fc-section-y);
+  padding-bottom: calc(var(--fc-section-y) * 0.7);
+  @apply grid items-stretch gap-14;
+  grid-template-columns: 1fr 1.5fr;
+}
+
+.fc-flow__aside {
+  @apply flex flex-col;
+}
+
+.fc-flow__h2 {
+  @apply font-display font-semibold m-0 text-fc-ink-strong;
+  font-size: clamp(26px, 3vw, 34px);
+  letter-spacing: -0.034em;
+  line-height: 1.12;
+  text-wrap: pretty;
+}
+
+.fc-flow__sub {
+  @apply text-[15px] leading-[1.65] text-fc-soft mt-3.5 mb-0;
+}
+
+/* ── Delta readout: the whole argument as two figures ── */
+
+.fc-flow__delta {
+  @apply border border-fc-rule mt-auto;
+  background: var(--plate);
+  box-shadow: var(--e1);
+}
+
+.fc-flow__delta-row {
+  @apply flex items-baseline justify-between gap-4;
+  @apply px-4 py-3 border-b border-fc-rule;
+}
+
+.fc-flow__delta-k {
+  @apply font-mono text-[10px] tracking-[0.12em] uppercase text-fc-muted;
+}
+
+.fc-flow__delta-v {
+  @apply font-display text-[19px] font-semibold;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-flow__delta-v--warn {
+  @apply text-fc-amber-ink;
+}
+
+.fc-flow__delta-v--own {
+  @apply text-fc-teal;
+}
+
+.fc-flow__delta-note {
+  @apply font-mono text-[9.5px] leading-[1.6] text-fc-muted;
+  @apply px-4 py-2.5 m-0;
+}
+
+/* ── The drawing ── */
+
+/* The paths are not equals and should not be drawn as equals: the one
+   being argued for carries more width and more lift. Symmetry here
+   would have the layout contradicting the claim. */
+.fc-flow__draw {
+  @apply grid items-start;
+  grid-template-columns: 1fr 1.12fr;
+  gap: 20px;
+}
+
+.fc-flow__col {
+  @apply relative border border-fc-rule p-5;
+  background: var(--plate);
+  box-shadow: var(--e1);
+}
+
+.fc-flow__col--own {
+  @apply border-fc-teal-border;
+  background: var(--lead-plate);
+  box-shadow: var(--e2);
+}
+
+.fc-flow__col-head {
+  @apply flex flex-wrap items-baseline justify-between gap-2;
+  @apply pb-3 mb-4 border-b border-fc-rule;
+}
+
+.fc-flow__col-kind {
+  @apply font-display text-[15px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.014em;
+}
+
+.fc-flow__col-kind--own {
+  @apply text-fc-teal;
+}
+
+.fc-flow__col-tag {
+  @apply font-mono text-[9.5px] tracking-[0.1em] uppercase border px-2 py-1;
+}
+
+.fc-flow__col-tag--warn {
+  @apply text-fc-amber-ink border-fc-amber-border;
+  background: var(--amber-bg);
+}
+
+.fc-flow__col-tag--own {
+  @apply text-fc-teal border-fc-teal-border;
+  background: var(--wash);
+}
+
+/* Steps share borders: one continuous drawing, not stacked chips. */
+.fc-flow__steps {
+  @apply list-none m-0 p-0 border border-fc-rule;
+  background: var(--surface);
+  box-shadow: var(--inset);
+}
+
+.fc-flow__step {
+  @apply flex items-baseline gap-3 px-3.5 py-3;
+  @apply border-b border-fc-rule;
+}
+
+.fc-flow__step:last-child {
+  @apply border-b-0;
+}
+
+.fc-flow__step--warn {
+  background: var(--amber-bg);
+}
+
+.fc-flow__step--own {
+  background: var(--wash);
+}
+
+.fc-flow__step-n {
+  @apply font-mono text-[10px] text-fc-muted shrink-0;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-flow__step-l {
+  @apply text-[13.5px] text-fc-ink font-medium;
+}
+
+.fc-flow__step-note {
+  @apply font-mono text-[9.5px] tracking-[0.08em] uppercase;
+  @apply ml-auto shrink-0 text-fc-muted;
+}
+
+.fc-flow__step--warn .fc-flow__step-note {
+  @apply text-fc-amber-ink;
+}
+
+.fc-flow__step--own .fc-flow__step-note {
+  @apply text-fc-teal;
+}
+
+/* The absence is the point — stated, not left as whitespace. */
+.fc-flow__absent {
+  @apply mt-3.5 pt-3.5 border-t border-fc-wash-rule;
+  @apply text-[12.5px] leading-[1.5] text-fc-teal;
+}
+
+/* ── Consequences: shared-border cells ── */
+
+/* No top rule: the ground already steps from surface2 to surface here,
+   which separates the band from the drawing. A border on top of that
+   change does the job twice and reads as a seam cutting the consequences
+   away from the paths they follow from. */
+.fc-flow__consequences {
+  @apply relative;
+  background: var(--surface);
+}
+
+/* Same container as every other section: max-width and gutter on one
+   element, so the band aligns with the drawing above it. */
+.fc-flow__consequences-wrap {
+  @apply mx-auto max-w-320 px-10 pt-10 pb-2;
+}
+
+/* Shared borders via a 1px gap over a rule-coloured ground — cells of a
+   spec sheet. The outer wrapper carries the page gutter so the grid can
+   sit flush inside it without overflowing. */
+.fc-flow__consequences-inner {
+  @apply grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+/* A cell is a claim someone in procurement will scan for, so it responds
+   as a unit: the ground lifts, a teal edge grows from the top, the
+   abbreviation fills in, and the body copy comes up to full contrast. */
+.fc-flow__consequence {
+  @apply relative px-6 py-6;
+  background: var(--surface);
+  transition: background-color var(--motion-hover);
+}
+
+/* Top edge marker — grows from the left rather than fading in, so the
+   cell reads as being selected rather than merely highlighted. */
+.fc-flow__consequence::before {
+  content: '';
+  @apply absolute left-0 top-0 h-0.5;
+  width: 0;
+  background: var(--teal);
+  transition: width var(--motion-enter);
+}
+
+.fc-flow__consequence-h {
+  @apply flex items-baseline gap-2.5 mb-2;
+}
+
+/* The abbreviation is the scan target: a real chip, not loose text.
+   Fixed width so the body copy below aligns across all four cells —
+   the codes are 2 and 3 characters, which would otherwise stagger. */
+.fc-flow__consequence-k {
+  @apply font-mono text-[9.5px] tracking-[0.06em] shrink-0;
+  @apply border border-fc-teal-border py-0.5 text-fc-teal;
+  @apply inline-flex items-center justify-center;
+  width: 2.1rem;
+  background: var(--wash);
+  transition:
+    background-color var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-flow__consequence-t {
+  @apply font-display text-[13.5px] font-semibold text-fc-ink-strong;
+  letter-spacing: -0.01em;
+}
+
+/* Indent matches the chip width plus the header's 0.625rem gap, so body
+   copy hangs off the title rather than the chip. */
+.fc-flow__consequence-b {
+  @apply text-[12.5px] leading-[1.6] text-fc-muted m-0;
+  padding-left: calc(2.1rem + 0.625rem);
+  transition: color var(--motion-hover);
+}
+
+.fc-flow__note {
+  @apply py-6 m-0;
+  @apply text-[13px] leading-[1.65] text-fc-muted;
+}
+
+.fc-flow__note code {
+  @apply font-mono text-[12px] text-fc-ink px-1 py-0.5;
+  background: var(--wash);
+  border: 1px solid var(--wash-rule);
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1100px) {
+  .fc-flow__consequences-inner {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .fc-flow__inner {
+    @apply gap-10;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .fc-flow__draw {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-flow__consequences-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-flow__inner,
+  .fc-flow__note {
+    @apply px-5;
+  }
+
+  .fc-flow__step-note {
+    @apply hidden;
+  }
+}
+
+/* ── Finishes ─────────────────────────────────────────────────────
+ * A drawing is read along, not taken in at once. These behaviours
+ * extend that idea into states a static artboard cannot show.
+ */
+
+/* Steps trace in sequence once the section is revealed, so the eye
+   follows the path rather than landing on a finished block. The delay
+   is per-step via an index custom property set in the markup. */
+.fc-scroll-reveal .fc-flow__step {
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.fc-revealed .fc-flow__step {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity 260ms ease-out,
+    transform 260ms ease-out;
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* The absent-step line is the punchline of the right-hand path: it
+   arrives after every step above it has landed. */
+.fc-scroll-reveal .fc-flow__absent {
+  opacity: 0;
+}
+
+.fc-revealed .fc-flow__absent {
+  opacity: 1;
+  transition: opacity 300ms ease-out 320ms;
+}
+
+/* Hovering a hop highlights the corresponding party count, so the
+   drawing and the readout are legibly the same claim. */
+.fc-flow__col {
+  transition: box-shadow var(--motion-enter);
+}
+
+.fc-flow__col:hover {
+  box-shadow: var(--e2);
+}
+
+.fc-flow__col--own:hover {
+  box-shadow: var(--e3);
+}
+
+/* Consequence cells lift on hover — they are the actionable part of
+   this section, so they should read as touchable. */
+.fc-flow__consequence {
+  transition: background-color var(--motion-hover);
+}
+
+.fc-flow__consequence:hover {
+  background: var(--wash);
+}
+
+.fc-flow__consequence:hover::before {
+  width: 100%;
+}
+
+/* Chip inverts — the scan target confirms the hit. */
+.fc-flow__consequence:hover .fc-flow__consequence-k {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--teal-on);
+}
+
+/* Body copy steps up to full contrast, so hovering is also the act of
+   settling in to read it. */
+.fc-flow__consequence:hover .fc-flow__consequence-b {
+  @apply text-fc-soft;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-flow__consequence,
+  .fc-flow__consequence::before,
+  .fc-flow__consequence-k,
+  .fc-flow__consequence-b {
+    transition: none;
+  }
+
+  .fc-flow__consequence:hover::before {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-scroll-reveal .fc-flow__step,
+  .fc-scroll-reveal .fc-flow__absent {
+    opacity: 1;
+    transform: none;
+  }
+
+  .fc-revealed .fc-flow__step,
+  .fc-revealed .fc-flow__absent {
+    transition: none;
+  }
+}
+
+/* Hovering a path dims the other, so a reader comparing them can hold
+   one at a time. Pointer-only: this is an enhancement for scanning,
+   never the sole way to read the section. */
+@media (hover: hover) and (pointer: fine) {
+  .fc-flow__draw:hover .fc-flow__col:not(:hover) {
+    opacity: 0.62;
+  }
+
+  .fc-flow__col {
+    transition:
+      opacity var(--motion-enter),
+      box-shadow var(--motion-enter);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-flow__draw:hover .fc-flow__col:not(:hover) {
+    opacity: 1;
+  }
+}

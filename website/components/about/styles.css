@@ -1,0 +1,143 @@
+@reference "../../app/globals.css";
+
+/* ── About page ── */
+
+.fc-about__inner {
+  @apply mx-auto max-w-320 px-10;
+}
+
+.fc-about-hero {
+  @apply relative overflow-hidden border-b border-fc-rule;
+  background-color: var(--bg);
+}
+
+.fc-about-hero__inner {
+  @apply relative pt-20 pb-16;
+}
+
+.fc-about-hero__h1 + .fc-v2-tick {
+  @apply mt-6 mb-5;
+}
+
+.fc-about-hero__h1 {
+  @apply font-display font-semibold m-0 text-fc-ink-strong;
+  font-size: clamp(32px, 4.2vw, 48px);
+  letter-spacing: -0.038em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.fc-about-hero__sub {
+  @apply text-[17px] leading-[1.6] text-fc-soft mt-0 mb-0;
+  max-width: 58ch;
+  text-wrap: pretty;
+}
+
+/* ── Two-column prose ── */
+
+.fc-about-body {
+  @apply py-20;
+}
+
+.fc-about__cols {
+  @apply grid gap-16 items-start;
+  grid-template-columns: 420px 1fr;
+}
+
+.fc-about__aside-tick {
+  @apply mt-5;
+}
+
+.fc-about__prose {
+  max-width: 62ch;
+}
+
+.fc-about__prose p {
+  @apply text-[15.5px] leading-[1.7] text-fc-soft mt-0 mb-4.5;
+}
+
+.fc-about__lead {
+  @apply text-[17px] leading-[1.68] text-fc-ink;
+}
+
+.fc-about__link {
+  @apply inline-flex items-center gap-2 mt-2.5;
+  @apply font-display text-sm font-medium text-fc-teal;
+  @apply border-b-[1.5px] border-fc-teal-border pb-0.5;
+  transition: border-color var(--motion-hover);
+}
+
+.fc-about__link:hover {
+  @apply border-fc-teal;
+}
+
+/* ── Lessons ── */
+
+.fc-about-learned {
+  @apply py-20;
+}
+
+.fc-about-learned__sub {
+  @apply mt-2.5 mb-9;
+}
+
+.fc-about-learned__grid {
+  @apply grid gap-4;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.fc-about-learned__item {
+  @apply border border-fc-rule p-5;
+  background: var(--surface);
+  box-shadow: var(--e1);
+}
+
+.fc-about-learned__item-t {
+  @apply font-display text-[15px] font-semibold text-fc-ink-strong mb-2;
+  letter-spacing: -0.012em;
+}
+
+.fc-about-learned__item-b {
+  @apply text-[13px] leading-[1.6] text-fc-muted m-0;
+}
+
+/* ── Closing ── */
+
+.fc-about-cta {
+  @apply py-16;
+}
+
+.fc-about-cta__inner {
+  @apply flex flex-wrap items-end justify-between gap-8;
+}
+
+.fc-about-cta__sub {
+  @apply mt-2.5;
+}
+
+.fc-about-cta__actions {
+  @apply flex flex-wrap gap-3;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
+  .fc-about-learned__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fc-about__cols {
+    @apply gap-10;
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .fc-about-learned__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fc-about__inner {
+    @apply px-5;
+  }
+}

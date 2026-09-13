@@ -3,7 +3,7 @@ import type { ValidationRule } from "../types/validation";
 /**
  * Executes a single built-in validation rule against a field value.
  *
- * This is the core dispatcher for FieldCraft's 19 built-in validators.
+ * This is the core dispatcher for FieldCraft's 27 built-in validators.
  * Each rule type maps to a focused validator function. Rules with
  * `type: "custom"` or `type: "async"` are handled by the validation
  * runner, not here — this function returns `null` for those.

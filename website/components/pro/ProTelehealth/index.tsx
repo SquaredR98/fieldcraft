@@ -32,7 +32,7 @@ function DocIcon() {
 
 export function ProTelehealth() {
   return (
-    <section className="fc-pro-section fc-pro-section--surface">
+    <section className="fc-pro-section fc-pro-section--surface2">
       <div className="fc-pro-section__inner">
         <div className="fc-pro-eyebrow fc-pro-eyebrow--amber">
           <div className="fc-pro-eyebrow__dot fc-pro-eyebrow__dot--amber" />
@@ -42,49 +42,61 @@ export function ProTelehealth() {
           <h2 className="fc-pro-h2" style={{ maxWidth: 600 }}>
             Validated clinical instruments, already scored
           </h2>
+          {/* NOT included with Pro — it is a separate $99 add-on with its
+              own FCTH-* licence key that also requires a Pro key. The
+              previous copy said "Included with every Pro licence", which
+              was false. Not yet published: blocked on instrument
+              licensing (see fieldcraft-pro/.plan/roadmap.md Track 1B). */}
           <div className="fc-pro-telehealth__included">
-            Included with every Pro licence
+            Separate add-on &middot; coming soon
           </div>
         </div>
 
         <div className="fc-pro-grid-1px fc-pro-grid-1px--3col" style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
           <div>
             <ChartIcon />
-            <div className="fc-pro-telehealth__title">Clinical instruments</div>
+            <div className="fc-pro-telehealth__title">
+              11 clinical instruments
+            </div>
             <p className="fc-pro-telehealth__desc">
-              PHQ-9, GAD-7 and PSS-10 as schemas with scoring, severity bands
-              and subscale totals computed by the engine.
+              Each one a schema with scoring, severity bands and subscale
+              totals computed by the engine rather than by your code.
             </p>
             <div className="fc-pro-telehealth__tags">
               <span className="fc-pro-telehealth__tag">PHQ-9</span>
               <span className="fc-pro-telehealth__tag">GAD-7</span>
-              <span className="fc-pro-telehealth__tag">PSS-10</span>
+              <span className="fc-pro-telehealth__tag">PCL-5</span>
             </div>
           </div>
 
           <div>
             <BodyIcon />
-            <div className="fc-pro-telehealth__title">Healthcare fields</div>
+            <div className="fc-pro-telehealth__title">
+              8 clinical field types
+            </div>
             <p className="fc-pro-telehealth__desc">
-              Pain scales, a body region selector, vitals with unit handling and
-              reference ranges — as first-class field types.
+              Pain scale, body diagram, vitals with unit handling, BMI,
+              medication and allergy lists &mdash; as first-class field
+              types, not custom components you maintain.
             </p>
             <div className="fc-pro-telehealth__tags">
-              <span className="fc-pro-telehealth__tag">painScale</span>
-              <span className="fc-pro-telehealth__tag">bodyRegion</span>
-              <span className="fc-pro-telehealth__tag">vitals</span>
+              <span className="fc-pro-telehealth__tag">pain_scale</span>
+              <span className="fc-pro-telehealth__tag">body_diagram</span>
+              <span className="fc-pro-telehealth__tag">vitals_entry</span>
             </div>
           </div>
 
           <div>
             <DocIcon />
-            <div className="fc-pro-telehealth__title">Clinical templates</div>
+            <div className="fc-pro-telehealth__title">
+              7 clinical templates
+            </div>
             <p className="fc-pro-telehealth__desc">
-              Intake, screening and follow-up assessment schemas you can copy
+              Intake, screening and follow-up assessment schemas you copy
               into your repository and edit like any other form.
             </p>
             <div className="fc-pro-telehealth__tags">
-              <span className="fc-pro-telehealth__tag">14 schemas</span>
+              <span className="fc-pro-telehealth__tag">7 schemas</span>
               <span className="fc-pro-telehealth__tag">Editable</span>
             </div>
           </div>
