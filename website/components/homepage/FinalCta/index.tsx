@@ -25,7 +25,7 @@ const packages = [
 
 export function FinalCta() {
   return (
-    <section id="start" className="fc-cta">
+    <section id="start" className="fc-cta fc-ground-bg">
       <div className="fc-cta__inner">
         {/* ── Left column ── */}
         <div>
@@ -38,12 +38,12 @@ export function FinalCta() {
             and the licence is MIT.
           </p>
           <div className="fc-cta__actions">
-            <a href="/docs" className="fc-cta__btn-primary">
-              Read the docs &rarr;
+            <a href="/docs" className="fc-v2-cta">
+              Read the docs <span className="fc-v2-cta__arrow">&rarr;</span>
             </a>
             <a
               href="https://github.com/SquaredR98/fieldcraft"
-              className="fc-cta__btn-outline"
+              className="fc-v2-btn"
             >
               View on GitHub
             </a>

@@ -3,36 +3,57 @@ import { HeroTabs } from './HeroTabs';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
 
+/*
+ * The hero makes one claim: submissions never pass through anyone else's
+ * servers. Capability comes later — every form library has field types,
+ * but a hosted service structurally cannot make this promise.
+ */
+
 const badges = ['MIT', 'TypeScript', 'React 18 & 19'];
 
 export function Hero() {
   return (
     <section id="top" className="fc-hero">
+      <div className="fc-v2-grid" aria-hidden="true" />
       <div className="fc-hero__inner">
         <div>
           <div className="fc-hero__eyebrow">
             <div className="fc-hero__eyebrow-dot" />
-            A side project &middot; MIT licensed &middot; early
+            Self-hosted &middot; MIT licensed
           </div>
           <h1 className="fc-hero__h1">
-            Forms are just code, so I wrote them that way.
+            Your forms. Your database.<br />
+            Nobody in the middle.
           </h1>
+          <div className="fc-hero__tick" />
           <p className="fc-hero__sub">
-            FieldCraft is a schema-driven form engine for React. You describe a
-            form once in JSON and it handles validation, conditional logic,
+            FieldCraft is a schema-driven form engine for React. Describe a form
+            once in JSON and it handles validation, conditional logic,
             multi-step navigation, drafts and submission.
           </p>
-          <p className="fc-hero__sub">
-            I built it to learn how to publish and maintain npm packages. It
-            works, I use it, and the source is MIT if it&rsquo;s useful to you.
+          <p className="fc-hero__sub fc-hero__sub--quiet">
+            It is a library, not a service. Responses go straight from the
+            browser to infrastructure you control &mdash; there is no vendor in
+            the path to trust, audit or pay.
           </p>
+          {/* Explore Builder leads: seeing the product beats reading about
+              it, so docs drop to the secondary tier. */}
           <div className="fc-hero__actions">
-            <a href="/docs" className="fc-hero__cta">Read the docs →</a>
+            <a href="#builder" className="fc-v2-cta">
+              Explore Builder <span className="fc-v2-cta__arrow">→</span>
+            </a>
+            <a href="/docs" className="fc-v2-btn">
+              Read the docs
+            </a>
+          </div>
+          {/* Own row: it is a command to copy, not a second CTA competing
+              for the same click. */}
+          <div className="fc-hero__install">
             <CopyInstall />
           </div>
           <div className="fc-hero__badges">
             {badges.map((b) => (
-              <div key={b} className="fc-hero__badge">{b}</div>
+              <div key={b} className="fc-v2-chip">{b}</div>
             ))}
           </div>
         </div>

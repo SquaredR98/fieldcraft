@@ -1,18 +1,51 @@
 @reference "../../../app/globals.css";
 
+/*
+ * An install line, not a button. It sat in a teal-bordered box on a wash
+ * ground beside the hero CTA, which made two buttons competing for the
+ * same click. It is now plain monospace text — copyable, but reading as
+ * the command it is.
+ */
+
 .fc-copy-install {
-  @apply flex items-center gap-2.5;
+  @apply inline-flex items-center gap-2.5;
   @apply whitespace-nowrap cursor-pointer shrink-0;
-  @apply font-mono text-[13px] text-fc-teal;
-  @apply px-4 py-3.25 border border-fc-teal-border bg-fc-wash;
+  @apply font-mono text-[13px] text-fc-soft;
+  @apply bg-transparent border-0 p-0;
+  transition: color var(--motion-hover);
 }
 
+.fc-copy-install:hover {
+  @apply text-fc-ink;
+}
+
+.fc-copy-install:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+}
+
+/* The prompt marks it as a command rather than prose. */
+.fc-copy-install__prompt {
+  @apply text-fc-muted select-none;
+}
+
+/* Quiet until hovered — the affordance is there without advertising. */
 .fc-copy-install__label {
-  @apply text-[10px] tracking-widest text-fc-muted;
+  @apply font-mono text-[9.5px] tracking-[0.12em] uppercase;
+  @apply text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-copy-install:hover .fc-copy-install__label {
+  @apply text-fc-teal;
+}
+
+.fc-copy-install__label--copied {
+  @apply text-fc-teal;
 }
 
 @media (max-width: 639px) {
   .fc-copy-install {
-    @apply text-[11.5px] px-3 py-2.75 shrink;
+    @apply text-[11.5px] shrink;
   }
 }

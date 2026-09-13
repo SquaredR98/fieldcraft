@@ -1,11 +1,12 @@
 @reference "../../../app/globals.css";
 
 .fc-builder-teaser {
-  @apply bg-fc-surface border-b border-fc-rule;
+  @apply border-b border-fc-rule;
 }
 
 .fc-builder-teaser__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply max-w-310 mx-auto px-10 ;
+  padding-block: var(--fc-section-y);
 }
 
 /* ── Header ── */
@@ -18,48 +19,81 @@
 }
 
 .fc-builder-teaser__h2 {
-  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 max-w-120 text-fc-ink-strong mb-4;
+  @apply font-display font-semibold tracking-[-0.03em] leading-[1.1] m-0 max-w-120 text-fc-ink-strong mb-4;
 }
 
 .fc-builder-teaser__sub {
   @apply text-fc-body-lg leading-[1.7] text-fc-muted m-0 mb-6 max-w-160;
 }
 
-.fc-builder-teaser__cta {
-  @apply inline-flex items-center font-mono text-[11px] tracking-[0.1em] uppercase text-fc-teal no-underline;
-  transition: opacity var(--motion-hover);
-}
-
-.fc-builder-teaser__cta:hover {
-  @apply opacity-80;
-}
-
 .fc-builder-teaser__note {
   @apply font-mono text-[10px] tracking-fc-mono-sm uppercase text-fc-muted mt-3 m-0;
 }
 
-/* ── Builder ── */
+/* ── Builder ──
+ * This is the real Pro FormBuilder, not a mock, so it gets the lead-plate
+ * treatment the hero card has — it is the same kind of object: the
+ * product itself, running.
+ *
+ * Two things here exist because of how Pro is built:
+ *
+ * 1. No `overflow-hidden`. dnd-kit renders its DragOverlay in place as a
+ *    position:fixed element rather than through a portal, so clipping the
+ *    frame cut the drag preview off at its edge. The builder manages its
+ *    own internal scrolling and --radius is 0 site-wide, so nothing needs
+ *    the clip.
+ *
+ * 2. `--background` must be the LIT surface, not the page ground. Pro's
+ *    view-mode tabs are a segmented control: the track is --muted and the
+ *    active tab is `bg-background shadow-sm`, so it only reads as active
+ *    when those two contrast. Left as the page ground (#F4F7F8) against a
+ *    --wash track (#EDF3F2) the gap was ~2% luminance and the active tab
+ *    was invisible.
+ *
+ * Pro also reads shadcn's --muted as a SURFACE while the site defines it
+ * as a text colour, so that value is scoped here rather than globally.
+ */
 .fc-builder-teaser__form {
-  @apply border border-fc-rule overflow-hidden;
+  @apply relative border border-fc-teal-border;
+  background: var(--plate);
+  box-shadow: var(--e3);
+}
+
+/* Token overrides kept in their own rule: a bare custom property declared
+   before @apply in the same block has tripped the dev-server CSS
+   transform before. */
+.fc-builder-teaser__form {
+  --muted: var(--wash);
+  --background: var(--surface);
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
+  --fcb-border-strong: var(--teal-border);
 }
 
 /* ── Responsive ── */
 @media (max-width: 1023px) {
   .fc-builder-teaser__inner {
-    @apply px-6 py-14;
-  }
-
-  .fc-builder-teaser__h2 {
-    @apply text-[30px];
+    @apply px-6;
   }
 }
 
 @media (max-width: 639px) {
   .fc-builder-teaser__inner {
-    @apply px-5 py-12;
+    @apply px-5;
   }
+}
 
-  .fc-builder-teaser__h2 {
-    @apply text-[26px];
-  }
+/* Brackets straddle the border as they do on every other plate — the
+   frame no longer clips, so the inset workaround is gone. They also need
+   to sit above the builder's own surfaces. */
+.fc-builder-teaser__form > .fc-v2-bracket {
+  z-index: 2;
+}
+
+/* In dark, --wash (#182F31) and --surface (#16242A) are close, so the
+   segmented track needs a deeper ground than --wash for the active tab
+   to read as lifted out of it. --bg is the page ground and sits a clear
+   step below --surface. */
+:root[data-theme="dark"] .fc-builder-teaser__form {
+  --muted: var(--bg);
 }

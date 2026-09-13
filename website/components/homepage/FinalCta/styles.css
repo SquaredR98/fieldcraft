@@ -14,7 +14,8 @@
 
 .fc-cta__inner {
   @apply grid items-start mx-auto max-w-310;
-  @apply px-10 py-22 gap-14;
+  @apply px-10 gap-14;
+  padding-block: var(--fc-section-y);
   grid-template-columns: 1.1fr 1fr;
 }
 
@@ -26,8 +27,7 @@
 }
 
 .fc-cta__h2 {
-  @apply font-display text-[44px] font-semibold;
-  @apply tracking-[-0.035em] leading-[1.05];
+  @apply font-display font-semibold;
   @apply m-0 text-fc-ink-strong;
 }
 
@@ -38,31 +38,6 @@
 
 .fc-cta__actions {
   @apply flex flex-wrap gap-3;
-}
-
-.fc-cta__btn-primary {
-  @apply inline-block no-underline whitespace-nowrap;
-  @apply bg-fc-teal text-fc-teal-on;
-  @apply font-display text-[15px] font-medium;
-  @apply px-6 py-3.5;
-  transition: background-color var(--motion-hover);
-}
-
-.fc-cta__btn-primary:hover {
-  @apply bg-fc-teal-hover text-fc-teal-on;
-}
-
-.fc-cta__btn-outline {
-  @apply inline-block no-underline whitespace-nowrap;
-  @apply bg-transparent text-fc-ink;
-  @apply font-display text-[15px] font-medium;
-  @apply border-fc-btn-line px-6 py-3.25;
-  border-width: 1.5px;
-  transition: background-color var(--motion-hover), color var(--motion-hover);
-}
-
-.fc-cta__btn-outline:hover {
-  @apply bg-fc-ink text-fc-bg;
 }
 
 /* ── Right column: packages card ── */
@@ -108,12 +83,8 @@
 
 @media (max-width: 1023px) {
   .fc-cta__inner {
-    @apply px-6 py-16 gap-10;
+    @apply px-6 gap-10;
     grid-template-columns: 1fr;
-  }
-
-  .fc-cta__h2 {
-    @apply text-[34px];
   }
 }
 
@@ -121,7 +92,7 @@
 
 @media (max-width: 639px) {
   .fc-cta__inner {
-    @apply px-5 py-12;
+    @apply px-5;
   }
 
   .fc-cta__h2 {

@@ -132,6 +132,37 @@
   --focus-ring: 0 0 0 3px rgba(31, 107, 110, 0.14);
   --placeholder: #96A5AD;
 
+  /* ── v2 depth system: engraved plates, elevation, insets ── */
+  --grid-major: #D5E2DF;
+  --lit: rgba(255, 255, 255, 0.9);
+  --lit-strong: #FFFFFF;
+  --plate: linear-gradient(180deg, #FFFFFF 0%, #FAFCFC 100%);
+  --lead-plate: linear-gradient(180deg, #FFFFFF 0%, #EDF3F2 100%);
+  --teal-plate: linear-gradient(180deg, #1F6B6E 0%, #17575A 100%);
+  --e1: inset 0 1px 0 var(--lit-strong), 0 1px 2px rgba(18, 34, 42, 0.04);
+  --e2: inset 0 1px 0 var(--lit-strong), 0 2px 6px rgba(18, 34, 42, 0.05), 0 16px 32px -16px rgba(18, 34, 42, 0.12);
+  --e3: inset 0 1px 0 var(--lit-strong), 0 2px 6px rgba(18, 34, 42, 0.05), 0 22px 44px -20px rgba(18, 34, 42, 0.16);
+  --inset: inset 0 1px 3px rgba(18, 34, 42, 0.05);
+  --cta-glow: 0 8px 18px -8px rgba(31, 107, 110, 0.35);
+
+  /* ── Layout scale (site-wide) ──
+     Section heading size, tracking and vertical rhythm. Declared here
+     rather than in a page-level stylesheet because both the homepage and
+     the Pro page resolve through them. */
+  --fc-h2: clamp(28px, 3.4vw, 38px);
+  --fc-h2-tracking: -0.032em;
+  --fc-h2-leading: 1.1;
+  --fc-h2-gap: 0.625rem;
+  --fc-block-gap: 2.25rem;
+  --fc-section-y: 5rem;
+  --fc-section-y-wide: 5.5rem;
+
+  /* Section ground a half-step below --surface. --surface2 (#FAFCFC) is
+     ~2% off white, invisible as a section ground once bottom rules come
+     off, so this alias deepens it for that use while leaving --surface2
+     alone for the blog cards it was made for. */
+  --ground-2: #F7FAFA;
+
   --font-display: var(--font-space-grotesk), system-ui, sans-serif;
   --font-body: var(--font-ibm-plex-sans), system-ui, sans-serif;
   --font-mono: var(--font-ibm-plex-mono), ui-monospace, monospace;
@@ -140,12 +171,18 @@
   --motion-enter: 200ms ease-out;
   --motion-theme: 160ms ease;
 
-  /* shadcn/ui variable bridge (consumed by FormEngineRenderer) */
+  /* shadcn/ui variable bridge — consumed by FormEngineRenderer AND by
+     @squaredr/fieldcraft-pro (FormBuilder, ResponseViewer, ThemeEditor).
+     Pro's stylesheet carries hardcoded LIGHT fallbacks, so any token
+     missing here renders light-on-dark in the dark theme. Keep both
+     blocks in sync. */
   --radius: 0px;
   --background: #F4F7F8;
   --foreground: #12222A;
   --card: #FFFFFF;
   --card-foreground: #12222A;
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
   --primary: #1F6B6E;
   --primary-foreground: #FFFFFF;
   --secondary: #EDF3F2;
@@ -158,6 +195,10 @@
   --border: #DCE4E8;
   --input: #DCE4E8;
   --ring: #1F6B6E;
+
+  /* Pro builder canvas. Used unfallbacked in radial-gradient() for the
+     dot grid, so leaving it undefined kills that background entirely. */
+  --fcb-border-strong: var(--teal-border);
 }
 
 :root[data-theme="dark"] {
@@ -188,11 +229,30 @@
   --focus-ring: 0 0 0 3px rgba(99, 189, 180, 0.18);
   --placeholder: #5E7680;
 
-  /* shadcn/ui variable bridge (dark) */
+  /* ── v2 depth system (dark): plates read as lifted, not lit ── */
+  --grid-major: #22383D;
+  --lit: rgba(232, 239, 241, 0.05);
+  --lit-strong: rgba(232, 239, 241, 0.05);
+  --plate: linear-gradient(180deg, #16242A 0%, #132026 100%);
+  --lead-plate: linear-gradient(180deg, #16242A 0%, #182F31 100%);
+  --teal-plate: linear-gradient(180deg, #63BDB4 0%, #4FA9A1 100%);
+  --e1: inset 0 1px 0 var(--lit), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --e2: inset 0 1px 0 var(--lit), 0 2px 8px rgba(0, 0, 0, 0.35), 0 18px 36px -18px rgba(0, 0, 0, 0.5);
+  --e3: inset 0 1px 0 var(--lit), 0 2px 8px rgba(0, 0, 0, 0.4), 0 24px 48px -20px rgba(0, 0, 0, 0.6);
+  --inset: inset 0 1px 3px rgba(0, 0, 0, 0.35);
+  --cta-glow: 0 8px 18px -8px rgba(99, 189, 180, 0.28);
+
+  /* Dark surface2 is already a clear step below surface, so the alias
+     just points at it. */
+  --ground-2: var(--surface2);
+
+  /* shadcn/ui variable bridge (dark) — see the light block's note. */
   --background: #0F1A1F;
   --foreground: #E8EFF1;
   --card: #16242A;
   --card-foreground: #E8EFF1;
+  --popover: var(--surface);
+  --popover-foreground: var(--ink);
   --primary: #63BDB4;
   --primary-foreground: #0F1A1F;
   --secondary: #182F31;
@@ -205,6 +265,8 @@
   --border: #2A3B42;
   --input: #2A3B42;
   --ring: #63BDB4;
+
+  --fcb-border-strong: var(--teal-border);
 }
 
 /* ── Base reset ── */
@@ -384,5 +446,14 @@ body::-webkit-scrollbar-corner,
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Section rhythm tightens on small screens. Declared once here so both
+   the homepage and the Pro page inherit it. */
+@media (max-width: 820px) {
+  :root {
+    --fc-section-y: 3.5rem;
+    --fc-section-y-wide: 4rem;
   }
 }

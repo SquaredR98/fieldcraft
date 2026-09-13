@@ -1,10 +1,41 @@
 @reference "../../../app/globals.css";
 
+/*
+ * Scroll reveal: fade and rise once, on first intersection.
+ *
+ * IMPORTANT — the revealed state must end with `transform: none`, not a
+ * zero transform. Any non-none transform makes the element a containing
+ * block for `position: fixed` descendants, which breaks anything that
+ * positions itself against the viewport. The Pro FormBuilder's dnd-kit
+ * DragOverlay is fixed-position, so a lingering `translate-y-0` here made
+ * the drag preview render offset from the cursor.
+ */
+
 .fc-scroll-reveal {
-  @apply opacity-0 translate-y-4;
-  transition: opacity var(--motion-enter), transform var(--motion-enter);
+  opacity: 0;
+  transform: translateY(1rem);
+  transition:
+    opacity var(--motion-enter),
+    transform var(--motion-enter);
 }
 
+/* Animate to a zero translate so the motion interpolates, then drop the
+   transform entirely once the transition has finished. `transform: none`
+   is not interpolable from a translate, so doing it in one step would
+   make the element jump instead of glide. */
 .fc-revealed {
-  @apply opacity-100 translate-y-0;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fc-reveal-done {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

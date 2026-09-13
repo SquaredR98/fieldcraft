@@ -7,7 +7,7 @@ const lessons = [
   },
   {
     title: 'Tests are how you come back',
-    body: '1,151 tests weren’t for correctness so much as for me — they’re the only reason I can still change the engine after forgetting how it works.',
+    body: '1,270 tests weren’t for correctness so much as for me — they’re the only reason I can still change the engine after forgetting how it works.',
   },
   {
     title: 'Validate the input, not the user',

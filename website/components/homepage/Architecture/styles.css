@@ -13,7 +13,8 @@
 }
 
 .fc-arch__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply max-w-310 mx-auto px-10;
+  padding-block: var(--fc-section-y);
 }
 
 .fc-arch__eyebrow {
@@ -22,14 +23,13 @@
 }
 
 .fc-arch__h2 {
-  @apply font-display text-[38px] font-semibold;
-  @apply tracking-[-0.03em] leading-[1.1];
+  @apply font-display font-semibold;
   @apply m-0 max-w-160 text-fc-ink-strong;
 }
 
 .fc-arch__sub {
   @apply text-base leading-[1.65] text-fc-muted;
-  @apply mt-4 mb-11 max-w-140;
+  @apply mt-4 max-w-140;
 }
 
 .fc-arch__grid {
@@ -135,15 +135,9 @@
   @apply text-sm leading-[1.65] text-fc-muted;
 }
 
+/* Positioning only — appearance comes from .fc-v2-link. */
 .fc-arch__contribute-link {
-  @apply inline-block mt-3 no-underline;
-  @apply font-mono text-[11px] tracking-[0.08em] uppercase;
-  @apply text-fc-teal;
-  transition: color var(--motion-hover);
-}
-
-.fc-arch__contribute-link:hover {
-  @apply text-fc-ink;
+  @apply mt-4;
 }
 
 /* ── Entry point table ── */
@@ -175,11 +169,7 @@
 
 @media (max-width: 1023px) {
   .fc-arch__inner {
-    @apply px-6 py-14;
-  }
-
-  .fc-arch__h2 {
-    @apply text-[30px];
+    @apply px-6;
   }
 
   .fc-arch__grid {
@@ -191,10 +181,6 @@
 
 @media (max-width: 639px) {
   .fc-arch__inner {
-    @apply px-5 py-12;
-  }
-
-  .fc-arch__h2 {
-    @apply text-[26px];
+    @apply px-5;
   }
 }

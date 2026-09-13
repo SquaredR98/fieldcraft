@@ -1,71 +1,165 @@
 @reference "../../../app/globals.css";
 
+/* ── How to check ──
+ * The audit trail for DataFlow's claim. Its job is to invite
+ * verification, so the evidence — a file path, a flag, a licence — is
+ * the element that carries the weight, not the prose above it.
+ *
+ * Asymmetric: the framing is anchored left, the four checks run right,
+ * matching DataFlow and Scope. No bottom rule; the ground step does the
+ * separating.
+ */
+
 .fc-trust {
-  @apply border-b border-fc-rule;
+  @apply relative;
 }
 
 .fc-trust__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply max-w-320 mx-auto px-10;
+  padding-block: var(--fc-section-y);
+  @apply grid items-stretch gap-14;
+  grid-template-columns: 1fr 1.5fr;
 }
 
-.fc-trust__eyebrow {
-  @apply font-mono text-[10.5px] tracking-[0.16em];
-  @apply uppercase text-fc-teal mb-4;
-}
+/* ── Left column: framing ── */
 
-.fc-trust__h2 {
-  @apply font-display text-[38px] font-semibold;
-  @apply tracking-[-0.03em] leading-[1.1];
-  @apply m-0 mb-3 max-w-160 text-fc-ink-strong;
+/* Column stretches so the source link can sit against the foot of the
+   grid rather than leaving a void under the paragraph. */
+.fc-trust__aside {
+  @apply flex flex-col h-full;
 }
 
 .fc-trust__sub {
-  @apply text-[16px] leading-[1.6] text-fc-muted;
-  @apply mb-11 max-w-160;
+  @apply text-[15px] leading-[1.65] text-fc-soft;
+  @apply mt-3.5 mb-0;
 }
 
+/* A reader who wants to skip the prose and go straight to the source. */
+.fc-trust__jump {
+  @apply mt-auto pt-6;
+}
+
+/* ── Right column: the checks ── */
+
 .fc-trust__grid {
-  @apply grid gap-px bg-fc-rule border border-fc-rule;
-  grid-template-columns: repeat(2, 1fr);
+  @apply grid border border-fc-rule;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  box-shadow: var(--e1);
 }
 
 .fc-trust__card {
-  @apply bg-fc-surface p-7.5;
+  @apply relative flex flex-col p-6;
+  background: var(--surface);
+  transition: background-color var(--motion-hover);
+}
+
+/* Edge marker grows from the top-left, as on the DataFlow cells, so the
+   two evidence grids behave the same way. */
+.fc-trust__card::before {
+  content: '';
+  @apply absolute left-0 top-0 h-0.5;
+  width: 0;
+  background: var(--teal);
+  transition: width var(--motion-enter);
+}
+
+.fc-trust__card:hover {
+  background: var(--wash);
+}
+
+.fc-trust__card:hover::before {
+  width: 100%;
 }
 
 .fc-trust__card-title {
-  @apply font-display text-lg font-semibold tracking-[-0.02em];
-  @apply mb-2.5;
+  @apply font-display text-[15.5px] font-semibold tracking-[-0.014em];
+  @apply text-fc-ink-strong mb-2;
 }
 
 .fc-trust__card-body {
-  @apply text-[14.5px] leading-[1.65] text-fc-muted;
+  @apply text-[13px] leading-[1.6] text-fc-muted mb-5;
+  transition: color var(--motion-hover);
 }
 
-/* ── Responsive: tablet ── */
+.fc-trust__card:hover .fc-trust__card-body {
+  @apply text-fc-soft;
+}
 
-@media (max-width: 1023px) {
+/* ── Proof line ──
+ * The verifiable part, so it gets a well rather than a hairline: it is
+ * a thing to copy and go look at, not a caption.
+ */
+
+.fc-trust__card-proof {
+  @apply flex items-center gap-2.5 mt-auto;
+  @apply border border-fc-wash-rule px-2.5 py-2;
+  background: var(--wash);
+  box-shadow: var(--inset);
+  transition: border-color var(--motion-hover);
+}
+
+.fc-trust__card:hover .fc-trust__card-proof {
+  @apply border-fc-teal-border;
+}
+
+.fc-trust__card-proof-k {
+  @apply font-mono text-[8.5px] tracking-[0.1em] uppercase shrink-0;
+  @apply inline-flex items-center justify-center;
+  @apply border border-fc-teal-border py-0.5 text-fc-teal;
+  width: 2.4rem;
+  background: var(--surface);
+  transition:
+    background-color var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-trust__card:hover .fc-trust__card-proof-k {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--teal-on);
+}
+
+.fc-trust__card-proof code {
+  @apply font-mono text-[11px] text-fc-soft;
+  word-break: break-all;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1000px) {
   .fc-trust__inner {
-    @apply px-6 py-14;
+    @apply gap-10;
+    grid-template-columns: 1fr;
   }
 
-  .fc-trust__h2 {
-    @apply text-[30px];
+  .fc-trust__jump {
+    @apply mt-0;
   }
 }
-
-/* ── Responsive: mobile ── */
 
 @media (max-width: 639px) {
   .fc-trust__inner {
-    @apply px-5 py-12;
-  }
-
-  .fc-trust__h2 {
-    @apply text-[26px];
+    @apply px-5;
   }
 
   .fc-trust__grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-trust__card,
+  .fc-trust__card::before,
+  .fc-trust__card-body,
+  .fc-trust__card-proof,
+  .fc-trust__card-proof-k {
+    transition: none;
+  }
+
+  .fc-trust__card:hover::before {
+    width: 100%;
   }
 }

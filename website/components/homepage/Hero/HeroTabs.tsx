@@ -11,6 +11,8 @@ export function HeroTabs() {
 
   return (
     <div className="fc-hero-card">
+      <div className="fc-v2-bracket fc-v2-bracket--tl" aria-hidden="true" />
+      <div className="fc-v2-bracket fc-v2-bracket--br" aria-hidden="true" />
       <div className="fc-hero-card__tabs">
         <button
           className={`fc-hero-card__tab ${tab === "rendered" ? "fc-hero-card__tab--active" : ""}`}

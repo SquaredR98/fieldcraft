@@ -1,11 +1,12 @@
 @reference "../../../app/globals.css";
 
 .fc-how {
-  @apply border-b border-fc-rule bg-fc-surface;
+  @apply border-b border-fc-rule;
 }
 
 .fc-how__inner {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply max-w-310 mx-auto px-10 ;
+  padding-block: var(--fc-section-y);
 }
 
 .fc-how__eyebrow {
@@ -14,14 +15,34 @@
 }
 
 .fc-how__h2 {
-  @apply font-display text-[38px] font-semibold;
-  @apply tracking-[-0.03em] leading-[1.1];
-  @apply m-0 mb-11 max-w-160 text-fc-ink-strong;
+  @apply font-display font-semibold;
+  @apply m-0 max-w-160 text-fc-ink-strong;
+}
+
+/* Gap to the grid comes from .fc-v2-block-gap on the subtitle. */
+.fc-how__sub {
+  @apply text-[15px] leading-[1.6] text-fc-soft m-0;
+  max-width: 480px;
+  text-wrap: pretty;
 }
 
 .fc-how__grid {
   @apply grid gap-7;
-  grid-template-columns: repeat(3, 1fr);
+  /* Step 02 is wider: the schema is the product, so it gets the weight. */
+  grid-template-columns: 1fr 1.18fr 1fr;
+}
+
+.fc-how__step {
+  @apply relative border border-fc-rule p-5.5;
+  background: var(--plate);
+  box-shadow: var(--e1);
+}
+
+/* Step 02 carries the argument: teal edge, more lift, wider column. */
+.fc-how__step--lead {
+  @apply border-fc-teal-border p-6.5;
+  background: var(--lead-plate);
+  box-shadow: var(--e2);
 }
 
 .fc-how__step-header {
@@ -64,11 +85,7 @@
 
 @media (max-width: 1023px) {
   .fc-how__inner {
-    @apply px-6 py-14;
-  }
-
-  .fc-how__h2 {
-    @apply text-[30px];
+    @apply px-6;
   }
 }
 
@@ -76,14 +93,20 @@
 
 @media (max-width: 639px) {
   .fc-how__inner {
-    @apply px-5 py-12;
-  }
-
-  .fc-how__h2 {
-    @apply text-[26px];
+    @apply px-5;
   }
 
   .fc-how__grid {
     grid-template-columns: 1fr;
   }
+}
+
+.fc-how__step--lead .fc-how__chip {
+  background: var(--teal-plate);
+  @apply text-fc-teal-on;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.fc-how__step--lead .fc-how__step-header {
+  @apply border-fc-teal-border;
 }

@@ -3,17 +3,12 @@
 /* ── Hero section ── */
 
 .fc-hero {
-  @apply border-b border-fc-rule;
-  /* Drafting grid — no Tailwind equivalent for this pattern */
+  @apply relative overflow-hidden border-b border-fc-rule;
   background-color: var(--bg);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
 }
 
 .fc-hero__inner {
-  @apply grid items-start mx-auto max-w-310;
+  @apply relative grid items-start mx-auto max-w-310;
   @apply px-10 pt-22 pb-20 gap-14;
   grid-template-columns: 1.02fr 1fr;
 }
@@ -21,13 +16,22 @@
 /* ── Left column ── */
 
 .fc-hero__eyebrow {
-  @apply flex items-center gap-2.5 mb-5.5;
-  @apply font-mono text-[10.5px] tracking-[0.16em];
+  @apply inline-flex items-center gap-2 mb-5.5;
+  @apply border border-fc-teal-border px-2.5 py-1.5;
+  @apply font-mono text-[10px] tracking-[0.14em];
   @apply uppercase text-fc-teal;
+  background: var(--lead-plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
 .fc-hero__eyebrow-dot {
-  @apply w-1.5 h-1.5 bg-fc-teal;
+  @apply w-[5px] h-[5px] bg-fc-teal;
+}
+
+.fc-hero__tick {
+  @apply h-0.5 mt-6.5 mb-5.5;
+  width: 64px;
+  background: linear-gradient(90deg, var(--teal), transparent);
 }
 
 .fc-hero__h1 {
@@ -40,7 +44,7 @@
 
 .fc-hero__sub {
   @apply text-[18px] leading-[1.6] text-fc-soft;
-  @apply mt-5.5 max-w-136;
+  @apply mt-0 max-w-136;
   text-wrap: pretty;
 }
 
@@ -48,8 +52,18 @@
   @apply mt-3.5;
 }
 
+.fc-hero__sub--quiet {
+  @apply text-[15px] leading-[1.68] text-fc-muted;
+}
+
 .fc-hero__actions {
-  @apply flex flex-wrap gap-3 mt-8;
+  @apply flex flex-wrap items-center gap-3 mt-8;
+}
+
+/* The install command sits on its own row under the CTA — it is a thing
+   to copy, not a second button competing for the same click. */
+.fc-hero__install {
+  @apply mt-4;
 }
 
 .fc-hero__cta {
@@ -87,7 +101,9 @@
 /* ── Right column: hero card ── */
 
 .fc-hero-card {
-  @apply border border-fc-rule bg-fc-surface;
+  @apply relative border border-fc-teal-border;
+  background: var(--plate);
+  box-shadow: var(--e3);
 }
 
 .fc-hero-card__tabs {
@@ -214,7 +230,9 @@
 /* ── Spec strip ── */
 
 .fc-spec-strip {
-  @apply border-t border-fc-rule bg-fc-surface overflow-hidden;
+  @apply relative border-t border-fc-rule overflow-hidden;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
 .fc-spec-strip__inner {
@@ -235,14 +253,24 @@
   @apply pl-6 border-l border-fc-rule;
 }
 
+.fc-spec-strip__head {
+  @apply flex items-baseline gap-2;
+}
+
+.fc-spec-strip__pip {
+  @apply w-1 h-1 bg-fc-teal;
+}
+
 .fc-spec-strip__value {
   @apply font-display text-2xl font-semibold tracking-fc-subhead;
   @apply text-fc-ink-strong;
+  /* Tabular figures: the counter changes digits without shifting width. */
+  font-variant-numeric: tabular-nums;
 }
 
 .fc-spec-strip__label {
   @apply font-mono text-[9.5px] tracking-[0.12em];
-  @apply uppercase text-fc-muted mt-1;
+  @apply uppercase text-fc-muted mt-1.5 pl-3;
 }
 
 /* ── Responsive: tablet ── */

@@ -12,12 +12,17 @@ export function Status({
   latestPackage,
 }: StatusProps) {
   return (
-    <section id="status" className="fc-status">
+    <section id="status" className="fc-status fc-ground-surface2">
       <div className="fc-status__inner">
         <div className="fc-status__eyebrow">Status</div>
         <h2 className="fc-status__h2">Where it stands right now.</h2>
+        <p className="fc-status__sub fc-v2-block-gap">
+          Stated plainly, and kept current &mdash; the release figure below
+          comes from the changelog, not from this page.
+        </p>
         <div className="fc-status__grid">
-          <div className="fc-status__card">
+          <div className="fc-status__card fc-status__card--lead">
+            <div className="fc-v2-bracket fc-v2-bracket--tl" aria-hidden="true" />
             <div className="fc-status__label">Latest release</div>
             <div className="fc-status__version">
               {latestPackage} {latestVersion}
@@ -45,9 +50,12 @@ export function Status({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Open an issue &rarr;
+                Open an issue{" "}
+                <span className="fc-v2-link__arrow">&rarr;</span>
               </a>
-              <a href="/changelog">Changelog &rarr;</a>
+              <a href="/changelog">
+                Changelog <span className="fc-v2-link__arrow">&rarr;</span>
+              </a>
             </div>
           </div>
         </div>

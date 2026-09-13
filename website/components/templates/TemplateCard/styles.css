@@ -1,12 +1,51 @@
 @reference "../../../app/globals.css";
 
+/*
+ * Shared by the homepage showcase and the /templates listing, so changes
+ * here land on both. A card is a link to a page, so it reads as a
+ * discrete plate rather than a cell of a table: elevation lifts on
+ * hover, and the id footer names the thing you would actually import.
+ */
+
 .fc-tpl-card {
-  @apply flex flex-col bg-fc-surface no-underline text-inherit p-5 md:p-6 border border-fc-rule;
-  transition: background var(--motion-hover), border-color var(--motion-hover);
+  @apply relative flex flex-col no-underline text-inherit;
+  @apply p-5 md:p-6 border border-fc-rule;
+  background: var(--plate);
+  box-shadow: var(--e1);
+  transition:
+    box-shadow var(--motion-enter),
+    border-color var(--motion-hover);
 }
 
 .fc-tpl-card:hover {
-  @apply bg-fc-surface2 border-fc-teal;
+  @apply border-fc-teal-border;
+  box-shadow: var(--e2);
+}
+
+.fc-tpl-card:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+/* Corner bracket grows in on hover — the same "this one is selected"
+   gesture the lead plates use, at card scale. */
+.fc-tpl-card::before {
+  content: '';
+  @apply absolute pointer-events-none;
+  top: -1px;
+  left: -1px;
+  width: 0;
+  height: 0;
+  border-top: 2px solid var(--teal);
+  border-left: 2px solid var(--teal);
+  transition:
+    width var(--motion-enter),
+    height var(--motion-enter);
+}
+
+.fc-tpl-card:hover::before {
+  width: 11px;
+  height: 11px;
 }
 
 .fc-tpl-card__header {
@@ -14,15 +53,29 @@
 }
 
 .fc-tpl-card__badge {
-  @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal px-[7px] py-[3px] border border-fc-teal-border bg-fc-wash leading-[1.3];
+  @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
+  @apply px-[7px] py-[3px] border border-fc-teal-border leading-[1.3];
+  background: var(--wash);
+  transition:
+    background-color var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-tpl-card:hover .fc-tpl-card__badge {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--teal-on);
 }
 
 .fc-tpl-card__stats {
   @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+  font-variant-numeric: tabular-nums;
 }
 
 .fc-tpl-card__title {
-  @apply font-display font-semibold text-base md:text-lg tracking-fc-subhead leading-[1.25] text-fc-ink-strong m-0 mb-2;
+  @apply font-display font-semibold text-base md:text-lg;
+  @apply tracking-fc-subhead leading-[1.25] text-fc-ink-strong m-0 mb-2;
 }
 
 .fc-tpl-card__desc {
@@ -32,12 +85,74 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  transition: color var(--motion-hover);
+}
+
+.fc-tpl-card:hover .fc-tpl-card__desc {
+  @apply text-fc-soft;
+}
+
+/* ── Foot: tags left, schema id right ──
+ * The id is what a developer actually types, so it earns a place.
+ */
+
+.fc-tpl-card__foot {
+  @apply mt-auto pt-3.5 border-t border-fc-rule;
+  @apply flex items-center justify-between gap-3;
 }
 
 .fc-tpl-card__tags {
-  @apply mt-auto flex flex-wrap gap-1.5;
+  @apply flex flex-wrap gap-1.5;
 }
 
 .fc-tpl-card__tag {
   @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+}
+
+.fc-tpl-card__id {
+  @apply flex items-center gap-1.5 shrink-0;
+  @apply font-mono text-fc-2xs text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-tpl-card__id-pip {
+  @apply w-1 h-1 bg-fc-teal shrink-0;
+}
+
+.fc-tpl-card:hover .fc-tpl-card__id {
+  @apply text-fc-teal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-tpl-card,
+  .fc-tpl-card::before,
+  .fc-tpl-card__badge,
+  .fc-tpl-card__desc,
+  .fc-tpl-card__id {
+    transition: none;
+  }
+
+  .fc-tpl-card:hover::before {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+/* Ids run up to 20 characters ("onboarding-checklist"), which can crowd
+   the tags in a three-column grid. The id's TEXT truncates — not the
+   element, so the pip is never clipped — and tags give way first. */
+.fc-tpl-card__id {
+  @apply min-w-0;
+  max-width: 58%;
+}
+
+.fc-tpl-card__id-text {
+  @apply min-w-0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fc-tpl-card__tags {
+  @apply min-w-0 overflow-hidden;
 }
