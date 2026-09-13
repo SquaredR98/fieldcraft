@@ -11,21 +11,28 @@
 
 .fc-pro-code__compat {
   @apply font-mono text-[11px] tracking-[0.1em];
-  @apply uppercase text-fc-muted;
-  @apply border border-fc-rule bg-fc-bg;
+  @apply uppercase text-fc-soft;
+  @apply border border-fc-rule;
   @apply px-3.25 py-2.5;
   @apply inline-block mt-6;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
+/* Plated frame around a recessed code well, so the snippet reads as
+   something set into the page rather than a box drawn on it. */
 .fc-pro-code__block {
-  @apply border border-fc-rule bg-fc-bg;
+  @apply relative border border-fc-teal-border;
+  background: var(--plate);
+  box-shadow: var(--e2);
 }
 
 .fc-pro-code__chrome {
   @apply flex items-center justify-between;
   @apply px-3.5 py-2.25;
   @apply border-b border-fc-rule;
-  background: var(--surface2, var(--color-fc-surface));
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
 .fc-pro-code__chrome-file {
@@ -44,6 +51,8 @@
   font-size: 12.5px;
   line-height: 1.9;
   padding: 20px;
+  background: var(--bg);
+  box-shadow: var(--inset);
 }
 
 .fc-pro-code__muted {

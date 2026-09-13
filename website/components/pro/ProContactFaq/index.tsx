@@ -117,7 +117,7 @@ export function ProContactFaq() {
   }, []);
 
   return (
-    <section id="contact" className="fc-pro-contactfaq">
+    <section id="contact" className="fc-pro-contactfaq fc-pro-section fc-pro-section--bg">
       <div className="fc-pro-contactfaq__inner">
         <div className="fc-pro-contactfaq__grid">
           {/* ── Left column: heading + FAQ + key terms ── */}

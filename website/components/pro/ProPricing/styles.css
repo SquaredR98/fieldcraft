@@ -12,7 +12,8 @@
 }
 
 .fc-pro-pricing__inner {
-  @apply mx-auto px-10 py-20;
+  @apply mx-auto px-10;
+  padding-block: var(--fc-section-y);
   max-width: 1280px;
 }
 
@@ -25,8 +26,12 @@
   @apply text-center mb-8;
 }
 
+/* The page.s decisive surface — lead plate and the strongest elevation
+   on the page, with brackets in the markup. */
 .fc-pro-pricing__card {
-  @apply border border-fc-rule bg-fc-surface;
+  @apply relative border border-fc-teal-border;
+  background: var(--lead-plate);
+  box-shadow: var(--e3);
 }
 
 .fc-pro-pricing__grid {
@@ -60,11 +65,6 @@
   line-height: 0.85;
 }
 
-.fc-pro-pricing__price-old {
-  @apply font-display text-[24px] text-fc-muted line-through;
-  line-height: 1.4;
-}
-
 .fc-pro-pricing__price-note {
   @apply font-mono text-[10.5px] tracking-[0.12em];
   @apply uppercase text-fc-muted mt-4;
@@ -76,16 +76,36 @@
   border-color: var(--wash-rule, var(--color-fc-rule));
 }
 
+/* Primary tier — the page's CTA plate, matching .fc-v2-cta. */
 .fc-pro-pricing__cta {
   @apply block text-center no-underline;
-  @apply bg-fc-teal text-fc-teal-on;
+  @apply text-fc-teal-on;
   @apply font-display text-[15px] font-medium;
   @apply px-5 py-3.5 cursor-pointer;
-  transition: background var(--motion-hover);
+  background: var(--teal-plate);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    var(--cta-glow);
+  transition: filter var(--motion-hover);
 }
 
 .fc-pro-pricing__cta:hover {
-  @apply bg-fc-teal-hover text-fc-teal-on;
+  @apply text-fc-teal-on;
+  filter: brightness(1.06);
+}
+
+/* Purchasing is not live yet: a plated well, clearly not pressable, so
+   nobody reads it as a button that failed. */
+.fc-pro-pricing__cta--soon {
+  @apply cursor-default border border-fc-rule text-fc-muted;
+  @apply font-mono text-[11px] tracking-[0.14em] uppercase;
+  background: var(--wash);
+  box-shadow: var(--inset);
+}
+
+.fc-pro-pricing__cta--soon:hover {
+  @apply text-fc-muted;
+  filter: none;
 }
 
 .fc-pro-pricing__trial {

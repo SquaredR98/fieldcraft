@@ -49,7 +49,21 @@
   @apply font-mono text-[12px] leading-[1.6];
 }
 
-.fc-pro-problem__highlight {
-  @apply bg-fc-wash;
-  box-shadow: inset 0 2px 0 var(--teal);
+/* The recommended cell of the three — lead plate and a teal top edge, so
+   it is weighted by treatment and not only by its label. Overrides the
+   shared grid cell's plain surface. */
+.fc-pro-grid-1px > .fc-pro-problem__highlight {
+  background: var(--lead-plate);
+  box-shadow:
+    inset 0 2px 0 var(--teal),
+    var(--e2);
+}
+
+.fc-pro-grid-1px > .fc-pro-problem__highlight:hover {
+  background: var(--lead-plate);
+}
+
+/* The shared edge marker would fight the permanent teal top edge. */
+.fc-pro-grid-1px > .fc-pro-problem__highlight::before {
+  content: none;
 }

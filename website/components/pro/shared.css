@@ -1,28 +1,54 @@
 @reference "../../app/globals.css";
 
-/* ── Shared Pro section layout ── */
+/* ── Shared Pro section layout ──
+ * These were a parallel set of primitives to the homepage's: a fixed
+ * 34px heading that did not scale, py-20 rhythm, muted eyebrows with
+ * dots rather than the fading rule. They now resolve through the same
+ * v2 tokens, so the two pages read as one site.
+ *
+ * Because every Pro section uses these, the whole page moves at once.
+ */
 
 .fc-pro-section {
-  @apply border-b border-fc-rule;
+  @apply relative;
 }
 
+/* Grounds alternate down the page, as on the homepage. Bottom rules are
+   gone — the ground step separates the sections. */
 .fc-pro-section--surface {
-  @apply bg-fc-surface;
+  background: var(--surface);
+}
+
+.fc-pro-section--surface2 {
+  background: var(--ground-2);
+}
+
+.fc-pro-section--bg {
+  background: var(--bg);
 }
 
 .fc-pro-section__inner {
-  @apply mx-auto px-10 py-20;
+  @apply mx-auto px-10;
+  padding-block: var(--fc-section-y);
   max-width: 1280px;
 }
 
+/* Mono label trailed by a rule that fades out — the homepage treatment.
+   The dot is kept for the variants that still use it. */
 .fc-pro-eyebrow {
-  @apply flex items-center gap-2.25 mb-4.5;
-  @apply font-mono text-[10.5px] tracking-[0.18em];
-  @apply uppercase text-fc-muted;
+  @apply flex items-center gap-3 mb-3.5;
+  @apply font-mono text-[10.5px] tracking-[0.14em];
+  @apply uppercase text-fc-teal;
+}
+
+.fc-pro-eyebrow::after {
+  content: '';
+  @apply flex-1 h-px;
+  background: linear-gradient(90deg, var(--rule), transparent);
 }
 
 .fc-pro-eyebrow__dot {
-  @apply w-1.5 h-1.5 bg-fc-teal;
+  @apply w-[5px] h-[5px] bg-fc-teal shrink-0;
 }
 
 .fc-pro-eyebrow__dot--amber {
@@ -33,18 +59,27 @@
   color: var(--amber-ink);
 }
 
+.fc-pro-eyebrow--amber::after {
+  background: linear-gradient(90deg, var(--amber-border), transparent);
+}
+
+/* Same fluid scale as the homepage — the fixed 34px did not scale down. */
 .fc-pro-h2 {
-  @apply font-display text-[34px] font-semibold;
-  @apply tracking-[-0.03em] leading-[1.1];
-  @apply m-0 text-fc-ink-strong;
+  @apply font-display font-semibold m-0 text-fc-ink-strong;
+  font-size: var(--fc-h2);
+  letter-spacing: var(--fc-h2-tracking);
+  line-height: var(--fc-h2-leading);
   text-wrap: pretty;
 }
 
 .fc-pro-sub {
-  @apply text-[16px] leading-[1.7] text-fc-muted;
-  @apply mt-3.5;
+  @apply text-[15px] leading-[1.65] text-fc-soft;
   max-width: 620px;
   text-wrap: pretty;
+}
+
+.fc-pro-h2 + .fc-pro-sub {
+  margin-top: var(--fc-h2-gap);
 }
 
 /* ── Shared badge pills ── */
@@ -56,20 +91,27 @@
 .fc-pro-badge {
   @apply font-mono text-[10.5px] tracking-[0.12em];
   @apply uppercase text-fc-muted;
-  @apply border border-fc-rule bg-fc-surface;
+  @apply border border-fc-rule;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
   @apply px-2.75 py-1.75;
 }
 
 /* ── Shared demo chrome bar ── */
 
+/* Each demo is the real Pro component running, so it gets the lead-plate
+   treatment the homepage reserves for the panel carrying the argument. */
 .fc-pro-demo {
-  @apply border border-fc-rule mt-8;
+  @apply relative border border-fc-teal-border mt-8;
+  background: var(--plate);
+  box-shadow: var(--e3);
 }
 
 .fc-pro-demo__chrome {
   @apply flex items-center gap-3 px-3.5 py-2.5;
   @apply border-b border-fc-rule;
-  background: var(--surface2, var(--color-fc-surface));
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
 .fc-pro-demo__dots {
@@ -96,9 +138,14 @@
   @apply px-1.75 py-0.75;
 }
 
+/* No overflow-hidden: dnd-kit renders its DragOverlay as a
+   position:fixed element in place rather than through a portal, so
+   clipping here cuts the drag preview off at the frame edge — the same
+   bug that hit the homepage builder. */
 .fc-pro-demo__body {
-  @apply overflow-hidden;
+  @apply relative;
   background: var(--bg);
+  box-shadow: var(--inset);
 
   /* Re-apply the site's shadcn variable bridge so Pro components
      (ResponseViewer, ThemeEditor) inherit the correct light/dark tokens
@@ -106,7 +153,11 @@
      Values reference the site's Drafting Teal tokens which already
      switch between light and dark via data-theme="dark". */
   --radius: 0px;
-  --background: var(--bg);
+  /* The LIT surface, not the page ground. Pro's view-mode tabs are a
+     segmented control — track is --muted, active tab is
+     `bg-background shadow-sm` — so those two must contrast or the active
+     tab is invisible. Same fix as the homepage builder teaser. */
+  --background: var(--surface);
   --foreground: var(--ink);
   --card: var(--surface);
   --card-foreground: var(--ink);
@@ -125,6 +176,10 @@
   --border: var(--rule);
   --input: var(--rule);
   --ring: var(--teal);
+
+  /* Builder canvas dot grid. Pro uses this unfallbacked inside
+     radial-gradient(), so an undefined value drops the grid entirely. */
+  --fcb-border-strong: var(--teal-border);
 }
 
 /* ── Shared demo section header (title left, tag right) ── */
@@ -135,7 +190,9 @@
 
 .fc-pro-demo-header__tag {
   @apply font-mono text-[12px] text-fc-muted;
-  @apply border border-fc-rule bg-fc-surface;
+  @apply border border-fc-rule;
+  background: var(--plate);
+  box-shadow: var(--e1);
   @apply px-3.5 py-2.5;
 }
 
@@ -146,22 +203,54 @@
   display: grid;
   gap: 1px;
   background: var(--color-fc-rule);
+  box-shadow: var(--e1);
 }
 
 .fc-pro-grid-1px > * {
-  @apply bg-fc-surface;
+  @apply relative;
+  background: var(--surface);
   padding: 28px 26px 32px;
+  transition: background-color var(--motion-hover);
+}
+
+/* Edge marker grows from the top-left on hover, as on every other
+   evidence grid across the site. */
+.fc-pro-grid-1px > *::before {
+  content: '';
+  @apply absolute left-0 top-0 h-0.5;
+  width: 0;
+  background: var(--teal);
+  transition: width var(--motion-enter);
+}
+
+.fc-pro-grid-1px > *:hover {
+  background: var(--wash);
+}
+
+.fc-pro-grid-1px > *:hover::before {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-pro-grid-1px > *,
+  .fc-pro-grid-1px > *::before {
+    transition: none;
+  }
+
+  .fc-pro-grid-1px > *:hover::before {
+    width: 100%;
+  }
 }
 
 /* ── Responsive ── */
 
+/* Heading size and vertical rhythm come from the tokens, which already
+   scale at 820px — the fixed 28px/26px and py-16/py-12 overrides that
+   used to live here fought them. */
+
 @media (max-width: 1000px) {
   .fc-pro-section__inner {
-    @apply px-6 py-16;
-  }
-
-  .fc-pro-h2 {
-    @apply text-[28px];
+    @apply px-6;
   }
 
   .fc-pro-grid-1px--3col {
@@ -175,14 +264,29 @@
 
 @media (max-width: 640px) {
   .fc-pro-section__inner {
-    @apply px-5 py-12;
+    @apply px-5;
   }
+}
 
-  .fc-pro-h2 {
-    @apply text-[26px];
-  }
+/* Centred eyebrow (pricing, FAQ headers): the fading rule assumes a
+   left-anchored label, so a centred one drops it and keeps the dot. */
+.fc-pro-eyebrow--center {
+  @apply justify-center;
+}
 
-  .fc-pro-sub {
-    @apply text-[15px];
-  }
+.fc-pro-eyebrow--center::after {
+  content: none;
+}
+
+/* Dark: --wash and --surface sit close, so the segmented track needs the
+   deeper page ground for the active tab to read as lifted. */
+:root[data-theme="dark"] .fc-pro-demo__body {
+  --muted: var(--bg);
+}
+
+/* Block gap between the heading group and the section's content. Same
+   token as the homepage's .fc-v2-block-gap, re-declared here so Pro
+   components need not import the homepage stylesheet. */
+.fc-pro-block-gap {
+  margin-bottom: var(--fc-block-gap);
 }
