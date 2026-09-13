@@ -159,7 +159,7 @@ pnpm install
 # Build all packages
 pnpm build
 
-# Run tests (824 core + 271 react + 56 adapters = 1,151 passing)
+# Run tests (824 core + 288 react + 56 adapters + 102 templates = 1,270 passing)
 pnpm test
 
 # Start docs site
