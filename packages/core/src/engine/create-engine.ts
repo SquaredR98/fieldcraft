@@ -5,6 +5,7 @@ import type { SubmitAdapter, DraftAdapter, AnalyticsAdapter } from "../types/ada
 import type { CustomValidator, AsyncValidator } from "../types/validation";
 import type { ConditionExpression } from "../types/conditions";
 import { validateSchema } from "../schema/schema-validator";
+import { validateFieldAsync } from "./validation-runner";
 import { createStateManager } from "./state-manager";
 import { createValidatorRegistry } from "../validators/registry";
 import { evaluate } from "./condition-evaluator";
@@ -103,7 +104,10 @@ export type EngineOptions = {
    * ```
    * @since 1.4.0
    */
-  draftMigrations?: Record<string, (draft: import("./draft-manager").DraftSnapshot) => import("./draft-manager").DraftSnapshot>;
+  draftMigrations?: Record<
+    string,
+    (draft: import("./draft-manager").DraftSnapshot) => import("./draft-manager").DraftSnapshot
+  >;
   /**
    * Override the telemetry opt-in setting. `true` enables anonymous telemetry,
    * `false` disables it. When omitted, falls back to the `FIELDCRAFT_TELEMETRY_ENABLED`
@@ -173,10 +177,26 @@ export type FormEngine = {
 
   // ---- Navigation ----
 
-  /** Advances to the next visible section. Respects jump rules defined in `section.onExit`. No-op if already on the last section. */
-  nextSection(): void;
-  /** Navigates to the previous section. Uses visited history to respect jump-logic paths. No-op if on the first section. */
-  prevSection(): void;
+  /**
+   * Advances to the next visible section. Respects jump rules defined in
+   * `section.onExit`.
+   *
+   * Returns `false` without moving when the section cannot be left: validation
+   * failed, an async check is still in flight, or there is no next section.
+   * `true` when it advanced.
+   *
+   * Declared `void` until 1.11.0, which made a refusal indistinguishable from
+   * a success — the state manager always returned the boolean, the wrapper
+   * discarded it. `nextQuestion()` already forwarded its result.
+   */
+  nextSection(): boolean;
+  /**
+   * Navigates to the previous section, using visited history so jump-logic
+   * paths are respected.
+   *
+   * Returns `false` without moving when there is no previous section.
+   */
+  prevSection(): boolean;
   /**
    * Jumps directly to a section by ID. The section must be currently visible
    * (its `showIf` condition must evaluate to `true`). No-op for hidden sections.
@@ -394,10 +414,7 @@ export type FormEngine = {
    * @param fieldId - The question's `id`.
    * @param props - Key-value pairs to merge into the field's `customProps`.
    */
-  updateFieldCustomProps(
-    fieldId: string,
-    props: Record<string, unknown>,
-  ): void;
+  updateFieldCustomProps(fieldId: string, props: Record<string, unknown>): void;
 
   // ---- Schema Lookups ----
 
@@ -458,10 +475,7 @@ export type FormEngine = {
  *
  * @since 1.0.0
  */
-export function createEngine(
-  rawSchema: FormEngineSchema,
-  options?: EngineOptions,
-): FormEngine {
+export function createEngine(rawSchema: FormEngineSchema, options?: EngineOptions): FormEngine {
   // Validate schema at creation time
   const schema = validateSchema(rawSchema);
 
@@ -479,17 +493,10 @@ export function createEngine(
   }
 
   // Create validator registry
-  const validatorRegistry = createValidatorRegistry(
-    options?.validators,
-    options?.asyncValidators,
-  );
+  const validatorRegistry = createValidatorRegistry(options?.validators, options?.asyncValidators);
 
   // Resolve prefill values
-  const prefilled = resolvePrefill(
-    schema,
-    options?.prefillValues,
-    schema.settings?.prefill,
-  );
+  const prefilled = resolvePrefill(schema, options?.prefillValues, schema.settings?.prefill);
   const initialValues = { ...prefilled, ...(options?.initialValues ?? {}) };
 
   // Session token
@@ -525,7 +532,9 @@ export function createEngine(
 
   // Normalize adapters to array
   const adapters: SubmitAdapter[] = options?.adapters
-    ? Array.isArray(options.adapters) ? options.adapters : [options.adapters]
+    ? Array.isArray(options.adapters)
+      ? options.adapters
+      : [options.adapters]
     : [];
 
   // Check for existing draft
@@ -558,6 +567,54 @@ export function createEngine(
 
   // ---- Build the engine object ----
 
+  /**
+   * Runs every visible field's async validators as the submit gate.
+   *
+   * Fails CLOSED, unlike the blur path: a validator that throws leaves its
+   * claim unverified, and passing an unverified value silently is exactly the
+   * bug this replaces. The message is deliberately generic — raw endpoint text
+   * reaches the consumer through `onSubmitError`, never the respondent.
+   */
+  async function runAllAsyncValidators(): Promise<{ ok: true } | { ok: false; error: string }> {
+    const st = stateManager.getState();
+    const fields: Question[] = [];
+    for (const sectionId of st.visibleSectionIds) {
+      for (const q of engine.getVisibleFields(sectionId)) {
+        if (q.validation?.some((r) => r.type === "async")) fields.push(q);
+      }
+    }
+    if (fields.length === 0) return { ok: true };
+
+    try {
+      const results = await Promise.all(
+        fields.map(async (q) => {
+          const value = stateManager.getState().values[q.id];
+          // A blur check already answered for this exact value — reuse it
+          // rather than asking the server the same question twice.
+          const cached = stateManager.getVerifiedAsync(q.id, value);
+          if (cached) return { id: q.id, errors: cached };
+          return { id: q.id, errors: await validateFieldAsync(q, value, validatorRegistry) };
+        }),
+      );
+      const failed = results.filter((r) => r.errors.length > 0);
+      if (failed.length > 0) {
+        stateManager.setFieldErrors(
+          Object.fromEntries(failed.map((r) => [r.id, r.errors])),
+        );
+        return {
+          ok: false,
+          error: `Validation failed: ${failed.length} field(s) with errors`,
+        };
+      }
+      return { ok: true };
+    } catch {
+      return {
+        ok: false,
+        error: "Could not complete validation. Please try again.",
+      };
+    }
+  }
+
   const engine: FormEngine = {
     getState() {
       return stateManager.getState();
@@ -569,15 +626,16 @@ export function createEngine(
 
     nextSection() {
       const prevState = stateManager.getState();
-      stateManager.nextSection();
+      const advanced = stateManager.nextSection();
       const newState = stateManager.getState();
       if (newState.currentSectionId !== prevState.currentSectionId) {
         analytics.sectionComplete(prevState.currentSectionId, prevState.currentSectionIndex);
       }
+      return advanced;
     },
 
     prevSection() {
-      stateManager.prevSection();
+      return stateManager.prevSection();
     },
 
     jumpTo(sectionId) {
@@ -632,9 +690,7 @@ export function createEngine(
 
     getVisibleSections() {
       const state = stateManager.getState();
-      return schema.sections.filter(
-        (s) => !s.showIf || evaluate(s.showIf, state.values),
-      );
+      return schema.sections.filter((s) => !s.showIf || evaluate(s.showIf, state.values));
     },
 
     getVisibleQuestions() {
@@ -646,9 +702,7 @@ export function createEngine(
       const section = sectionMap.get(sectionId);
       if (!section) return [];
       const state = stateManager.getState();
-      return section.questions.filter(
-        (q) => !q.showIf || evaluate(q.showIf, state.values),
-      );
+      return section.questions.filter((q) => !q.showIf || evaluate(q.showIf, state.values));
     },
 
     isFieldRequired(fieldId) {
@@ -761,18 +815,60 @@ export function createEngine(
 
     async submit() {
       assertNotDestroyed();
+
+      // Already in flight - refuse eather than POST the response twice.
+      if (stateManager.getState().isSubmitting) {
+        return {
+          success: false,
+          adapterResults: [
+            {
+              adapterName: "guard",
+              success: false,
+              error: "Submission already in progress",
+            },
+          ],
+        };
+      }
+
       stateManager.setSubmitAttempted();
 
-      // Validate all
+      // Let any blur-triggered check finish first. Without this a submit that
+      // lands while a blur check is open duplicates the request for the same
+      // field, and the gate below asks the server something it is already
+      // being asked.
+      await stateManager.settleAsyncValidation();
+
+      // Validate all (synchronous rules)
       const validation = engine.validate();
       if (!validation.valid) {
         return {
           success: false,
-          adapterResults: [{
-            adapterName: "validation",
-            success: false,
-            error: `Validation failed: ${Object.keys(validation.errors).length} field(s) with errors`,
-          }],
+          adapterResults: [
+            {
+              adapterName: "validation",
+              success: false,
+              error: `Validation failed: ${Object.keys(validation.errors).length} field(s) with errors`,
+            },
+          ],
+        };
+      }
+
+      // Async rules are the gate, so they run here even for fields the
+      // respondent never blurred. Unlike on blur, this path fails CLOSED: a
+      // validator that throws leaves the claim unverified, and letting an
+      // unverified value through silently is the failure mode this whole item
+      // exists to remove.
+      const asyncResult = await runAllAsyncValidators();
+      if (!asyncResult.ok) {
+        return {
+          success: false,
+          adapterResults: [
+            {
+              adapterName: "validation",
+              success: false,
+              error: asyncResult.error,
+            },
+          ],
         };
       }
 
@@ -805,11 +901,13 @@ export function createEngine(
           stateManager.setSubmitting(false);
           return {
             success: false,
-            adapterResults: [{
-              adapterName: "beforeSubmit",
-              success: false,
-              error: "Submission cancelled by beforeSubmit hook",
-            }],
+            adapterResults: [
+              {
+                adapterName: "beforeSubmit",
+                success: false,
+                error: "Submission cancelled by beforeSubmit hook",
+              },
+            ],
           };
         }
         if (hookResult && typeof hookResult === "object") {

@@ -55,6 +55,10 @@ export { ProgressBar, type ProgressBarProps } from "./components/ProgressBar";
 export { NavigationButtons, type NavigationButtonsProps } from "./components/NavigationButtons";
 export { SectionNavigation, type SectionNavigationProps } from "./components/SectionNavigation";
 export { ErrorSummary, type ErrorSummaryProps } from "./components/ErrorSummary";
+export {
+  SubmitErrorNotice,
+  type SubmitErrorNoticeProps,
+} from "./components/SubmitErrorNotice";
 export { DraftResumePrompt, type DraftResumePromptProps } from "./components/DraftResumePrompt";
 export { CompletionScreen, type CompletionScreenProps } from "./components/CompletionScreen";
 

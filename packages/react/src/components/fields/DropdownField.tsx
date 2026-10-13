@@ -2,13 +2,7 @@ import { useState, useMemo } from "react";
 import type { DropdownConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { FieldWrapper, fieldAria } from "./FieldWrapper";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -17,7 +11,17 @@ import { cn } from "../../utils/cn";
 
 const OTHER_VALUE = "__fc_other__";
 
-export function DropdownField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+export function DropdownField({
+  field,
+  value,
+  error,
+  touched,
+  disabled,
+  readonly,
+  onChange,
+  onBlur,
+  onFocus,
+}: FieldProps) {
   const config = field.config as DropdownConfig | undefined;
   const options = field.options ?? [];
   const hasError = !!(touched && error?.length);
@@ -66,7 +70,8 @@ export function DropdownField({ field, value, error, touched, disabled, readonly
 
   // Standard non-searchable Select
   const current = value !== undefined && value !== null && value !== "" ? String(value) : undefined;
-  const isOtherSelected = allowOther && current != null && !options.some((o) => String(o.value) === current);
+  const isOtherSelected =
+    allowOther && current != null && !options.some((o) => String(o.value) === current);
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
@@ -98,9 +103,7 @@ export function DropdownField({ field, value, error, touched, disabled, readonly
               {opt.label}
             </SelectItem>
           ))}
-          {allowOther && (
-            <SelectItem value={OTHER_VALUE}>Other...</SelectItem>
-          )}
+          {allowOther && <SelectItem value={OTHER_VALUE}>Other...</SelectItem>}
         </SelectContent>
       </Select>
       {isOtherSelected && (
@@ -165,15 +168,25 @@ function MultiDropdown({
     .map((v) => options.find((o) => String(o.value) === v)?.label)
     .filter(Boolean);
 
-  const summary = selectedLabels.length === 0
-    ? (field.placeholder ?? "Select...")
-    : selectedLabels.length <= 2
-      ? selectedLabels.join(", ")
-      : `${selectedLabels.length} selected`;
+  const summary =
+    selectedLabels.length === 0
+      ? (field.placeholder ?? "Select...")
+      : selectedLabels.length <= 2
+        ? selectedLabels.join(", ")
+        : `${selectedLabels.length} selected`;
 
   return (
     <FieldWrapper field={field} error={error} touched={touched}>
-      <Popover open={open} onOpenChange={(o) => { setOpen(o); if (!o) { setSearch(""); onBlur(); } }}>
+      <Popover
+        open={open}
+        onOpenChange={(o) => {
+          setOpen(o);
+          if (!o) {
+            setSearch("");
+            onBlur();
+          }
+        }}
+      >
         <PopoverTrigger asChild>
           <Button
             id={aria.id}
@@ -184,11 +197,21 @@ function MultiDropdown({
             aria-invalid={aria["aria-invalid"]}
             aria-required={aria["aria-required"]}
             disabled={disabled || readonly}
-            className={cn("w-full justify-between font-normal", selected.length === 0 && "text-muted-foreground")}
+            className={cn(
+              "w-full justify-between font-normal",
+              selected.length === 0 && "text-muted-foreground",
+            )}
             onFocus={onFocus}
+            type="button"
           >
             {summary}
-            <svg className="ml-2 size-4 shrink-0 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="ml-2 size-4 shrink-0 opacity-50"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path d="m7 15 5 5 5-5M7 9l5-5 5 5" />
             </svg>
           </Button>
@@ -263,7 +286,8 @@ function SearchableDropdown({
   const [search, setSearch] = useState("");
 
   const selectedLabel = options.find((o) => String(o.value) === value)?.label;
-  const isOtherSelected = allowOther && value != null && !options.some((o) => String(o.value) === value);
+  const isOtherSelected =
+    allowOther && value != null && !options.some((o) => String(o.value) === value);
 
   const filtered = useMemo(() => {
     if (!search) return options;
@@ -287,9 +311,16 @@ function SearchableDropdown({
             className={cn("w-full justify-between font-normal", !value && "text-muted-foreground")}
             onBlur={onBlur}
             onFocus={onFocus}
+            type="button"
           >
             {isOtherSelected ? value : (selectedLabel ?? field.placeholder ?? "Select...")}
-            <svg className="ml-2 size-4 shrink-0 opacity-50" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
+            <svg
+              className="ml-2 size-4 shrink-0 opacity-50"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
               <path d="m7 15 5 5 5-5M7 9l5-5 5 5" />
             </svg>
           </Button>
@@ -326,7 +357,9 @@ function SearchableDropdown({
                     onBlur();
                   }}
                 >
-                  <span className={cn("size-4 shrink-0", isSelected ? "opacity-100" : "opacity-0")}>✓</span>
+                  <span className={cn("size-4 shrink-0", isSelected ? "opacity-100" : "opacity-0")}>
+                    ✓
+                  </span>
                   {opt.label}
                 </button>
               );
@@ -344,7 +377,11 @@ function SearchableDropdown({
                   setSearch("");
                 }}
               >
-                <span className={cn("size-4 shrink-0", isOtherSelected ? "opacity-100" : "opacity-0")}>✓</span>
+                <span
+                  className={cn("size-4 shrink-0", isOtherSelected ? "opacity-100" : "opacity-0")}
+                >
+                  ✓
+                </span>
                 {search ? `Use "${search}"` : "Other..."}
               </button>
             )}

@@ -43,7 +43,7 @@ These are not built-in — they delegate to validator functions you provide.
 | Type | Parameters | Description |
 |------|-----------|-------------|
 | `custom` | `name: string`, `params?`, `message?` | Custom sync validator |
-| `async` | `endpoint: string`, `debounceMs?`, `message?` | Async server-side validator |
+| `async` | `endpoint: string`, `message?` | Async server-side validator. Runs on blur and again as the submit gate. |
 
 ## Examples
 
@@ -148,7 +148,7 @@ For server-side validation (e.g., checking if a username is taken):
   type: 'short_text',
   label: 'Username',
   validation: [
-    { type: 'async', endpoint: '/api/check-username', debounceMs: 500 },
+    { type: 'async', endpoint: 'uniqueUsername' },
   ],
 }
 ```

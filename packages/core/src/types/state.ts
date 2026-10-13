@@ -16,6 +16,17 @@ export type FormState = {
   warnings: Record<string, string>;
   /** Tracks which fields the user has interacted with (focused then blurred). */
   touched: Record<string, boolean>;
+  /**
+   * Fields with an async validator currently in flight, keyed by field ID.
+   *
+   * While true the field is **neither valid nor invalid** — the answer is not
+   * known yet. Renderers should show a pending affordance rather than a tick
+   * or an error, and `submit()` awaits every outstanding check before it
+   * decides.
+   *
+   * @since 1.11.0
+   */
+  validating: Record<string, boolean>;
   /** True if any field value differs from its initial/prefilled value. */
   isDirty: boolean;
 

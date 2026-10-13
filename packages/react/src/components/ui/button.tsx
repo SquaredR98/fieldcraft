@@ -43,6 +43,7 @@ function Button({
   variant = "default",
   size = "default",
   asChild = false,
+  type,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
@@ -56,6 +57,17 @@ function Button({
       data-variant={variant}
       data-size={size}
       className={cn(buttonVariants({ variant, size, className }))}
+      // HTML defaults a bare <button> to type="submit". Inside a <form> that
+      // turns every unmarked button -- a date-picker trigger, a calendar day
+      // cell, a dropdown toggle -- into a submit button. Defaulting to
+      // "button" here fixes the whole class at once rather than per call site,
+      // so a button added later cannot reintroduce it.
+      //
+      // Only when rendering a real <button>: with asChild the child owns its
+      // element, and `type` on an <a> or <div> is either meaningless or wrong.
+      //
+      // The actual submit control passes type="submit" explicitly.
+      type={asChild ? type : (type ?? "button")}
       {...props}
     />
   )

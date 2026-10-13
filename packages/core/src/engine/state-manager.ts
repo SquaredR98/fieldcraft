@@ -1,7 +1,7 @@
 import type { FormState } from "../types/state";
 import type { FormEngineSchema, Question } from "../types/schema";
 import { evaluate } from "./condition-evaluator";
-import { validateField } from "./validation-runner";
+import { validateField, validateFieldAsync } from "./validation-runner";
 import { evaluateExpression, extractFieldRefs } from "./calculated-resolver";
 import { createNavigation } from "./navigation";
 import type { ValidatorRegistry } from "../validators/registry";
@@ -62,6 +62,7 @@ export function createStateManager(config: StateManagerConfig) {
     errors: {},
     warnings: {},
     touched: {},
+    validating: {},
     isDirty: false,
 
     isSubmitting: false,
@@ -160,12 +161,134 @@ export function createStateManager(config: StateManagerConfig) {
     notify();
   }
 
-  function touchField(fieldId: string): void {
-    if (state.touched[fieldId]) return;
+  /**
+   * Monotonic token per field, so a slow response cannot overwrite a newer one.
+   *
+   * Type "ab", blur, type "abc", blur: two requests are in flight and the
+   * first may land last. Without this the field would show an error computed
+   * from a value the user has already replaced.
+   */
+  const asyncRunId = new Map<string, number>();
+
+  /** True while any async validator is in flight. `submit()` waits on this. */
+  const asyncInFlight = new Set<Promise<void>>();
+
+  /**
+   * The value each field was last async-verified against, and what came back.
+   *
+   * Without this the submit gate re-asks the server about a value a blur check
+   * just answered — two requests for one question. Keyed by value, so any edit
+   * invalidates the entry automatically.
+   */
+  const asyncVerified = new Map<string, { value: unknown; errors: string[] }>();
+
+  /** The cached async result for a field, if its value is unchanged since. */
+  function getVerifiedAsync(fieldId: string, value: unknown): string[] | undefined {
+    const hit = asyncVerified.get(fieldId);
+    return hit && hit.value === value ? hit.errors : undefined;
+  }
+
+  function hasAsyncRules(field: Question): boolean {
+    return !!field.validation?.some((r) => r.type === "async");
+  }
+
+  /**
+   * Runs a field's async validators and merges the result into state.
+   *
+   * Fails OPEN: if the validator itself throws — endpoint down, 5xx, network
+   * gone — the field is left as the synchronous rules found it rather than
+   * marked invalid. Blur is a convenience, and an unreachable endpoint should
+   * not nag the respondent about something they cannot fix. `submit()` fails
+   * CLOSED for the same condition, because that is the gate.
+   */
+  function runAsyncValidation(fieldId: string): Promise<void> {
+    const field = questionMap.get(fieldId);
+    if (!field || !hasAsyncRules(field)) return Promise.resolve();
+
+    const runId = (asyncRunId.get(fieldId) ?? 0) + 1;
+    asyncRunId.set(fieldId, runId);
+
+    state = { ...state, validating: { ...state.validating, [fieldId]: true } };
+    notify();
+
+    const value = state.values[fieldId];
+    const task = validateFieldAsync(field, value, validatorRegistry)
+      .then((asyncErrors) => {
+        // A newer run started while this was in flight — discard this result.
+        if (asyncRunId.get(fieldId) !== runId) return;
+        const nextValidating = { ...state.validating };
+        delete nextValidating[fieldId];
+        const sync = validateField(field, state.values[fieldId], state.values, validatorRegistry);
+        asyncVerified.set(fieldId, { value, errors: asyncErrors });
+        state = {
+          ...state,
+          validating: nextValidating,
+          errors: { ...state.errors, [fieldId]: [...sync, ...asyncErrors] },
+        };
+        notify();
+      })
+      .catch(() => {
+        if (asyncRunId.get(fieldId) !== runId) return;
+        const nextValidating = { ...state.validating };
+        delete nextValidating[fieldId];
+        state = { ...state, validating: nextValidating };
+        notify();
+      });
+
+    const tracked = task.finally(() => {
+      asyncInFlight.delete(tracked);
+    });
+    asyncInFlight.add(tracked);
+    return tracked;
+  }
+
+  /**
+   * True while any field in a set has an async check in flight.
+   *
+   * Navigation refuses in that window. Otherwise a respondent can leave a
+   * field, advance before the answer returns, and have the error land on a
+   * question they can no longer see — the check ran, and told nobody.
+   */
+  function isValidatingAny(fieldIds: string[]): boolean {
+    return fieldIds.some((id) => state.validating[id]);
+  }
+
+  /** Resolves once no async validator is in flight. Used by `submit()`. */
+  async function settleAsyncValidation(): Promise<void> {
+    while (asyncInFlight.size > 0) {
+      await Promise.all([...asyncInFlight]);
+    }
+  }
+
+  /**
+   * Merges externally-computed errors into state and marks those fields
+   * touched so the renderer shows them.
+   *
+   * Exists for the async submit gate: `validateFieldAsync` runs outside the
+   * state manager, and its findings still have to surface on the fields.
+   */
+  function setFieldErrors(errors: Record<string, string[]>): void {
+    const nextTouched = { ...state.touched };
+    for (const id of Object.keys(errors)) nextTouched[id] = true;
     state = {
       ...state,
-      touched: { ...state.touched, [fieldId]: true },
+      errors: { ...state.errors, ...errors },
+      touched: nextTouched,
     };
+    notify();
+  }
+
+  function touchField(fieldId: string): void {
+    // The touched flag is set once; validation runs on EVERY blur. It used to
+    // return early here, so a field validated on first blur and never again —
+    // which matters for async rules, since the value may have changed since.
+    const alreadyTouched = !!state.touched[fieldId];
+    if (!alreadyTouched) {
+      state = {
+        ...state,
+        touched: { ...state.touched, [fieldId]: true },
+      };
+    }
 
     // Run validation on touch (blur)
     const field = questionMap.get(fieldId);
@@ -183,6 +306,13 @@ export function createStateManager(config: StateManagerConfig) {
     }
 
     notify();
+
+    // Async rules run after the synchronous ones pass. Checking a server for a
+    // value the local rules already rejected wastes a request and shows the
+    // respondent two problems when they have one.
+    if (field && (state.errors[fieldId]?.length ?? 0) === 0) {
+      void runAsyncValidation(fieldId);
+    }
   }
 
   function clearField(fieldId: string): void {
@@ -210,6 +340,16 @@ export function createStateManager(config: StateManagerConfig) {
   function nextSection(): boolean {
     const navState = navigation.computeState(state.currentSectionId, state.values);
     if (!navState.canGoNext) return false;
+
+    // An async check on this section is still open — the answer is not known
+    // yet, so advancing would strand its result on a hidden field.
+    const currentSectionForAsync = schema.sections.find((s) => s.id === state.currentSectionId);
+    if (
+      currentSectionForAsync &&
+      isValidatingAny(currentSectionForAsync.questions.map((q) => q.id))
+    ) {
+      return false;
+    }
 
     // Validate all visible fields in the current section before allowing navigation
     const currentSection = schema.sections.find((s) => s.id === state.currentSectionId);
@@ -307,6 +447,9 @@ export function createStateManager(config: StateManagerConfig) {
   function nextQuestion(): boolean {
     const next = navigation.resolveNextQuestionId(state.currentQuestionId, state.values);
     if (!next) return false;
+
+    // Same rule as nextSection: do not advance past an unanswered check.
+    if (isValidatingAny([state.currentQuestionId])) return false;
 
     // Validate the current question before advancing
     const currentQ = questionMap.get(state.currentQuestionId);
@@ -738,6 +881,7 @@ export function createStateManager(config: StateManagerConfig) {
       errors: {},
       warnings: {},
       touched: {},
+      validating: {},
       isDirty: false,
       isSubmitted: false,
       isSubmitting: false,
@@ -835,6 +979,10 @@ export function createStateManager(config: StateManagerConfig) {
     setValue,
     setValues,
     touchField,
+    setFieldErrors,
+    getVerifiedAsync,
+    runAsyncValidation,
+    settleAsyncValidation,
     clearField,
     nextSection,
     prevSection,

@@ -27,6 +27,18 @@ export type ConversationalRendererProps = {
   submitLabel?: string;
   onSubmit: () => void;
   hideNavigation?: boolean;
+  /**
+   * Set when rendered inside a `<form>` whose submit handler already advances
+   * or submits — as `FormEngineRenderer` does.
+   *
+   * The forward button is then `type="submit"` with no click handler, so Enter
+   * and a click take one path. Without this the button is a plain
+   * `type="button"` driven by its own handler, which is what a consumer
+   * rendering this component standalone needs.
+   *
+   * @since 1.12.0
+   */
+  insideForm?: boolean;
 };
 
 /**
@@ -44,6 +56,7 @@ export function ConversationalRenderer({
   submitLabel = "Submit",
   onSubmit,
   hideNavigation,
+  insideForm = false,
 }: ConversationalRendererProps) {
   const state = engine.getState();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -91,24 +104,11 @@ export function ConversationalRenderer({
     };
   }, [state.currentQuestionId]);
 
-  // Keyboard: Enter to advance
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Enter" && !e.shiftKey) {
-        // Don't intercept Enter in textarea fields
-        const target = e.target as HTMLElement;
-        if (target.tagName === "TEXTAREA") return;
-        // Don't intercept if in a select/dropdown
-        if (target.role === "listbox" || target.role === "option") return;
-        e.preventDefault();
-        handleNext();
-      }
-    }
-
-    const container = containerRef.current;
-    container?.addEventListener("keydown", handleKeyDown);
-    return () => container?.removeEventListener("keydown", handleKeyDown);
-  }, [handleNext]);
+  // Enter-to-advance is handled natively now: FormEngineRenderer wraps every
+  // display mode in a real <form>, and the forward button below is its submit
+  // control. The browser already does what the previous hand-rolled keydown
+  // listener did — including leaving Enter alone inside a textarea — so that
+  // listener was removed rather than left to fight the form for the event.
 
   // Auto-focus on question change
   useEffect(() => {
@@ -184,8 +184,8 @@ export function ConversationalRenderer({
             </button>
 
             <button
-              type="button"
-              onClick={handleNext}
+              type={insideForm ? "submit" : "button"}
+              onClick={insideForm ? undefined : handleNext}
               disabled={state.isSubmitting}
               className={cn(
                 "px-6 py-2 text-sm rounded-md",

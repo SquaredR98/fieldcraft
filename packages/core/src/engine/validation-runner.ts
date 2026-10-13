@@ -72,8 +72,16 @@ export function validateField(
       }
 
       if (rule.type === "async") {
-        // Async validators are skipped during synchronous validation.
-        // They are run separately by the engine when needed.
+        // Skipped here by design — this function is synchronous. The engine
+        // runs async rules via `validateFieldAsync`: on blur (state-manager's
+        // `runAsyncValidation`, failing open) and as the submit gate
+        // (create-engine's `runAllAsyncValidators`, failing closed).
+        //
+        // This comment used to claim they were "run separately by the engine
+        // when needed" while no call site existed, so every async rule was
+        // silently ignored. Both call sites now exist and are tested in
+        // `__tests__/async-validation-wiring.test.ts` — if that file is ever
+        // deleted, this comment becomes a lie again.
         continue;
       }
 
