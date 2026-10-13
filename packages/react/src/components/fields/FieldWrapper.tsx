@@ -1,6 +1,7 @@
 import type { FieldProps } from "../../registry/field-registry";
 import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
+import { FormattedText } from "../../utils/inline-markdown";
 
 type FieldWrapperProps = Pick<FieldProps, "field" | "error" | "touched"> & {
   children: React.ReactNode;
@@ -22,13 +23,13 @@ export function FieldWrapper({
     <div className={cn("flex flex-col gap-1.5", className)}>
       {!hideLabel && (
         <Label htmlFor={field.id}>
-          {field.label}
+          <FormattedText text={field.label} format={field.labelFormat} />
           {field.required && <span className="text-destructive" aria-hidden="true"> *</span>}
         </Label>
       )}
       {field.helpText && (
         <p className="text-sm text-muted-foreground" id={`${field.id}-help`}>
-          {field.helpText}
+          <FormattedText text={field.helpText} format={field.helpTextFormat} />
         </p>
       )}
       {children}

@@ -2,6 +2,7 @@ import type { InfoBlockConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { cn } from "../../utils/cn";
+import { FormattedText } from "../../utils/inline-markdown";
 
 const variantStyles: Record<string, string> = {
   info: "border-primary/30 bg-primary/5 text-foreground",
@@ -22,7 +23,10 @@ export function InfoBlockField({ field, value: _value, error: _error, touched: _
     >
       {field.label && <AlertTitle>{field.label}</AlertTitle>}
       <AlertDescription>
-        {config?.content ?? field.helpText}
+        <FormattedText
+          text={config?.content ?? field.helpText ?? ""}
+          format={config?.contentFormat}
+        />
       </AlertDescription>
     </Alert>
   );

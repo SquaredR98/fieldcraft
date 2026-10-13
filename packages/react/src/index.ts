@@ -170,3 +170,10 @@ export { TIMEZONES, type Timezone } from "@squaredr/fieldcraft-core";
 // ---- Utils ----
 export { cn } from "./utils/cn";
 export { formatPhone, formatCurrency, formatFileSize, truncate } from "./utils/format-helpers";
+// Custom field components need these to honour `labelFormat` / `helpTextFormat`
+// the way the built-in fields do. Without them a custom field would silently
+// render markdown source as literal text.
+export {
+  FormattedText,
+  inlineMarkdownToHtml,
+} from "./utils/inline-markdown";
