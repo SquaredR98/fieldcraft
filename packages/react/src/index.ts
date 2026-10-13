@@ -177,3 +177,12 @@ export {
   FormattedText,
   inlineMarkdownToHtml,
 } from "./utils/inline-markdown";
+
+// Exported so a consumer can check a schema against the deprecation list in
+// their own tooling — a lint rule, a CI check, a migration script — rather
+// than waiting for a console warning at render time.
+export {
+  DEPRECATED_FIELD_TYPES,
+  REPLACED_FIELD_TYPES,
+  DEPRECATION_REMOVAL_DATE,
+} from "./utils/deprecations";

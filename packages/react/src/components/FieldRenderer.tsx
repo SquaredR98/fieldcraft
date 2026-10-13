@@ -1,6 +1,7 @@
 import type { Question, FormEngineTheme } from "@squaredr/fieldcraft-core";
 import type { FieldRegistry } from "../registry/field-registry";
 import { cn } from "../utils/cn";
+import { warnIfDeprecated } from "../utils/deprecations";
 
 export type FieldRendererProps = {
   field: Question;
@@ -36,6 +37,10 @@ export function FieldRenderer({
   registry,
   fieldValues,
 }: FieldRendererProps) {
+  // The single place every field type is resolved, so the single place a
+  // deprecation notice belongs. Fires once per type per session, dev only.
+  warnIfDeprecated(field.type);
+
   const Component = registry[field.type];
 
   if (!Component) {
