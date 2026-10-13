@@ -59,6 +59,11 @@ export {
   SubmitErrorNotice,
   type SubmitErrorNoticeProps,
 } from "./components/SubmitErrorNotice";
+export {
+  FormActionsProvider,
+  useFormActions,
+  type FormActions,
+} from "./components/FormActionsContext";
 export { DraftResumePrompt, type DraftResumePromptProps } from "./components/DraftResumePrompt";
 export { CompletionScreen, type CompletionScreenProps } from "./components/CompletionScreen";
 

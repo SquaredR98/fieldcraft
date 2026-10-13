@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   FormEngineSchema,
   FormEngineTheme,
@@ -23,6 +23,7 @@ import { ProgressBar } from "./ProgressBar";
 import { NavigationButtons } from "./NavigationButtons";
 import { ErrorSummary } from "./ErrorSummary";
 import { SubmitErrorNotice } from "./SubmitErrorNotice";
+import { FormActionsProvider } from "./FormActionsContext";
 import { CompletionScreen } from "./CompletionScreen";
 import { DraftResumePrompt } from "./DraftResumePrompt";
 import { FormErrorBoundary } from "./FormErrorBoundary";
@@ -242,20 +243,34 @@ export function FormEngineRenderer({
         ? state.currentSectionIndex === state.totalVisibleSections - 1
         : !state.canGoNextQuestion;
 
+  /**
+   * Move the form on by one step. Classic has nothing to advance to, so this
+   * is a no-op there and `atEnd` is always true.
+   *
+   * Extracted so the form's submit handler and `FormActionsProvider` share one
+   * definition — a screen component's Start button and pressing Enter must do
+   * the same thing.
+   */
+  const advance = useCallback(() => {
+    if (displayMode === "stepped") engine.nextSection();
+    else if (displayMode === "conversational") engine.nextQuestion();
+  }, [displayMode, engine]);
+
+  const formActions = useMemo(() => ({ advance, atEnd }), [advance, atEnd]);
+
   const handleFormSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       // Always: the engine owns submission, never the browser.
       e.preventDefault();
 
       if (!atEnd) {
-        if (displayMode === "stepped") engine.nextSection();
-        else engine.nextQuestion();
+        advance();
         return;
       }
 
       void handleSubmit();
     },
-    [atEnd, displayMode, engine, handleSubmit],
+    [atEnd, advance, handleSubmit],
   );
 
   const handleResumeDraft = useCallback(async () => {
@@ -318,6 +333,7 @@ export function FormEngineRenderer({
         noValidate
       >
         <FieldRegistryProvider registry={registry}>
+          <FormActionsProvider actions={formActions}>
           <FormErrorBoundary>
             {displayMode === "classic" && (
               <ClassicModeContent
@@ -369,6 +385,7 @@ export function FormEngineRenderer({
               />
             )}
           </FormErrorBoundary>
+          </FormActionsProvider>
         </FieldRegistryProvider>
       </form>
     </FormEngineThemeProvider>
