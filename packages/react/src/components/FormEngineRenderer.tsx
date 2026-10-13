@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type {
   FormEngineSchema,
   FormEngineTheme,
@@ -8,6 +8,11 @@ import type {
   CustomValidator,
   AsyncValidator,
   FormEngine,
+  AnalyticsAdapter,
+  DraftAdapter,
+  DraftSnapshot,
+  FieldCraftEvent,
+  SubmitErrorDetail,
 } from "@squaredr/fieldcraft-core";
 import { useFormEngine } from "../hooks/useFormEngine";
 import { FormEngineThemeProvider, useTheme } from "../theme/ThemeProvider";
@@ -17,6 +22,8 @@ import { SectionRenderer } from "./SectionRenderer";
 import { ProgressBar } from "./ProgressBar";
 import { NavigationButtons } from "./NavigationButtons";
 import { ErrorSummary } from "./ErrorSummary";
+import { SubmitErrorNotice } from "./SubmitErrorNotice";
+import { FormActionsProvider } from "./FormActionsContext";
 import { CompletionScreen } from "./CompletionScreen";
 import { DraftResumePrompt } from "./DraftResumePrompt";
 import { FormErrorBoundary } from "./FormErrorBoundary";
@@ -48,18 +55,33 @@ export type FormEngineRendererProps = {
   onFieldChange?: (fieldId: string, value: unknown) => void;
   onReady?: (engine: FormEngine) => void;
   onValidationError?: (errors: Record<string, string[]>) => void;
+  /**
+   * Called when a submission fails for a reason the respondent cannot fix —
+   * a delivery failure, or a `beforeSubmit` hook that returned `false`.
+   * Validation failures go to `onValidationError` instead.
+   *
+   * Return `false` to suppress the built-in message and present your own,
+   * mirroring the `beforeSubmit` convention. Returning nothing logs/handles
+   * the error while keeping the default message, which is the common case.
+   */
+  onSubmitError?: (detail: SubmitErrorDetail) => void | false;
+  /**
+   * Overrides the built-in delivery-failure message. Provided for translation;
+   * it must stay safe to show a respondent, so never pass raw adapter text.
+   */
+  submitErrorLabel?: string;
   onStateChange?: (state: FormState) => void;
 
   // Draft
   sessionToken?: string;
-  draftAdapter?: import("@squaredr/fieldcraft-core").DraftAdapter;
+  draftAdapter?: DraftAdapter;
   autoSaveIntervalMs?: number;
-  draftMigrations?: Record<string, (draft: import("@squaredr/fieldcraft-core").DraftSnapshot) => import("@squaredr/fieldcraft-core").DraftSnapshot>;
+  draftMigrations?: Record<string, (draft: DraftSnapshot) => DraftSnapshot>;
 
   // Submission hooks & analytics
   beforeSubmit?: (response: FormResponse) => FormResponse | false | Promise<FormResponse | false>;
-  analytics?: import("@squaredr/fieldcraft-core").AnalyticsAdapter;
-  onEvent?: (event: import("@squaredr/fieldcraft-core").FieldCraftEvent) => void;
+  analytics?: AnalyticsAdapter;
+  onEvent?: (event: FieldCraftEvent) => void;
   metadata?: Record<string, unknown>;
 
   // Custom validators
@@ -98,6 +120,8 @@ export function FormEngineRenderer({
   onFieldChange,
   onReady,
   onValidationError,
+  onSubmitError,
+  submitErrorLabel,
   onStateChange,
   sessionToken,
   draftAdapter,
@@ -152,13 +176,102 @@ export function FormEngineRenderer({
 
   const registry = mergeRegistries(defaultRegistry, components);
 
+  /**
+   * Set when a submission fails for a reason the respondent cannot fix, and
+   * the consumer did not take over by returning `false`. Drives the fallback
+   * message — deliberately a fixed string, never `state.submitError`, which
+   * carries raw adapter text (hostnames, ports) that must not reach a
+   * respondent.
+   */
+  const [showSubmitError, setShowSubmitError] = useState(false);
+
   const handleSubmit = useCallback(async () => {
+    setShowSubmitError(false);
+
     const result = await engine.submit();
-    if (!result.success) {
-      const validation = engine.validate();
+    if (result.success) return;
+
+    // A failure is only the respondent's to fix if validation found something.
+    const validation = engine.validate();
+    if (!validation.valid) {
       onValidationError?.(validation.errors);
+      return;
     }
-  }, [engine, onValidationError]);
+
+    // Input was fine, so the submission itself failed. A `beforeSubmit` hook
+    // returning false is a deliberate stop rather than an error, so it is
+    // reported but never shown as a failure to the respondent.
+    const cancelled = result.adapterResults.some(
+      (r) => !r.success && r.adapterName === "beforeSubmit",
+    );
+    const detail: SubmitErrorDetail = {
+      kind: cancelled ? "cancelled" : "delivery",
+      message: result.adapterResults
+        .filter((r) => !r.success)
+        .map((r) => r.error)
+        .filter(Boolean)
+        .join("; "),
+      adapterResults: result.adapterResults,
+      // `SubmitResult` carries no response, and the engine builds it with
+      // values this component does not hold (sessionToken, completionTimeMs,
+      // merged metadata). Omitted rather than reconstructed inaccurately.
+      // `CORE-16` threads the real one through.
+    };
+
+    const handled = onSubmitError?.(detail);
+    if (handled === false) return;
+    if (detail.kind === "delivery") setShowSubmitError(true);
+  }, [engine, onValidationError, onSubmitError]);
+
+  /**
+   * One rule for all three display modes: a form submit event means "the user
+   * is done with what is in front of them". The engine decides whether that
+   * means advance or finish.
+   *
+   * Classic is the degenerate case — there is nothing to advance to, so it is
+   * always at the end and submit always submits.
+   *
+   * No validation lives here. `engine.nextSection()` already validates the
+   * current section and refuses to advance when it fails (state-manager.ts:215),
+   * and `engine.submit()` already validates everything. The renderer's job is
+   * only to ask the right one.
+   */
+  const atEnd =
+    displayMode === "classic"
+      ? true
+      : displayMode === "stepped"
+        ? state.currentSectionIndex === state.totalVisibleSections - 1
+        : !state.canGoNextQuestion;
+
+  /**
+   * Move the form on by one step. Classic has nothing to advance to, so this
+   * is a no-op there and `atEnd` is always true.
+   *
+   * Extracted so the form's submit handler and `FormActionsProvider` share one
+   * definition — a screen component's Start button and pressing Enter must do
+   * the same thing.
+   */
+  const advance = useCallback(() => {
+    if (displayMode === "stepped") engine.nextSection();
+    else if (displayMode === "conversational") engine.nextQuestion();
+  }, [displayMode, engine]);
+
+  const formActions = useMemo(() => ({ advance, atEnd }), [advance, atEnd]);
+
+  const handleFormSubmit = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      // Always: the engine owns submission, never the browser.
+      e.preventDefault();
+
+      if (!atEnd) {
+        advance();
+        return;
+      }
+
+      void handleSubmit();
+    },
+    [atEnd, advance, handleSubmit],
+  );
 
   const handleResumeDraft = useCallback(async () => {
     await engine.loadDraft();
@@ -206,8 +319,21 @@ export function FormEngineRenderer({
 
   return (
     <FormEngineThemeProvider theme={theme}>
-      <div className={cn("flex flex-col gap-8", className)} data-display-mode={displayMode}>
+      {/* A real <form>, in every display mode. Password managers detect a form
+          submit event, Enter works natively, and screen readers get the form
+          landmark — none of which a <div> provides.
+
+          noValidate: the engine owns validation. Without it browsers show
+          their own bubbles on required / type=email inputs alongside the
+          engine's messages, so the respondent sees two error systems. */}
+      <form
+        className={cn("flex flex-col gap-8", className)}
+        data-display-mode={displayMode}
+        onSubmit={handleFormSubmit}
+        noValidate
+      >
         <FieldRegistryProvider registry={registry}>
+          <FormActionsProvider actions={formActions}>
           <FormErrorBoundary>
             {displayMode === "classic" && (
               <ClassicModeContent
@@ -217,8 +343,9 @@ export function FormEngineRenderer({
                 fieldLabels={fieldLabels}
                 autoFocus={autoFocus}
                 submitLabel={submitLabel}
-                onSubmit={handleSubmit}
                 hideNavigation={hideNavigation}
+                submitError={showSubmitError}
+                submitErrorLabel={submitErrorLabel}
               />
             )}
 
@@ -237,6 +364,8 @@ export function FormEngineRenderer({
                 showProgress={schema.settings?.showProgress}
                 showBack={schema.settings?.navigation?.showBack}
                 hideNavigation={hideNavigation}
+                submitError={showSubmitError}
+                submitErrorLabel={submitErrorLabel}
               />
             )}
 
@@ -251,11 +380,14 @@ export function FormEngineRenderer({
                 submitLabel={submitLabel}
                 onSubmit={handleSubmit}
                 hideNavigation={hideNavigation}
+                submitError={showSubmitError}
+                submitErrorLabel={submitErrorLabel}
               />
             )}
           </FormErrorBoundary>
+          </FormActionsProvider>
         </FieldRegistryProvider>
-      </div>
+      </form>
     </FormEngineThemeProvider>
   );
 }
@@ -269,17 +401,19 @@ function ClassicModeContent({
   fieldLabels,
   autoFocus,
   submitLabel = "Submit",
-  onSubmit,
   hideNavigation,
+  submitError,
+  submitErrorLabel,
 }: {
   engine: FormEngine;
-  state: import("@squaredr/fieldcraft-core").FormState;
+  state: FormState;
   registry: FieldRegistry;
   fieldLabels: Record<string, string>;
   autoFocus?: boolean;
   submitLabel?: string;
-  onSubmit: () => void;
   hideNavigation?: boolean;
+  submitError?: boolean;
+  submitErrorLabel?: string;
 }) {
   const theme = useTheme();
   return (
@@ -287,6 +421,7 @@ function ClassicModeContent({
       {state.submitAttempted && !state.isSubmitted && (
         <ErrorSummary errors={state.errors} fieldLabels={fieldLabels} />
       )}
+      {submitError && <SubmitErrorNotice message={submitErrorLabel} />}
       <ClassicModeRenderer
         engine={engine}
         theme={theme}
@@ -296,8 +431,7 @@ function ClassicModeContent({
       {!hideNavigation && (
         <div className="flex justify-end pt-2">
           <button
-            type="button"
-            onClick={onSubmit}
+            type="submit"
             disabled={state.isSubmitting}
             className={cn(
               "px-6 py-2 text-sm rounded-md",
@@ -328,9 +462,11 @@ function SteppedModeContent({
   showProgress = true,
   showBack = true,
   hideNavigation,
+  submitError,
+  submitErrorLabel,
 }: {
   engine: FormEngine;
-  state: import("@squaredr/fieldcraft-core").FormState;
+  state: FormState;
   registry: FieldRegistry;
   fieldLabels: Record<string, string>;
   autoFocus?: boolean;
@@ -342,14 +478,13 @@ function SteppedModeContent({
   showProgress?: boolean;
   showBack?: boolean;
   hideNavigation?: boolean;
+  submitError?: boolean;
+  submitErrorLabel?: string;
 }) {
   const theme = useTheme();
   const visibleSections = engine.getVisibleSections();
-  const currentSection = visibleSections.find(
-    (s) => s.id === state.currentSectionId,
-  );
-  const isLastSection =
-    state.currentSectionIndex === state.totalVisibleSections - 1;
+  const currentSection = visibleSections.find((s) => s.id === state.currentSectionId);
+  const isLastSection = state.currentSectionIndex === state.totalVisibleSections - 1;
 
   return (
     <div className="fc-mode-stepped flex flex-col gap-6">
@@ -364,6 +499,7 @@ function SteppedModeContent({
       {state.submitAttempted && !state.isSubmitted && (
         <ErrorSummary errors={state.errors} fieldLabels={fieldLabels} />
       )}
+      {submitError && <SubmitErrorNotice message={submitErrorLabel} />}
 
       {currentSection && (
         <SectionRenderer
@@ -381,6 +517,7 @@ function SteppedModeContent({
           canGoNext={state.canGoNext}
           isLastSection={isLastSection}
           isSubmitting={state.isSubmitting}
+          insideForm
           onPrev={() => engine.prevSection()}
           onNext={() => engine.nextSection()}
           onSubmit={onSubmit}
@@ -403,6 +540,8 @@ function ConversationalModeContent({
   submitLabel,
   onSubmit,
   hideNavigation,
+  submitError,
+  submitErrorLabel,
 }: {
   engine: FormEngine;
   registry: FieldRegistry;
@@ -413,20 +552,26 @@ function ConversationalModeContent({
   submitLabel?: string;
   onSubmit: () => void;
   hideNavigation?: boolean;
+  submitError?: boolean;
+  submitErrorLabel?: string;
 }) {
   const theme = useTheme();
   return (
-    <ConversationalRenderer
-      engine={engine}
-      theme={theme}
-      registry={registry}
-      autoFocus={autoFocus}
-      autoAdvance={autoAdvance}
-      prevLabel={prevLabel}
-      nextLabel={nextLabel}
-      submitLabel={submitLabel}
-      onSubmit={onSubmit}
-      hideNavigation={hideNavigation}
-    />
+    <>
+      {submitError && <SubmitErrorNotice message={submitErrorLabel} />}
+      <ConversationalRenderer
+        insideForm
+        engine={engine}
+        theme={theme}
+        registry={registry}
+        autoFocus={autoFocus}
+        autoAdvance={autoAdvance}
+        prevLabel={prevLabel}
+        nextLabel={nextLabel}
+        submitLabel={submitLabel}
+        onSubmit={onSubmit}
+        hideNavigation={hideNavigation}
+      />
+    </>
   );
 }

@@ -138,11 +138,15 @@ const questionLayout = z.object({
 
 // ---- Question ----
 
+const textFormat = z.enum(["plain", "markdown"]);
+
 const questionSchema = z.object({
   id: z.string().min(1, "Question ID is required"),
   type: z.string().min(1, "Question type is required"),
   label: z.string(),
+  labelFormat: textFormat.optional(),
   helpText: z.string().optional(),
+  helpTextFormat: textFormat.optional(),
   placeholder: z.string().optional(),
   required: z.union([z.boolean(), conditionExpression]).optional(),
   showIf: conditionExpression.optional(),

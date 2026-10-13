@@ -38,7 +38,24 @@ export type ValidationRule = (
   | { type: "maxItems"; value: number; message?: string }
   | { type: "compareToField"; fieldId: string; operator: "eq" | "neq" | "gt" | "gte" | "lt" | "lte"; message?: string }
   | { type: "custom"; name: string; params?: Record<string, unknown>; message?: string }
-  | { type: "async"; endpoint: string; debounceMs?: number; message?: string }
+  | {
+      type: "async";
+      endpoint: string;
+      /**
+       * @deprecated Not implemented, and scheduled for removal on 2027-07-01.
+       *
+       * Async validators run on blur and as the submit gate — both are
+       * single events, so there is nothing to debounce. The option only makes
+       * sense for per-keystroke checking, which the engine deliberately does
+       * not do: it would put a request behind every character typed.
+       *
+       * Setting it has never had any effect. It is kept until the removal
+       * date because the docs advertised it with a worked example, so silent
+       * deletion would contradict published guidance.
+       */
+      debounceMs?: number;
+      message?: string;
+    }
 ) & {
   /**
    * Conditional expression that controls whether this rule is applied.

@@ -463,6 +463,16 @@ export type ConsentConfig = {
 export type InfoBlockConfig = {
   type: "info_block";
   content: string;
+  /**
+   * How to interpret `content`. Defaults to `"plain"`.
+   *
+   * Same narrow markdown subset as `Question.labelFormat`. An info block's job
+   * is explaining something to the respondent, which often needs a bolded
+   * word or a list — `content` being plain-only meant it could not.
+   *
+   * @since 1.11.0
+   */
+  contentFormat?: "plain" | "markdown";
   variant?: "info" | "warning" | "success" | "error";
 };
 

@@ -133,8 +133,33 @@ export type Question = {
   type: QuestionType;
   /** Display label shown above the field input. */
   label: string;
+  /**
+   * How to interpret `label`. Defaults to `"plain"` — rendered as text.
+   *
+   * With `"markdown"` a narrow subset is allowed: bold, italic, links, lists
+   * and line breaks. **Not** headings, images or tables — an `<h1>` inside a
+   * question label is a bug, not a feature.
+   *
+   * Formatting belongs on the question rather than in a separate block beside
+   * it. A block is unrelated content to a screen reader, vanishes in
+   * conversational mode, and stays behind when the question is reordered. A
+   * formatted label travels with its question and stays bound to the input.
+   *
+   * The clearest case is clinical wording: "Over the **last 2 weeks**, how
+   * often have you been bothered by…" needs the timeframe emphasised inside
+   * the question.
+   *
+   * @since 1.11.0
+   */
+  labelFormat?: "plain" | "markdown";
   /** Optional helper text displayed below the field. */
   helpText?: string;
+  /**
+   * How to interpret `helpText`. Same subset and defaults as `labelFormat`.
+   *
+   * @since 1.11.0
+   */
+  helpTextFormat?: "plain" | "markdown";
   /** Optional placeholder text inside the input. */
   placeholder?: string;
   /** Whether the field is required. Can be a boolean or a conditional expression. */

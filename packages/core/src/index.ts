@@ -104,7 +104,12 @@ export type {
 } from "./types/adapters";
 
 // Types — Response
-export type { FormResponse, SubmitResult } from "./types/response";
+export type {
+  FormResponse,
+  SubmitResult,
+  SubmitErrorDetail,
+  SubmitErrorKind,
+} from "./types/response";
 
 // Types — Theme
 export type { FormEngineTheme } from "./types/theme";

@@ -43,3 +43,44 @@ export type SubmitResult = {
     error?: string;
   }[];
 };
+
+/**
+ * Why a submission failed when the input itself was valid.
+ *
+ * - `delivery` — one or more adapters failed (network, 5xx, timeout). The
+ *   response never reached its destination.
+ * - `cancelled` — a `beforeSubmit` hook returned `false`. Not a failure; the
+ *   consumer stopped the submission deliberately.
+ *
+ * @since 1.11.0
+ */
+export type SubmitErrorKind = "delivery" | "cancelled";
+
+/**
+ * Detail handed to a consumer when a submission fails for a reason the
+ * respondent cannot fix.
+ *
+ * Validation failures do NOT produce this — those surface as field errors the
+ * respondent can act on. This type exists so a consumer can log, retry or
+ * queue the payload while the renderer shows the respondent a safe generic
+ * message rather than raw adapter text (which can carry hostnames and ports).
+ *
+ * @since 1.11.0
+ */
+export type SubmitErrorDetail = {
+  /** Why it failed, so consumers can branch without parsing message strings. */
+  kind: SubmitErrorKind;
+  /** Joined adapter messages, as the engine recorded them. Not for display to the respondent. */
+  message: string;
+  /** Per-adapter outcome, so a consumer can see which destination failed. */
+  adapterResults: SubmitResult["adapterResults"];
+  /**
+   * The payload that failed to send, so a consumer can retry or queue it.
+   *
+   * Optional because `SubmitResult` does not currently carry the response, so
+   * a renderer reacting to a failed `submit()` cannot always supply it. The
+   * engine populates this where it has it; consumers must handle `undefined`
+   * rather than assume a retry payload is available. Tracked as `CORE-16`.
+   */
+  response?: FormResponse;
+};

@@ -55,6 +55,15 @@ export { ProgressBar, type ProgressBarProps } from "./components/ProgressBar";
 export { NavigationButtons, type NavigationButtonsProps } from "./components/NavigationButtons";
 export { SectionNavigation, type SectionNavigationProps } from "./components/SectionNavigation";
 export { ErrorSummary, type ErrorSummaryProps } from "./components/ErrorSummary";
+export {
+  SubmitErrorNotice,
+  type SubmitErrorNoticeProps,
+} from "./components/SubmitErrorNotice";
+export {
+  FormActionsProvider,
+  useFormActions,
+  type FormActions,
+} from "./components/FormActionsContext";
 export { DraftResumePrompt, type DraftResumePromptProps } from "./components/DraftResumePrompt";
 export { CompletionScreen, type CompletionScreenProps } from "./components/CompletionScreen";
 
@@ -161,3 +170,19 @@ export { TIMEZONES, type Timezone } from "@squaredr/fieldcraft-core";
 // ---- Utils ----
 export { cn } from "./utils/cn";
 export { formatPhone, formatCurrency, formatFileSize, truncate } from "./utils/format-helpers";
+// Custom field components need these to honour `labelFormat` / `helpTextFormat`
+// the way the built-in fields do. Without them a custom field would silently
+// render markdown source as literal text.
+export {
+  FormattedText,
+  inlineMarkdownToHtml,
+} from "./utils/inline-markdown";
+
+// Exported so a consumer can check a schema against the deprecation list in
+// their own tooling — a lint rule, a CI check, a migration script — rather
+// than waiting for a console warning at render time.
+export {
+  DEPRECATED_FIELD_TYPES,
+  REPLACED_FIELD_TYPES,
+  DEPRECATION_REMOVAL_DATE,
+} from "./utils/deprecations";

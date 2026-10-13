@@ -9,7 +9,17 @@ import { Calendar } from "../ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "../../utils/cn";
 
-export function DateField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+export function DateField({
+  field,
+  value,
+  error,
+  touched,
+  disabled,
+  readonly,
+  onChange,
+  onBlur,
+  onFocus,
+}: FieldProps) {
   const config = field.config as DateConfig | undefined;
   const hasError = !!(touched && error?.length);
   const [open, setOpen] = useState(false);
@@ -50,13 +60,16 @@ export function DateField({ field, value, error, touched, disabled, readonly, on
             disabled={disabled || readonly}
             className={cn(
               "w-full justify-start text-left font-normal",
-              !validSelected && "text-muted-foreground"
+              !validSelected && "text-muted-foreground",
             )}
             onBlur={onBlur}
             onFocus={onFocus}
+            type="button"
           >
             <CalendarIcon className="mr-2 size-4" />
-            {validSelected ? format(validSelected, config?.format || "PPP") : (field.placeholder ?? "Pick a date")}
+            {validSelected
+              ? format(validSelected, config?.format || "PPP")
+              : (field.placeholder ?? "Pick a date")}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
