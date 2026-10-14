@@ -5,6 +5,99 @@ All notable changes to `@squaredr/fieldcraft-react` will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-10-13
+
+### Added
+- **A real `<form>` element**, in all three display modes. There had been none — the root was a `div` and submit was `type="button"`, so Enter did not submit, password managers never offered to save, and screen readers got no form landmark. One rule covers every mode: a submit event means the respondent is done with what is in front of them, and the engine decides whether that means advance or finish.
+- `onSubmitError` — called when a submission fails for a reason the respondent cannot fix. Return `false` to suppress the built-in notice and present your own, mirroring the `beforeSubmit` convention. Return nothing and you get the detail *and* the default message.
+- `submitErrorLabel` — overrides the built-in delivery-failure message, for translation.
+- `SubmitErrorNotice` — the fallback notice. Shows a fixed, calm string; never `state.submitError`, which carries hostnames and ports.
+- `FormActionsContext` / `useFormActions` — navigation actions for the few *screen* field types that are chrome rather than inputs and legitimately need to move the form on.
+- `FormattedText` and `inlineMarkdownToHtml` — the narrow markdown subset for `labelFormat` / `helpTextFormat` / `contentFormat`. Bold, italic, code, links, lists, line breaks; deliberately not headings, images or tables. Exported so a custom field component formats labels the way the built-ins do.
+- `insideForm` on `NavigationButtons` and `ConversationalRenderer` — set when rendered inside a form whose submit handler already advances, so Enter and a click take one path.
+- `DEPRECATED_FIELD_TYPES`, `REPLACED_FIELD_TYPES`, `DEPRECATION_REMOVAL_DATE` — check a schema in a lint rule or CI script rather than waiting for a console warning.
+
+### Changed
+- **Submit failures are visible.** Every `!result.success` was treated as a validation failure, so a network error or a 500 produced an empty `onValidationError` and the respondent saw nothing at all. Validation failures and delivery failures are now distinguished.
+- `Button` defaults to `type="button"` unless `asChild`. HTML defaults a bare button to submit, so inside a form every unmarked button — a date-picker trigger, a calendar day cell, a dropdown toggle — would have submitted the form. Fixes the class rather than the instances.
+- Removed `ConversationalRenderer`'s hand-rolled `keydown` listener. The browser does all of it natively once a real form exists, including leaving Enter alone inside a textarea.
+
+### Deprecated
+- Nineteen field types scheduled for removal on **2027-07-01**, with a one-off development warning: `signature`, `payment`, `matrix`, `image_capture`, `appointment`, `file_upload`, `address`, `repeater`, `ranking`, `scoring`, `phone_international`, `legal_name`, `country_select`, `date_range`, `time`, `slider`, `welcome-screen`, `image`, `video`. Nothing breaks before that date, and self-registering the component keeps any of them working afterwards. See `/docs/deprecations`.
+- `rich-text` — replaced rather than relocated. Use `labelFormat` on a question or `contentFormat` on an `info_block`: a separate block is unrelated content to a screen reader, vanishes in conversational mode, and is left behind when the question is reordered.
+
+### Fixed
+- **The welcome screen's Start button did nothing.** It queried `[data-question-index="1"]`, an attribute that existed nowhere in the package, so the lookup always returned null. It now advances through the engine.
+- `DateField`, `DateRangeField` and `DropdownField` had popover triggers with no explicit `type`.
+
+## [1.11.1] - 2026-09-03
+
+### Changed
+- Version bump accompanying the documentation pass.
+
+## [1.11.0] - 2026-09-03
+
+### Fixed
+- A broken renderer import in the docs, and several inaccurate counts.
+
+## [1.10.0] - 2026-08-30
+
+### Changed
+- Version alignment release across the workspace.
+
+## [1.9.2] - 2026-08-30
+
+### Changed
+- Base fields standardised and aligned with shadcn/ui primitives.
+
+## [1.9.1] - 2026-08-29
+
+### Fixed
+- Followed core's `evaluateFunction()` wiring in the calculated-field pipeline.
+
+## [1.9.0] - 2026-08-28
+
+### Changed
+- Audit fixes: config-driven validation and six field fixes.
+
+## [1.8.0] - 2026-08-28
+
+### Fixed
+- Required core 1.7.1, since the published 1.7.0 was missing `timezoneField`.
+
+## [1.7.0] - 2026-08-26
+
+### Added
+- Auto-advance in conversational mode, with reduced-motion support.
+
+### Changed
+- `templates-free` renamed to `templates`.
+
+## [1.6.0] - 2026-08-22
+
+### Removed
+- Preset exports. The renderer now auto-inherits the host page's CSS variables.
+
+## [1.4.0] - 2026-08-18
+
+### Added
+- **Display modes** — `classic`, `stepped` and `conversational`, selected by one field in the schema.
+
+## [1.3.0] - 2026-08-16
+
+### Changed
+- OSS hardening release.
+
+## [1.2.12] - 2026-07-14
+
+### Fixed
+- Corrected the version banner.
+
+## [1.2.11] - 2026-07-14
+
+### Fixed
+- `README.md` added to the npm `files` list, and GitHub URLs corrected in READMEs and banners.
+
 ## [1.2.10] - 2026-06-09
 
 ### Fixed

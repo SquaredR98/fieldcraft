@@ -5,6 +5,80 @@ All notable changes to `@squaredr/fieldcraft-core` will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2026-10-13
+
+### Added
+- `SubmitErrorDetail` and `SubmitErrorKind` — detail handed to a consumer when a submission fails for a reason the respondent cannot fix. Carries `kind` (`"delivery"` or `"cancelled"`), the joined adapter messages, and the per-adapter results, so a consumer can branch without parsing strings.
+- `FormState.validating` — fields with an async check in flight. While true a field is neither valid nor invalid, so a renderer can show a pending state rather than a tick or an error.
+- `Question.labelFormat` and `Question.helpTextFormat` — opt into a narrow markdown subset on a question's own text. Defaults to `"plain"`, so no existing schema changes behaviour.
+- `InfoBlockConfig.contentFormat` — the same, for info blocks. Their `content` was plain-only, so a block whose job is explaining something could not bold a word.
+
+### Fixed
+- **Async validators never ran.** `validateFieldAsync()` was written, unit-tested, and called from nowhere in production code — so `{ type: "async" }` validated as if the rule were absent and "is this username taken" silently passed. Now runs on blur (failing open, since an unreachable endpoint should not nag about something the respondent cannot fix) and as the submit gate (failing closed, since an unverified claim must not pass silently).
+- **`submit()` had no re-entry guard.** It set `isSubmitting` but never checked it, so two fast calls ran the adapter pipeline twice and POSTed the response twice. Previously masked by the submit button's `disabled` state — a UI guard, not an engine one.
+- **`touchField()` validated on the first blur only.** An early return skipped validation once a field was touched. Harmless for synchronous rules; wrong for async, where the value may have changed between blurs.
+- **Navigation could advance past an open async check**, stranding the result on a field the respondent could no longer see. `nextSection()` and `nextQuestion()` now refuse while a check is in flight.
+- `nextSection()` and `prevSection()` were declared `void` on the public `FormEngine` interface while the state manager always returned a boolean, so a caller could not tell a refusal from a success. Both now return `boolean`, matching `nextQuestion()` / `prevQuestion()`.
+
+### Deprecated
+- `{ type: "async" }`'s `debounceMs` option — scheduled for removal 2027-07-01. It has never had any effect, and debounce is meaningless for the two events async validation runs on. Kept until the date because the docs advertised it with a worked example.
+
+## [1.10.2] - 2026-09-13
+
+### Fixed
+- Corrected the validator count in a dispatcher docstring.
+
+## [1.10.1] - 2026-09-03
+
+### Fixed
+- **Performance**: calculated-field evaluation is now linear in chain depth rather than quadratic.
+
+## [1.10.0] - 2026-08-30
+
+### Changed
+- Version alignment release across the workspace.
+
+## [1.9.1] - 2026-08-29
+
+### Fixed
+- Transitive calculated-field resolution, draft lifecycle, and hook stability.
+
+## [1.9.0] - 2026-08-29
+
+### Added
+- `evaluateFunction()` wired into the calculated-field pipeline.
+
+## [1.8.2] - 2026-08-29
+
+### Added
+- Comprehensive test coverage for core and react (954 tests at the time).
+
+## [1.8.1] - 2026-08-28
+
+### Added
+- `validateFormValues()` — standalone schema validation with no engine instance, so the same rules can run on a server.
+
+## [1.8.0] - 2026-08-28
+
+### Changed
+- Audit fixes: config-driven validation, six field fixes, and shared data moved into core.
+
+## [1.7.1] - 2026-08-28
+
+### Fixed
+- **Published 1.7.0 was missing `timezoneField`.** It was in the source and in the tests but absent from the tarball — an export path that was never verified against `npm pack`.
+
+## [1.7.0] - 2026-08-28
+
+### Added
+- Predefined timezone data and a dynamic `timezoneField` for `AppointmentField`.
+- Repeater aggregate functions — `SUM()`, `AVG()`, `COUNT()`, `MIN()`, `MAX()` with dot-notation sub-field references, and per-row expressions inside aggregates.
+
+## [1.6.0] - 2026-08-22
+
+### Removed
+- Theme preset exports. Themes now auto-inherit the host page's CSS variables instead.
+
 ## [1.5.1] - 2026-08-18
 
 ### Fixed
@@ -57,6 +131,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `severity` on ValidationRule (`error` | `warning` | `info`)
 - HTTP adapter enhancements: `onRetry`, `timeout`, `transformResponse`, `healthCheck`, `invalidateCache`
 - `FormAdapter` interface for custom adapter authors
+
+## [1.3.14] - 2026-08-07
+
+### Changed
+- Released alongside the FieldCraft website, docs and blog. No engine changes.
+
+## [1.3.13] - 2026-07-14
+
+### Fixed
+- `README.md` added to the npm `files` list, and GitHub URLs corrected in READMEs and banners.
+
+## [1.3.12] - 2026-07-05
+
+### Added
+- 107 tests covering `prefill-resolver`, `validator-registry` and the built-in validators.
 
 ## [1.3.11] - 2026-06-26
 
