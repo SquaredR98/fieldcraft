@@ -8,7 +8,7 @@
 import { SpecCounter } from './SpecCounter';
 
 const specs = [
-  { value: '41', label: 'Field types' },
+  { value: '34', label: 'Input field types' },
   { value: '27', label: 'Built-in validators' },
   { value: '25', label: 'Condition operators' },
   { value: '1,270', label: 'Tests passing' },

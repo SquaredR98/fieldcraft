@@ -21,7 +21,7 @@ FieldCraft is a monorepo with strict dependency boundaries. Each package depends
 | Package | What it contains | Size |
 |---------|-----------------|------|
 | `fieldcraft-core` | Schema types, engine factory (`createEngine`), state manager, condition evaluator, validation runner, expression parser, draft manager, prefill resolver, schema validator | ~27 KB gzip |
-| `fieldcraft-react` | `<FormEngineRenderer />`, 41 field components, 10 hooks, CSS variable theming with auto-inherit, field registry, UI primitives (shadcn/Radix) | ~96 KB gzip |
+| `fieldcraft-react` | `<FormEngineRenderer />`, 44 field components (34 input + 10 structural), 10 hooks, CSS variable theming with auto-inherit, field registry, UI primitives (shadcn/Radix) | ~96 KB gzip |
 | `fieldcraft-adapters` | HTTP adapter, Supabase adapter, Postgres adapter, webhook adapter. Each with encryption, retry logic | ~1 KB gzip |
 | `fieldcraft-templates` | 16 production-ready form schemas across 7 categories | ~13 KB gzip |
 | `fieldcraft-pro` | FormBuilder, ResponseViewer, ThemeEditor, 5 theme preset families | Commercial |

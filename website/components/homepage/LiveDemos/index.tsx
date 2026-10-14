@@ -14,7 +14,7 @@ import './styles.css';
 
 const readout = [
   { k: 'engine', v: 'fieldcraft-react', teal: true },
-  { k: 'fields', v: '41' },
+  { k: 'fields', v: '34' },
   { k: 'operators', v: '25' },
 ];
 

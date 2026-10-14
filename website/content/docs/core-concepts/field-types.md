@@ -5,7 +5,7 @@ description: All 41 built-in field types organised into 8 categories, with their
 
 ## Overview
 
-FieldCraft ships with 41 field types in 8 categories. In `@squaredr/fieldcraft-react`, all field components are built on **shadcn/ui primitives** (Radix UI + Tailwind CSS) for full keyboard navigation, dark mode theming, and WAI-ARIA compliance.
+FieldCraft ships with **34 input field types** in 8 categories, plus 10 structural types (headings, dividers, info blocks and the like) that render but never hold a value — 44 registry entries in total. In `@squaredr/fieldcraft-react`, all field components are built on **shadcn/ui primitives** (Radix UI + Tailwind CSS) for full keyboard navigation, dark mode theming, and WAI-ARIA compliance.
 
 The `QuestionType` union also accepts custom strings — you can register your own field types or override any default field via the [field registry](/docs/react/custom-field-types) without modifying core types.
 

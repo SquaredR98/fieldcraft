@@ -15,7 +15,7 @@ I built this to learn how to publish and maintain npm packages. It works and I u
 | Package | Description | Version |
 |---------|-------------|---------|
 | [`@squaredr/fieldcraft-core`](packages/core) | Headless TypeScript engine — schema, validation, conditional visibility, state management | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-core)](https://www.npmjs.com/package/@squaredr/fieldcraft-core) |
-| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 41 field components, hooks, theming, pluggable field registry | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react) |
+| [`@squaredr/fieldcraft-react`](packages/react) | React renderer — 44 field components (34 input + 10 structural), hooks, theming, pluggable field registry | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-react)](https://www.npmjs.com/package/@squaredr/fieldcraft-react) |
 | [`@squaredr/fieldcraft-adapters`](packages/adapters) | Submission adapters — HTTP, Postgres, Supabase, Webhook | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-adapters)](https://www.npmjs.com/package/@squaredr/fieldcraft-adapters) |
 | [`@squaredr/fieldcraft-templates`](packages/templates) | 16 free form templates — general, HR, and more | [![npm](https://img.shields.io/npm/v/@squaredr/fieldcraft-templates)](https://www.npmjs.com/package/@squaredr/fieldcraft-templates) |
 
@@ -74,7 +74,7 @@ function App() {
 ## Features
 
 - **Headless core** -- pure TypeScript engine with zero UI dependencies; bring your own renderer or use the React package
-- **41 field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs
+- **34 input field types** -- ratings, NPS, matrix grids, file uploads, signatures, address blocks, and all the standard inputs -- plus 10 structural types that render but never hold a value
 - **JSON schemas** -- define entire forms as plain objects in TypeScript or JSON
 - **Display modes** -- stepped (wizard), classic (all-at-once), or conversational (one question at a time, Typeform-style)
 - **Multi-step flows** -- wizard-style sections with progress tracking and back/next navigation
@@ -136,7 +136,7 @@ Contact form, feedback survey, NPS, job application, event registration, bug rep
 fieldcraft/
 ├── packages/
 │   ├── core/                  # Form engine (pure TypeScript)
-│   ├── react/                 # React renderer + 41 field components
+│   ├── react/                 # React renderer + 44 field components
 │   ├── adapters/              # Submission adapters (HTTP, Postgres, Supabase, Webhook)
 │   └── templates/        # 16 free form schemas
 ├── website/                   # Docs site (fieldcraft.squaredr.tech)

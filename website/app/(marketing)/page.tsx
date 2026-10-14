@@ -6,11 +6,11 @@ import { changelog } from '@/lib/changelog';
 export const metadata: Metadata = {
   title: 'FieldCraft — Self-hosted form engine for React',
   description:
-    'Responses go straight from the browser to infrastructure you control — no vendor in the path. Schema-driven form engine for React with 41 field types, conditional logic, multi-step forms and validation. MIT licensed.',
+    'Responses go straight from the browser to infrastructure you control — no vendor in the path. Schema-driven form engine for React with 34 input field types, conditional logic, multi-step forms and validation. MIT licensed.',
   openGraph: {
     title: 'FieldCraft — Self-hosted form engine for React',
     description:
-      'Your forms, your database, nobody in the middle. 41 field types, conditional logic, multi-step navigation and validation, defined once in JSON. MIT licensed.',
+      'Your forms, your database, nobody in the middle. 34 input field types, conditional logic, multi-step navigation and validation, defined once in JSON. MIT licensed.',
   },
 };
 
@@ -23,7 +23,7 @@ const jsonLd = {
   applicationCategory: 'DeveloperApplication',
   operatingSystem: 'Any',
   description:
-    'A self-hosted, schema-driven form engine for React. 41 field types, validation, conditional logic, multi-step navigation, and draft persistence.',
+    'A self-hosted, schema-driven form engine for React. 34 input field types, validation, conditional logic, multi-step navigation, and draft persistence.',
   url: 'https://fieldcraft.squaredr.tech',
   author: {
     '@type': 'Organization',

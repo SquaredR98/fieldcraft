@@ -27,7 +27,7 @@ export function ProHero() {
 
         <div className="fc-pro-hero__badges">
           <div className="fc-pro-hero__badge">React 18 &amp; 19</div>
-          <div className="fc-pro-hero__badge">41 field types</div>
+          <div className="fc-pro-hero__badge">34 input field types</div>
           <div className="fc-pro-hero__badge">One-time purchase</div>
           <div className="fc-pro-hero__badge fc-pro-hero__badge--amber">
             Free on localhost &mdash; no key needed

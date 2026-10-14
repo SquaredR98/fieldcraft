@@ -1,6 +1,6 @@
 ---
 title: Validation
-description: 25 built-in validation rule types, custom sync and async validators, and how validation triggers work.
+description: 14 built-in validation rule types, custom sync and async validators, and how validation triggers work.
 ---
 
 ## Validation rules
