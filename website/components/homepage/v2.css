@@ -322,6 +322,7 @@ section.fc-ground-surface2 {
 /* ── Buttons ─────────────────────────────────────────────────── */
 
 .fc-v2-cta {
+  border-radius: var(--rad);
   @apply inline-flex items-center gap-2 font-display font-medium;
   @apply px-5.5 py-3.5 text-sm;
   background: var(--teal-plate);
@@ -338,6 +339,7 @@ section.fc-ground-surface2 {
 }
 
 .fc-v2-btn {
+  border-radius: var(--rad);
   @apply inline-flex items-center border border-fc-rule;
   @apply font-display font-medium px-5.5 py-3.5 text-sm text-fc-ink;
   background: var(--plate);
@@ -360,6 +362,7 @@ section.fc-ground-surface2 {
    lending it to every section link made the secondary tier shout louder
    than the thing it was supporting. */
 .fc-v2-link {
+  border-radius: var(--rad);
   @apply inline-flex items-center gap-2 no-underline whitespace-nowrap;
   @apply border border-fc-rule px-4.5 py-2.75;
   @apply font-display text-[13.5px] font-medium text-fc-ink;
@@ -400,6 +403,7 @@ a:hover > .fc-v2-link__arrow {
 /* ── Chips ───────────────────────────────────────────────────── */
 
 .fc-v2-chip {
+  border-radius: var(--rad-pill);
   @apply border border-fc-rule px-2 py-1.5;
   @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-soft;
   background: var(--plate);

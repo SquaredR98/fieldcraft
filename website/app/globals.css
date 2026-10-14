@@ -145,6 +145,18 @@
   --inset: inset 0 1px 3px rgba(18, 34, 42, 0.05);
   --cta-glow: 0 8px 18px -8px rgba(31, 107, 110, 0.35);
 
+  /* ── Radius scale ──
+     The site was committed to square (`--radius: 0px` plus a hard
+     `border-radius: 0 !important` on Radix portals). That reads precise but
+     also cold, so these introduce softness WITHOUT touching `--radius`,
+     which feeds shadcn and therefore every Pro component embedded here.
+     Being separate tokens means the rollout is per-section rather than one
+     irreversible global flip. */
+  --rad-sm: 6px;    /* chips, badges, inline code */
+  --rad: 10px;      /* buttons, inputs */
+  --rad-lg: 14px;   /* panels, cards, code frames */
+  --rad-pill: 999px;
+
   /* ── Layout scale (site-wide) ──
      Section heading size, tracking and vertical rhythm. Declared here
      rather than in a page-level stylesheet because both the homepage and

@@ -28,7 +28,7 @@ export const changelog: ChangelogEntry[] = [
     changes: [
       { type: 'fixed', text: 'Fourteen field components emitted a label pointing at an element that did not exist, so clicking it focused nothing and the field had no accessible name (WCAG 1.3.1, 4.1.2)' },
       { type: 'fixed', text: 'Composite fields now carry aria-invalid, aria-required and aria-describedby, so their errors and help text are announced' },
-      { type: 'added', text: 'groupAria() and FieldWrapper's composite prop — for fields rendered as a group of controls rather than one focusable input' },
+      { type: 'added', text: 'groupAria() and the FieldWrapper composite prop — for fields rendered as a group of controls rather than one focusable input' },
     ],
   },
   {
@@ -39,7 +39,7 @@ export const changelog: ChangelogEntry[] = [
     changes: [
       { type: 'added', text: 'A real <form> element in all three display modes — Enter now submits, password managers can offer to save, and screen readers get a form landmark' },
       { type: 'added', text: 'onSubmitError and SubmitErrorNotice — delivery failures were previously invisible to the respondent' },
-      { type: 'added', text: 'labelFormat, helpTextFormat and contentFormat — a narrow markdown subset on a question's own text' },
+      { type: 'added', text: 'labelFormat, helpTextFormat and contentFormat — a narrow markdown subset on the text of a question itself' },
       { type: 'changed', text: 'Nineteen field types now log a one-off development warning: they are scheduled for removal on 2027-07-01' },
     ],
   },
