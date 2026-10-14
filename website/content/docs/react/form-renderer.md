@@ -38,6 +38,8 @@ export default function ContactPage() {
 |------|------|-------------|
 | `onSubmit` | `(response: FormResponse) => void \| Promise<void>` | Called when the form is submitted successfully. Receives the full `FormResponse` with values, metadata, scores. |
 | `adapters` | `SubmitAdapter \| SubmitAdapter[]` | One or more submission adapters (HTTP, Supabase, Postgres, webhook). Run in parallel on submit. |
+| `onSubmitError` | `(detail: SubmitErrorDetail) => void \| false` | Called when a submission fails for a reason the respondent cannot fix — a delivery failure, or a `beforeSubmit` hook that returned `false`. Validation failures go to `onValidationError` instead. Return `false` to suppress the built-in message and show your own. **Since 1.12.0** |
+| `submitErrorLabel` | `string` | Overrides the built-in delivery-failure message. Provided for translation — it must stay safe to show a respondent, so never pass raw adapter text. **Since 1.12.0** |
 
 ### Theming
 
@@ -94,6 +96,11 @@ export default function ContactPage() {
 | `onStateChange` | `(state: FormState) => void` | Called on every state change. Use sparingly — this fires frequently. |
 | `onEvent` | `(event: FieldCraftEvent) => void` | Called on every engine event (field interaction, section change, submit, etc.). Useful for custom logging. |
 | `beforeSubmit` | `(response: FormResponse) => FormResponse \| false \| Promise<FormResponse \| false>` | Intercept submissions before they reach adapters. Return a modified response, or `false` to cancel the submission. |
+
+`onValidationError` and `onSubmitError` are deliberately separate. One means
+*the respondent can fix this*; the other means *they cannot*. Before 1.12.0
+every failure went to `onValidationError`, so a network error arrived as an
+empty error object and the respondent saw nothing at all.
 
 ### Analytics
 
@@ -157,6 +164,16 @@ export default function IntakePage() {
 
 Use `hideNavigation` with `onReady` and `onStateChange` to replace the built-in buttons with your own UI:
 
+Your own buttons live **outside** the renderer's `<form>`, so give them
+`type="button"` and drive them from the engine. Calling `engine.nextSection()`
+from a button that also submits a surrounding form would advance twice —
+`nextSection()` is not idempotent.
+
+If you reuse the exported `NavigationButtons` component standalone, leave its
+`insideForm` prop unset: it then renders plain buttons driven by `onNext` and
+`onSubmit`. The renderer passes `insideForm` so that, inside its form, Enter
+and a click take one path instead of both firing.
+
 ```tsx
 import { useState, useCallback } from 'react'
 import { FormEngineRenderer } from '@squaredr/fieldcraft-react'
@@ -205,6 +222,73 @@ export default function CustomNavForm({ schema }) {
   )
 }
 ```
+
+## Handling submission failures
+
+A submission can fail three ways, and they are not the same problem.
+
+| Cause | Where it goes | Can the respondent fix it? |
+|---|---|---|
+| A field is invalid | `onValidationError` | Yes |
+| The adapter failed — network, 5xx, timeout | `onSubmitError`, `kind: "delivery"` | No |
+| Your `beforeSubmit` returned `false` | `onSubmitError`, `kind: "cancelled"` | Not a failure — you stopped it |
+
+`onSubmitError` receives a `SubmitErrorDetail`:
+
+```ts
+type SubmitErrorDetail = {
+  kind: 'delivery' | 'cancelled';
+  message: string;                              // joined adapter messages
+  adapterResults: { adapterName: string; success: boolean; error?: string }[];
+  response?: FormResponse;                      // see note below
+};
+```
+
+### The three behaviours
+
+```tsx
+// 1. Pass nothing. The respondent sees the built-in message.
+<FormEngineRenderer schema={schema} adapters={adapters} />
+
+// 2. Log it and keep the built-in message. Return nothing.
+<FormEngineRenderer
+  schema={schema}
+  adapters={adapters}
+  onSubmitError={(detail) => {
+    Sentry.captureMessage(detail.message, { extra: detail.adapterResults });
+  }}
+/>
+
+// 3. Take over completely. Return false.
+<FormEngineRenderer
+  schema={schema}
+  adapters={adapters}
+  onSubmitError={(detail) => {
+    if (detail.kind === 'cancelled') return false;   // you stopped it; say nothing
+    toast.error('Could not save. Retrying shortly.');
+    return false;                                     // suppress the built-in notice
+  }}
+/>
+```
+
+Returning nothing gives you the detail *and* the default message, which is the
+common case — you usually want to know, and the respondent still needs telling.
+
+### Why the built-in message is generic
+
+It says "We couldn't send your response. Please try again." and never shows
+`detail.message`. Raw adapter text can contain hostnames, ports and driver
+errors — information a respondent cannot act on and should not see. The detail
+goes to you; the reassurance goes to them.
+
+Override the wording with `submitErrorLabel` for translation, but keep it safe
+to display.
+
+**`detail.response` is currently always `undefined`.** `SubmitResult` does not
+carry the response, and the renderer cannot reconstruct it faithfully — the
+engine builds it with a session token, a completion time and merged metadata
+the component does not hold. Handle `undefined` rather than assuming a retry
+payload is available.
 
 ## How it works internally
 

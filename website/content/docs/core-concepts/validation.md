@@ -153,11 +153,12 @@ For server-side validation (e.g., checking if a username is taken):
 }
 ```
 
-Register async validators similarly:
+The `endpoint` is a **key**, not a URL. Register a function under that exact
+key — the name in the schema and the name in the registry must match:
 
 ```ts
 const asyncValidators: Record<string, AsyncValidator> = {
-  checkUsername: async (value) => {
+  uniqueUsername: async (value) => {
     const res = await fetch(`/api/check-username?u=${value}`)
     const data = await res.json()
     return data.available ? null : 'Username is already taken.'
@@ -173,14 +174,57 @@ const asyncValidators: Record<string, AsyncValidator> = {
 />
 ```
 
+Keeping the function out of the schema is deliberate. The schema stays JSON —
+serialisable, storable in a database row, diffable in a pull request. The
+moment a function can live in it, it stops being data.
+
+### When async rules run
+
+Twice, and the two differ on purpose.
+
+| | When | If the validator throws |
+|---|---|---|
+| **On blur** | After the synchronous rules pass | **Fails open** — the field is left as the sync rules found it |
+| **On submit** | Every visible field, including ones never blurred | **Fails closed** — the submission is blocked |
+
+Blur is a convenience: an unreachable endpoint should not nag a respondent
+about something they cannot fix. Submit is the gate: an unverified claim must
+not pass silently.
+
+Async rules are skipped when the synchronous rules already failed — there is no
+point asking a server about a value `minLength` has rejected.
+
+A blur result is reused by the submit gate when the value has not changed, so
+the same question is not asked twice. Change the value after blurring and it is
+re-checked.
+
+### The pending state
+
+While a check is in flight the field is neither valid nor invalid — the answer
+is not known yet. `FormState.validating` carries that:
+
+```tsx
+const { state } = useFormEngine(schema, { asyncValidators })
+
+{state.validating.username && <Spinner />}
+```
+
+Navigation refuses while a check is open. Without that, a respondent could
+leave a field, advance, and have the error land on a question they can no
+longer see.
+
+**`debounceMs` is deprecated** and scheduled for removal on 2027-07-01. It has
+never had any effect: blur and submit are single events, so there is nothing to
+debounce.
+
 ## When validation runs
 
-| Trigger | What validates |
-|---------|---------------|
-| Field blur | That single field |
-| `setValue()` | That single field (if `touched`) |
-| Section navigation ("Next") | All visible fields in the current section |
-| Submit | All visible fields across all sections |
+| Trigger | What validates | Async rules too? |
+|---------|---------------|---|
+| Field blur | That single field | Yes, after the sync rules pass |
+| `setValue()` | That single field (if `touched`) | No |
+| Section navigation ("Next") | All visible fields in the current section | No — but navigation refuses while a check is open |
+| Submit | All visible fields across all sections | Yes, including fields never blurred |
 
 Errors are only displayed after a field has been `touched` (the user interacted with it) or after `submitAttempted` is `true`. This prevents showing errors on fields the user hasn't reached yet.
 

@@ -238,6 +238,65 @@ Display-only fields. Like structural fields, they don't collect values and canno
 | `divider` | Horizontal rule | `style` ("solid" \| "dashed" \| "dotted"), `color`, `thickness`, `spacing` |
 | `spacer` | Empty vertical space | `height` (required, in pixels) |
 
+## Formatting a question's text
+
+Every question takes `labelFormat` and `helpTextFormat`, and `info_block` takes
+`contentFormat`. All default to `"plain"`, so existing schemas are unaffected.
+
+```ts
+{
+  id: 'phq9_1',
+  type: 'likert',
+  label: 'Over the **last 2 weeks**, how often have you been bothered by:
+
+Little interest or pleasure in doing things',
+  labelFormat: 'markdown',
+  helpText: 'Choose the answer that best describes _your_ experience.',
+  helpTextFormat: 'markdown',
+}
+```
+
+Supported: **bold**, _italic_, `code`, links, unordered and ordered lists, and
+line breaks.
+
+Deliberately **not** supported: headings, images, tables. An `<h1>` inside a
+question label breaks the document outline, and an image there is almost always
+a layout accident. Use an `image` field if you want a picture.
+
+### Why this and not a content block
+
+Formatting belongs on the text it formats. A separate `rich-text` block beside
+the question fails three ways:
+
+- a screen reader treats it as unrelated content, so the detail is not
+  announced with the question it belongs to
+- it **disappears entirely in conversational mode**, which renders one question
+  at a time
+- it is left behind when the question is reordered in a builder
+
+A formatted label travels with its question and stays bound to its input. This
+is why `rich-text` is [deprecated](/docs/deprecations) rather than moved.
+
+### Security
+
+Content is escaped, then sanitised with DOMPurify against an explicit
+allow-list. Schemas often come out of a database row, so label text is treated
+as untrusted input even when you wrote it yourself — a label containing
+`<script>` is displayed as text, not executed.
+
+If you write a custom field component, import `FormattedText` so your labels
+honour these options the way the built-in fields do:
+
+```tsx
+import { FormattedText } from '@squaredr/fieldcraft-react';
+
+<label htmlFor={field.id}>
+  <FormattedText text={field.label} format={field.labelFormat} />
+</label>
+```
+
+Without it, a markdown label renders as literal source text.
+
 ## Custom field types
 
 You can register any string as a field type via the [field registry](/docs/react/custom-field-types). The `QuestionType` union includes `(string & {})` — any custom type string is valid in a schema without modifying core types.
