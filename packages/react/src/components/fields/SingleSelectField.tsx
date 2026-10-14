@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { SingleSelectConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -28,8 +28,9 @@ export function SingleSelectField({ field, value, error, touched, disabled, read
   const [otherText, setOtherText] = useState(isOtherSelected ? current : "");
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
       <RadioGroup
+        {...groupAria(field, hasError)}
         value={isOtherSelected ? OTHER_VALUE : current}
         onValueChange={(val) => {
           if (val === OTHER_VALUE) {

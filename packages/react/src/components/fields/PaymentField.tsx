@@ -1,6 +1,6 @@
 import type { PaymentConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Badge } from "../ui/badge";
 
@@ -15,11 +15,12 @@ export function PaymentField({
   onBlur: _onBlur,
   onFocus: _onFocus,
 }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as PaymentConfig | undefined;
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <Card className="py-4 gap-3 bg-muted/30">
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <Card className="py-4 gap-3 bg-muted/30" role="group" {...groupAria(field, hasError)}>
         <CardHeader className="px-4 py-0 flex flex-row items-center justify-between">
           <div className="flex items-center gap-2">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} width={18} height={18} className="text-muted-foreground">

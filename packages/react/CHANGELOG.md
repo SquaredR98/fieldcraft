@@ -5,6 +5,19 @@ All notable changes to `@squaredr/fieldcraft-react` will be documented in this f
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.13.0] - 2026-10-14
+
+### Fixed
+- **Fourteen field components had a label pointing at nothing.** `FieldWrapper` emits `<Label htmlFor={field.id}>`, but those components never set a matching `id` on anything — so clicking the label focused nothing and the field had no accessible name. A WCAG 1.3.1 and 4.1.2 failure, and harsher than a missing attribute: `AppointmentField`, `CalculatedField`, `FileUploadField`, `ImageCaptureField`, `LikertField`, `MatrixField`, `NpsField`, `OpinionScaleField`, `PaymentField`, `RankingField`, `RatingField`, `RepeaterField`, `ScoringField`, `SignatureField`. Also `AddressField`, `MultiSelectField` and `SingleSelectField`, which set per-option ids (`-street`, `-other`) that the field-level label could never match.
+- Composite fields now carry `aria-invalid`, `aria-required` and `aria-describedby`, so their errors and help text are announced. Previously `FieldWrapper`'s own `id="{field.id}-error"` block was announced to nobody.
+
+### Added
+- `groupAria(field, hasError)` — aria attributes for a composite field's group container. Pairs with `FieldWrapper`'s new `composite` prop.
+- `FieldWrapper` takes `composite` for fields rendered as a group of controls rather than one focusable input. `<label for>` is only valid pointing at a single labelable element; for a group the label is rendered as text with id `{field.id}-label` and the group names itself with `aria-labelledby`.
+
+### Changed
+- `MatrixField`'s container moved from `role="region"` to `role="group"`, and `RankingField`'s ad-hoc `aria-label` is replaced by `groupAria`. Both had named themselves but carried no error or help association.
+
 ## [1.12.0] - 2026-10-13
 
 ### Added

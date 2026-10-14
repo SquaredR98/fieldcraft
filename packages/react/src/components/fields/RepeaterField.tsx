@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { RepeaterConfig, Question } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 import { FieldRenderer } from "../FieldRenderer";
 import { useFieldRegistry } from "../../registry/FieldRegistryContext";
@@ -10,6 +10,7 @@ import { useTheme } from "../../theme/ThemeProvider";
 type RepeaterEntry = Record<string, unknown>;
 
 export function RepeaterField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as RepeaterConfig | undefined;
   const entries = (value as RepeaterEntry[]) ?? [];
   const subFields = (config?.fields ?? []) as Question[];
@@ -49,8 +50,8 @@ export function RepeaterField({ field, value, error, touched, disabled, readonly
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-3">
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="flex flex-col gap-3" role="group" {...groupAria(field, hasError)}>
         {entries.map((entry, index) => (
           <div key={index} className="rounded-lg border border-input bg-card p-4">
             <div className="flex items-center justify-between mb-3">

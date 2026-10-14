@@ -1,6 +1,6 @@
 import type { ScoringConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { Badge } from "../ui/badge";
@@ -13,8 +13,9 @@ export function ScoringField({ field, value, error, touched, disabled, readonly,
   const hasError = touched && !!error?.length;
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
       <RadioGroup
+        {...groupAria(field, hasError)}
         value={current || undefined}
         onValueChange={(val) => { onChange(val); onBlur(); }}
         disabled={disabled || readonly}

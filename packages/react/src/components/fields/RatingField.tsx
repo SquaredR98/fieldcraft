@@ -1,6 +1,6 @@
 import type { RatingConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
@@ -12,6 +12,7 @@ const ICON_PATHS: Record<string, string> = {
 
 export function RatingField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as RatingConfig | undefined;
+  const hasError = !!(touched && error?.length);
   const max = config?.max ?? 5;
   const current = (value as number) ?? 0;
   const iconPath = ICON_PATHS[config?.icon ?? "star"] ?? ICON_PATHS.star;
@@ -43,11 +44,11 @@ export function RatingField({ field, value, error, touched, disabled, readonly, 
   }
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
       <div
         className="flex gap-1"
         role="radiogroup"
-        aria-label={field.label}
+        {...groupAria(field, hasError)}
         onFocus={onFocus}
         onKeyDown={handleKeyDown}
       >

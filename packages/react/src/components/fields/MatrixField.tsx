@@ -1,11 +1,12 @@
 import type { MatrixConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "../ui/table";
 
 type MatrixValue = Record<string, string | string[]>;
 
 export function MatrixField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as MatrixConfig | undefined;
   if (!config) return null;
   const { rows, columns, inputType = "radio" } = config;
@@ -26,8 +27,8 @@ export function MatrixField({ field, value, error, touched, disabled, readonly, 
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="overflow-x-auto rounded-md border border-input" role="region" aria-label={field.label}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="overflow-x-auto rounded-md border border-input" role="group" {...groupAria(field, hasError)}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">

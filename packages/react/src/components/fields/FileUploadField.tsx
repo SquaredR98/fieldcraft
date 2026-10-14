@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import type { FileUploadConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { formatFileSize } from "../../utils/format-helpers";
 import { cn } from "../../utils/cn";
 import { Button } from "../ui/button";
@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 type FileEntry = { name: string; size: number; type: string };
 
 export function FileUploadField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as FileUploadConfig | undefined;
   const files = (value as FileEntry[]) ?? [];
   const inputRef = useRef<HTMLInputElement>(null);
@@ -55,8 +56,10 @@ export function FileUploadField({ field, value, error, touched, disabled, readon
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
       <div
+        role="group"
+        {...groupAria(field, hasError)}
         className={cn(
           "relative z-10 flex flex-col items-center gap-2 rounded-lg border-2 border-dashed border-input p-6 transition-colors",
           !disabled && !readonly && "hover:border-ring hover:bg-accent/50",

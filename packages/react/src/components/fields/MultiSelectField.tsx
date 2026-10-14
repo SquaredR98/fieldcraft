@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { MultiSelectConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Checkbox } from "../ui/checkbox";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -14,6 +14,7 @@ const LAYOUT_CLASSES: Record<string, string> = {
 };
 
 export function MultiSelectField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as MultiSelectConfig | undefined;
   const options = field.options ?? [];
   const selected = (value as (string | number | boolean)[]) ?? [];
@@ -56,8 +57,8 @@ export function MultiSelectField({ field, value, error, touched, disabled, reado
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className={LAYOUT_CLASSES[layout] ?? LAYOUT_CLASSES.vertical} role="group" aria-label={field.label} onFocus={onFocus}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className={LAYOUT_CLASSES[layout] ?? LAYOUT_CLASSES.vertical} role="group" {...groupAria(field, hasError)} onFocus={onFocus}>
         {options.map((opt) => {
           const checked = selected.includes(opt.value);
           const optId = `${field.id}-${opt.value}`;

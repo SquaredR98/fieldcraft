@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
 import type { ImageCaptureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 
 export function ImageCaptureField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as ImageCaptureConfig | undefined;
   const inputRef = useRef<HTMLInputElement>(null);
   const imageUrl = value as string | undefined;
@@ -29,8 +30,8 @@ export function ImageCaptureField({ field, value, error, touched, disabled, read
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-3">
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="flex flex-col gap-3" role="group" {...groupAria(field, hasError)}>
         <input
           ref={inputRef}
           type="file"

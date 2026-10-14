@@ -1,10 +1,11 @@
 import { useState } from "react";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
 export function RankingField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const options = field.options ?? [];
   const ranked = (value as (string | number | boolean)[]) ?? options.map((o) => o.value);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
@@ -18,8 +19,9 @@ export function RankingField({ field, value, error, touched, disabled, readonly,
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <ol className="flex flex-col gap-1.5 list-none p-0 m-0" role="list" aria-label={`Rank ${field.label}`}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div role="group" {...groupAria(field, hasError)}>
+        <ol className="flex flex-col gap-1.5 list-none p-0 m-0" role="list">
         {ranked.map((val, index) => {
           const opt = options.find((o) => o.value === val);
           return (
@@ -73,7 +75,8 @@ export function RankingField({ field, value, error, touched, disabled, readonly,
             </li>
           );
         })}
-      </ol>
+        </ol>
+      </div>
     </FieldWrapper>
   );
 }

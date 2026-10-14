@@ -1,6 +1,6 @@
 import type { LikertConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Label } from "../ui/label";
 import { cn } from "../../utils/cn";
@@ -14,8 +14,9 @@ export function LikertField({ field, value, error, touched, disabled, readonly, 
   const hasError = touched && !!error?.length;
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
       <RadioGroup
+        {...groupAria(field, hasError)}
         value={current != null ? String(current) : ""}
         onValueChange={(val) => { onChange(val); onBlur(); }}
         disabled={disabled || readonly}

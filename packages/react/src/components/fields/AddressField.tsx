@@ -1,6 +1,6 @@
 import type { AddressConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Input } from "../ui/input";
 
 type AddressValue = {
@@ -15,6 +15,7 @@ type AddressValue = {
 const DEFAULT_FIELDS: AddressConfig["fields"] = ["street", "city", "state", "zip", "country"];
 
 export function AddressField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as AddressConfig | undefined;
   const addr = (value as AddressValue) ?? {};
   const fields = config?.fields ?? DEFAULT_FIELDS;
@@ -24,8 +25,8 @@ export function AddressField({ field, value, error, touched, disabled, readonly,
   };
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-3">
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="flex flex-col gap-3" role="group" {...groupAria(field, hasError)}>
         {fields!.includes("street") && (
           <Input
             id={`${field.id}-street`}

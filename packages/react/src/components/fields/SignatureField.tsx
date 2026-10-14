@@ -1,10 +1,11 @@
 import { useRef, useEffect, useCallback } from "react";
 import type { SignatureConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 
 export function SignatureField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as SignatureConfig | undefined;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const drawingRef = useRef(false);
@@ -77,8 +78,8 @@ export function SignatureField({ field, value, error, touched, disabled, readonl
   }, [width, height, onChange]);
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2">
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="flex flex-col gap-2" role="group" {...groupAria(field, hasError)}>
         <canvas
           ref={canvasRef}
           width={width}

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import type { AppointmentConfig, AppointmentSlot } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
 import { cn } from "../../utils/cn";
@@ -42,6 +42,7 @@ export function AppointmentField({
   customProps,
   fieldValues,
 }: FieldProps) {
+  const hasError = !!(touched && error?.length);
   const config = field.config as AppointmentConfig | undefined;
   const selected = value as AppointmentValue | undefined;
 
@@ -85,7 +86,7 @@ export function AppointmentField({
 
   if (slots.length === 0) {
     return (
-      <FieldWrapper field={field} error={error} touched={touched}>
+      <FieldWrapper field={field} error={error} touched={touched} composite>
         <div className="rounded-lg border border-dashed border-input bg-muted/30 p-4">
           <p className="text-sm text-muted-foreground">
             No appointment slots configured. Provide <code className="text-xs bg-muted px-1 rounded">slots</code> in the schema, or register a custom provider override.
@@ -96,8 +97,8 @@ export function AppointmentField({
   }
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-3">
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="flex flex-col gap-3" {...groupAria(field, hasError)} role="group">
         {/* Header Badges: Duration & Timezone */}
         <div className="flex flex-wrap items-center gap-2">
           {config?.duration && (

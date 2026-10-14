@@ -1,11 +1,12 @@
 import type { OpinionScaleConfig } from "@squaredr/fieldcraft-core";
 import type { FieldProps } from "../../registry/field-registry";
-import { FieldWrapper } from "./FieldWrapper";
+import { FieldWrapper, groupAria } from "./FieldWrapper";
 import { Button } from "../ui/button";
 import { cn } from "../../utils/cn";
 
 export function OpinionScaleField({ field, value, error, touched, disabled, readonly, onChange, onBlur, onFocus }: FieldProps) {
   const config = field.config as OpinionScaleConfig | undefined;
+  const hasError = !!(touched && error?.length);
   const min = config?.min ?? 1;
   const max = config?.max ?? 5;
   const current = value as number | undefined;
@@ -15,8 +16,8 @@ export function OpinionScaleField({ field, value, error, touched, disabled, read
   for (let n = min; n <= max; n += step) steps.push(n);
 
   return (
-    <FieldWrapper field={field} error={error} touched={touched}>
-      <div className="flex flex-col gap-2" role="radiogroup" aria-label={field.label} onFocus={onFocus}>
+    <FieldWrapper field={field} error={error} touched={touched} composite>
+      <div className="flex flex-col gap-2" role="radiogroup" {...groupAria(field, hasError)} onFocus={onFocus}>
         <div className="flex gap-1">
           {steps.map((n) => {
             const isSelected = current === n;
