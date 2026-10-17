@@ -364,3 +364,38 @@ main h3[id] {
   stroke-linejoin: round;
   opacity: 0.8;
 }
+
+/* ── Staged entrance ──
+   Fades in after the hero has painted, so the first frame is the hero's
+   copy alone. The markup is server-rendered and present from byte one —
+   only the opacity is deferred — so there is no layout shift and a
+   crawler sees the full nav.
+
+   Hidden only under `.fc-js`, which the inline head script sets before
+   first paint; with JS off the header is simply visible. The rescue
+   animation reveals it anyway if the script sets that class and then
+   fails before `fc-ready`.
+
+   Deliberately opacity ONLY: this element is `position: fixed`, and
+   animating its transform would momentarily make the bar its own
+   containing block — the same class of bug that offset the Pro drag
+   overlay. */
+.fc-js .fc-nav {
+  opacity: 0;
+  animation: fc-stage-rescue 1ms linear 1.2s forwards;
+}
+
+.fc-ready .fc-nav {
+  opacity: 1;
+  animation: none;
+  transition:
+    opacity 300ms ease-out 120ms,
+    transform var(--motion-enter);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-js .fc-nav {
+    opacity: 1;
+    animation: none;
+  }
+}

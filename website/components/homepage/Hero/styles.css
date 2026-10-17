@@ -806,3 +806,91 @@
     @apply mt-0;
   }
 }
+
+/* ── Staged entrance ─────────────────────────────────────────────────────
+   The hero's own copy — release pill, h1, description, CTAs, install
+   line — is deliberately NOT animated. It is the first paint and the LCP
+   element; delaying it to animate it would be trading the number that
+   matters for a flourish.
+
+   Everything else lands after that paint: the spec strip fades in as a
+   block with its cells arriving one by one, and the panel fade-slides
+   down from above.
+
+   SAFETY. The hidden state applies only under `.fc-js`, which the inline
+   head script sets synchronously before first paint. No JS, no hiding —
+   the page renders complete. And the hidden rule carries its own
+   `fc-stage-rescue` animation, so even if the script sets `fc-js` and
+   then dies before `fc-ready`, CSS reveals the content on its own after
+   1.2s. Content can never be stranded by a JS failure.
+
+   COST. opacity and transform only — both composited, so these run off
+   the main thread and trigger no layout. No filter or backdrop-filter
+   here: those are genuinely expensive without GPU compositing, which is
+   the case this has to survive. */
+
+/* ── Spec strip ── */
+
+.fc-js .fc-spec-strip {
+  opacity: 0;
+  animation: fc-stage-rescue 1ms linear 1.2s forwards;
+  transition: opacity var(--motion-enter) 80ms;
+}
+
+.fc-ready .fc-spec-strip {
+  opacity: 1;
+  /* Cancels the rescue so it cannot fight the transition. */
+  animation: none;
+}
+
+/* The container fades first, then the cells arrive in sequence. --i is
+   set on each cell server-side, so the stagger needs no timers and no
+   JavaScript at all. */
+.fc-js .fc-spec-strip__cell {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fc-stage-rescue 1ms linear 1.2s forwards;
+}
+
+.fc-ready .fc-spec-strip__cell {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  transition:
+    opacity var(--motion-enter),
+    transform var(--motion-enter);
+  transition-delay: calc(240ms + var(--i, 0) * 70ms);
+}
+
+/* ── Panel ── */
+
+.fc-js .fc-hero-panel {
+  opacity: 0;
+  transform: translateY(-14px);
+  animation: fc-stage-rescue 1ms linear 1.2s forwards;
+}
+
+/* Lands last, after the strip's cells have finished arriving. Ends on
+   `transform: none` rather than a zero translate: any non-none transform
+   makes an element a containing block for fixed-position descendants,
+   which is what offset the Pro drag overlay when ScrollReveal left one
+   behind. */
+.fc-ready .fc-hero-panel {
+  opacity: 1;
+  transform: none;
+  animation: none;
+  transition:
+    opacity 340ms ease-out 560ms,
+    transform 340ms ease-out 560ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-js .fc-spec-strip,
+  .fc-js .fc-spec-strip__cell,
+  .fc-js .fc-hero-panel {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+}

@@ -477,6 +477,22 @@ body::-webkit-scrollbar-corner,
   animation: fc-tab-enter var(--motion-enter) forwards;
 }
 
+/* Safety net for the staged entrance. Anything hidden by `.fc-js` also
+   runs this, so if the inline script sets that class and then fails
+   before adding `fc-ready`, CSS reveals the content on its own after
+   1.2s. A JavaScript failure can delay the animation; it can never
+   strand content off screen.
+
+   Lives here rather than in a section stylesheet because both the hero
+   and the nav use it, and a keyframe defined in one component's CSS but
+   referenced from another's is a dependency waiting to break. */
+@keyframes fc-stage-rescue {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @keyframes fc-tab-enter {
   from {
     opacity: 0;

@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react';
+
 /*
  * The numbers under the hero.
  *
@@ -56,11 +58,15 @@ export function SpecStrip() {
   return (
     <section className="fc-spec-strip">
       <div className="fc-spec-strip__inner">
-        {specs.map((s) => (
+        {specs.map((s, i) => (
           <article
             key={s.label}
             className="fc-spec-strip__cell"
             data-lead={s.lead ? '' : undefined}
+            /* Drives the entrance stagger from CSS — the cell's own
+               transition-delay is calc()'d from it. Set here, server
+               side, so the sequence costs no timers and no JavaScript. */
+            style={{ '--i': i } as CSSProperties}
           >
             {/* No classes inside the cell: there is one of each element,
                 so `.fc-spec-strip__cell b` and `… small` are exact. */}

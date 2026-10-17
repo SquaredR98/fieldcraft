@@ -84,6 +84,34 @@ export default function RootLayout({
             __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('consent','default',{'analytics_storage':'denied','ad_storage':'denied','ad_user_data':'denied','ad_personalization':'denied','wait_for_update':500});try{if(document.cookie.indexOf('fc_consent=granted')>-1){gtag('consent','update',{'analytics_storage':'granted'})}}catch(e){}`,
           }}
         />
+        {/*
+          Staged entrance for the page furniture.
+
+          `fc-js` is set SYNCHRONOUSLY, before first paint. Nothing is
+          hidden by CSS unless this class exists, so a browser with
+          JavaScript off, blocked, or still downloading shows the full
+          page — the hidden state is opt-in and can never strand content.
+
+          `fc-ready` lands after the browser has actually painted, via a
+          double requestAnimationFrame: the first callback runs before
+          the paint, the second after it. That is the cheap, accurate way
+          to say "after first contentful paint" without measuring
+          anything, and it keeps the hero's own text out of the
+          animation entirely — it paints immediately and is the LCP
+          element.
+
+          Inline and tiny on purpose: no bundle, no network round trip,
+          no hydration pass. The animations themselves are pure CSS on
+          opacity and transform, which are composited and never touch the
+          main thread.
+        */}
+        <Script
+          id="fc-stage"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `try{var d=document.documentElement;d.classList.add('fc-js');requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('fc-ready')})})}catch(e){}`,
+          }}
+        />
       </head>
       {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <body>
