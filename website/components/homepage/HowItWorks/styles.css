@@ -12,10 +12,20 @@
 .fc-how.fc-ground-surface2 {
   background: linear-gradient(
     180deg,
+    /* Top: begins on the hero's --bg. */
     var(--bg) 0%,
     color-mix(in srgb, var(--bg) 62%, var(--ground-2)) 12%,
     color-mix(in srgb, var(--bg) 24%, var(--ground-2)) 26%,
-    var(--ground-2) 40%
+    /* Middle: the section's own ground. */
+    var(--ground-2) 40%,
+    var(--ground-2) 62%,
+    /* Bottom: ends on --surface, which is what BatteriesIncluded below
+       sits on. It used to stop flat at --ground-2 and meet that
+       --surface as a step, so fixing the top boundary just moved the
+       visible line down one section. */
+    color-mix(in srgb, var(--surface) 30%, var(--ground-2)) 76%,
+    color-mix(in srgb, var(--surface) 70%, var(--ground-2)) 90%,
+    var(--surface) 100%
   );
 }
 

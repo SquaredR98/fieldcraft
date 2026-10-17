@@ -39,7 +39,18 @@
     color-mix(in srgb, var(--surface) 70%, var(--bg)) 91%,
     var(--surface) 100%
   );
-  /* The inset shadow that gave the flat ground its top edge. */
+  box-shadow: none;
+}
+
+/* The same kill, at matching specificity.
+   `.fc-ground-bg` carries `inset 0 1px 2px` to make a recessed ground
+   legible — a dark band along the TOP edge, which over a blend is
+   exactly the sharp line it is meant to avoid. The light rule was
+   already overridden above, but the dark one is
+   `:root[data-theme="dark"] .fc-ground-bg` (0,2,1) against this
+   section's (0,2,0), so it kept winning and kept drawing the line on
+   the only theme the site actually ships. */
+:root[data-theme='dark'] .fc-demos.fc-ground-bg {
   box-shadow: none;
 }
 
