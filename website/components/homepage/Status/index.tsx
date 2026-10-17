@@ -12,7 +12,7 @@ export function Status({
   latestPackage,
 }: StatusProps) {
   return (
-    <section id="status" className="fc-status fc-ground-surface2">
+    <section id="status" className="fc-status fc-ground-bg">
       <div className="fc-status__inner">
         <div className="fc-status__eyebrow">Status</div>
         <h2 className="fc-status__h2">Where it stands right now.</h2>

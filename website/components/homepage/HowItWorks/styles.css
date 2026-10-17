@@ -19,30 +19,35 @@
   @apply m-0 max-w-160 text-fc-ink-strong;
 }
 
-/* Gap to the grid comes from .fc-v2-block-gap on the subtitle. */
-.fc-how__sub {
-  @apply text-[15px] leading-[1.6] text-fc-soft m-0;
-  max-width: 480px;
-  text-wrap: pretty;
-}
-
 .fc-how__grid {
   @apply grid gap-7;
-  /* Step 02 is wider: the schema is the product, so it gets the weight. */
-  grid-template-columns: 1fr 1.18fr 1fr;
+  /* Equal columns. Step 02 used to take 1.18fr because the schema was the
+     argument and needed the weight — but the hero now carries that, at
+     full width, so these are three peers in a sequence rather than one
+     step with two supporting it. */
+  grid-template-columns: repeat(3, 1fr);
 }
 
+/* Rounded plate, following the direction the hero and nav now set.
+   The handoff makes each quick-start step a borderless column with a
+   left divider; keeping the card here because these sit on a tinted
+   ground where a bare column would have nothing to hold it, but the
+   corners, the lift and the hover come from the same system. */
 .fc-how__step {
-  @apply relative border border-fc-rule p-5.5;
+  @apply relative border border-fc-rule p-5.5 rounded-lg;
   background: var(--plate);
   box-shadow: var(--e1);
+  transition: box-shadow var(--motion-hover);
 }
 
-/* Step 02 carries the argument: teal edge, more lift, wider column. */
-.fc-how__step--lead {
-  @apply border-fc-teal-border p-6.5;
-  background: var(--lead-plate);
+.fc-how__step:hover {
   box-shadow: var(--e2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-how__step {
+    transition: none;
+  }
 }
 
 .fc-how__step-header {
@@ -50,10 +55,16 @@
   @apply pb-3 border-b border-fc-rule mb-4;
 }
 
+/* The handoff sets the step number in amber against a plain ground
+   rather than as an inverted ink chip. Amber is this page's single
+   deliberate colour moment and belongs to Scope, so the number stays
+   teal — the same hue the rest of the page uses to mark a sequence —
+   and takes a pill rather than a square. */
 .fc-how__chip {
-  @apply font-mono text-[10px];
-  @apply bg-fc-ink text-fc-bg;
-  @apply px-1.75 py-0.75;
+  @apply font-mono text-[10px] rounded-full;
+  @apply px-2 py-0.75;
+  color: var(--teal);
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
 }
 
 .fc-how__step-title {
@@ -64,9 +75,13 @@
   @apply text-sm leading-[1.65] text-fc-muted mb-3.5;
 }
 
+/* The code well is the one element the handoff explicitly rounds, at
+   calc(--r * .6) — rounded-sm here. Recessed rather than flat, so it
+   reads as set into the plate it sits on. */
 .fc-how__code {
-  @apply border border-fc-rule bg-fc-bg;
+  @apply border border-fc-rule bg-fc-bg rounded-sm;
   @apply p-3.5 font-mono text-xs leading-[1.8] text-fc-ink;
+  box-shadow: var(--inset);
 }
 
 .fc-how__code-muted {
@@ -101,12 +116,3 @@
   }
 }
 
-.fc-how__step--lead .fc-how__chip {
-  background: var(--teal-plate);
-  @apply text-fc-teal-on;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
-}
-
-.fc-how__step--lead .fc-how__step-header {
-  @apply border-fc-teal-border;
-}

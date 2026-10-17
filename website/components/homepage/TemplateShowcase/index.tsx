@@ -21,7 +21,7 @@ export function TemplateShowcase({ templates, total }: TemplateShowcaseProps) {
   const remaining = total - templates.length;
 
   return (
-    <section id="templates" className="fc-showcase fc-ground-surface">
+    <section id="templates" className="fc-showcase fc-ground-surface2">
       <div className="fc-showcase__inner">
         <div className="fc-showcase__head">
           <div>

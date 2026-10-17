@@ -25,7 +25,7 @@ const packages = [
 
 export function FinalCta() {
   return (
-    <section id="start" className="fc-cta fc-ground-bg">
+    <section id="start" className="fc-cta fc-ground-surface2">
       <div className="fc-cta__inner">
         {/* ── Left column ── */}
         <div>
