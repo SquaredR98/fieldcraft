@@ -146,7 +146,7 @@
 /* ── Panel ──────────────────────────────────────────────────────────── */
 
 .fc-hero-panel {
-  @apply relative mx-auto max-w-290 overflow-hidden;
+  @apply relative mx-4 sm:mx-auto max-w-290 overflow-hidden mb-12 sm:mb-16;
   border: 1px solid var(--rule);
   border-radius: var(--r);
   background: var(--surface);
@@ -183,17 +183,45 @@
   background: color-mix(in srgb, var(--teal) 55%, var(--rule));
 }
 
-.fc-hero-panel__file {
-  @apply px-3 py-1.5 text-fc-ink;
-  border-radius: var(--r-chip);
-  background: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--rule);
+/* ── Tabs ──
+   Labelling on desktop, real controls below 1080px where the panes
+   stack. Both states share one DOM so nothing remounts at the
+   breakpoint. */
+.fc-hero-panel__tabs {
+  @apply flex items-center gap-0.5 min-w-0;
 }
 
-.fc-hero-panel__file[data-muted] {
-  @apply text-fc-muted;
+.fc-hero-panel__tabs button {
+  @apply inline-flex items-center gap-1.5 px-3 py-1.5 min-w-0;
+  @apply font-mono text-[12px] text-fc-muted cursor-default;
+  border: 0;
+  border-radius: var(--r-chip);
   background: transparent;
-  box-shadow: none;
+  transition:
+    background var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-hero-panel__tabs button svg {
+  @apply w-3.5 h-3.5 shrink-0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fc-hero-panel__tabs button span {
+  @apply truncate;
+}
+
+/* Desktop: the SCHEMA tab reads as the file being shown, since both panes
+   are visible and the left one is the document. aria-selected drives
+   nothing here — the panes do not respond to it above 1080. */
+.fc-hero-panel__tabs button:first-child {
+  @apply text-fc-ink;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
 }
 
 .fc-hero-panel__status {
@@ -586,11 +614,34 @@
     @apply min-w-0;
   }
 
-  /* CRITICAL once the columns stack. The code pane is absolutely
-     positioned on desktop so it cannot drive the row height — but stacked,
-     its cell has no height of its own, so `inset: 0` would collapse the
-     code to nothing and it would vanish entirely. Back into flow, with a
-     max-height so it still cannot run away down the page. */
+  /* ── Tabbed ──
+     Stacked, the JSON sat ON TOP of the form, so the first thing inside
+     the demo was a wall of code and the working form — the part that
+     convinces — was pushed below it. One pane at a time instead, preview
+     first. The schema stays one tap away rather than being dropped: it is
+     half the argument. */
+  .fc-hero-panel__split {
+    grid-template-columns: 1fr;
+  }
+
+  /* Both panes occupy the same cell, and the inactive one is removed from
+     flow AND from the accessibility tree. `display: none` rather than
+     visibility, so the hidden pane contributes no height — the panel is
+     exactly as tall as what is on screen. */
+  .fc-hero-panel__code,
+  .fc-hero-panel__preview {
+    grid-area: 1 / 1;
+  }
+
+  .fc-hero-panel[data-tab='preview'] .fc-hero-panel__code,
+  .fc-hero-panel[data-tab='schema'] .fc-hero-panel__preview {
+    @apply hidden;
+  }
+
+  /* Back into flow: absolute positioning exists only to stop the code
+     driving the row height beside the form. Alone in its cell it has no
+     one to out-grow, and `inset: 0` against a cell with no height of its
+     own would collapse it to nothing. */
   .fc-hero-panel__code {
     @apply static;
   }
@@ -599,19 +650,45 @@
     @apply static;
   }
 
-  /* The cap goes on the scrolling child, which is the element that owns
-     the code's height — capping only the wrapper would leave the content
-     overflowing it. */
+  /* The cap goes on the scrolling child, which owns the code's height —
+     capping the wrapper alone would leave the content overflowing it. */
   .fc-hero-panel__code .fc-code-block__content {
     @apply overflow-auto;
-    max-height: 20rem;
+    max-height: 24rem;
   }
 
-  /* Stacked, so the divider belongs on top rather than the side. */
   .fc-hero-panel__preview {
     @apply p-5;
+    /* No divider: nothing is beside or above it now. */
     border-left: 0;
-    border-top: 1px solid var(--rule);
+  }
+
+  /* Tabs become controls. The inactive one drops its LABEL and keeps its
+     icon, handing that width to the active tab — which is the point on a
+     narrow screen. */
+  .fc-hero-panel__tabs button {
+    @apply cursor-pointer px-2;
+  }
+
+  .fc-hero-panel__tabs button[aria-selected='false'] span {
+    @apply sr-only;
+  }
+
+  .fc-hero-panel__tabs button[aria-selected='false'] {
+    @apply text-fc-muted;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* Overrides the desktop rule that always lit the first tab. */
+  .fc-hero-panel__tabs button[aria-selected='true'] {
+    @apply text-fc-ink px-2.5;
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--rule);
+  }
+
+  .fc-hero-panel__tabs button[aria-selected='false']:hover {
+    @apply text-fc-ink;
   }
 
   .fc-spec-strip {
@@ -667,19 +744,26 @@
     @apply px-2.5;
   }
 
-  /* The filename truncates rather than the status being dropped: "schema
-     valid" is a trust signal, not chrome, and it is the shorter of the
-     two. Lights give up their left padding first. */
+  /* The bar now carries lights, two tabs and the status. The LIGHTS go
+     first — they are the only element making no claim and carrying no
+     control, so they are the cheapest thing to lose. "schema valid" stays:
+     it is a trust signal, not chrome. */
   .fc-hero-panel__lights {
-    @apply pl-0 pr-1.5;
+    @apply hidden;
   }
 
-  .fc-hero-panel__file {
-    @apply px-2 min-w-0 truncate;
+  .fc-hero-panel__tabs {
+    @apply flex-1;
   }
 
   .fc-hero-panel__status {
     @apply shrink-0 pl-1;
+  }
+
+  /* The active tab's label can truncate; the inactive one is already
+     icon-only, so neither can push the status off the bar. */
+  .fc-hero-panel__tabs button[aria-selected='true'] {
+    @apply min-w-0;
   }
 
   .fc-hero-panel__preview {
