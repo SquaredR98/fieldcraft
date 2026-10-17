@@ -21,8 +21,6 @@ import './styles.css';
  * items, and state.
  */
 
-const badges = ['MIT', 'TypeScript', 'React 18 & 19', 'No backend required'];
-
 export type HeroProps = {
   /** Newest shipped version, from lib/changelog.ts via page.tsx (Rule 11). */
   version: string;
@@ -94,17 +92,28 @@ export function Hero({ version }: HeroProps) {
           <CopyInstall />
         </div>
 
-        <ul className="fc-hero__badges">
-          {badges.map((b) => (
-            <li key={b}>{b}</li>
-          ))}
-        </ul>
       </div>
 
-      {/* Full width, below the copy — the schema/result relationship is the
-          argument, so it gets the whole page rather than a column. */}
-      <HeroPanel />
+      {/* Above the panel, not below.
+          Below, the numbers were an afterthought the eye reached only
+          after the demo had already made its case; above, they are the
+          context you read the demo THROUGH — 34 field types and 1,384
+          tests, then a form built from them.
+
+          This replaced the badge row that used to close the copy column
+          (MIT · TypeScript · React 18 & 19 · No backend required). Two
+          horizontal credibility bands stacked back to back, with the
+          panel under them, was three competing bands in one space — and
+          the two were doing the same job. Every badge claim survives
+          elsewhere on the page: MIT in Architecture, ComparisonTable and
+          FinalCta; TypeScript in Architecture; React 18 and 19 in
+          HowItWorks. */}
       <SpecStrip />
+
+      {/* Full width and last — the schema/result relationship is the
+          argument, so it closes the hero and gets the whole page rather
+          than a column. */}
+      <HeroPanel />
     </section>
   );
 }

@@ -141,15 +141,7 @@
   @apply mt-4;
 }
 
-.fc-hero__badges {
-  @apply flex flex-wrap justify-center gap-2.5 mt-7 m-0 p-0 list-none;
-}
 
-.fc-hero__badges li {
-  @apply border border-fc-rule bg-fc-surface px-2.25 py-1.25;
-  @apply font-mono text-[10px] tracking-widest uppercase text-fc-muted;
-  border-radius: var(--r-pill);
-}
 
 /* ── Panel ──────────────────────────────────────────────────────────── */
 
@@ -490,7 +482,10 @@
    inside the box. Max-width and gutter on one element is the convention;
    this keeps them on the wrapper so the bordered grid can own its edges. */
 .fc-spec-strip {
-  @apply relative mx-auto max-w-310 mt-14 px-10;
+  /* Sits ABOVE the panel now, so the margin belongs on top of it and
+     below the copy — close enough to the copy to read as part of the
+     same block, with clear air before the panel. */
+  @apply relative mx-auto max-w-310 mb-10 px-10;
 }
 
 /* Asymmetric, because that is how this page encodes emphasis everywhere
@@ -512,14 +507,32 @@
    divider, which is the spec-sheet primitive the rest of the homepage
    uses. Replaces the old border-l-per-cell, which left a hanging rule on
    the first cell at every breakpoint change. */
+/* ── Hover ──
+   This was broken three ways at once, all visible as a flash on leave.
+
+   1. `background` was transitioning between a COLOUR (--surface) and a
+      GRADIENT (--plate). Those cannot be interpolated, so the browser
+      snapped rather than eased — and snapped back out of sync with the
+      shadow, which is the flash.
+   2. `.fc-spec-strip__cell:hover` beat `…__cell[data-lead]` on source
+      order, so hovering a LEAD cell replaced --lead-plate with the
+      lighter --plate: it got brighter on hover and dropped back on
+      leave, the opposite of the intended direction.
+   3. The transition listed `background` only, while lead cells also
+      animate box-shadow — so the two halves of the same gesture moved at
+      different rates.
+
+   Fix: the ground is a flat colour that stays put, hover moves only
+   interpolatable properties (box-shadow), and the lead rule re-declares
+   its own hover so specificity cannot flip it. Same approach Status uses. */
 .fc-spec-strip__cell {
   @apply py-5 px-5 m-0;
   background: var(--surface);
-  transition: background var(--motion-hover);
+  transition: box-shadow var(--motion-hover);
 }
 
 .fc-spec-strip__cell:hover {
-  background: var(--plate);
+  box-shadow: var(--e1);
 }
 
 /* The two that decide an evaluation — is it tested, what does it cost —
@@ -530,6 +543,9 @@
 }
 
 .fc-spec-strip__cell[data-lead]:hover {
+  /* Re-declared so the plain :hover rule above cannot win on source
+     order and flatten the lead ground. */
+  background: var(--lead-plate);
   box-shadow: var(--e3);
 }
 
@@ -599,7 +615,7 @@
   }
 
   .fc-spec-strip {
-    @apply px-5 mt-10;
+    @apply px-5 mb-8;
   }
 
   /* Two per row. The shared-border grid handles its own dividers, so
@@ -688,7 +704,7 @@
   /* One column: five cells over two columns leaves an orphan spanning
      half a row, which reads as a layout error rather than a list. */
   .fc-spec-strip {
-    @apply px-4 mt-8;
+    @apply px-4 mb-6;
   }
 
   .fc-spec-strip__inner {
