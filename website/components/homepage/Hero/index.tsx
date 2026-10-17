@@ -35,7 +35,14 @@ export type HeroProps = {
 export function Hero({ version }: HeroProps) {
   return (
     <section id="top" className="fc-hero">
-      <div className="fc-v2-grid" aria-hidden="true" />
+      {/* Dots rather than the shared .fc-v2-grid line field: with rounded
+          geometry throughout, an orthogonal grid fights the corners. Three
+          offset glows sit under it for depth — asymmetric on purpose, since
+          three centred washes would read as a single vignette. */}
+      <div className="fc-hero__dots" aria-hidden="true" />
+      <div className="fc-hero__glow fc-hero__glow--1" aria-hidden="true" />
+      <div className="fc-hero__glow fc-hero__glow--2" aria-hidden="true" />
+      <div className="fc-hero__glow fc-hero__glow--3" aria-hidden="true" />
       <div className="fc-hero__inner">
         <div className="fc-hero__copy">
           {/* Version comes from props, which page.tsx reads out of
@@ -48,11 +55,15 @@ export function Hero({ version }: HeroProps) {
             Now on npm &mdash; read the release notes
             <span className="fc-v2-link__arrow">&rarr;</span>
           </a>
+          {/* Accent on the second line only. Across both, the gradient turns
+              the headline into decoration and costs contrast; on one line it
+              reads as emphasis — and it is the line naming the product. */}
           <h1 className="fc-hero__h1">
-            Declare the form.<br />
-            FieldCraft renders the rest.
+            Declare the form.{' '}
+            <span className="fc-hero__h1-accent">
+              FieldCraft renders the rest.
+            </span>
           </h1>
-          <div className="fc-hero__tick" />
           <p className="fc-hero__sub">
             A schema-driven form engine for React. Multi-step navigation,
             conditional logic, validation, computed fields and drafts &mdash;

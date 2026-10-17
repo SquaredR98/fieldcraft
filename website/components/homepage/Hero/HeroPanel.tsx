@@ -25,10 +25,19 @@ export function HeroPanel() {
       <div className="fc-v2-bracket fc-v2-bracket--br" aria-hidden="true" />
 
       <div className="fc-hero-panel__chrome">
-        <div className="fc-hero-panel__file">schema.json</div>
+        <div className="fc-hero-panel__lights" aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div className="fc-hero-panel__file">event-registration.json</div>
         <div className="fc-hero-panel__file fc-hero-panel__file--muted">
           Preview
         </div>
+        {/* Not decoration: the schema in SchemaPanel was run through
+            validateSchema() from the published core and passes. It failed
+            first time — an empty `questions` array on section 2 — which is
+            exactly why this is worth asserting rather than drawing. */}
         <div className="fc-hero-panel__status">
           <span className="fc-hero-panel__pip" aria-hidden="true" />
           schema valid

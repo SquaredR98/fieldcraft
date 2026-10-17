@@ -321,27 +321,42 @@ section.fc-ground-surface2 {
 
 /* ── Buttons ─────────────────────────────────────────────────── */
 
+/* Pills, per direction B — the handoff puts both hero buttons on --rb
+   (999px) rather than the panel radius. A pill beside a 14px panel reads as
+   a deliberate pairing; a 10px button beside it reads as a rounding error. */
 .fc-v2-cta {
-  border-radius: var(--rad);
-  @apply inline-flex items-center gap-2 font-display font-medium;
-  @apply px-5.5 py-3.5 text-sm;
+  border-radius: var(--r-pill);
+  @apply inline-flex items-center gap-2 font-display;
+  @apply px-7 py-3.5 text-base;
+  font-weight: var(--display-weight);
   background: var(--teal-plate);
   color: var(--teal-on);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.18),
     0 1px 2px rgba(18, 34, 42, 0.1),
     var(--cta-glow);
-  transition: filter var(--motion-hover);
+  transition: filter var(--motion-hover), box-shadow var(--motion-hover);
 }
 
 .fc-v2-cta:hover {
   filter: brightness(1.06);
+  /* Direction B's third glow layer, on hover only. Permanently on, an amber
+     bloom under a teal button muddies the hue; as a hover state it reads as
+     the button lighting up. */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 1px 2px rgba(18, 34, 42, 0.1),
+    var(--cta-glow),
+    0 0 50px -16px rgba(160, 109, 34, 0.4);
 }
 
 .fc-v2-btn {
-  border-radius: var(--rad);
+  border-radius: var(--r-pill);
   @apply inline-flex items-center border border-fc-rule;
-  @apply font-display font-medium px-5.5 py-3.5 text-sm text-fc-ink;
+  /* Padding and size match .fc-v2-cta so the pair reads as one control
+     group rather than two buttons that happen to sit together. */
+  @apply font-display px-7 py-3.5 text-base text-fc-ink;
+  font-weight: var(--display-weight);
   background: var(--plate);
   box-shadow: inset 0 1px 0 var(--lit);
   transition:
@@ -362,7 +377,7 @@ section.fc-ground-surface2 {
    lending it to every section link made the secondary tier shout louder
    than the thing it was supporting. */
 .fc-v2-link {
-  border-radius: var(--rad);
+  border-radius: var(--r-inner);
   @apply inline-flex items-center gap-2 no-underline whitespace-nowrap;
   @apply border border-fc-rule px-4.5 py-2.75;
   @apply font-display text-[13.5px] font-medium text-fc-ink;
@@ -403,7 +418,7 @@ a:hover > .fc-v2-link__arrow {
 /* ── Chips ───────────────────────────────────────────────────── */
 
 .fc-v2-chip {
-  border-radius: var(--rad-pill);
+  border-radius: var(--r-pill);
   @apply border border-fc-rule px-2 py-1.5;
   @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-soft;
   background: var(--plate);

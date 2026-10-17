@@ -5,6 +5,105 @@
 .fc-hero {
   @apply relative overflow-hidden border-b border-fc-rule;
   background-color: var(--bg);
+  /* Establishes the stacking context the backdrop layers sit under, so
+     z-index: -1 resolves against the hero rather than the page. */
+  isolation: isolate;
+}
+
+/* ── Backdrop: dots, not the line grid ──
+   Direction B swaps the 32px line grid for a 20px radial dot field. With
+   rounded corners everywhere, a hard orthogonal grid fights the geometry;
+   dots sit under it. Masked to a soft oval so the field fades rather than
+   ending at an edge. */
+.fc-hero__dots {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: -1;
+  background-image: var(--hero-pattern);
+  background-size: var(--hero-pattern-size);
+  opacity: 0.8;
+  -webkit-mask-image: radial-gradient(
+    70% 60% at 50% 30%,
+    #000 0%,
+    transparent 75%
+  );
+  mask-image: radial-gradient(70% 60% at 50% 30%, #000 0%, transparent 75%);
+}
+
+/* ── Glows ──
+   Three offset radial washes. The handoff places them asymmetrically (50%
+   above, 72% right, 20% left) on purpose: three centred glows would read as
+   one vignette. Light mode uses much lower alpha — the handoff's values
+   were authored on a near-black ground and would grey out white. */
+.fc-hero__glow {
+  @apply absolute pointer-events-none;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+.fc-hero__glow--1 {
+  width: 68rem;
+  height: 45rem;
+  left: 50%;
+  top: -21rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    rgba(31, 107, 110, 0.1),
+    transparent
+  );
+  filter: blur(30px);
+}
+
+.fc-hero__glow--2 {
+  width: 44rem;
+  height: 32rem;
+  left: 72%;
+  top: 22rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    rgba(160, 109, 34, 0.08),
+    transparent
+  );
+  filter: blur(40px);
+}
+
+.fc-hero__glow--3 {
+  width: 38rem;
+  height: 30rem;
+  left: 20%;
+  top: 30rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    rgba(31, 107, 110, 0.07),
+    transparent
+  );
+  filter: blur(50px);
+}
+
+:root[data-theme="dark"] .fc-hero__glow--1 {
+  background: radial-gradient(
+    closest-side,
+    rgba(99, 189, 180, 0.17),
+    transparent
+  );
+}
+
+:root[data-theme="dark"] .fc-hero__glow--2 {
+  background: radial-gradient(
+    closest-side,
+    rgba(224, 169, 79, 0.13),
+    transparent
+  );
+}
+
+:root[data-theme="dark"] .fc-hero__glow--3 {
+  background: radial-gradient(
+    closest-side,
+    rgba(99, 189, 180, 0.12),
+    transparent
+  );
 }
 
 .fc-hero__inner {
@@ -34,9 +133,6 @@
   @apply justify-center;
 }
 
-.fc-hero__copy .fc-hero__tick {
-  @apply mx-auto;
-}
 
 /* ── Release pill ──
    The version is data, not decoration: it comes from lib/changelog.ts. */
@@ -44,7 +140,7 @@
   @apply inline-flex items-center gap-2.5 mb-7;
   @apply border border-fc-rule py-1.5 pl-1.5 pr-3.5;
   @apply text-[13px] text-fc-soft;
-  border-radius: var(--rad-pill);
+  border-radius: var(--r-pill);
   background: var(--plate);
   box-shadow: inset 0 1px 0 var(--lit);
   transition: border-color var(--motion-hover), color var(--motion-hover);
@@ -56,44 +152,52 @@
 
 .fc-hero__release-pill {
   @apply font-mono text-[11px] font-medium px-2 py-[3px];
-  border-radius: var(--rad-pill);
+  border-radius: var(--r-pill);
   background: var(--teal-plate);
   color: var(--teal-on);
 }
 
 /* ── Left column ── */
 
-.fc-hero__eyebrow {
-  border-radius: var(--rad-pill);
-  @apply inline-flex items-center gap-2 mb-5.5;
-  @apply border border-fc-teal-border px-2.5 py-1.5;
-  @apply font-mono text-[10px] tracking-[0.14em];
-  @apply uppercase text-fc-teal;
-  background: var(--lead-plate);
-  box-shadow: inset 0 1px 0 var(--lit);
-}
-
-.fc-hero__eyebrow-dot {
-  @apply w-[5px] h-[5px] bg-fc-teal;
-}
-
-.fc-hero__tick {
-  @apply h-0.5 mt-6.5 mb-5.5;
-  width: 64px;
-  background: linear-gradient(90deg, var(--teal), transparent);
-}
 
 .fc-hero__h1 {
-  @apply font-display font-semibold;
-  @apply tracking-[-0.035em] leading-[1.02];
-  @apply m-0 text-fc-ink-strong;
-  font-size: clamp(36px, 4.6vw, 54px);
+  /* Direction B: much larger, tighter tracking, sub-1 leading, and the
+     heavier display weight. At 54px with -0.035em this read as a section
+     heading that happened to be first; the hero's job is to dominate the
+     fold, and the two lines stacking tightly is what makes it an object
+     rather than a sentence. */
+  @apply font-display m-0 text-fc-ink-strong;
+  font-weight: var(--display-weight);
+  font-size: clamp(42px, 6.4vw, 86px);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
   text-wrap: balance;
+  max-width: 64rem;
+}
+
+/* The second line carries the accent gradient. Only the FieldCraft half —
+   gradient across both lines turns the whole headline into decoration and
+   costs contrast; on one line it reads as emphasis. */
+.fc-hero__h1-accent {
+  background: var(--accent-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Gradient text has no system colour, so forced-colours mode would render
+     it invisible. This restores a real colour there. */
+}
+
+@media (forced-colors: active) {
+  .fc-hero__h1-accent {
+    color: CanvasText;
+    background: none;
+  }
 }
 
 .fc-hero__sub {
-  @apply text-[18px] leading-[1.6] text-fc-soft;
-  @apply mt-0 max-w-136;
+  @apply leading-[1.6] text-fc-soft;
+  @apply mt-0;
+  font-size: clamp(16px, 1.3vw, 20px);
   text-wrap: pretty;
 }
 
@@ -101,9 +205,6 @@
   @apply mt-3.5;
 }
 
-.fc-hero__sub--quiet {
-  @apply text-[15px] leading-[1.68] text-fc-muted;
-}
 
 .fc-hero__actions {
   @apply flex flex-wrap items-center gap-3 mt-8;
@@ -115,17 +216,6 @@
   @apply mt-4;
 }
 
-.fc-hero__cta {
-  @apply whitespace-nowrap shrink-0 no-underline;
-  @apply bg-fc-teal text-fc-teal-on;
-  @apply font-display text-[15px] font-medium;
-  @apply px-6 py-3.5;
-  transition: background var(--motion-hover);
-}
-
-.fc-hero__cta:hover {
-  @apply bg-fc-teal-hover text-fc-teal-on;
-}
 
 .fc-hero__badges {
   @apply flex flex-wrap gap-2.5 mt-7;
@@ -134,7 +224,7 @@
 }
 
 .fc-hero__badge {
-  border-radius: var(--rad-pill);
+  border-radius: var(--r-pill);
   @apply border border-fc-rule bg-fc-surface;
   @apply px-2.25 py-1.25;
 }
@@ -151,15 +241,10 @@
 /* ── Right column: hero card ── */
 
 
-
-
-
-
-
 /* ── Code panel (Shiki-powered) ── */
 
 .fc-hero-code-block {
-  border-radius: var(--rad-lg);
+  border-radius: var(--r);
   @apply border-0 rounded-none;
 }
 
@@ -170,94 +255,6 @@
 
 /* ── Rendered panel ── */
 
-.fc-hero-rendered {
-  border-radius: var(--rad-lg);
-  @apply flex flex-col gap-4;
-  @apply px-5 pt-5.5 pb-6;
-}
-
-.fc-hero-rendered__label {
-  @apply block text-[12.5px] font-semibold mb-1.5 text-fc-ink;
-}
-
-.fc-hero-rendered__required {
-  @apply text-fc-danger;
-}
-
-.fc-hero-rendered__input {
-  border-radius: var(--rad);
-  @apply w-full border border-fc-rule bg-fc-surface;
-  @apply px-3 py-2.75 text-sm text-fc-ink;
-  @apply outline-none rounded-none;
-  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
-}
-
-.fc-hero-rendered__input::placeholder {
-  @apply text-fc-muted;
-}
-
-.fc-hero-rendered__input:focus {
-  @apply border-fc-teal;
-  box-shadow: var(--focus-ring);
-}
-
-.fc-hero-rendered__checkbox {
-  @apply flex items-center gap-2.5 cursor-pointer;
-}
-
-.fc-hero-rendered__check {
-  border-radius: var(--rad-sm);
-  @apply flex items-center justify-center shrink-0;
-  @apply w-4 h-4 text-[11px] leading-none;
-  @apply border border-fc-rule bg-fc-surface text-transparent;
-  transition: background var(--motion-hover), border-color var(--motion-hover);
-}
-
-.fc-hero-rendered__check--on {
-  @apply bg-fc-teal text-fc-teal-on border-fc-teal;
-}
-
-.fc-hero-rendered__check-label {
-  @apply text-sm text-fc-ink;
-}
-
-.fc-hero-rendered__conditional {
-  border-radius: var(--rad);
-  @apply pl-3.5 border-l-2 border-fc-teal;
-}
-
-.fc-hero-rendered__conditional-label {
-  @apply font-mono text-[9.5px] tracking-[0.12em];
-  @apply uppercase text-fc-teal mb-2;
-}
-
-.fc-hero-rendered__buttons {
-  @apply flex gap-2.5 pt-1;
-}
-
-.fc-hero-rendered__btn-outline {
-  border-radius: var(--rad);
-  @apply border border-fc-btn-line bg-transparent;
-  @apply px-4.5 py-2.5 text-[13.5px] text-fc-muted;
-  @apply cursor-pointer font-display font-medium;
-  transition: color var(--motion-hover);
-}
-
-.fc-hero-rendered__btn-outline:hover {
-  @apply text-fc-ink;
-}
-
-.fc-hero-rendered__btn-primary {
-  border-radius: var(--rad);
-  @apply bg-fc-teal text-fc-teal-on border-0;
-  @apply px-4.5 py-2.5 text-[13.5px];
-  @apply font-display font-medium cursor-pointer;
-  transition: background var(--motion-hover);
-}
-
-.fc-hero-rendered__btn-primary:hover {
-  @apply bg-fc-teal-hover;
-}
 
 /* ── Spec strip ── */
 
@@ -273,7 +270,7 @@
 }
 
 .fc-spec-strip__cell {
-  border-radius: var(--rad);
+  border-radius: var(--r-inner);
   @apply py-5;
   transition: background-color var(--motion-hover);
 }
@@ -381,9 +378,12 @@
 .fc-hero-panel {
   @apply relative mx-auto max-w-290 overflow-hidden;
   border: 1px solid var(--rule);
-  border-radius: var(--rad-lg);
+  border-radius: var(--r);
   background: var(--surface);
-  box-shadow: var(--e3);
+  /* Direction B's deeper card shadow (30/60 with a teal ring) rather than
+     --e3. The panel is the heaviest object on the page and should sit
+     clearly above the dot field, not hover a few pixels over it. */
+  box-shadow: var(--card-shadow);
 }
 
 .fc-hero-panel__chrome {
@@ -395,7 +395,7 @@
 
 .fc-hero-panel__file {
   @apply px-3 py-1.5 text-fc-ink;
-  border-radius: var(--rad-sm);
+  border-radius: var(--r-chip);
   background: var(--surface);
   box-shadow: inset 0 0 0 1px var(--rule);
 }
@@ -443,11 +443,167 @@
 
 /* Validation state on the mockup. Amber, matching the reference and the
    Scope section's single-colour-moment convention. */
-.fc-hero-rendered__input--invalid {
+
+
+/* ── Hero form: the evidence panel ──
+   Every rule here exists to make one engine behaviour visible. See
+   RenderedPanel.tsx for which device proves which claim. */
+
+.fc-hero-form {
+  @apply text-left;
+}
+
+/* Step indicator: two segments so "of 2" is shown, not just stated. */
+.fc-hero-form__steps {
+  @apply flex items-center gap-2.5 mb-5.5;
+}
+
+.fc-hero-form__seg {
+  @apply flex-1 h-[3px] rounded-full;
+  background: var(--rule);
+}
+
+.fc-hero-form__seg--on {
+  background: var(--teal);
+}
+
+.fc-hero-form__steps-label {
+  @apply font-mono text-[11px] text-fc-muted shrink-0;
+}
+
+.fc-hero-form__title {
+  @apply font-display m-0 text-[22px] text-fc-ink-strong;
+  font-weight: var(--display-weight);
+  letter-spacing: -0.02em;
+}
+
+.fc-hero-form__hint {
+  @apply mt-1 mb-5.5 text-[13.5px] text-fc-muted;
+}
+
+.fc-hero-form__fields {
+  @apply grid gap-4;
+}
+
+.fc-hero-form__label {
+  @apply block mb-1.5 text-[13px] font-medium text-fc-ink;
+}
+
+/* Amber, matching the engine's own required marker and the error colour —
+   one hue for "this needs your attention". */
+.fc-hero-form__req {
+  color: var(--amber);
+}
+
+.fc-hero-form__input {
+  @apply w-full px-3.5 py-2.75 text-[14px] text-fc-ink;
+  @apply border border-fc-rule;
+  border-radius: var(--r-inner);
+  background: var(--surface);
+  box-shadow: var(--inset);
+  transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
+}
+
+.fc-hero-form__input::placeholder {
+  color: var(--placeholder);
+}
+
+.fc-hero-form__input:focus {
+  @apply outline-none border-fc-teal-border;
+  box-shadow: var(--focus-ring);
+}
+
+.fc-hero-form__input--invalid {
   border-color: var(--amber);
 }
 
-.fc-hero-rendered__error {
+.fc-hero-form__error {
   @apply mt-1.5 text-[12px];
-  color: var(--amber);
+  color: var(--amber-ink);
+}
+
+.fc-hero-form__group {
+  @apply m-0 p-0 border-0;
+}
+
+.fc-hero-form__options {
+  @apply grid grid-cols-2 gap-2;
+}
+
+.fc-hero-form__option {
+  @apply px-3.5 py-2.75 text-[14px] text-fc-soft cursor-pointer;
+  @apply border border-fc-rule;
+  border-radius: var(--r-inner);
+  background: var(--surface);
+  transition:
+    border-color var(--motion-hover),
+    box-shadow var(--motion-hover),
+    color var(--motion-hover);
+}
+
+/* The selected option is lit rather than merely outlined: a tinted ground
+   plus a soft teal bloom, so "Workshop is chosen" is readable at a glance
+   and the conditional field below has a visible cause. */
+.fc-hero-form__option--on {
+  @apply text-fc-ink;
+  border-color: var(--teal);
+  background: color-mix(in srgb, var(--teal) 10%, var(--surface));
+  box-shadow: 0 0 24px -10px var(--teal);
+}
+
+.fc-hero-form__option:has(input:focus-visible) {
+  box-shadow: var(--focus-ring);
+}
+
+/* ── The conditional field ──
+   A dashed teal border with the rule notched into its top edge. Dashed
+   because the field is contingent — it is not always there — and the label
+   names the schema line responsible, so the reader sees rule, input and
+   result at once instead of taking "conditional logic" on trust. */
+.fc-hero-form__conditional {
+  @apply relative px-3.5 pt-3.5 pb-3.5 mt-1;
+  border: 1px dashed var(--teal);
+  border-radius: var(--r-inner);
+}
+
+.fc-hero-form__rule {
+  @apply absolute px-1.5 font-mono text-[10.5px] text-fc-teal;
+  top: -0.5625rem;
+  left: 0.75rem;
+  /* Matches the pane ground so the border appears to pass behind the text.
+     Any other value shows as a visible patch over the dashes. */
+  background: var(--surface2);
+}
+
+.fc-hero-form__foot {
+  @apply flex items-center justify-between gap-3 mt-6;
+}
+
+.fc-hero-form__draft {
+  @apply font-mono text-[11px] text-fc-muted;
+}
+
+.fc-hero-form__continue {
+  @apply font-display text-[14px] px-5 py-2.5;
+  font-weight: var(--display-weight);
+  border-radius: var(--r-pill);
+  background: var(--teal-plate);
+  color: var(--teal-on);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), var(--cta-glow);
+  transition: filter var(--motion-hover);
+}
+
+.fc-hero-form__continue:hover {
+  filter: brightness(1.06);
+}
+
+/* Window lights. Inert and unlabelled — they say "this is an editor" with
+   no claim attached, which is the only honest thing chrome can do. */
+.fc-hero-panel__lights {
+  @apply flex gap-1.5 pr-2.5 pl-1;
+}
+
+.fc-hero-panel__lights span {
+  @apply w-2.5 h-2.5 rounded-full;
+  background: var(--rule);
 }
