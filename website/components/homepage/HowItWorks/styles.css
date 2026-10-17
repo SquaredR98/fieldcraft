@@ -33,8 +33,19 @@
    left divider; keeping the card here because these sit on a tinted
    ground where a bare column would have nothing to hold it, but the
    corners, the lift and the hover come from the same system. */
+/* No padding of its own, and a flex column.
+   The card used to be `p-5.5` with three stacked children, which caused
+   all three problems at once: the header's rule stopped 22px short of
+   each edge and read as an underline rather than a division; the code
+   block floated inside the padding; and because each body is a
+   different length, the three code blocks started at three different
+   heights, leaving a ragged line across the row.
+   Padding now lives on the rows that need it, so a full-bleed child can
+   reach the card's edges. `overflow-hidden` lets the code block inherit
+   the bottom corners. */
 .fc-how__step {
-  @apply relative border border-fc-rule p-5.5 rounded-lg;
+  @apply relative flex flex-col overflow-hidden;
+  @apply border border-fc-rule rounded-lg;
   background: var(--plate);
   box-shadow: var(--e1);
   transition: box-shadow var(--motion-hover);
@@ -50,9 +61,11 @@
   }
 }
 
+/* The rule now runs edge to edge because the border is on a full-width
+   row; the TEXT keeps its inset from the row's own horizontal padding. */
 .fc-how__step-header {
   @apply flex items-center gap-2.5;
-  @apply pb-3 border-b border-fc-rule mb-4;
+  @apply px-5.5 py-4 border-b border-fc-rule;
 }
 
 /* The handoff sets the step number in amber against a plain ground
@@ -71,16 +84,28 @@
   @apply font-display text-[17px] font-semibold tracking-[-0.01em];
 }
 
+/* `flex-1` is what pins the code to the floor: the body absorbs the
+   leftover height, so a short body pushes the code down rather than
+   letting it float up behind a longer neighbour's. */
 .fc-how__step-body {
-  @apply text-sm leading-[1.65] text-fc-muted mb-3.5;
+  @apply flex-1 px-5.5 py-4;
+  @apply text-sm leading-[1.65] text-fc-muted;
 }
 
-/* The code well is the one element the handoff explicitly rounds, at
-   calc(--r * .6) — rounded-sm here. Recessed rather than flat, so it
-   reads as set into the plate it sits on. */
+/* The card's floor: full bleed, bottom corners inherited from the card
+   via its overflow-hidden, and a TOP border only — left and right would
+   double up against the card's own border, and the bottom edge is the
+   card's.
+
+   `min-height` is what makes the three line up as one band rather than
+   three bottom-aligned blocks of different depths. 3 lines at 1.8
+   leading plus the vertical padding is the tallest of the three
+   snippets, so the shorter ones match it instead of the row going
+   ragged. */
 .fc-how__code {
-  @apply border border-fc-rule bg-fc-bg rounded-sm;
-  @apply p-3.5 font-mono text-xs leading-[1.8] text-fc-ink;
+  @apply border-t border-fc-rule bg-fc-bg;
+  @apply px-5.5 py-4 font-mono text-xs leading-[1.8] text-fc-ink;
+  min-height: calc(3 * 1.8em + 2rem);
   box-shadow: var(--inset);
 }
 

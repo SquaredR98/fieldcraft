@@ -45,7 +45,7 @@ export function HowItWorks() {
             </div>
           </div>
 
-          {/* Step 02 — the schema is the product, so this one leads. */}
+          {/* Step 02 */}
           <div className="fc-how__step">
             <div className="fc-how__step-header">
               <div className="fc-how__chip">02</div>
