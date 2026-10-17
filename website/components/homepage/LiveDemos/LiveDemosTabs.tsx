@@ -142,7 +142,17 @@ export function LiveDemosTabs() {
     if (!el || typeof ResizeObserver === 'undefined') return;
 
     const observer = new ResizeObserver(([entry]) => {
-      setHeight(entry.contentRect.height);
+      /*
+       * offsetHeight, NOT entry.contentRect.height.
+       *
+       * contentRect is the CONTENT box: it excludes the body's 1px
+       * border on each side. Setting the shell to that value left it
+       * 2px shorter than its child, and since the shell is
+       * overflow-hidden it clipped the body's bottom border clean off —
+       * the panel looked open at the bottom.
+       */
+      const el = entry.target as HTMLElement;
+      setHeight(el.offsetHeight);
     });
     observer.observe(el);
     return () => observer.disconnect();

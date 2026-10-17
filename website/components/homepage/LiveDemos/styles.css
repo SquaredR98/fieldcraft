@@ -229,12 +229,23 @@
    Undefined height on first render, so the shell sizes to content
    before the observer reports — nothing collapses if JS is slow or
    absent. */
-/* Rounds its own bottom corners, because `overflow-hidden` here (needed
-   so the body does not spill while the height animates) would otherwise
-   clip the body's square against the shell's. */
+/* `overflow: clip` with a positive `overflow-clip-margin`, not
+   `overflow: hidden`.
+
+   The shell exists to hold an animated pixel height, so it has to
+   contain its child vertically — but `hidden` clips at the padding box,
+   which ate two things: the body's --e3 drop shadow, which renders
+   OUTSIDE its border box, and (with the height measured from
+   contentRect rather than offsetHeight) its bottom border too, leaving
+   the panel looking open at the bottom.
+
+   `clip` with a margin keeps the height constraint while letting the
+   shadow spill. No radius here either — the body rounds its own corners
+   and nothing needs to clip them. */
 .fc-demos__body-shell {
-  @apply relative overflow-hidden;
-  border-radius: 0 0 var(--radius) var(--radius);
+  @apply relative;
+  overflow: clip;
+  overflow-clip-margin: 40px;
   transition: height 320ms ease-out;
 }
 
