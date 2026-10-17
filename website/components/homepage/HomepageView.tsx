@@ -7,7 +7,6 @@ import { TemplateShowcase } from '@/components/homepage/TemplateShowcase';
 import { KnownGaps } from '@/components/homepage/KnownGaps';
 import { Status } from '@/components/homepage/Status';
 import { FinalCta } from '@/components/homepage/FinalCta';
-import { ScrollReveal } from '@/components/shared/ScrollReveal';
 import type { Template } from '@/lib/templates';
 import './v2.css';
 
@@ -60,23 +59,35 @@ export function HomepageView({
           section on faith", so it was the audit trail for exactly that
           claim, and its four points (no endpoint of ours, telemetry off
           by default, MIT) are the same baseline-not-USP problem. */}
-      <ScrollReveal><HowItWorks /></ScrollReveal>
-      <ScrollReveal><BatteriesIncluded /></ScrollReveal>
-      <ScrollReveal><LiveDemos /></ScrollReveal>
-      <ScrollReveal><Architecture /></ScrollReveal>
+      {/* No ScrollReveal. Every section was wrapped in it, which is the
+          opposite of strategic: eight fade-and-rise animations firing
+          one after another as you scroll turns reading the page into
+          waiting for it. A reveal is worth something when ONE thing
+          earns the emphasis; applied to everything it emphasises
+          nothing and taxes the whole page.
+
+          It also hid each section behind a bare `opacity: 0` that only
+          its IntersectionObserver could undo — so with JavaScript off,
+          blocked, or still loading, the entire page below the hero was
+          invisible. Removing the wrapper fixes that too.
+
+          The component is kept on disk: per-section reveals are planned,
+          and that is a different design from wrapping the lot. */}
+      <HowItWorks />
+      <BatteriesIncluded />
+      <LiveDemos />
+      <Architecture />
       {/* FormBuilderTeaser removed: Pro is hidden from the site until the
           OSS stands on its own. The component is kept, not deleted, so it
           can come back when Pro is ready. */}
-      <ScrollReveal><TemplateShowcase templates={showcaseTemplates} total={templateCount} /></ScrollReveal>
-      <ScrollReveal><KnownGaps /></ScrollReveal>
-      <ScrollReveal>
-        <Status
-          latestVersion={latestVersion}
-          latestDate={latestDate}
-          latestPackage={latestPackage}
-        />
-      </ScrollReveal>
-      <ScrollReveal><FinalCta /></ScrollReveal>
+      <TemplateShowcase templates={showcaseTemplates} total={templateCount} />
+      <KnownGaps />
+      <Status
+        latestVersion={latestVersion}
+        latestDate={latestDate}
+        latestPackage={latestPackage}
+      />
+      <FinalCta />
     </>
   );
 }
