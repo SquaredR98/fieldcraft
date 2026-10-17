@@ -40,8 +40,13 @@
  * 1. No `overflow-hidden`. dnd-kit renders its DragOverlay in place as a
  *    position:fixed element rather than through a portal, so clipping the
  *    frame cut the drag preview off at its edge. The builder manages its
- *    own internal scrolling and --radius is 0 site-wide, so nothing needs
- *    the clip.
+ *    own internal scrolling, so nothing needs the clip for layout.
+ *
+ *    NOTE: --radius went 0 -> 14px site-wide, and the original reasoning
+ *    here rested on it being 0. A rounded frame whose child is square can
+ *    show the child's corners outside the curve. Keeping the overlay
+ *    intact matters more than a 14px corner, so the clip stays off; if
+ *    corner bleed shows, round the CHILD rather than clipping the parent.
  *
  * 2. `--background` must be the LIT surface, not the page ground. Pro's
  *    view-mode tabs are a segmented control: the track is --muted and the

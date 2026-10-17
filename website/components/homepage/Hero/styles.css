@@ -14,7 +14,7 @@
    ------------------------------------------------------------------- */
 
 .fc-hero {
-  @apply relative overflow-hidden border-b border-fc-rule pt-22;
+  @apply relative overflow-hidden border-b border-fc-rule pt-22 sm:pt-32;
   background-color: var(--bg);
   /* Stacking context for the backdrop, so its z-index resolves here
      rather than against the page. */
@@ -44,7 +44,7 @@
   left: 50%;
   top: -21rem;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, var(--glow-strong), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--teal) 11%, transparent), transparent);
   filter: blur(30px);
 }
 
@@ -54,7 +54,7 @@
   left: 72%;
   top: 22rem;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, var(--glow-mid), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--teal) 8%, transparent), transparent);
   filter: blur(40px);
 }
 
@@ -64,7 +64,7 @@
   left: 20%;
   top: 30rem;
   transform: translateX(-50%);
-  background: radial-gradient(closest-side, var(--glow-soft), transparent);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--teal) 6%, transparent), transparent);
   filter: blur(50px);
 }
 
@@ -74,12 +74,12 @@
   /* Centred: with the panel below rather than beside, a left-aligned
      column would leave the right half of the fold empty. */
   @apply relative mx-auto flex flex-col items-center text-center max-w-7xl;
-  @apply px-10 pt-22 pb-12;
+  @apply px-10 pb-12;
 }
 
 .fc-hero__copy h1 {
   @apply font-display m-0 text-fc-ink-strong;
-  font-weight: var(--display-weight);
+  @apply font-bold;
   font-size: clamp(42px, 6.4vw, 86px);
   letter-spacing: -0.045em;
   line-height: 0.98;
@@ -115,7 +115,7 @@
   @apply inline-flex items-center gap-2.5 mb-7 no-underline;
   @apply border border-fc-rule py-1.5 pl-1.5 pr-3.5;
   @apply text-[13px] text-fc-soft;
-  border-radius: var(--r-pill);
+  @apply rounded-full;
   background: var(--plate);
   box-shadow: inset 0 1px 0 var(--lit);
   transition: border-color var(--motion-hover), color var(--motion-hover);
@@ -127,7 +127,7 @@
 
 .fc-hero__release strong {
   @apply font-mono text-[11px] font-medium px-2 py-[3px];
-  border-radius: var(--r-pill);
+  @apply rounded-full;
   background: var(--teal-plate);
   color: var(--teal-on);
 }
@@ -148,7 +148,7 @@
 .fc-hero-panel {
   @apply relative mx-4 sm:mx-auto max-w-290 overflow-hidden mb-12 sm:mb-16;
   border: 1px solid var(--rule);
-  border-radius: var(--r);
+  @apply rounded-lg;
   background: var(--surface);
   /* The heaviest object on the page: it should sit clearly above the grid
      rather than hover a few pixels over it. */
@@ -195,7 +195,7 @@
   @apply inline-flex items-center gap-1.5 px-3 py-1.5 min-w-0;
   @apply font-mono text-[12px] text-fc-muted cursor-default;
   border: 0;
-  border-radius: var(--r-chip);
+  @apply rounded-sm;
   background: transparent;
   transition:
     background var(--motion-hover),
@@ -280,7 +280,7 @@
 
 .fc-hero-form h3 {
   @apply font-display m-0 text-[22px] text-fc-ink-strong;
-  font-weight: var(--display-weight);
+  @apply font-bold;
   letter-spacing: -0.02em;
 }
 
@@ -334,7 +334,7 @@
 .fc-hero-form input[type='email'] {
   @apply block w-full mt-1.5 px-3.5 py-2.75 text-[14px] font-normal text-fc-ink;
   @apply border border-fc-rule;
-  border-radius: var(--r-inner);
+  @apply rounded-sm;
   background: var(--surface);
   box-shadow: var(--inset);
   transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
@@ -366,7 +366,7 @@
 .fc-hero-form__options label {
   @apply px-3.5 py-2.75 text-[14px] font-normal text-fc-soft cursor-pointer;
   @apply border border-fc-rule;
-  border-radius: var(--r-inner);
+  @apply rounded-sm;
   background: var(--surface);
   transition:
     border-color var(--motion-enter),
@@ -396,7 +396,7 @@
 .fc-hero-form__conditional {
   @apply relative block px-3.5 pt-3.5 pb-3.5 mt-1;
   border: 1px dashed var(--teal);
-  border-radius: var(--r-inner);
+  @apply rounded-sm;
 }
 
 .fc-hero-form__conditional code {
@@ -418,9 +418,9 @@
 
 .fc-hero-form button {
   @apply font-display text-[14px] px-5 py-2.5 cursor-pointer;
-  font-weight: var(--display-weight);
+  @apply font-bold;
   border: 0;
-  border-radius: var(--r-pill);
+  @apply rounded-full;
   background: var(--teal-plate);
   color: var(--teal-on);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), var(--cta-glow);
@@ -446,7 +446,7 @@
 .fc-hero-form__done {
   @apply flex items-center gap-2.5 m-0 mb-2;
   @apply font-display text-[18px] text-fc-ink-strong;
-  font-weight: var(--display-weight);
+  @apply font-bold;
 }
 
 .fc-hero-form__done i {
@@ -527,7 +527,7 @@
   grid-template-columns: 1fr 1fr 1fr 1.25fr 1.25fr;
   background: var(--rule);
   border: 1px solid var(--rule);
-  border-radius: var(--r);
+  @apply rounded-lg;
   overflow: hidden;
 }
 

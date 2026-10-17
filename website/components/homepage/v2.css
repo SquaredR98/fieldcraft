@@ -5,8 +5,11 @@
  *
  * Shared by every homepage section so the depth language stays consistent:
  * plates catch light along their top edge, wells sink, and only the panel
- * carrying the argument gets corner brackets. Nothing here is rounded —
- * --radius is 0 site-wide and the drafting-instrument look depends on it.
+ * carrying the argument gets corner brackets.
+ *
+ * --radius is 14px site-wide (was 0). Rounding is expressed through the
+ * rounded-* utilities that derive from it, not through a parallel set of
+ * radius tokens.
  */
 
 /* ── Section shell ───────────────────────────────────────────── */
@@ -325,10 +328,10 @@ section.fc-ground-surface2 {
    (999px) rather than the panel radius. A pill beside a 14px panel reads as
    a deliberate pairing; a 10px button beside it reads as a rounding error. */
 .fc-v2-cta {
-  border-radius: var(--r-pill);
+  @apply rounded-lg;
   @apply inline-flex items-center gap-2 font-display;
   @apply px-7 py-3.5 text-base;
-  font-weight: var(--display-weight);
+  @apply font-bold;
   background: var(--teal-plate);
   color: var(--teal-on);
   box-shadow:
@@ -343,12 +346,12 @@ section.fc-ground-surface2 {
 }
 
 .fc-v2-btn {
-  border-radius: var(--r-pill);
+  @apply rounded-lg;
   @apply inline-flex items-center border border-fc-rule;
   /* Padding and size match .fc-v2-cta so the pair reads as one control
      group rather than two buttons that happen to sit together. */
   @apply font-display px-7 py-3.5 text-base text-fc-ink;
-  font-weight: var(--display-weight);
+  @apply font-bold;
   background: var(--plate);
   box-shadow: inset 0 1px 0 var(--lit);
   transition:
@@ -369,7 +372,7 @@ section.fc-ground-surface2 {
    lending it to every section link made the secondary tier shout louder
    than the thing it was supporting. */
 .fc-v2-link {
-  border-radius: var(--r-inner);
+  @apply rounded-sm;
   @apply inline-flex items-center gap-2 no-underline whitespace-nowrap;
   @apply border border-fc-rule px-4.5 py-2.75;
   @apply font-display text-[13.5px] font-medium text-fc-ink;
@@ -410,7 +413,7 @@ a:hover > .fc-v2-link__arrow {
 /* ── Chips ───────────────────────────────────────────────────── */
 
 .fc-v2-chip {
-  border-radius: var(--r-pill);
+  @apply rounded-full;
   @apply border border-fc-rule px-2 py-1.5;
   @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-soft;
   background: var(--plate);

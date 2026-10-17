@@ -145,30 +145,7 @@
   --inset: inset 0 1px 3px rgba(18, 34, 42, 0.05);
   --cta-glow: 0 8px 18px -8px rgba(31, 107, 110, 0.35);
 
-  /* ── Radius: one value, derived family ──
-     The site was committed to square (`--radius: 0px` plus a hard
-     `border-radius: 0 !important` on Radix portals). That reads precise but
-     cold.
 
-     `--r` is the ONLY authored value. Inner elements derive from it at a
-     fixed ratio, which is what makes a panel and the inputs inside it read
-     as one object rather than three unrelated roundnesses. An earlier pass
-     here authored three independent values (6/10/14px) and the result
-     looked arbitrary, because it was.
-
-     Deliberately NOT `--radius`, which feeds shadcn and therefore every
-     embedded Pro component — this rolls out section by section instead of
-     one irreversible global flip. */
-  --r: 14px;                      /* panels, cards, code frames */
-  --r-inner: calc(var(--r) * 0.6); /* inputs, option cells, nested blocks */
-  --r-chip: calc(var(--r) * 0.4);  /* file tabs, inline code, small labels */
-  --r-pill: 999px;                 /* buttons, badges, release pill */
-
-  /* Heavier display weight to carry the softer corners. The only part of
-     the handoff's second direction adopted wholesale: its accent gradient
-     and amber hover ring were dropped, because amber is this page's single
-     deliberate colour moment and belongs to Scope alone. */
-  --display-weight: 700;
 
   /* Headline accent. Built from the teal already in the palette — the
      handoff's own gradient carried #3F8F84 and #A9DCC8, colours that exist
@@ -188,12 +165,6 @@
     0 0 0 1px color-mix(in srgb, var(--teal) 6%, transparent),
     0 30px 60px -30px color-mix(in srgb, var(--ink) 18%, transparent);
 
-  /* One colour, the CTA's own teal, at three strengths. The glows are a
-     single hue by design: a second hue in the backdrop competes with the
-     content and spends a colour that means something elsewhere. */
-  --glow-strong: color-mix(in srgb, var(--teal) 11%, transparent);
-  --glow-mid: color-mix(in srgb, var(--teal) 8%, transparent);
-  --glow-soft: color-mix(in srgb, var(--teal) 6%, transparent);
 
   /* ── Layout scale (site-wide) ──
      Section heading size, tracking and vertical rhythm. Declared here
@@ -226,7 +197,15 @@
      Pro's stylesheet carries hardcoded LIGHT fallbacks, so any token
      missing here renders light-on-dark in the dark theme. Keep both
      blocks in sync. */
-  --radius: 0px;
+  /* The single authored radius. --radius-sm/md/lg/xl derive from it (see
+     the @theme block above), so this one value drives every rounded-*
+     utility, shadcn, and the embedded Pro components in one place.
+
+     Was 0px. An earlier pass in this session wanted soft corners and
+     wrote a PARALLEL --r/--r-inner/--r-chip/--r-pill family beside this
+     one rather than changing it — duplicating a scale that already
+     existed, and leaving two systems to keep in sync. */
+  --radius: 14px;
   --background: #F4F7F8;
   --foreground: #12222A;
   --card: #FFFFFF;
@@ -301,10 +280,6 @@
     0 0 0 1px color-mix(in srgb, var(--teal) 8%, transparent),
     0 30px 60px -30px rgba(0, 0, 0, 0.8);
 
-  /* Glows need more presence on a dark ground to be visible at all. */
-  --glow-strong: color-mix(in srgb, var(--teal) 18%, transparent);
-  --glow-mid: color-mix(in srgb, var(--teal) 13%, transparent);
-  --glow-soft: color-mix(in srgb, var(--teal) 10%, transparent);
 
   /* Dark surface2 is already a clear step below surface, so the alias
      just points at it. */
@@ -458,17 +433,17 @@ body::-webkit-scrollbar-corner,
 /* ── Radix portal content (Select dropdown, Popover) ──
    These render at <body> level, outside ThemeProvider and .fc-demos__live-form.
    They inherit :root CSS vars, so shadcn colors from :root apply correctly.
-   We just need to kill border-radius and ensure Drafting Teal visual alignment. */
+
+   These used to force `border-radius: 0 !important` on the content and
+   every descendant, back when --radius was 0 site-wide. With --radius at
+   14px that override would leave dropdowns square while everything around
+   them is rounded, so it is gone — Radix now inherits the scale like any
+   other surface. */
 
 [data-slot="select-content"] {
-  border-radius: 0 !important;
   border-color: var(--rule);
   background: var(--surface);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-[data-slot="select-content"] * {
-  border-radius: 0 !important;
 }
 
 [data-slot="select-item"] {

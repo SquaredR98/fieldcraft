@@ -2,6 +2,7 @@ import { CopyInstall } from '@/components/shared/CopyInstall';
 import { HeroPanel } from './HeroPanel';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
+import Link from 'next/link';
 
 /*
  * The hero answers "what is this" before "why is it different".
@@ -75,9 +76,9 @@ export function Hero({ version }: HeroProps) {
         </p>
 
         <div className="fc-hero__actions">
-          <a href="/docs" className="fc-v2-cta">
+          <Link href="/docs" className="fc-v2-cta">
             Read the docs <span className="fc-v2-cta__arrow">&rarr;</span>
-          </a>
+          </Link>
           <a
             href="https://github.com/SquaredR98/fieldcraft"
             className="fc-v2-btn"

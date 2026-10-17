@@ -43,10 +43,9 @@
   @apply flex items-center justify-between mx-auto;
   @apply max-w-290 h-14 gap-6 px-4;
   border: 1px solid var(--rule);
-  border-radius: var(--r);
+  @apply rounded-lg;
   background: color-mix(in srgb, var(--surface) 72%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(1.6);
-  backdrop-filter: blur(14px) saturate(1.6);
+  @apply backdrop-blur-[14px] backdrop-saturate-150;
   box-shadow: var(--e2);
   transition:
     background var(--motion-enter),
@@ -165,9 +164,8 @@ main h3[id] {
 
    - `py-1` against `px-4` made it a thin slab, four pixels of vertical
      padding inside sixteen horizontal.
-   - It claimed in a comment to match the bar's radius and used --r-chip
-     (5.6px) inside a container at --r (14px). A sharper corner inside a
-     rounder one reads as a mistake rather than a choice.
+   - Its radius was a step sharper than the bar containing it, which
+     reads as a mistake rather than a choice.
    - No font-size at all after an earlier edit dropped it, so it
      inherited whatever the bar happened to set.
    - A SOLID teal plate sitting inside a translucent glass bar: the
@@ -190,7 +188,7 @@ main h3[id] {
   @apply px-3.5;
   color: var(--teal);
   border: 1px solid color-mix(in srgb, var(--teal) 32%, transparent);
-  border-radius: var(--r-inner);
+  @apply rounded-sm;
   background: color-mix(in srgb, var(--teal) 10%, transparent);
   transition:
     background var(--motion-hover),
@@ -269,10 +267,16 @@ main h3[id] {
   top: calc(100% + 0.5rem);
   @apply flex flex-col px-5 py-3;
   border: 1px solid var(--rule);
-  border-radius: var(--r);
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  -webkit-backdrop-filter: blur(14px) saturate(1.6);
-  backdrop-filter: blur(14px) saturate(1.6);
+  @apply rounded-lg;
+  /* Heavier glass than the bar, not lighter.
+     This was 92% opaque against the bar's 72%, with the same 14px blur —
+     so it was very nearly a solid panel and the blur had almost nothing
+     left to do. It also covers far more area, over the busiest part of
+     the page, so the content behind it needs to be pushed further out of
+     focus before the links read cleanly: 28px of blur against a ground
+     that now lets some of the page through. */
+  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  @apply backdrop-blur-[28px] backdrop-saturate-[1.8];
   box-shadow: var(--e3);
 }
 
@@ -304,7 +308,7 @@ main h3[id] {
   @apply text-fc-teal-on;
   @apply font-display text-[14px] font-medium;
   @apply px-4 py-3 mt-3;
-  border-radius: var(--r-inner);
+  @apply rounded-sm;
   background: var(--teal-plate);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transition: filter var(--motion-hover);
