@@ -2,11 +2,27 @@
 
 import { useState } from 'react';
 
+/*
+ * A mockup, deliberately — hand-written markup whose state is local React,
+ * matching the schema in SchemaPanel field for field. It is NOT the engine:
+ * the reveal below is a React conditional, and the email error is derived
+ * here rather than by the validation runner.
+ *
+ * The real engine runs in LiveDemos further down the page, which imports
+ * FormEngineRenderer from the published package. Kept as a mockup here
+ * because the hero must render instantly on the server; labelled as one
+ * because Rule 9 does not allow presenting a drawing as the product.
+ */
+
 export function RenderedPanel() {
   const [name, setName] = useState('Aanya Sharma');
-  const [email, setEmail] = useState('aanya@clinic.example');
+  // Caught mid-error on purpose: a form showing a validation message is
+  // better evidence than a pristine one. Derived below, not drawn.
+  const [email, setEmail] = useState('aanya@');
   const [consent, setConsent] = useState(true);
   const [gp, setGp] = useState('');
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   return (
     <div className="fc-hero-rendered">
@@ -29,10 +45,19 @@ export function RenderedPanel() {
         <input
           id="hero-email"
           type="email"
-          className="fc-hero-rendered__input"
+          className={`fc-hero-rendered__input${
+            emailValid ? '' : ' fc-hero-rendered__input--invalid'
+          }`}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          aria-invalid={!emailValid}
+          aria-describedby={emailValid ? undefined : 'hero-email-error'}
         />
+        {!emailValid && (
+          <div className="fc-hero-rendered__error" id="hero-email-error">
+            Enter a valid email address
+          </div>
+        )}
       </div>
       <label className="fc-hero-rendered__checkbox">
         <div
@@ -52,8 +77,11 @@ export function RenderedPanel() {
       </label>
       {consent && (
         <div className="fc-hero-rendered__conditional">
+          {/* Was "Revealed by showIf", which credited the engine for a
+              React conditional. It names the schema line it mirrors
+              instead. */}
           <div className="fc-hero-rendered__conditional-label">
-            Revealed by showIf
+            showIf: consent eq true
           </div>
           <label className="fc-hero-rendered__label" htmlFor="hero-gp">
             GP practice

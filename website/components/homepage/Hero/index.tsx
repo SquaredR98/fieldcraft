@@ -1,5 +1,5 @@
 import { CopyInstall } from '@/components/shared/CopyInstall';
-import { HeroTabs } from './HeroTabs';
+import { HeroPanel } from './HeroPanel';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
 
@@ -27,16 +27,27 @@ import './styles.css';
    backend" is both true and the thing a reader actually wants to know. */
 const badges = ['MIT', 'TypeScript', 'React 18 & 19', 'No backend required'];
 
-export function Hero() {
+export type HeroProps = {
+  /** Newest shipped version, from lib/changelog.ts via page.tsx (Rule 11). */
+  version: string;
+};
+
+export function Hero({ version }: HeroProps) {
   return (
     <section id="top" className="fc-hero">
       <div className="fc-v2-grid" aria-hidden="true" />
       <div className="fc-hero__inner">
-        <div>
-          <div className="fc-hero__eyebrow">
-            <div className="fc-hero__eyebrow-dot" />
-            Schema-driven &middot; MIT licensed
-          </div>
+        <div className="fc-hero__copy">
+          {/* Version comes from props, which page.tsx reads out of
+              lib/changelog.ts — the same source the Status section uses. A
+              version typed into markup here is a figure that goes stale
+              silently, which is how the site came to advertise 1.7.0 for
+              seven weeks. */}
+          <a className="fc-hero__release" href="/changelog">
+            <span className="fc-hero__release-pill">{version}</span>
+            Now on npm &mdash; read the release notes
+            <span className="fc-v2-link__arrow">&rarr;</span>
+          </a>
           <h1 className="fc-hero__h1">
             Declare the form.<br />
             FieldCraft renders the rest.
@@ -72,8 +83,10 @@ export function Hero() {
             ))}
           </div>
         </div>
-        <HeroTabs />
       </div>
+      {/* Full width, below the copy — the schema/result relationship is the
+          argument, so it gets the whole page rather than a column. */}
+      <HeroPanel />
       <SpecStrip />
     </section>
   );

@@ -8,9 +8,57 @@
 }
 
 .fc-hero__inner {
-  @apply relative grid items-start mx-auto max-w-310;
-  @apply px-10 pt-22 pb-20 gap-14;
-  grid-template-columns: 1.02fr 1fr;
+  /* Was a two-column grid with the panel beside the copy. The panel now
+     sits full width BELOW, because it shows the schema and the rendered
+     result at the same time and that relationship is the page's whole
+     argument — it does not fit in half a column. */
+  @apply relative mx-auto max-w-310;
+  @apply px-10 pt-22 pb-12;
+}
+
+.fc-hero__copy {
+  /* Centred, per the reference: with the panel below rather than beside,
+     a left-aligned column would leave the right half of the fold empty. */
+  @apply flex flex-col items-center text-center mx-auto;
+  max-width: 62rem;
+}
+
+/* The copy column centres, so the children that were block-level and
+   left-aligned need to stop filling the width. */
+.fc-hero__copy .fc-hero__sub {
+  @apply max-w-166 mx-auto;
+}
+
+.fc-hero__copy .fc-hero__actions,
+.fc-hero__copy .fc-hero__badges {
+  @apply justify-center;
+}
+
+.fc-hero__copy .fc-hero__tick {
+  @apply mx-auto;
+}
+
+/* ── Release pill ──
+   The version is data, not decoration: it comes from lib/changelog.ts. */
+.fc-hero__release {
+  @apply inline-flex items-center gap-2.5 mb-7;
+  @apply border border-fc-rule py-1.5 pl-1.5 pr-3.5;
+  @apply text-[13px] text-fc-soft;
+  border-radius: var(--rad-pill);
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
+  transition: border-color var(--motion-hover), color var(--motion-hover);
+}
+
+.fc-hero__release:hover {
+  @apply border-fc-teal-border text-fc-ink;
+}
+
+.fc-hero__release-pill {
+  @apply font-mono text-[11px] font-medium px-2 py-[3px];
+  border-radius: var(--rad-pill);
+  background: var(--teal-plate);
+  color: var(--teal-on);
 }
 
 /* ── Left column ── */
@@ -102,37 +150,11 @@
 
 /* ── Right column: hero card ── */
 
-.fc-hero-card {
-  border-radius: var(--rad-lg);
-  @apply relative border border-fc-teal-border;
-  background: var(--plate);
-  box-shadow: var(--e3);
-}
 
-.fc-hero-card__tabs {
-  @apply flex border-b border-fc-rule;
-}
 
-.fc-hero-card__tab {
-  @apply font-mono text-[11px] tracking-widest uppercase;
-  @apply px-5 py-3.25 cursor-pointer text-fc-muted;
-  transition: color var(--motion-hover), background var(--motion-hover);
-}
 
-.fc-hero-card__tab--active {
-  @apply bg-fc-wash text-fc-teal;
-  box-shadow: inset 0 -2px 0 var(--teal);
-}
 
-.fc-hero-card__tab:not(.fc-hero-card__tab--active):hover {
-  @apply text-fc-ink;
-}
 
-.fc-hero-card__live-label {
-  @apply flex-1 text-right;
-  @apply font-mono text-[10px] tracking-widest uppercase;
-  @apply px-4 py-2.75 text-fc-muted;
-}
 
 /* ── Code panel (Shiki-powered) ── */
 
@@ -312,8 +334,9 @@
     @apply text-[15px];
   }
 
-  /* Prevent hero card from overflowing viewport */
-  .fc-hero-card {
+  /* Keep the split panel inside the viewport. It stacks at this width via
+     the auto-fit minmax, so the code pane gets the full column. */
+  .fc-hero-panel {
     @apply min-w-0 overflow-hidden;
   }
 
@@ -321,12 +344,11 @@
     @apply max-h-[320px];
   }
 
-  .fc-hero-card__tab {
-    @apply px-3 text-[10px];
-  }
-
-  .fc-hero-card__live-label {
-    @apply text-[9px] px-2;
+  .fc-hero-panel__preview {
+    @apply p-5;
+    /* Stacked now, so the divider belongs on top rather than the side. */
+    border-left: 0;
+    border-top: 1px solid var(--rule);
   }
 
   .fc-spec-strip__inner {
@@ -351,4 +373,81 @@
     grid-column: 1 / -1;
     @apply border-l-0 pl-0;
   }
+}
+
+/* ── Hero panel ──
+   Schema and rendered result side by side, full width. Replaces the tabbed
+   card (.fc-hero-card), which could only ever show one of the two. */
+.fc-hero-panel {
+  @apply relative mx-auto max-w-290 overflow-hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--rad-lg);
+  background: var(--surface);
+  box-shadow: var(--e3);
+}
+
+.fc-hero-panel__chrome {
+  @apply flex items-center gap-0.5 px-3 py-2.5;
+  @apply font-mono text-[12px];
+  border-bottom: 1px solid var(--rule);
+  background: var(--plate);
+}
+
+.fc-hero-panel__file {
+  @apply px-3 py-1.5 text-fc-ink;
+  border-radius: var(--rad-sm);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.fc-hero-panel__file--muted {
+  @apply text-fc-muted;
+  background: transparent;
+  box-shadow: none;
+}
+
+.fc-hero-panel__status {
+  @apply ml-auto flex items-center gap-2 pr-1;
+  @apply font-mono text-[11px] text-fc-teal;
+}
+
+.fc-hero-panel__pip {
+  @apply w-[7px] h-[7px] rounded-full bg-fc-teal;
+  box-shadow: 0 0 10px var(--teal);
+}
+
+/* Two equal halves on desktop; stacks below, where a 340px code column
+   would scroll horizontally against a cramped form. */
+.fc-hero-panel__split {
+  @apply grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.25rem), 1fr));
+}
+
+.fc-hero-panel__code {
+  @apply min-w-0 overflow-x-auto text-left;
+}
+
+.fc-hero-panel__preview {
+  @apply p-7 text-left;
+  background: var(--surface2);
+  border-left: 1px solid var(--rule);
+}
+
+/* The code pane owns the left edge, so the panel's own radius handles the
+   corner — an inner radius here would show a sliver of panel ground. */
+.fc-hero-panel__code .fc-hero-code-block {
+  @apply h-full;
+  border: 0;
+  border-radius: 0;
+}
+
+/* Validation state on the mockup. Amber, matching the reference and the
+   Scope section's single-colour-moment convention. */
+.fc-hero-rendered__input--invalid {
+  border-color: var(--amber);
+}
+
+.fc-hero-rendered__error {
+  @apply mt-1.5 text-[12px];
+  color: var(--amber);
 }

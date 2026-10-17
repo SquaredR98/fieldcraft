@@ -44,7 +44,7 @@ export function HomepageView({
 }: HomepageViewProps) {
   return (
     <>
-      <Hero />
+      <Hero version={latestVersion} />
       <ScrollReveal><DataFlow /></ScrollReveal>
       <ScrollReveal><TrustStrip /></ScrollReveal>
       <ScrollReveal><HowItWorks /></ScrollReveal>
