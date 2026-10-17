@@ -30,11 +30,25 @@ export const draftingTealTheme: FormEngineTheme = {
     helpTextSize: '0.75rem',
     bodySize: '0.875rem',
   },
+  /* Matches --radius (14px) on the site. These used to be 'none' and
+     0px, which is why every control in a live demo was square while the
+     page around it was rounded — and why LiveDemos carried a
+     `border-radius: 0 !important` sweep over the whole form on top of
+     it. Shape belongs in the theme: the engine turns these into
+     --fc-radius-* custom properties that its own components consume, so
+     the demo now looks like the site without a single override.
+
+     Inputs sit one step below the card they are in, matching the
+     site's own nesting. */
   shape: {
-    radius: 'none',
-    inputRadius: '0px',
-    buttonRadius: '0px',
-    cardRadius: '0px',
+    /* 'lg' is 12px in the engine's scale, so the shadcn `rounded-md`
+       its inputs and buttons use — calc(var(--radius) - 2px) — lands at
+       10px, one step inside the site's 14px cards. 'md' would have been
+       8px and read noticeably sharper than everything around it. */
+    radius: 'lg',
+    inputRadius: '10px',
+    buttonRadius: '10px',
+    cardRadius: '14px',
   },
   spacing: {
     base: 16,
@@ -81,11 +95,25 @@ export const draftingTealDarkTheme: FormEngineTheme = {
     helpTextSize: '0.75rem',
     bodySize: '0.875rem',
   },
+  /* Matches --radius (14px) on the site. These used to be 'none' and
+     0px, which is why every control in a live demo was square while the
+     page around it was rounded — and why LiveDemos carried a
+     `border-radius: 0 !important` sweep over the whole form on top of
+     it. Shape belongs in the theme: the engine turns these into
+     --fc-radius-* custom properties that its own components consume, so
+     the demo now looks like the site without a single override.
+
+     Inputs sit one step below the card they are in, matching the
+     site's own nesting. */
   shape: {
-    radius: 'none',
-    inputRadius: '0px',
-    buttonRadius: '0px',
-    cardRadius: '0px',
+    /* 'lg' is 12px in the engine's scale, so the shadcn `rounded-md`
+       its inputs and buttons use — calc(var(--radius) - 2px) — lands at
+       10px, one step inside the site's 14px cards. 'md' would have been
+       8px and read noticeably sharper than everything around it. */
+    radius: 'lg',
+    inputRadius: '10px',
+    buttonRadius: '10px',
+    cardRadius: '14px',
   },
   spacing: {
     base: 16,

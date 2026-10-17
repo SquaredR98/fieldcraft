@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type CSSProperties } from 'react';
+import { useState } from 'react';
 import { MultiStepDemo } from './demos/MultiStepDemo';
 import { ConditionalDemo } from './demos/ConditionalDemo';
 import { ValidationDemo } from './demos/ValidationDemo';
@@ -8,12 +8,39 @@ import { ComputedDemo } from './demos/ComputedDemo';
 
 type Tab = 'multistep' | 'conditional' | 'validation' | 'computed';
 
-const tabs: { key: Tab; label: string }[] = [
-  { key: 'multistep', label: 'Multi-step' },
-  { key: 'conditional', label: 'Conditional' },
-  { key: 'validation', label: 'Validation' },
-  { key: 'computed', label: 'Computed' },
-];
+/*
+ * The three demos you are NOT currently looking at appear as cards under
+ * the panel, each saying what it does in one line.
+ *
+ * They were a tab strip of four bare labels — "Multi-step",
+ * "Conditional", "Validation", "Computed" — which hid three quarters of
+ * the only section where a visitor can operate the real product. A label
+ * gives no reason to click; a line saying what you would see does.
+ *
+ * Deliberately no schema on the cards. They exist to make someone click,
+ * and four code blocks on screen at once would compete with the one in
+ * the panel that is actually making the argument.
+ */
+const teasers: Record<Tab, { label: string; teaser: string }> = {
+  multistep: {
+    label: 'Multi-step',
+    teaser: 'Sections become steps, with progress and back-navigation.',
+  },
+  conditional: {
+    label: 'Conditional',
+    teaser: 'Answer one question, watch another appear.',
+  },
+  validation: {
+    label: 'Validation',
+    teaser: 'Get it wrong on purpose and see what the engine says.',
+  },
+  computed: {
+    label: 'Computed',
+    teaser: 'Change a number and watch a total follow it.',
+  },
+};
+
+const tabOrder: Tab[] = ['multistep', 'conditional', 'validation', 'computed'];
 
 /*
  * Code lines are split into key/value so they can be syntax-coloured
@@ -84,25 +111,6 @@ export function LiveDemosTabs() {
 
   return (
     <>
-      <div className="fc-demos__tabs" role="tablist" aria-label="Engine behaviours">
-        {tabs.map((t, i) => (
-          <button
-            key={t.key}
-            role="tab"
-            id={`fc-demo-tab-${t.key}`}
-            aria-selected={activeTab === t.key}
-            aria-controls={`fc-demo-panel-${t.key}`}
-            className={`fc-demos__tab ${
-              activeTab === t.key ? 'fc-demos__tab--active' : ''
-            }`}
-            style={{ '--i': i } as CSSProperties}
-            onClick={() => setActiveTab(t.key)}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
       {/* No key on the body: keying it here remounted the explanation
           column too, so both halves flashed on every tab change. The key
           sits on the panel, which is the part that should transition. */}
@@ -137,9 +145,12 @@ export function LiveDemosTabs() {
         <div
           key={activeTab}
           className="fc-demos__panel fc-tab-panel-enter"
-          role="tabpanel"
+          /* Not role="tabpanel" any more: there is no tablist, and a
+             tabpanel with no tab referencing it is worse than none.
+             aria-live announces the swap, since the trigger that caused
+             it is a button further down the page. */
+          aria-live="polite"
           id={`fc-demo-panel-${activeTab}`}
-          aria-labelledby={`fc-demo-tab-${activeTab}`}
         >
           <div className="fc-demos__panel-head">
             <span className="fc-demos__panel-label">
@@ -158,6 +169,37 @@ export function LiveDemosTabs() {
             {explanation.hint}
           </div>
         </div>
+      </div>
+
+      {/* The other three, each saying what it does. These ARE the
+          navigation — clicking one swaps it into the panel above and the
+          current demo takes its place here, so nothing is ever hidden
+          behind a label. */}
+      <div className="fc-demos__more">
+        {tabOrder
+          .filter((key) => key !== activeTab)
+          .map((key) => (
+            <button
+              key={key}
+              type="button"
+              className="fc-demos__more-card"
+              aria-label={`Show the ${teasers[key].label} demo`}
+              onClick={() => setActiveTab(key)}
+            >
+              <span className="fc-demos__more-label">
+                {teasers[key].label}
+              </span>
+              <span className="fc-demos__more-teaser">
+                {teasers[key].teaser}
+              </span>
+              <span className="fc-demos__more-cue" aria-hidden="true">
+                Run it
+                <svg viewBox="0 0 16 16" focusable="false">
+                  <path d="M6 3.5 10.5 8 6 12.5" />
+                </svg>
+              </span>
+            </button>
+          ))}
       </div>
     </>
   );

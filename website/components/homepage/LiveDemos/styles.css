@@ -21,11 +21,22 @@
    boundary, which is the opposite of blending. */
 .fc-demos.fc-ground-bg {
   @apply relative;
+  /* The fade needs DISTANCE. A first pass used 14%/86% stops, about
+     126px on a section this tall — still readable as an edge, just a
+     soft one. These span roughly a third of the section at each end, far
+     enough that the eye cannot find where one ground becomes the other.
+
+     Multiple stops rather than two: a linear ramp has a visible corner
+     where it stops changing, so the intermediate values ease it. */
   background: linear-gradient(
     180deg,
     var(--surface) 0%,
-    var(--bg) 14%,
-    var(--bg) 86%,
+    color-mix(in srgb, var(--surface) 70%, var(--bg)) 9%,
+    color-mix(in srgb, var(--surface) 28%, var(--bg)) 20%,
+    var(--bg) 34%,
+    var(--bg) 66%,
+    color-mix(in srgb, var(--surface) 28%, var(--bg)) 80%,
+    color-mix(in srgb, var(--surface) 70%, var(--bg)) 91%,
     var(--surface) 100%
   );
   /* The inset shadow that gave the flat ground its top edge. */
@@ -41,20 +52,28 @@
    Replaced with a vertical mask that fades at BOTH ends: the grid is
    strongest through the middle of the section and dissolves before it
    reaches either neighbour. Scoped to this section so the hero keeps
-   its own. */
+   its own.
+
+   Stops match the ground gradient's (34% / 66%) deliberately: two fades
+   of different lengths on the same boundary means one finishes while
+   the other is still going, and that mismatch is itself a visible line. */
 .fc-demos .fc-v2-grid {
   -webkit-mask-image: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(0, 0, 0, 0.5) 18%,
-    rgba(0, 0, 0, 0.5) 82%,
+    rgba(0, 0, 0, 0.18) 20%,
+    rgba(0, 0, 0, 0.5) 34%,
+    rgba(0, 0, 0, 0.5) 66%,
+    rgba(0, 0, 0, 0.18) 80%,
     transparent 100%
   );
   mask-image: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(0, 0, 0, 0.5) 18%,
-    rgba(0, 0, 0, 0.5) 82%,
+    rgba(0, 0, 0, 0.18) 20%,
+    rgba(0, 0, 0, 0.5) 34%,
+    rgba(0, 0, 0, 0.5) 66%,
+    rgba(0, 0, 0, 0.18) 80%,
     transparent 100%
   );
 }
@@ -110,59 +129,72 @@
   @apply text-fc-teal;
 }
 
-/* ── Tab strip ── */
+/* ── The other three ──
+   Replaces a tab strip of four bare labels, which hid three quarters of
+   the only section where a visitor can operate the real product. These
+   sit BELOW the panel and say what each demo does, so there is a reason
+   to click rather than a name to guess at. */
 
-/* Tabs sit on a plate and share borders with the body below, so the
-   whole thing reads as one instrument rather than a text row above a
-   box. The active tab lifts to the body's surface and loses its bottom
-   border, connecting the two. */
+.fc-demos__more {
+  @apply grid gap-4 mt-4;
+  grid-template-columns: repeat(3, 1fr);
+}
 
-/* Top corners only: the tabs and the body below are one object, so the
-   radius belongs to the pair rather than to each half. */
-.fc-demos__tabs {
-  @apply flex relative overflow-hidden;
-  @apply border-t border-l border-r border-fc-rule;
-  border-radius: var(--radius) var(--radius) 0 0;
+.fc-demos__more-card {
+  @apply flex flex-col items-start gap-1.5 text-left cursor-pointer;
+  @apply border border-fc-rule rounded-lg px-5 py-4;
   background: var(--plate);
-  box-shadow: inset 0 1px 0 var(--lit);
-}
-
-.fc-demos__tab {
-  @apply relative font-mono text-[11px] tracking-[0.1em] uppercase;
-  @apply px-5 py-3.25 cursor-pointer text-fc-muted;
-  @apply border-r border-fc-rule bg-transparent;
+  box-shadow: var(--e1);
   transition:
-    color var(--motion-hover),
-    background-color var(--motion-hover);
+    box-shadow var(--motion-hover),
+    border-color var(--motion-hover);
 }
 
-.fc-demos__tab:last-child {
-  @apply border-r-0;
+.fc-demos__more-card:hover {
+  @apply border-fc-teal-border;
+  box-shadow: var(--e2);
 }
 
-.fc-demos__tab--active {
-  @apply text-fc-teal;
-  background: var(--surface);
-  box-shadow: inset 0 2px 0 var(--teal);
-}
-
-/* Cover the body's top border so the active tab joins the panel. */
-.fc-demos__tab--active::after {
-  content: '';
-  @apply absolute left-0 right-0;
-  bottom: -1px;
-  height: 1px;
-  background: var(--surface);
-}
-
-.fc-demos__tab:not(.fc-demos__tab--active):hover {
-  @apply text-fc-ink;
-  background: var(--wash);
-}
-
-.fc-demos__tab:focus-visible {
+.fc-demos__more-card:focus-visible {
   outline: 2px solid var(--teal);
-  outline-offset: -2px;
+  outline-offset: 2px;
+}
+
+.fc-demos__more-label {
+  @apply font-display text-[15px] font-semibold tracking-[-0.015em];
+  @apply text-fc-ink-strong;
+}
+
+.fc-demos__more-teaser {
+  @apply text-[13px] leading-[1.55] text-fc-muted;
+}
+
+/* The affordance. A card that only describes a demo gives no sign it is
+   a control, so this says plainly that clicking runs it. */
+.fc-demos__more-cue {
+  @apply inline-flex items-center gap-1 mt-1.5;
+  @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-teal;
+}
+
+.fc-demos__more-cue svg {
+  @apply w-3 h-3;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform var(--motion-hover);
+}
+
+.fc-demos__more-card:hover .fc-demos__more-cue svg {
+  transform: translateX(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-demos__more-card,
+  .fc-demos__more-cue svg {
+    transition: none;
+  }
 }
 
 /* ── Body: explanation left, working form right ──
@@ -170,9 +202,13 @@
    takes the wider column and the lead treatment. */
 
 .fc-demos__body {
-  @apply relative grid border border-fc-teal-border;
-  /* Bottom corners only — the tab strip above carries the top pair. */
-  border-radius: 0 0 var(--radius) var(--radius);
+  @apply relative grid border border-fc-teal-border rounded-lg;
+  /* All four corners now. It was bottom-only while a tab strip sat on
+     top carrying the top pair; the strip is gone.
+
+     NO overflow-hidden: the corner brackets are positioned at -1px,
+     deliberately outside the box, and clipping would eat them. The
+     columns inside round their own outer corners instead. */
   grid-template-columns: 1fr 1.22fr;
   background: var(--surface);
   box-shadow: var(--e3);
@@ -180,8 +216,11 @@
 
 /* ── Left column: explanation panel ── */
 
+/* Rounds its own left corners, since the body cannot clip (the corner
+   brackets live outside it). */
 .fc-demos__explain {
   @apply flex flex-col border-r border-fc-teal-border px-7.5 py-8;
+  border-radius: var(--radius) 0 0 var(--radius);
   background: var(--plate);
 }
 
@@ -277,10 +316,16 @@
   @apply w-full;
 }
 
-/* Kill ALL border-radius inside the live form */
-.fc-demos__live-form * {
-  border-radius: 0 !important;
-}
+/* The radius sweep that was here — `.fc-demos__live-form * {
+   border-radius: 0 !important }` — is gone. It forced every input,
+   button, select and checkbox in a live demo square while the page
+   around them was rounded, and it would have overridden the theme no
+   matter what the theme said.
+
+   Shape now comes from the theme prop (lib/drafting-teal-theme.ts),
+   which the engine turns into --fc-radius-* properties its own
+   components read. That is the supported path, and it means the demo
+   demonstrates the theming system rather than fighting it. */
 
 /* Root flex container — tighten gap */
 .fc-demos__live-form .flex.flex-col.gap-8 {
@@ -503,14 +548,6 @@
     @apply mt-0;
   }
 
-  .fc-demos__tabs {
-    @apply overflow-x-auto;
-  }
-
-  .fc-demos__tab {
-    @apply whitespace-nowrap;
-  }
-
   /* Readout moves below the heading rather than beside it. */
   .fc-demos__head {
     @apply flex-col items-start gap-6;
@@ -536,8 +573,10 @@
     @apply px-5 py-6;
   }
 
-  .fc-demos__tab {
-    @apply px-3.5 text-[10px];
+  /* One per row: three cards across a phone leaves no room for the
+     teaser line that is the whole reason they exist. */
+  .fc-demos__more {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -598,28 +637,15 @@
   letter-spacing: 0;
 }
 
-/* Tabs reveal in sequence so the control reads as a set. */
-.fc-scroll-reveal .fc-demos__tab {
-  opacity: 0;
-}
-
-.fc-revealed .fc-demos__tab {
-  opacity: 1;
-  transition: opacity 200ms ease-out;
-  transition-delay: calc(var(--i, 0) * 55ms);
-}
+/* The tab stagger that lived here is gone with the tabs. Not re-added
+   for the preview cards: it hid them behind a bare `opacity: 0` that
+   only ScrollReveal could undo, so with JavaScript off the controls
+   were invisible — and these cards are now the section's only
+   navigation, which makes that failure much more expensive. */
 
 @media (prefers-reduced-motion: reduce) {
   .fc-demos__live-dot {
     animation: none;
-  }
-
-  .fc-scroll-reveal .fc-demos__tab {
-    opacity: 1;
-  }
-
-  .fc-revealed .fc-demos__tab {
-    transition: none;
   }
 }
 
