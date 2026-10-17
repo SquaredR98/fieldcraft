@@ -6,9 +6,57 @@
    ground, a bracketed lead plate around the working form, and a live
    pip that says the thing is actually running. */
 
-.fc-demos {
-  @apply relative overflow-hidden border-b border-fc-rule;
-  /* Ground comes from .fc-ground-bg on the section element. */
+/* ── Blending into its neighbours ──
+   The section used to start and stop hard: `.fc-ground-bg` paints a flat
+   --bg with an inset shadow, so there was a visible step at both edges,
+   and `border-b` drew a 1px rule on top of that.
+
+   Both neighbours (BatteriesIncluded above, Architecture below) sit on
+   --surface, so the ground is now a gradient that BEGINS at --surface,
+   sinks to --bg through the middle, and returns — there is no edge left
+   to see. Overriding the shared class here rather than changing it,
+   because Status also uses it and sits between different neighbours.
+
+   `overflow-hidden` is gone too: it clipped anything reaching toward the
+   boundary, which is the opposite of blending. */
+.fc-demos.fc-ground-bg {
+  @apply relative;
+  background: linear-gradient(
+    180deg,
+    var(--surface) 0%,
+    var(--bg) 14%,
+    var(--bg) 86%,
+    var(--surface) 100%
+  );
+  /* The inset shadow that gave the flat ground its top edge. */
+  box-shadow: none;
+}
+
+/* The shared `.fc-v2-grid--center` mask is a radial anchored `at 50% 0%`
+   at 0.9 opacity — so the blueprint grid is at FULL STRENGTH exactly
+   where it meets the section above, then fades downward. That is right
+   in the hero, which sits under a fixed header with nothing above it,
+   and backwards here.
+
+   Replaced with a vertical mask that fades at BOTH ends: the grid is
+   strongest through the middle of the section and dissolves before it
+   reaches either neighbour. Scoped to this section so the hero keeps
+   its own. */
+.fc-demos .fc-v2-grid {
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.5) 18%,
+    rgba(0, 0, 0, 0.5) 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(0, 0, 0, 0.5) 18%,
+    rgba(0, 0, 0, 0.5) 82%,
+    transparent 100%
+  );
 }
 
 .fc-demos__inner {
@@ -35,7 +83,7 @@
 /* A readout, not a badge: this is the real engine, and the figures
    say which build is running it. */
 .fc-demos__readout {
-  @apply border border-fc-rule shrink-0;
+  @apply border border-fc-rule shrink-0 rounded-lg overflow-hidden;
   background: var(--plate);
   box-shadow: var(--e1);
 }
@@ -69,9 +117,12 @@
    box. The active tab lifts to the body's surface and loses its bottom
    border, connecting the two. */
 
+/* Top corners only: the tabs and the body below are one object, so the
+   radius belongs to the pair rather than to each half. */
 .fc-demos__tabs {
-  @apply flex relative;
+  @apply flex relative overflow-hidden;
   @apply border-t border-l border-r border-fc-rule;
+  border-radius: var(--radius) var(--radius) 0 0;
   background: var(--plate);
   box-shadow: inset 0 1px 0 var(--lit);
 }
@@ -120,6 +171,8 @@
 
 .fc-demos__body {
   @apply relative grid border border-fc-teal-border;
+  /* Bottom corners only — the tab strip above carries the top pair. */
+  border-radius: 0 0 var(--radius) var(--radius);
   grid-template-columns: 1fr 1.22fr;
   background: var(--surface);
   box-shadow: var(--e3);
@@ -147,8 +200,12 @@
    the foot of the column so it sits against the form's controls. */
 .fc-demos__explain-code {
   @apply font-mono text-[11.5px] leading-[1.9];
-  @apply border border-fc-wash-rule px-3.5 py-3 mt-6;
-  background: var(--wash);
+  @apply border border-fc-rule px-3.5 py-3 mt-6 rounded-sm;
+  /* --bg, not --wash. In dark --wash is #182F31, a green-tinted surface
+     that reads as a different material from the plate it sits on; --bg
+     is a clear step below it, so the well reads as recessed. Same fix
+     as BatteriesIncluded and the hero's code panes. */
+  background: var(--bg);
   box-shadow: var(--inset);
   overflow-x: auto;
 }
@@ -418,10 +475,10 @@
 
 .fc-demos__result-json {
   @apply font-mono text-[11.5px] leading-[1.8] text-fc-ink;
-  @apply border border-fc-wash-rule;
+  @apply border border-fc-rule rounded-sm;
   @apply px-4 py-3 w-full overflow-x-auto;
   @apply m-0;
-  background: var(--wash);
+  background: var(--bg);
   box-shadow: var(--inset);
 }
 
