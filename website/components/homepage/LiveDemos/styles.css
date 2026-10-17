@@ -129,70 +129,117 @@
   @apply text-fc-teal;
 }
 
-/* ── The other three ──
-   Replaces a tab strip of four bare labels, which hid three quarters of
-   the only section where a visitor can operate the real product. These
-   sit BELOW the panel and say what each demo does, so there is a reason
-   to click rather than a name to guess at. */
+/* ── Tab strip ──
+   Back after a pass replaced it with three preview cards below the
+   panel. Those read better on a wide screen, but stacked on a phone
+   they put the panel plus three full-width cards on screen where four
+   labels in a row had fitted anywhere. The teaser lines live on each
+   tab's `title` now.
 
-.fc-demos__more {
-  @apply grid gap-4 mt-4;
-  grid-template-columns: repeat(3, 1fr);
-}
+   They now sit in a chrome bar beside window lights, matching the hero
+   panel, so the whole thing reads as one application window rather than
+   a row of labels above a box. */
 
-.fc-demos__more-card {
-  @apply flex flex-col items-start gap-1.5 text-left cursor-pointer;
-  @apply border border-fc-rule rounded-lg px-5 py-4;
+/* The chrome bar: window lights, then the tabs beside them. */
+.fc-demos__chrome {
+  @apply flex items-center gap-4 px-3.5 py-2;
+  @apply border-t border-l border-r border-fc-rule;
+  border-radius: var(--radius) var(--radius) 0 0;
   background: var(--plate);
-  box-shadow: var(--e1);
+  box-shadow: inset 0 1px 0 var(--lit);
+}
+
+.fc-demos__lights {
+  @apply flex gap-1.5 shrink-0 pl-0.5;
+}
+
+.fc-demos__lights i {
+  @apply w-2.5 h-2.5 rounded-full;
+}
+
+.fc-demos__lights i:nth-child(1) {
+  background: color-mix(in srgb, var(--danger) 70%, var(--rule));
+}
+
+.fc-demos__lights i:nth-child(2) {
+  background: color-mix(in srgb, var(--amber) 70%, var(--rule));
+}
+
+.fc-demos__lights i:nth-child(3) {
+  background: color-mix(in srgb, var(--teal) 55%, var(--rule));
+}
+
+/* NOT overflow-x-auto. That was added as a mobile fallback and applied
+   at every width, so the strip scrolled on desktop where there was
+   ample room — and worse, it created a clipping context that cut off
+   the active tab's bottom-border cover. Four tabs fit because the
+   inactive ones drop their labels on a phone. */
+.fc-demos__tabs {
+  @apply flex items-center gap-1 min-w-0;
+}
+
+/* Pills on the chrome bar, not a row of bordered cells sharing edges
+   with the panel below. The old treatment had the active tab lift to
+   the body's surface and paint a 1px strip over the border between
+   them — a trick that only works when the tabs sit directly on the
+   body, and which broke the moment anything clipped. */
+.fc-demos__tab {
+  @apply relative inline-flex items-center gap-2 shrink-0;
+  @apply font-mono text-[11px] tracking-[0.08em] uppercase;
+  @apply px-3 py-1.5 cursor-pointer text-fc-muted whitespace-nowrap;
+  @apply border-0 bg-transparent rounded-full;
   transition:
-    box-shadow var(--motion-hover),
-    border-color var(--motion-hover);
+    color var(--motion-hover),
+    background-color var(--motion-hover);
 }
 
-.fc-demos__more-card:hover {
-  @apply border-fc-teal-border;
-  box-shadow: var(--e2);
+.fc-demos__tab svg {
+  @apply w-3.5 h-3.5 shrink-0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.fc-demos__more-card:focus-visible {
+/* A filled pill rather than a lifted cell: it reads as selected at a
+   glance, needs no border trickery, and cannot be broken by clipping. */
+.fc-demos__tab--active {
+  color: var(--teal);
+  background: color-mix(in srgb, var(--teal) 14%, transparent);
+}
+
+.fc-demos__tab:not(.fc-demos__tab--active):hover {
+  @apply text-fc-ink;
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
+}
+
+.fc-demos__tab:focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 2px;
 }
 
-.fc-demos__more-label {
-  @apply font-display text-[15px] font-semibold tracking-[-0.015em];
-  @apply text-fc-ink-strong;
-}
+/* ── Height transition ──
+   Each demo is a different height, so swapping one made the panel jump.
+   CSS cannot animate `height: auto`, so the shell takes a measured pixel
+   height (written by a ResizeObserver on the body inside it) and
+   animates that. Measuring the INNER element means the measurement is
+   never affected by the transition it drives.
 
-.fc-demos__more-teaser {
-  @apply text-[13px] leading-[1.55] text-fc-muted;
-}
-
-/* The affordance. A card that only describes a demo gives no sign it is
-   a control, so this says plainly that clicking runs it. */
-.fc-demos__more-cue {
-  @apply inline-flex items-center gap-1 mt-1.5;
-  @apply font-mono text-[10px] tracking-[0.1em] uppercase text-fc-teal;
-}
-
-.fc-demos__more-cue svg {
-  @apply w-3 h-3;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  transition: transform var(--motion-hover);
-}
-
-.fc-demos__more-card:hover .fc-demos__more-cue svg {
-  transform: translateX(2px);
+   Undefined height on first render, so the shell sizes to content
+   before the observer reports — nothing collapses if JS is slow or
+   absent. */
+/* Rounds its own bottom corners, because `overflow-hidden` here (needed
+   so the body does not spill while the height animates) would otherwise
+   clip the body's square against the shell's. */
+.fc-demos__body-shell {
+  @apply relative overflow-hidden;
+  border-radius: 0 0 var(--radius) var(--radius);
+  transition: height 320ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fc-demos__more-card,
-  .fc-demos__more-cue svg {
+  .fc-demos__body-shell {
     transition: none;
   }
 }
@@ -202,13 +249,18 @@
    takes the wider column and the lead treatment. */
 
 .fc-demos__body {
-  @apply relative grid border border-fc-teal-border rounded-lg;
-  /* All four corners now. It was bottom-only while a tab strip sat on
-     top carrying the top pair; the strip is gone.
+  @apply relative grid border border-fc-teal-border overflow-hidden;
+  /* Bottom corners only — the chrome bar above carries the top pair,
+     and the two are one object.
 
-     NO overflow-hidden: the corner brackets are positioned at -1px,
-     deliberately outside the box, and clipping would eat them. The
-     columns inside round their own outer corners instead. */
+     overflow-hidden is safe again now the corner brackets are gone.
+     They were 11px squares positioned at -1px, built for a square box:
+     against a 14px radius the card's corner curves inward while the
+     bracket stays put, so they detached and floated outside the panel.
+     A square bracket and a rounded corner cannot be reconciled by
+     offsetting — the shapes do not match — and the body already reads
+     as the lead object through its teal border and --e3 lift. */
+  border-radius: 0 0 var(--radius) var(--radius);
   grid-template-columns: 1fr 1.22fr;
   background: var(--surface);
   box-shadow: var(--e3);
@@ -216,11 +268,8 @@
 
 /* ── Left column: explanation panel ── */
 
-/* Rounds its own left corners, since the body cannot clip (the corner
-   brackets live outside it). */
 .fc-demos__explain {
   @apply flex flex-col border-r border-fc-teal-border px-7.5 py-8;
-  border-radius: var(--radius) 0 0 var(--radius);
   background: var(--plate);
 }
 
@@ -573,10 +622,28 @@
     @apply px-5 py-6;
   }
 
-  /* One per row: three cards across a phone leaves no room for the
-     teaser line that is the whole reason they exist. */
-  .fc-demos__more {
-    grid-template-columns: 1fr;
+  /* Icon only, except on the active tab. Four labelled tabs do not fit
+     a phone bar, and this is why nothing has to scroll: the icons
+     identify the inactive ones and the label appears on the one you
+     are actually looking at.
+
+     `sr-only` rather than `display: none` — the label stays in the
+     accessibility tree, so a screen reader still announces every tab by
+     name. */
+  .fc-demos__chrome {
+    @apply gap-2.5 px-3;
+  }
+
+  .fc-demos__tab {
+    @apply px-2 text-[10px];
+  }
+
+  .fc-demos__tab--active {
+    @apply px-2.5;
+  }
+
+  .fc-demos__tab:not(.fc-demos__tab--active) .fc-demos__tab-label {
+    @apply sr-only;
   }
 }
 
@@ -649,8 +716,3 @@
   }
 }
 
-/* The explanation column paints a plate over the body's corners, so the
-   brackets need to sit above it. */
-.fc-demos__body > .fc-v2-bracket {
-  z-index: 1;
-}
