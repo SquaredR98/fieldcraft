@@ -170,10 +170,16 @@
      deliberate colour moment and belongs to Scope alone. */
   --display-weight: 700;
 
-  /* Dot field for the hero backdrop. --grid-major is already theme-aware,
-     so this adapts without a dark override. */
-  --hero-pattern: radial-gradient(var(--grid-major) 1px, transparent 1.2px);
-  --hero-pattern-size: 20px 20px;
+  /* Headline accent. Built from the teal already in the palette — the
+     handoff's own gradient carried #3F8F84 and #A9DCC8, colours that exist
+     nowhere here, and an amber stop that belongs to Scope. Same gesture,
+     legitimate values: teal deepening into its hover shade. */
+  --accent-text: linear-gradient(
+    96deg,
+    var(--teal) 0%,
+    color-mix(in srgb, var(--teal) 72%, var(--ink-strong)) 58%,
+    var(--teal-hover) 100%
+  );
 
   /* Deeper card shadow for the heaviest object on a page. Built from the
      same ink and teal the rest of the depth system uses — no new hues. */

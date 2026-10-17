@@ -21,29 +21,24 @@
   isolation: isolate;
 }
 
-/* ── Backdrop: dot field + three glows of ONE hue ──
-   Dots rather than the shared line grid: with rounded geometry throughout,
-   an orthogonal grid fights the corners.
+/* ── Glows ──
+   The line grid itself comes from the shared .fc-v2-grid, as it does in
+   every other section; only these washes are hero-specific.
 
-   The glows are all --teal, the CTA's own colour, at three strengths. A
-   single hue is deliberate — a second colour here competes with the
-   content and spends a hue that carries meaning elsewhere on the page.
-   Offset rather than centred, since three centred washes read as one
-   vignette. */
-.fc-hero__backdrop {
+   All three are --teal, the CTA's own colour, at three strengths. A single
+   hue is deliberate: a second colour here competes with the content and
+   spends a hue that means something elsewhere on the page. Offset rather
+   than centred, since three centred washes read as one vignette. */
+.fc-hero__glows {
   @apply absolute inset-0 pointer-events-none;
   z-index: -1;
-  background-image: var(--hero-pattern);
-  background-size: var(--hero-pattern-size);
-  -webkit-mask-image: radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);
-  mask-image: radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);
 }
 
-.fc-hero__backdrop i {
+.fc-hero__glows i {
   @apply absolute rounded-full;
 }
 
-.fc-hero__backdrop i:nth-child(1) {
+.fc-hero__glows i:nth-child(1) {
   width: 68rem;
   height: 45rem;
   left: 50%;
@@ -53,7 +48,7 @@
   filter: blur(30px);
 }
 
-.fc-hero__backdrop i:nth-child(2) {
+.fc-hero__glows i:nth-child(2) {
   width: 44rem;
   height: 32rem;
   left: 72%;
@@ -63,7 +58,7 @@
   filter: blur(40px);
 }
 
-.fc-hero__backdrop i:nth-child(3) {
+.fc-hero__glows i:nth-child(3) {
   width: 38rem;
   height: 30rem;
   left: 20%;
@@ -90,6 +85,24 @@
   letter-spacing: -0.045em;
   line-height: 0.98;
   text-wrap: balance;
+}
+
+/* The second line, emphasised. No class needed — there is one span in one
+   h1, so the descendant selector is exact. */
+.fc-hero__copy h1 span {
+  background: var(--accent-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Gradient text has no system colour, so forced-colours mode would render
+   it invisible. */
+@media (forced-colors: active) {
+  .fc-hero__copy h1 span {
+    color: CanvasText;
+    background: none;
+  }
 }
 
 .fc-hero__copy > p {
@@ -147,8 +160,8 @@
   border: 1px solid var(--rule);
   border-radius: var(--r);
   background: var(--surface);
-  /* The heaviest object on the page: it should sit clearly above the dot
-     field rather than hover a few pixels over it. */
+  /* The heaviest object on the page: it should sit clearly above the grid
+     rather than hover a few pixels over it. */
   box-shadow: var(--card-shadow);
 }
 
@@ -211,14 +224,28 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.25rem), 1fr));
 }
 
+/* ── The form sets the panel height, not the JSON ──
+   The schema serialises to ~65 lines. Left to size itself the code pane
+   made the panel nearly five times taller than the form, which then
+   floated in dead space. The handoff caps its code at 14 lines for exactly
+   this reason.
+
+   A grid row grows to its tallest item, so `align-items: stretch` and
+   `overflow` are not enough on their own — the code would still set the
+   height. The code cell is therefore a positioned box whose content fills
+   it absolutely: taken out of flow it cannot contribute height at all, and
+   the preview column is left as the only thing the row measures. */
 .fc-hero-panel__code {
-  @apply min-w-0 overflow-x-auto text-left;
+  @apply relative min-w-0;
+}
+
+.fc-hero-panel__code > * {
+  @apply absolute inset-0 overflow-auto;
 }
 
 /* The code pane owns the left edge, so the panel's own radius handles the
    corner — an inner radius would show a sliver of panel ground. */
 .fc-hero-panel__code .fc-hero-code-block {
-  @apply h-full;
   border: 0;
   border-radius: 0;
 }

@@ -17,51 +17,48 @@ import { CodeBlockClient } from '@/components/shared/CodeBlock/CodeBlockClient';
  * A schema shown on a page that invites readers to count from source has
  * to actually validate.
  */
-const heroSchema = JSON.stringify(
-  {
-    id: 'event-registration',
-    settings: { showProgress: true, allowDraftSave: true },
-    sections: [
-      {
-        id: 'attendee',
-        title: 'Attendee',
-        description: "Tell us who's coming.",
-        questions: [
-          { id: 'name', type: 'short_text', label: 'Full name', required: true },
-          { id: 'email', type: 'email', label: 'Work email', required: true },
-          {
-            id: 'ticket',
-            type: 'single_select',
-            label: 'Ticket',
-            options: [
-              { label: 'Standard', value: 'standard' },
-              { label: 'Workshop', value: 'workshop' },
-            ],
-          },
-          {
-            id: 'diet',
-            type: 'short_text',
-            label: 'Dietary needs',
-            showIf: { field: 'ticket', operator: 'eq', value: 'workshop' },
-          },
-        ],
-      },
-      {
-        id: 'payment',
-        title: 'Payment',
-        // Section 2 exists so "Step 1 of 2" on the right is backed by a real
-        // second section. It needs a question of its own: validateSchema()
-        // rejects an empty section ("Section must have at least one
-        // question"), and a schema shown on this page has to actually run.
-        questions: [
-          { id: 'card', type: 'short_text', label: 'Card number', required: true },
-        ],
-      },
-    ],
-  },
-  null,
-  2,
-);
+/*
+ * Hand-formatted rather than JSON.stringify'd.
+ *
+ * `JSON.stringify(schema, null, 2)` produced 65 lines — one property per
+ * line, every option object exploded over four. The handoff caps its hero
+ * code at 14 lines, and for good reason: nobody reads 65 lines of JSON in a
+ * hero, and the pane then dwarfed the form beside it.
+ *
+ * So each question is one line. Same object, same properties, same order —
+ * only the whitespace differs, and it stays legible at the 12px the pane
+ * renders at. The content was verified by running the equivalent object
+ * through validateSchema() from the published core: it passes (and failed
+ * the first time, on an empty `questions` array, which is why asserting
+ * beats assuming).
+ *
+ * Every property is real API, not illustrative:
+ *   showIf + operator "eq"   core/src/types/conditions.ts
+ *   allowDraftSave           core/src/types/settings.ts (opt-OUT: the
+ *                            engine treats !== false as on)
+ */
+const heroSchema = `{
+  "id": "event-registration",
+  "settings": { "showProgress": true, "allowDraftSave": true },
+  "sections": [
+    {
+      "id": "attendee",
+      "title": "Attendee",
+      "questions": [
+        { "id": "name",  "type": "short_text", "label": "Full name",  "required": true },
+        { "id": "email", "type": "email",      "label": "Work email", "required": true },
+        { "id": "ticket", "type": "single_select", "label": "Ticket",
+          "options": [{ "label": "Standard", "value": "standard" },
+                      { "label": "Workshop", "value": "workshop" }] },
+        { "id": "diet", "type": "short_text", "label": "Dietary needs",
+          "showIf": { "field": "ticket", "operator": "eq", "value": "workshop" } }
+      ]
+    },
+    { "id": "payment", "title": "Payment", "questions": [
+      { "id": "card", "type": "short_text", "label": "Card number", "required": true }
+    ] }
+  ]
+}`;
 
 export function SchemaPanel() {
   return (

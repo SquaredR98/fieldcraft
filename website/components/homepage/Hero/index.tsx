@@ -31,9 +31,17 @@ export type HeroProps = {
 export function Hero({ version }: HeroProps) {
   return (
     <section id="top" className="fc-hero">
-      {/* One hue, three strengths, offset rather than centred — three
-          centred washes would read as a single vignette. */}
-      <div className="fc-hero__backdrop" aria-hidden="true">
+      {/* The shared 32px line grid — the handoff's DEFAULT pattern. A
+          previous pass swapped it for a 20px dot field, but the dots live
+          only inside the handoff's `data-dir="b"` variant block; the hero
+          itself is on the line grid. Reading a variant as the spec was the
+          mistake.
+
+          Glows sit over it: one hue (the CTA's own teal) at three
+          strengths, offset rather than centred, since three centred washes
+          read as a single vignette. */}
+      <div className="fc-v2-grid fc-v2-grid--center" aria-hidden="true" />
+      <div className="fc-hero__glows" aria-hidden="true">
         <i />
         <i />
         <i />
@@ -50,10 +58,16 @@ export function Hero({ version }: HeroProps) {
           <span className="fc-v2-link__arrow">&rarr;</span>
         </a>
 
+        {/* The second line is emphasised — it is the one naming the
+            product. The span needs no class: `.fc-hero__copy h1 span` is
+            exact, and there is only ever one. A previous pass removed the
+            emphasis entirely to satisfy Rule 6 after I had built it from
+            invented hex values; the fix was to use the real teal tokens,
+            not to delete the design decision. */}
         <h1>
           Declare the form.
           <br />
-          FieldCraft renders the rest.
+          <span>FieldCraft renders the rest.</span>
         </h1>
 
         <p>
