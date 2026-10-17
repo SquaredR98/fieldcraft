@@ -73,6 +73,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      /* In the markup, not applied after hydration — this is what the
+         first paint reads. */
+      data-theme="dark"
       suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`}
     >
@@ -115,12 +118,23 @@ export default function RootLayout({
       </head>
       {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
       <body>
+        {/*
+          Dark only. `defaultTheme: 'system'` with `enableSystem` meant the
+          theme was resolved after hydration, so `data-theme` was absent
+          from the server HTML (verified) and the first paint used the
+          :root light tokens — the white flash on reload.
+
+          Forced here AND stamped on <html> below, so the attribute is in
+          the markup before any CSS loads. The light tokens are left
+          untouched: this stops the switcher, it does not remove a theme.
+        */}
         <RootProvider
           theme={{
             attribute: 'data-theme',
             storageKey: 'fieldcraft-theme',
-            defaultTheme: 'system',
-            enableSystem: true,
+            defaultTheme: 'dark',
+            forcedTheme: 'dark',
+            enableSystem: false,
           }}
         >
           {children}

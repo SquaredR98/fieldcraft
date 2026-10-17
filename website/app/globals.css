@@ -105,6 +105,16 @@
    ===================================================== */
 
 :root {
+  /* Tells the browser to paint its own canvas, scrollbars and form
+     controls dark BEFORE any stylesheet is applied. Without it the
+     browser paints white first and the page flashes on reload no matter
+     what the tokens say — the white flash was this as much as the theme
+     resolving late.
+
+     The light values below are untouched and still resolve; the site is
+     simply forced to dark at the root. */
+  color-scheme: dark;
+
   --bg: #F4F7F8;
   --surface: #FFFFFF;
   --surface2: #FAFCFC;

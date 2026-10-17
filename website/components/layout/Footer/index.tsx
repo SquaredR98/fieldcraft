@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Logo } from '@/components/shared/Logo';
-import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import './styles.css';
 
 interface FooterLink {
@@ -82,7 +81,8 @@ export function Footer() {
         <div className="fc-footer__bottom-inner">
           <div>&copy; 2026 SquaredR &middot; MIT licensed</div>
           <div className="fc-footer__bottom-note">Built in my spare time</div>
-          <ThemeToggle />
+          {/* Theme toggle removed: the site is forced dark, so the
+              control had nothing to switch. */}
         </div>
       </div>
     </footer>

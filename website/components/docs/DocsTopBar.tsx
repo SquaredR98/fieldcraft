@@ -1,4 +1,3 @@
-import { ThemeToggle } from '@/components/layout/ThemeToggle';
 
 export function DocsTopBar() {
   return (
@@ -42,7 +41,8 @@ export function DocsTopBar() {
           <a href="/" className="fc-docs-topbar__link">
             Site
           </a>
-          <ThemeToggle />
+          {/* Theme toggle removed: the site is forced dark, so the
+              control had nothing to switch. */}
         </div>
       </div>
     </div>
