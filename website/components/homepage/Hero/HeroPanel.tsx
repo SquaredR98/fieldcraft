@@ -27,9 +27,9 @@ export function HeroPanel() {
         </span>
 
         <span className="fc-hero-panel__file">event-registration.json</span>
-        <span className="fc-hero-panel__file" data-muted="">
+        {/* <span className="fc-hero-panel__file" data-muted="">
           Preview
-        </span>
+        </span> */}
 
         {/* Not decoration: the schema in SchemaPanel was run through
             validateSchema() from the published core and passes. It failed

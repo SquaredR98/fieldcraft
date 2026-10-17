@@ -24,30 +24,54 @@
  */
 import { SpecCounter } from './SpecCounter';
 
+/*
+ * HIERARCHY — the five figures are three different kinds of claim:
+ *
+ *   34 / 25 / 14   inventory: how much there is
+ *   1,384          assurance: that it works
+ *   ~28 KB         cost: what it weighs
+ *
+ * Five identical cells made them read as one undifferentiated set, so
+ * nothing led and the two a developer actually weighs — is it tested, what
+ * does it cost — sat level with "25 condition operators".
+ *
+ * The fix is weight, NOT structure. Merging the three inventory numbers
+ * into one cell was considered and rejected: every evidence grid on this
+ * page is one-cell-one-claim, SpecCounter animates a single value, and the
+ * pip marks one figure — a composite cell would have broken all three and
+ * forced a second value size into the same strip. So the contract holds
+ * (one cell, one number, one pip, one counter) and `lead` marks the two
+ * that carry the argument, using the same --lead-plate + --e2/--e3
+ * treatment the Status section uses for the cell people come to read.
+ */
 const specs = [
   { value: '34', label: 'Input field types' },
   { value: '25', label: 'Condition operators' },
   { value: '14', label: 'Built-in validators' },
-  { value: '1,384', label: 'Tests passing' },
-  { value: '~28 KB', label: 'Core, gzipped' },
+  { value: '1,384', label: 'Tests passing', lead: true },
+  { value: '~28 KB', label: 'Core, gzipped', lead: true },
 ];
 
 export function SpecStrip() {
   return (
-    <div className="fc-spec-strip">
+    <section className="fc-spec-strip">
       <div className="fc-spec-strip__inner">
         {specs.map((s) => (
-          <div key={s.label} className="fc-spec-strip__cell">
-            <div className="fc-spec-strip__head">
-              <div className="fc-spec-strip__pip" />
-              <div className="fc-spec-strip__value">
-                <SpecCounter value={s.value} />
-              </div>
-            </div>
-            <div className="fc-spec-strip__label">{s.label}</div>
-          </div>
+          <article
+            key={s.label}
+            className="fc-spec-strip__cell"
+            data-lead={s.lead ? '' : undefined}
+          >
+            {/* No classes inside the cell: there is one of each element,
+                so `.fc-spec-strip__cell b` and `… small` are exact. */}
+            <b>
+              <i aria-hidden="true" />
+              <SpecCounter value={s.value} />
+            </b>
+            <small>{s.label}</small>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

@@ -73,9 +73,8 @@
 .fc-hero__copy {
   /* Centred: with the panel below rather than beside, a left-aligned
      column would leave the right half of the fold empty. */
-  @apply relative mx-auto flex flex-col items-center text-center;
+  @apply relative mx-auto flex flex-col items-center text-center max-w-7xl;
   @apply px-10 pt-22 pb-12;
-  max-width: 62rem;
 }
 
 .fc-hero__copy h1 {
@@ -106,9 +105,8 @@
 }
 
 .fc-hero__copy > p {
-  @apply mt-5 mb-0 leading-[1.6] text-fc-soft;
+  @apply mt-5 mb-0 leading-[1.6] text-fc-soft max-w-4xl;
   font-size: clamp(16px, 1.3vw, 20px);
-  max-width: 41rem;
   text-wrap: pretty;
 }
 
@@ -480,19 +478,43 @@
 
 /* ── Spec strip ─────────────────────────────────────────────────────── */
 
+/* ── Spec strip ─────────────────────────────────────────────────────────
+   It was welded to the panel: no space between them, so the panel's
+   bottom edge and the strip's top border landed on the same line and the
+   strip read as the panel's footer rather than as the hero's closing
+   statement. The border is gone and the gap does the separating — the
+   hero's own border-b already closes the section, so a border here was a
+   third horizontal rule inside about 40px. */
+/* The page gutter lives HERE, not on __inner — __inner now carries the
+   border and radius, and a padding on that element would put the gutter
+   inside the box. Max-width and gutter on one element is the convention;
+   this keeps them on the wrapper so the bordered grid can own its edges. */
 .fc-spec-strip {
-  @apply relative border-t border-fc-rule;
-  background: var(--ground-2);
+  @apply relative mx-auto max-w-310 mt-14 px-10;
 }
 
+/* Asymmetric, because that is how this page encodes emphasis everywhere
+   else. The two lead cells get the wider columns.
+
+   Shared-border cells: gap-px over a rule-coloured ground, so the gap IS
+   the divider. Replaces a border-l-per-cell, which left a hanging rule on
+   the first cell whenever the column count changed. */
 .fc-spec-strip__inner {
-  @apply mx-auto max-w-310 px-10 grid;
-  grid-template-columns: repeat(5, 1fr);
+  @apply grid gap-px;
+  grid-template-columns: 1fr 1fr 1fr 1.25fr 1.25fr;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  overflow: hidden;
 }
 
+/* Shared-border cells over a rule-coloured ground: the grid gap IS the
+   divider, which is the spec-sheet primitive the rest of the homepage
+   uses. Replaces the old border-l-per-cell, which left a hanging rule on
+   the first cell at every breakpoint change. */
 .fc-spec-strip__cell {
-  @apply py-5 px-5;
-  border-radius: var(--r-inner);
+  @apply py-5 px-5 m-0;
+  background: var(--surface);
   transition: background var(--motion-hover);
 }
 
@@ -500,25 +522,41 @@
   background: var(--plate);
 }
 
-.fc-spec-strip__cell + .fc-spec-strip__cell {
-  @apply border-l border-fc-rule;
+/* The two that decide an evaluation — is it tested, what does it cost —
+   carry the lead treatment Status uses for the cell people come to read. */
+.fc-spec-strip__cell[data-lead] {
+  background: var(--lead-plate);
+  box-shadow: var(--e2);
 }
 
-.fc-spec-strip__head {
-  @apply flex items-center gap-2;
+.fc-spec-strip__cell[data-lead]:hover {
+  box-shadow: var(--e3);
 }
 
-.fc-spec-strip__pip {
-  @apply w-1 h-1 bg-fc-teal;
-}
-
-.fc-spec-strip__value {
-  @apply font-display text-2xl font-semibold tracking-fc-subhead;
+.fc-spec-strip__cell b {
+  @apply flex items-center gap-2 font-display font-semibold tracking-fc-subhead;
   @apply text-fc-ink-strong tabular-nums;
+  font-size: 1.3rem;
 }
 
-.fc-spec-strip__label {
-  @apply mt-1.5 font-mono text-[10px] tracking-widest uppercase text-fc-muted;
+/* Lead figures are larger. One step, not two — the supporting numbers
+   still have to be readable as data, not as a caption. */
+.fc-spec-strip__cell[data-lead] b {
+  font-size: 1.6rem;
+}
+
+.fc-spec-strip__cell b i {
+  @apply w-1 h-1 shrink-0;
+  background: var(--teal);
+}
+
+.fc-spec-strip__cell small {
+  @apply block mt-1.5 font-mono text-[10px] tracking-widest uppercase;
+  @apply text-fc-muted;
+}
+
+.fc-spec-strip__cell[data-lead] small {
+  @apply text-fc-teal;
 }
 
 /* ── Narrow ─────────────────────────────────────────────────────────── */
@@ -532,6 +570,27 @@
     @apply min-w-0;
   }
 
+  /* CRITICAL once the columns stack. The code pane is absolutely
+     positioned on desktop so it cannot drive the row height — but stacked,
+     its cell has no height of its own, so `inset: 0` would collapse the
+     code to nothing and it would vanish entirely. Back into flow, with a
+     max-height so it still cannot run away down the page. */
+  .fc-hero-panel__code {
+    @apply static;
+  }
+
+  .fc-hero-panel__code > * {
+    @apply static;
+  }
+
+  /* The cap goes on the scrolling child, which is the element that owns
+     the code's height — capping only the wrapper would leave the content
+     overflowing it. */
+  .fc-hero-panel__code .fc-code-block__content {
+    @apply overflow-auto;
+    max-height: 20rem;
+  }
+
   /* Stacked, so the divider belongs on top rather than the side. */
   .fc-hero-panel__preview {
     @apply p-5;
@@ -539,16 +598,111 @@
     border-top: 1px solid var(--rule);
   }
 
-  .fc-hero-code-block .fc-code-block__content {
-    @apply max-h-[320px];
+  .fc-spec-strip {
+    @apply px-5 mt-10;
   }
 
+  /* Two per row. The shared-border grid handles its own dividers, so
+     nothing needs unsetting per column as it did before. */
   .fc-spec-strip__inner {
-    @apply px-5;
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .fc-spec-strip__cell:nth-child(odd) {
-    @apply border-l-0;
+  /* The lead figures lose their size advantage here — at two columns the
+     cells are already wide, and the step would only cause ragged
+     baselines between rows. */
+  .fc-spec-strip__cell[data-lead] b {
+    font-size: 1.3rem;
+  }
+}
+
+/* ── Phone ──────────────────────────────────────────────────────────────
+   The hero previously had ONE breakpoint (1080px) and nothing below it,
+   so a phone got the tablet layout: a 42px headline inside a ~320px line,
+   and five spec cells in two columns leaving an orphan on its own row.
+   639px matches the breakpoint the rest of the site already uses. */
+@media (max-width: 639px) {
+  .fc-hero__copy {
+    @apply px-4 pt-10 pb-8;
+  }
+
+  /* 42px was the clamp floor and too large for a 360px viewport. */
+  .fc-hero__copy h1 {
+    font-size: clamp(30px, 8.4vw, 42px);
+    letter-spacing: -0.035em;
+  }
+
+  .fc-hero__copy > p {
+    @apply mt-4 text-[15px];
+  }
+
+  /* Both buttons full width and stacked: side by side they wrap into two
+     ragged rows at this width, and a half-width CTA is a small tap
+     target. */
+  .fc-hero__actions {
+    @apply flex-col items-stretch w-full gap-2.5 mt-6;
+  }
+
+  .fc-hero__actions > a {
+    @apply justify-center;
+  }
+
+  .fc-hero-panel__chrome {
+    @apply px-2.5;
+  }
+
+  /* The filename truncates rather than the status being dropped: "schema
+     valid" is a trust signal, not chrome, and it is the shorter of the
+     two. Lights give up their left padding first. */
+  .fc-hero-panel__lights {
+    @apply pl-0 pr-1.5;
+  }
+
+  .fc-hero-panel__file {
+    @apply px-2 min-w-0 truncate;
+  }
+
+  .fc-hero-panel__status {
+    @apply shrink-0 pl-1;
+  }
+
+  .fc-hero-panel__preview {
+    @apply p-4;
+  }
+
+  /* Stacked, so a ticket option gets the full line rather than half of a
+     narrow one. */
+  .fc-hero-form__options {
+    @apply grid-cols-1;
+  }
+
+  /* Draft line and Continue stack rather than squeezing onto one row. */
+  .fc-hero-form footer {
+    @apply flex-col-reverse items-stretch gap-3;
+  }
+
+  .fc-hero-form footer button {
+    @apply w-full;
+  }
+
+  /* One column: five cells over two columns leaves an orphan spanning
+     half a row, which reads as a layout error rather than a list. */
+  .fc-spec-strip {
+    @apply px-4 mt-8;
+  }
+
+  .fc-spec-strip__inner {
+    grid-template-columns: 1fr;
+  }
+
+  /* As a single column the cells become rows, so the figure and its label
+     sit side by side instead of stacking — five stacked cells would be a
+     very tall column for very little information. */
+  .fc-spec-strip__cell {
+    @apply flex items-baseline justify-between gap-3 py-3.5 px-4;
+  }
+
+  .fc-spec-strip__cell small {
+    @apply mt-0;
   }
 }
