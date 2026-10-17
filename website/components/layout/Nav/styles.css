@@ -160,25 +160,82 @@ main h3[id] {
   @apply text-fc-ink;
 }
 
-/* Primary tier, like .fc-v2-cta — solid teal plate with the inset
-   highlight. It was a flat fill, which read as a different button
-   system to the hero and final CTAs. */
+/* ── Header CTA ──
+   Four problems with the previous version, all visible at a glance:
+
+   - `py-1` against `px-4` made it a thin slab, four pixels of vertical
+     padding inside sixteen horizontal.
+   - It claimed in a comment to match the bar's radius and used --r-chip
+     (5.6px) inside a container at --r (14px). A sharper corner inside a
+     rounder one reads as a mistake rather than a choice.
+   - No font-size at all after an earlier edit dropped it, so it
+     inherited whatever the bar happened to set.
+   - A SOLID teal plate sitting inside a translucent glass bar: the
+     heaviest treatment available, fighting the surface it sits on, and
+     the only opaque object in a header whose whole idea is that you can
+     see through it.
+
+   Now a tinted glass chip rather than a filled button. It still reads
+   as the primary action — it is the only coloured thing in the bar — but
+   it belongs to the bar instead of being stuck onto it. Teal text on a
+   teal-tinted translucent ground, with a teal border doing the work the
+   fill used to.
+
+   Height is set to line up with the 56px bar: 32px tall inside a 56px
+   bar leaves 12px either side, matching the bar's own inner gutter. */
 .fc-nav__cta {
-  @apply inline-flex items-center gap-1.5;
+  @apply inline-flex items-center gap-1.5 h-8;
   @apply whitespace-nowrap shrink-0 no-underline;
-  @apply text-fc-teal-on;
-  @apply font-display text-[13.5px] font-medium;
-  @apply px-4 py-1;
-  /* Matches the radius of the bar it sits in. */
-  border-radius: var(--r);
-  background: var(--teal-plate);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transition: filter var(--motion-hover);
+  @apply font-display text-[13px] font-medium;
+  @apply px-3.5;
+  color: var(--teal);
+  border: 1px solid color-mix(in srgb, var(--teal) 32%, transparent);
+  border-radius: var(--r-inner);
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
+  transition:
+    background var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
 }
 
+/* Fills in on hover — the gesture the glass version earns: it resolves
+   from a hint of colour into the real thing. */
 .fc-nav__cta:hover {
-  @apply text-fc-teal-on;
-  filter: brightness(1.06);
+  color: var(--teal-on);
+  border-color: transparent;
+  background: var(--teal-plate);
+}
+
+/* Optically smaller than the label and slightly less present, so it
+   points without competing. Stroked rather than filled, matching the
+   panel tab icons. */
+.fc-nav__cta svg {
+  @apply w-3.5 h-3.5 shrink-0 -mr-0.5;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.7;
+  transition:
+    transform var(--motion-hover),
+    opacity var(--motion-hover);
+}
+
+/* Advances on hover, the gesture every other CTA on the site shares. */
+.fc-nav__cta:hover svg {
+  transform: translateX(2px);
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-nav__cta svg {
+    transition: opacity var(--motion-hover);
+  }
+
+  .fc-nav__cta:hover svg {
+    transform: none;
+  }
 }
 
 .fc-nav__cta:focus-visible {
@@ -236,12 +293,21 @@ main h3[id] {
   @apply text-fc-ink;
 }
 
+/* Stays SOLID, unlike the desktop CTA: this is a full-width button at the
+   foot of an opaque drawer, where a tinted-glass chip would read as
+   disabled rather than primary. It does take the radius and the plate —
+   it was square inside a 14px rounded drawer, with a flat fill rather
+   than the gradient plate every other primary button uses. */
 .fc-nav__drawer-cta {
-  @apply block no-underline text-center;
-  @apply bg-fc-teal text-fc-teal-on;
+  @apply flex items-center justify-center gap-1.5;
+  @apply no-underline text-center;
+  @apply text-fc-teal-on;
   @apply font-display text-[14px] font-medium;
   @apply px-4 py-3 mt-3;
-  transition: background var(--motion-hover);
+  border-radius: var(--r-inner);
+  background: var(--teal-plate);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: filter var(--motion-hover);
 }
 
 .fc-nav__drawer-cta:hover {
@@ -281,4 +347,16 @@ main h3[id] {
   .fc-nav__drawer {
     @apply px-5;
   }
+}
+
+/* Same chevron as the desktop CTA. No hover advance here: the drawer is
+   touch-first, where there is no hover to resolve. */
+.fc-nav__drawer-cta svg {
+  @apply w-3.5 h-3.5 shrink-0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.8;
 }

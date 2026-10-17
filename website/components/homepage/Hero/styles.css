@@ -14,7 +14,7 @@
    ------------------------------------------------------------------- */
 
 .fc-hero {
-  @apply relative overflow-hidden border-b border-fc-rule;
+  @apply relative overflow-hidden border-b border-fc-rule pt-22;
   background-color: var(--bg);
   /* Stacking context for the backdrop, so its z-index resolves here
      rather than against the page. */

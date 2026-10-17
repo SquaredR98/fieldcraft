@@ -53,8 +53,16 @@ export function Nav() {
             </svg>
           </a>
 
+          {/* An SVG chevron rather than a text glyph. This was a literal
+              ">" character, which renders as a thin baseline-sitting mark
+              that reads as a typo next to the label — and no text arrow
+              aligns reliably across fonts, since its vertical centring is
+              whatever the typeface decided. */}
           <Link href="/docs" className="fc-nav__cta">
-            Docs <span aria-hidden="true">→</span>
+            Docs
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M6 3.5 10.5 8 6 12.5" />
+            </svg>
           </Link>
         </div>
 
