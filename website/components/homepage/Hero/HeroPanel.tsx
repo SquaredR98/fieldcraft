@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { SchemaPanel } from './SchemaPanel';
+import { useState, type ReactNode } from 'react';
 import { HeroForm } from './HeroForm';
 
 /*
@@ -27,6 +26,13 @@ import { HeroForm } from './HeroForm';
  * The right pane is a mockup, labelled as one in HeroForm. The real
  * engine runs in LiveDemos, which imports FormEngineRenderer from the
  * published package.
+ *
+ * The schema pane arrives as `children` rather than being imported. This
+ * component is a client component for the tab state, and a client
+ * component cannot import a server one — it would drag SchemaPanel, and
+ * with it Shiki, into the browser bundle to highlight a schema that never
+ * changes. Passed as children it stays server-rendered, highlighted at
+ * build time, costing nothing at runtime.
  */
 
 type Tab = 'preview' | 'schema';
@@ -51,7 +57,7 @@ function FormIcon() {
   );
 }
 
-export function HeroPanel() {
+export function HeroPanel({ schema }: { schema: ReactNode }) {
   const [tab, setTab] = useState<Tab>('preview');
 
   return (
@@ -112,7 +118,7 @@ export function HeroPanel() {
           role="tabpanel"
           aria-labelledby="hero-tab-schema"
         >
-          <SchemaPanel />
+          {schema}
         </div>
         <div
           className="fc-hero-panel__preview"

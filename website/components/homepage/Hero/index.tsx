@@ -1,5 +1,6 @@
 import { CopyInstall } from '@/components/shared/CopyInstall';
 import { HeroPanel } from './HeroPanel';
+import { SchemaPanel } from './SchemaPanel';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
 import Link from 'next/link';
@@ -114,7 +115,7 @@ export function Hero({ version }: HeroProps) {
       {/* Full width and last — the schema/result relationship is the
           argument, so it closes the hero and gets the whole page rather
           than a column. */}
-      <HeroPanel />
+      <HeroPanel schema={<SchemaPanel />} />
     </section>
   );
 }
