@@ -1,7 +1,22 @@
 @reference "../../../app/globals.css";
 
-.fc-how {
-  @apply border-b border-fc-rule;
+/* ── Blending out of the hero ──
+   There were TWO rules stacked at this boundary — the hero's border-b
+   and this section's — over a hard step from the hero's --bg to this
+   section's --surface2. Both borders are gone and the ground is now a
+   gradient that BEGINS at the hero's colour and settles into its own,
+   so there is no line and no step to see.
+
+   Only the top fades: the section below this one is a separate
+   boundary, and its own ground still steps normally. */
+.fc-how.fc-ground-surface2 {
+  background: linear-gradient(
+    180deg,
+    var(--bg) 0%,
+    color-mix(in srgb, var(--bg) 62%, var(--ground-2)) 12%,
+    color-mix(in srgb, var(--bg) 24%, var(--ground-2)) 26%,
+    var(--ground-2) 40%
+  );
 }
 
 .fc-how__inner {
