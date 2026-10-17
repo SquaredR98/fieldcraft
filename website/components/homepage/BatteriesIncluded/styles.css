@@ -1,9 +1,13 @@
 @reference "../../../app/globals.css";
 
 /* ── Batteries included ──
- * The most technical content on the page, so it is presented as a spec
- * sheet: shared-border cells, each carrying the schema that enables the
- * behaviour and the cost of not having it.
+ * Four behaviours, each shown as the line of schema that turns it on.
+ *
+ * Was a 2x2 shared-border spec sheet where every cell also carried a
+ * prose body and a "what you'd write instead" line. The cards are three
+ * elements now, so they sit in one row of four rounded plates matching
+ * the quick-start cards — header row with a full-width rule, code as the
+ * floor at a shared baseline.
  *
  * No bottom rule — the ground step separates this from its neighbours.
  */
@@ -28,44 +32,60 @@
   text-wrap: pretty;
 }
 
-/* ── Grid: shared-border cells ── */
+/* ── Grid ──
+   Four across, not 2x2. Each card now holds three elements instead of
+   five, so two rows of short cards wasted the width and made the eye
+   zigzag; one row reads in a single pass.
+
+   Separate rounded plates rather than the shared-border cell grid this
+   used to be. That grid (gap:1px over a rule-coloured ground) is square
+   by definition — the cells ARE the border — so it could never take the
+   new radius. It was also the house style for evidence sections, shared
+   with DataFlow and TrustStrip, and both of those are gone: the pattern
+   had become an orphan rather than a convention. These now match the
+   quick-start cards, which is the page's one card treatment. */
 
 .fc-batteries__grid {
-  @apply grid border border-fc-rule;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: var(--rule);
-  box-shadow: var(--e1);
+  @apply grid gap-5;
+  grid-template-columns: repeat(4, 1fr);
 }
 
 .fc-batteries__card {
-  @apply relative flex flex-col p-7;
-  background: var(--surface);
-  transition: background-color var(--motion-hover);
-}
-
-/* Edge marker grows from the top-left, matching DataFlow and TrustStrip
-   so every evidence grid on the page behaves the same way. */
-.fc-batteries__card::before {
-  content: '';
-  @apply absolute left-0 top-0 h-0.5;
-  width: 0;
-  background: var(--teal);
-  transition: width var(--motion-enter);
+  @apply relative flex flex-col overflow-hidden;
+  @apply border border-fc-rule rounded-lg;
+  background: var(--plate);
+  box-shadow: var(--e1);
+  transition: box-shadow var(--motion-hover);
 }
 
 .fc-batteries__card:hover {
-  background: var(--wash);
-}
-
-.fc-batteries__card:hover::before {
-  width: 100%;
+  box-shadow: var(--e2);
 }
 
 /* ── Card head: index, title, badge ── */
 
+/* A COLUMN, not a wrapping row.
+   As a wrapping flex row the three parts competed in one flow, so the
+   layout depended on how long each title happened to be: card 01's
+   title wrapped to two lines and pushed its index onto a line of its
+   own, while 02-04 kept theirs inline — four different arrangements of
+   the same component. The badges landed at four different heights for
+   the same reason.
+
+   Stacked, the index is always on its own line and the badge is pushed
+   to the foot of the head by `mt-auto`, so all four sit on one baseline
+   whether the title took one line or two. Same technique that pins the
+   code blocks to a shared floor, one level up.
+
+   Padding is on the row rather than the card so the rule below reaches
+   both edges while the text keeps its inset. */
 .fc-batteries__card-head {
-  @apply flex items-baseline gap-3 mb-3;
+  @apply flex flex-col items-start gap-2;
+  @apply flex-1 px-5 py-4 border-b border-fc-rule;
+}
+
+.fc-batteries__card-head .fc-batteries__badge {
+  @apply mt-auto;
 }
 
 /* Numbered because the subtitle counts them and each card names its own
@@ -80,44 +100,44 @@
   @apply text-fc-teal;
 }
 
+/* 16px rather than 18: at a quarter of the row these titles have little
+   width, and 18 wrapped the longest one to two lines while the others
+   held one. Wrapping is handled by the column layout either way, but a
+   size that mostly fits keeps the four reading as a set. */
 .fc-batteries__card-title {
-  @apply font-display text-[18px] font-semibold tracking-[-0.02em];
-  @apply text-fc-ink-strong;
+  @apply font-display text-[16px] font-semibold tracking-[-0.02em];
+  @apply text-fc-ink-strong leading-[1.3];
+  text-wrap: balance;
 }
 
+/* A pill, matching the quick-start step number and the nav CTA. It sits
+   on its own line at the foot of the head (see the mt-auto above), not
+   at the right of the title row — at a quarter of the row there is no
+   room beside a title for it. */
 .fc-batteries__badge {
-  @apply font-mono text-[9px] tracking-[0.1em] uppercase shrink-0 ml-auto;
-  @apply border border-fc-teal-border px-1.75 py-0.75 text-fc-teal;
-  background: var(--wash);
-  transition:
-    background-color var(--motion-hover),
-    border-color var(--motion-hover),
-    color var(--motion-hover);
+  @apply font-mono text-[9px] tracking-[0.1em] uppercase shrink-0 rounded-full;
+  @apply px-2 py-0.75 text-fc-teal;
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
 }
 
-.fc-batteries__card:hover .fc-batteries__badge {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: var(--teal-on);
-}
-
-.fc-batteries__card-body {
-  @apply text-[13.5px] leading-[1.65] text-fc-muted m-0 mb-5;
-  padding-left: 1.85rem;
-  transition: color var(--motion-hover);
-}
-
-.fc-batteries__card:hover .fc-batteries__card-body {
-  @apply text-fc-soft;
-}
-
-/* ── The schema that turns it on ── */
+/* ── The schema that turns it on ──
+   The card's floor: full bleed with a top border only, bottom corners
+   inherited through the card's overflow-hidden, and a min-height so all
+   four form one band rather than four blocks of different depths. Two
+   code lines at 1.9 leading plus the padding is the tallest case. */
 
 .fc-batteries__code {
-  @apply border border-fc-wash-rule px-3.5 py-3;
+  @apply border-t border-fc-rule px-5 py-4;
   @apply font-mono text-[11px] leading-[1.9];
-  margin-left: 1.85rem;
-  background: var(--wash);
+  min-height: calc(2 * 1.9em + 2rem);
+  /* --bg, the page ground, not --wash. In dark --wash is #182F31, a
+     GREEN-tinted surface that sat oddly beside the teal badges and read
+     as a different material from the card. --bg (#0F1A1F) is a clear
+     step below the plate (#16242A), so the well reads as cut into the
+     card — showing the ground behind it — which is what every other
+     recessed code surface on the page does. Border follows: --rule, the
+     divider used everywhere else. */
+  background: var(--bg);
   box-shadow: var(--inset);
   overflow-x: auto;
 }
@@ -138,26 +158,22 @@
   @apply text-fc-muted;
 }
 
-/* ── The cost of not having it ──
- * Pushed to the cell foot so every card ends on the same note: this is
- * work the engine is doing for you.
- */
-
-.fc-batteries__cost {
-  @apply mt-auto pt-4;
-  @apply text-[12px] leading-[1.55] text-fc-muted;
-  margin-left: 1.85rem;
-}
-
 /* ── Responsive ── */
 
+/* Four columns need real width — a card holding a title, a badge and two
+   lines of monospace is cramped much below this, so it steps to two
+   rather than holding four until it breaks. */
 @media (max-width: 1023px) {
   .fc-batteries__inner {
     @apply px-6;
   }
+
+  .fc-batteries__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 639px) {
   .fc-batteries__grid {
     grid-template-columns: 1fr;
   }
@@ -168,33 +184,22 @@
     @apply px-5;
   }
 
-  .fc-batteries__card {
-    @apply p-5;
+  .fc-batteries__card-head,
+  .fc-batteries__code {
+    @apply px-4 py-3.5;
   }
 
-  /* Drop the hanging indent — too little width left for it to read. */
-  .fc-batteries__card-body,
-  .fc-batteries__code,
-  .fc-batteries__cost {
-    padding-left: 0;
-    margin-left: 0;
-  }
-
-  .fc-batteries__badge {
-    @apply hidden;
+  /* Kept at one per row, but the code no longer needs a floor height:
+     stacked, each card is read on its own rather than compared across
+     a row, so a shared band buys nothing and only adds dead space. */
+  .fc-batteries__code {
+    min-height: 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .fc-batteries__card,
-  .fc-batteries__card::before,
-  .fc-batteries__n,
-  .fc-batteries__badge,
-  .fc-batteries__card-body {
+  .fc-batteries__n {
     transition: none;
-  }
-
-  .fc-batteries__card:hover::before {
-    width: 100%;
   }
 }

@@ -1,78 +1,95 @@
 import './styles.css';
 
 /*
- * Four behaviours that are tedious to build by hand. This section used to
- * state them as prose, which undersold the only genuinely technical
- * content on the page — so each one now carries the schema or API that
- * enables it, and the cost line says what building it yourself involves.
+ * Four behaviours that are tedious to build by hand, each shown as the
+ * line of schema that turns it on.
  *
- * Every claim verified against source 2026-09-12:
- *   drafts      — settings.allowDraftSave, opt-OUT (`!== false`) in
- *                 create-engine.ts:533; auto-save needs autoSaveIntervalMs
- *   prefill     — prefill-resolver.ts declares Layers 1-3, and
- *                 create-engine.ts:493 merges initialValues on top
- *   validation  — validateSchema() runs at create-engine.ts:466, before
- *                 any render; duplicate ids at schema-validator.ts:285
- *   expressions — utils/expression-parser.ts, tokenizer + RPN, and its
- *                 header comment states "No eval()"
+ * Re-verified against source 2026-10-17, and the pass found TWO code
+ * examples on this page that would not have worked if copied:
+ *
+ *   drafts      — settings.allowDraftSave is opt-OUT (`!== false`),
+ *                 create-engine.ts:542. Auto-save is an ENGINE OPTION,
+ *                 read at create-engine.ts:547 as
+ *                 options.autoSaveIntervalMs — it was shown here bare,
+ *                 beside a settings key, so it read as schema.
+ *   prefill     — PrefillConfig takes `source: "props" | "url" | "both"`
+ *                 (settings.ts:79). The card showed `{ fromUrl: true }`,
+ *                 a property that does not exist.
+ *   validation  — validateSchema() runs at create-engine.ts:480, before
+ *                 any render.
+ *   expressions — utils/expression-parser.ts is a tokeniser plus RPN
+ *                 evaluator with no eval. Its functions are abs, ceil,
+ *                 floor, max, min, round — the card advertised `if`,
+ *                 which is not among them.
  */
 
 type Feature = {
   n: string;
   title: string;
   badge: string;
-  body: string;
   /** The line that turns the behaviour on, or the API that provides it. */
   code: { k: string; v?: string }[];
-  /** What you write instead, if the engine does not do it for you. */
-  cost: string;
 };
 
+/*
+ * Each card is TITLE, BADGE, CODE — nothing else.
+ *
+ * It used to carry a two-to-three line body and a "what you'd write
+ * instead" line as well, five elements per card across four cards. The
+ * body was prose paraphrasing the code line directly beneath it, which
+ * is slower to read than the thing it describes. The title says what the
+ * behaviour is, the badge says its default, and the code says how to
+ * reach it — so the reader scans four cards in the time the old version
+ * took to read one.
+ *
+ * Titles do the work the body used to: "Safe expressions" became
+ * "Expressions, never eval", which carries its own point.
+ */
 const features: Feature[] = [
   {
     n: '01',
-    title: 'Draft persistence',
+    title: 'Drafts that survive a closed tab',
     badge: 'On unless disabled',
-    body: 'Answers are written to local storage as they change and restored on the next visit. A long intake form survives a closed tab, a refresh, or a dead battery.',
     code: [
       { k: 'settings.allowDraftSave', v: 'true' },
-      { k: 'autoSaveIntervalMs', v: '2000' },
+      // An ENGINE OPTION, not a schema setting — createFormEngine reads
+      // options.autoSaveIntervalMs (create-engine.ts:547). It was listed
+      // bare beside settings.allowDraftSave, which read as a sibling
+      // schema key and would not have worked if copied.
+      { k: 'options.autoSaveIntervalMs', v: '2000' },
     ],
-    cost: 'Otherwise: serialise on change, debounce, restore on mount, expire stale drafts.',
   },
   {
     n: '02',
-    title: 'Layered prefill',
+    title: 'Prefill from the URL',
     badge: 'Fixed precedence',
-    body: 'Initial values resolve in a fixed order — schema defaults, then URL parameters, then props — with explicit initial values merged last. Campaign links and personalised forms need no extra code.',
     code: [
       { k: 'question.config.defaultValue' },
-      { k: 'settings.prefill', v: '{ fromUrl: true }' },
-      { k: 'prefillValues', v: '{ … }' },
+      // PrefillConfig takes `source`, one of "props" | "url" | "both"
+      // (settings.ts:79). `{ fromUrl: true }` was shown here and that
+      // property does not exist.
+      { k: 'settings.prefill.source', v: '"both"' },
     ],
-    cost: 'Otherwise: parse the query string, decide precedence, and re-resolve on navigation.',
   },
   {
     n: '03',
-    title: 'Schema validation at boot',
-    badge: 'Fail fast',
-    body: 'Duplicate question ids, conditions pointing at fields that do not exist, and malformed expressions are reported when the engine is created — in development, not in a user’s session.',
+    title: 'Broken schemas fail at boot',
+    badge: 'Before first render',
     code: [
       { k: 'validateSchema(schema)' },
       { k: 'throws', v: 'FormEngineSchemaError' },
     ],
-    cost: 'Otherwise: the first report of a broken condition is a confused user.',
   },
   {
     n: '04',
-    title: 'Safe expressions',
-    badge: 'No eval',
-    body: 'Calculated fields run through a purpose-built parser — tokeniser, postfix conversion, then evaluation — supporting arithmetic, comparisons and a fixed function set. A schema is data, never executable code.',
+    title: 'Expressions, never eval',
+    badge: 'Own parser',
     code: [
       { k: 'expression', v: '"{qty} * {price}"' },
-      { k: 'functions', v: 'round · min · max · if' },
+      // Verified against the parser's own switch: floor, ceil, round,
+      // abs, min, max. "if" was listed and is not one of them.
+      { k: 'functions', v: 'round · min · max · abs' },
     ],
-    cost: 'Otherwise: eval on user-supplied strings, or a parser of your own.',
   },
 ];
 
@@ -85,9 +102,8 @@ export function BatteriesIncluded() {
           The parts you would otherwise write twice.
         </h2>
         <p className="fc-batteries__sub fc-v2-block-gap">
-          Four behaviours that are tedious to build and easy to get subtly
-          wrong. Each one is a line of schema, and each card says what you
-          would be writing instead.
+          Four behaviours that are tedious to build by hand and easy to get
+          subtly wrong. Each one is already a line of schema.
         </p>
 
         <div className="fc-batteries__grid">
@@ -98,8 +114,6 @@ export function BatteriesIncluded() {
                 <span className="fc-batteries__card-title">{f.title}</span>
                 <span className="fc-batteries__badge">{f.badge}</span>
               </div>
-
-              <p className="fc-batteries__card-body">{f.body}</p>
 
               <div className="fc-batteries__code">
                 {f.code.map((line) => (
@@ -114,8 +128,6 @@ export function BatteriesIncluded() {
                   </div>
                 ))}
               </div>
-
-              <div className="fc-batteries__cost">{f.cost}</div>
             </div>
           ))}
         </div>
