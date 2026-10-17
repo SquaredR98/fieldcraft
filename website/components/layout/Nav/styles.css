@@ -1,13 +1,87 @@
 @reference "../../../app/globals.css";
 
+/* ── Floating header ──
+   Was `sticky top-0` with a solid ground and a bottom rule, so it read as
+   a bar welded to the top of the document. Now it detaches: inset from
+   the top and sides, rounded, with the page visibly scrolling UNDER it.
+   The bottom border is gone — a floating object is defined by its edges
+   and shadow, not by a rule joining it to something. */
 .fc-nav {
-  @apply sticky top-0 z-50;
-  @apply bg-fc-surface border-b border-fc-rule;
+  @apply fixed z-50 left-0 right-0 px-10;
+  top: 0.875rem;
+  /* The nav itself is a positioning frame only; the visible bar is
+     __inner. Keeping them separate means the frame can span the viewport
+     for centring while the bar stays max-width. */
+  @apply pointer-events-none;
+  transition:
+    transform var(--motion-enter),
+    opacity var(--motion-enter);
 }
 
+/* Hidden on scroll down. Translated rather than display-toggled so it
+   animates, and -120% clears the shadow as well as the box. */
+.fc-nav[data-hidden='true'] {
+  transform: translateY(-120%);
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-nav {
+    transition: none;
+  }
+}
+
+/* ── The bar ──
+   Glass: translucent ground plus a backdrop blur, so the page is visible
+   through it but never competes with the labels. The saturate() is what
+   stops blurred content going grey — without it, glass over a muted page
+   looks like frosted plastic. */
 .fc-nav__inner {
+  /* Positioning context for the mobile drawer, which hangs off the bar
+     rather than off the viewport. */
+  @apply relative pointer-events-auto;
   @apply flex items-center justify-between mx-auto;
-  @apply max-w-310 h-16 gap-6 px-10;
+  @apply max-w-290 h-14 gap-6 px-4;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow: var(--e2);
+  transition:
+    background var(--motion-enter),
+    border-color var(--motion-enter),
+    box-shadow var(--motion-enter);
+}
+
+/* ── At the top ──
+   The bar KEEPS its glass: blur, rounded corners, translucent ground. What
+   changes is only how much it lifts off the page. At the top there is
+   nothing scrolling underneath, so the drop shadow has nothing to
+   separate from and reads as a chip resting on the hero; once content
+   starts passing beneath, the shadow earns its place.
+
+   An earlier pass stripped the background, blur and border here
+   entirely. That was wrong: letting the hero show THROUGH the glass is
+   the point — removing the glass is not the same thing. The ground goes
+   slightly more transparent so more hero comes through, and that is all. */
+.fc-nav[data-pinned='true'] .fc-nav__inner {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  box-shadow: inset 0 1px 0 var(--lit);
+}
+
+
+/* backdrop-filter is unsupported or disabled (Firefox with the flag off,
+   some privacy modes). Translucency without blur is unreadable over a
+   busy hero, so fall back to an opaque ground. */
+@supports not (backdrop-filter: blur(1px)) {
+  /* Both states, and the pinned one explicitly: it is the more specific
+     selector, so without naming it here it would keep its 55%
+     translucency with no blur behind it — unreadable over the hero. */
+  .fc-nav__inner,
+  .fc-nav[data-pinned='true'] .fc-nav__inner {
+    background: var(--surface);
+  }
 }
 
 .fc-nav__links {
@@ -17,11 +91,64 @@
 
 .fc-nav__link {
   @apply text-fc-muted no-underline;
-  transition: color var(--motion-hover);
+  transition:
+    color var(--motion-hover),
+    filter var(--motion-hover),
+    opacity var(--motion-hover);
 }
 
 .fc-nav__link:hover {
   @apply text-fc-ink;
+}
+
+/* ── Focus-follows-cursor ──
+   Hovering one link blurs and fades the OTHERS, so the one under the
+   cursor is the only sharp thing in the row.
+
+   Pure CSS via :has() — no state, no pointer listener, and the links stay
+   server-rendered. A useState hover index would re-render the row on
+   every pointer move to produce exactly this.
+
+   Pointer-only, and deliberately not tied to :focus: a keyboard user
+   tabbing through should not watch the other items smear, and on touch
+   there is no hover to resolve. */
+@media (hover: hover) and (pointer: fine) {
+  .fc-nav__links:has(.fc-nav__link:hover) .fc-nav__link:not(:hover) {
+    filter: blur(1.5px);
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-nav__link {
+    transition: color var(--motion-hover);
+  }
+}
+
+/* Bar height (3.5rem) + top inset (0.875rem) + air. Pages make their own
+   room for the floating header out of the top padding they already have
+   — the hero's pt-22 is well past this — rather than a wrapper element
+   being added to <main> to push everything down. A spacer div around the
+   whole site is the structural version of the header not belonging to
+   the page.
+
+   The token is still declared because scroll-margin-top needs the same
+   measurement. */
+:root {
+  --fc-nav-space: 5.25rem;
+}
+
+/* An in-page link (/#demos) scrolls its target to y=0, which is behind
+   the floating bar. Scoped to sections and headings — the only things
+   anchors point at here — rather than every [id] on the page. */
+section[id],
+main h2[id],
+main h3[id] {
+  scroll-margin-top: var(--fc-nav-space);
+}
+
+.fc-nav__actions {
+  @apply flex items-center gap-4 shrink-0;
 }
 
 .fc-nav__github {
@@ -41,7 +168,9 @@
   @apply whitespace-nowrap shrink-0 no-underline;
   @apply text-fc-teal-on;
   @apply font-display text-[13.5px] font-medium;
-  @apply px-4 py-2.25;
+  @apply px-4 py-1;
+  /* Matches the radius of the bar it sits in. */
+  border-radius: var(--r);
   background: var(--teal-plate);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
   transition: filter var(--motion-hover);
@@ -75,11 +204,25 @@
 
 /* ── Drawer ── */
 
+/* Hangs off the floating bar rather than off the viewport top, and
+   matches it: inset, rounded, glass. `top-16` was measured against the
+   old welded bar and would now leave a gap. */
 .fc-nav__drawer {
-  @apply absolute top-16 left-0 right-0 z-40;
-  @apply flex flex-col;
-  @apply bg-fc-surface border-b border-fc-rule;
-  @apply px-6 py-4;
+  @apply absolute left-0 right-0 z-40;
+  top: calc(100% + 0.5rem);
+  @apply flex flex-col px-5 py-3;
+  border: 1px solid var(--rule);
+  border-radius: var(--r);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  -webkit-backdrop-filter: blur(14px) saturate(1.6);
+  backdrop-filter: blur(14px) saturate(1.6);
+  box-shadow: var(--e3);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .fc-nav__drawer {
+    background: var(--surface);
+  }
 }
 
 .fc-nav__drawer-link {
@@ -108,11 +251,18 @@
 /* ── Responsive: below lg (1024px) ── */
 
 @media (max-width: 1023px) {
-  .fc-nav__inner {
-    @apply px-6;
+  /* The frame spans the viewport, so the floating bar needs its own side
+     inset or it touches the screen edges and stops reading as floating. */
+  .fc-nav {
+    @apply px-5;
   }
 
-  .fc-nav__links {
+  .fc-nav__inner {
+    @apply px-4;
+  }
+
+  .fc-nav__links,
+  .fc-nav__actions {
     @apply hidden;
   }
 

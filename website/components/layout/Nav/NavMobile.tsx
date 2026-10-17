@@ -3,12 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
-const links = [
-  { label: 'Demos', href: '/#demos' },
-  { label: 'Docs', href: '/docs' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
-];
+import { NAV_LINKS } from './links';
 
 export function NavMobile() {
   const [open, setOpen] = useState(false);
@@ -47,7 +42,7 @@ export function NavMobile() {
 
       {open && (
         <div className="fc-nav__drawer">
-          {links.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -66,12 +61,13 @@ export function NavMobile() {
           >
             GitHub
           </a>
+          {/* Docs is the CTA here too, matching the desktop bar. */}
           <Link
-            href="/pro"
+            href="/docs"
             className="fc-nav__drawer-cta"
             onClick={() => setOpen(false)}
           >
-            Explore Pro →
+            Docs →
           </Link>
         </div>
       )}
