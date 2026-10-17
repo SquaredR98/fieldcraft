@@ -4,7 +4,7 @@ import { CodeBlockClient } from '@/components/shared/CodeBlock/CodeBlockClient';
 
 /*
  * The left half of the hero panel, and it must stay in lockstep with
- * RenderedPanel: the whole point of showing them together is that the
+ * HeroForm: the whole point of showing them together is that the
  * reader can trace a line from a schema property to the thing it produced.
  * A field here with no counterpart on the right makes the panel a lie.
  *

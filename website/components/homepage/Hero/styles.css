@@ -1,143 +1,107 @@
 @reference "../../../app/globals.css";
 
-/* ── Hero section ── */
+/* ── Hero ───────────────────────────────────────────────────────────────
+   Styled by ELEMENT inside a few named scopes, not by a class per node.
+   A singleton — the one h1, the one intro p — gets no class, because a
+   name with one possible target is a name with no job. Classes are kept
+   for three things only: layout scopes (.fc-hero__copy), repeated items
+   (.fc-hero-form__options > label), and state, which rides on data-
+   attributes (data-on, data-error, data-reveal) so the markup reads as
+   state rather than as more class soup.
+
+   Previous version: 609 lines, 52 classes. This one does the same work
+   with a third of the names.
+   ------------------------------------------------------------------- */
 
 .fc-hero {
   @apply relative overflow-hidden border-b border-fc-rule;
   background-color: var(--bg);
-  /* Establishes the stacking context the backdrop layers sit under, so
-     z-index: -1 resolves against the hero rather than the page. */
+  /* Stacking context for the backdrop, so its z-index resolves here
+     rather than against the page. */
   isolation: isolate;
 }
 
-/* ── Backdrop: dots, not the line grid ──
-   Direction B swaps the 32px line grid for a 20px radial dot field. With
-   rounded corners everywhere, a hard orthogonal grid fights the geometry;
-   dots sit under it. Masked to a soft oval so the field fades rather than
-   ending at an edge. */
-.fc-hero__dots {
+/* ── Backdrop: dot field + three glows of ONE hue ──
+   Dots rather than the shared line grid: with rounded geometry throughout,
+   an orthogonal grid fights the corners.
+
+   The glows are all --teal, the CTA's own colour, at three strengths. A
+   single hue is deliberate — a second colour here competes with the
+   content and spends a hue that carries meaning elsewhere on the page.
+   Offset rather than centred, since three centred washes read as one
+   vignette. */
+.fc-hero__backdrop {
   @apply absolute inset-0 pointer-events-none;
   z-index: -1;
   background-image: var(--hero-pattern);
   background-size: var(--hero-pattern-size);
-  opacity: 0.8;
-  -webkit-mask-image: radial-gradient(
-    70% 60% at 50% 30%,
-    #000 0%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(70% 60% at 50% 30%, #000 0%, transparent 75%);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);
+  mask-image: radial-gradient(70% 60% at 50% 30%, #000, transparent 75%);
 }
 
-/* ── Glows ──
-   Three offset radial washes. The handoff places them asymmetrically (50%
-   above, 72% right, 20% left) on purpose: three centred glows would read as
-   one vignette. Light mode uses much lower alpha — the handoff's values
-   were authored on a near-black ground and would grey out white. */
-.fc-hero__glow {
-  @apply absolute pointer-events-none;
-  z-index: -1;
-  border-radius: 50%;
+.fc-hero__backdrop i {
+  @apply absolute rounded-full;
 }
 
-.fc-hero__glow--1 {
+.fc-hero__backdrop i:nth-child(1) {
   width: 68rem;
   height: 45rem;
   left: 50%;
   top: -21rem;
   transform: translateX(-50%);
-  background: radial-gradient(
-    closest-side,
-    rgba(31, 107, 110, 0.1),
-    transparent
-  );
+  background: radial-gradient(closest-side, var(--glow-strong), transparent);
   filter: blur(30px);
 }
 
-.fc-hero__glow--2 {
+.fc-hero__backdrop i:nth-child(2) {
   width: 44rem;
   height: 32rem;
   left: 72%;
   top: 22rem;
   transform: translateX(-50%);
-  background: radial-gradient(
-    closest-side,
-    rgba(160, 109, 34, 0.08),
-    transparent
-  );
+  background: radial-gradient(closest-side, var(--glow-mid), transparent);
   filter: blur(40px);
 }
 
-.fc-hero__glow--3 {
+.fc-hero__backdrop i:nth-child(3) {
   width: 38rem;
   height: 30rem;
   left: 20%;
   top: 30rem;
   transform: translateX(-50%);
-  background: radial-gradient(
-    closest-side,
-    rgba(31, 107, 110, 0.07),
-    transparent
-  );
+  background: radial-gradient(closest-side, var(--glow-soft), transparent);
   filter: blur(50px);
 }
 
-:root[data-theme="dark"] .fc-hero__glow--1 {
-  background: radial-gradient(
-    closest-side,
-    rgba(99, 189, 180, 0.17),
-    transparent
-  );
-}
-
-:root[data-theme="dark"] .fc-hero__glow--2 {
-  background: radial-gradient(
-    closest-side,
-    rgba(224, 169, 79, 0.13),
-    transparent
-  );
-}
-
-:root[data-theme="dark"] .fc-hero__glow--3 {
-  background: radial-gradient(
-    closest-side,
-    rgba(99, 189, 180, 0.12),
-    transparent
-  );
-}
-
-.fc-hero__inner {
-  /* Was a two-column grid with the panel beside the copy. The panel now
-     sits full width BELOW, because it shows the schema and the rendered
-     result at the same time and that relationship is the page's whole
-     argument — it does not fit in half a column. */
-  @apply relative mx-auto max-w-310;
-  @apply px-10 pt-22 pb-12;
-}
+/* ── Copy column ── */
 
 .fc-hero__copy {
-  /* Centred, per the reference: with the panel below rather than beside,
-     a left-aligned column would leave the right half of the fold empty. */
-  @apply flex flex-col items-center text-center mx-auto;
+  /* Centred: with the panel below rather than beside, a left-aligned
+     column would leave the right half of the fold empty. */
+  @apply relative mx-auto flex flex-col items-center text-center;
+  @apply px-10 pt-22 pb-12;
   max-width: 62rem;
 }
 
-/* The copy column centres, so the children that were block-level and
-   left-aligned need to stop filling the width. */
-.fc-hero__copy .fc-hero__sub {
-  @apply max-w-166 mx-auto;
+.fc-hero__copy h1 {
+  @apply font-display m-0 text-fc-ink-strong;
+  font-weight: var(--display-weight);
+  font-size: clamp(42px, 6.4vw, 86px);
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
 }
 
-.fc-hero__copy .fc-hero__actions,
-.fc-hero__copy .fc-hero__badges {
-  @apply justify-center;
+.fc-hero__copy > p {
+  @apply mt-5 mb-0 leading-[1.6] text-fc-soft;
+  font-size: clamp(16px, 1.3vw, 20px);
+  max-width: 41rem;
+  text-wrap: pretty;
 }
 
-
-/* ── Release pill ──
-   The version is data, not decoration: it comes from lib/changelog.ts. */
+/* Release pill. The version is data — it comes from lib/changelog.ts. */
 .fc-hero__release {
-  @apply inline-flex items-center gap-2.5 mb-7;
+  @apply inline-flex items-center gap-2.5 mb-7 no-underline;
   @apply border border-fc-rule py-1.5 pl-1.5 pr-3.5;
   @apply text-[13px] text-fc-soft;
   border-radius: var(--r-pill);
@@ -150,239 +114,41 @@
   @apply border-fc-teal-border text-fc-ink;
 }
 
-.fc-hero__release-pill {
+.fc-hero__release strong {
   @apply font-mono text-[11px] font-medium px-2 py-[3px];
   border-radius: var(--r-pill);
   background: var(--teal-plate);
   color: var(--teal-on);
 }
 
-/* ── Left column ── */
-
-
-.fc-hero__h1 {
-  /* Direction B: much larger, tighter tracking, sub-1 leading, and the
-     heavier display weight. At 54px with -0.035em this read as a section
-     heading that happened to be first; the hero's job is to dominate the
-     fold, and the two lines stacking tightly is what makes it an object
-     rather than a sentence. */
-  @apply font-display m-0 text-fc-ink-strong;
-  font-weight: var(--display-weight);
-  font-size: clamp(42px, 6.4vw, 86px);
-  letter-spacing: -0.045em;
-  line-height: 0.98;
-  text-wrap: balance;
-  max-width: 64rem;
-}
-
-/* The second line carries the accent gradient. Only the FieldCraft half —
-   gradient across both lines turns the whole headline into decoration and
-   costs contrast; on one line it reads as emphasis. */
-.fc-hero__h1-accent {
-  background: var(--accent-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  /* Gradient text has no system colour, so forced-colours mode would render
-     it invisible. This restores a real colour there. */
-}
-
-@media (forced-colors: active) {
-  .fc-hero__h1-accent {
-    color: CanvasText;
-    background: none;
-  }
-}
-
-.fc-hero__sub {
-  @apply leading-[1.6] text-fc-soft;
-  @apply mt-0;
-  font-size: clamp(16px, 1.3vw, 20px);
-  text-wrap: pretty;
-}
-
-.fc-hero__sub + .fc-hero__sub {
-  @apply mt-3.5;
-}
-
-
 .fc-hero__actions {
-  @apply flex flex-wrap items-center gap-3 mt-8;
+  @apply flex flex-wrap items-center justify-center gap-3 mt-8;
 }
 
-/* The install command sits on its own row under the CTA — it is a thing
-   to copy, not a second button competing for the same click. */
+/* A command to copy, not a second button competing for the same click. */
 .fc-hero__install {
   @apply mt-4;
 }
 
-
 .fc-hero__badges {
-  @apply flex flex-wrap gap-2.5 mt-7;
-  @apply font-mono text-[10px] tracking-widest;
-  @apply uppercase text-fc-muted;
+  @apply flex flex-wrap justify-center gap-2.5 mt-7 m-0 p-0 list-none;
 }
 
-.fc-hero__badge {
+.fc-hero__badges li {
+  @apply border border-fc-rule bg-fc-surface px-2.25 py-1.25;
+  @apply font-mono text-[10px] tracking-widest uppercase text-fc-muted;
   border-radius: var(--r-pill);
-  @apply border border-fc-rule bg-fc-surface;
-  @apply px-2.25 py-1.25;
 }
 
-.fc-hero__badge--gh {
-  @apply flex items-center gap-1.5 no-underline text-fc-muted;
-  transition: color var(--motion-hover), border-color var(--motion-hover);
-}
+/* ── Panel ──────────────────────────────────────────────────────────── */
 
-.fc-hero__badge--gh:hover {
-  @apply text-fc-ink border-fc-ink;
-}
-
-/* ── Right column: hero card ── */
-
-
-/* ── Code panel (Shiki-powered) ── */
-
-.fc-hero-code-block {
-  border-radius: var(--r);
-  @apply border-0 rounded-none;
-}
-
-.fc-hero-code-block .fc-code-block__content {
-  @apply text-[11.5px] leading-[1.85];
-  @apply max-h-[420px] overflow-y-auto;
-}
-
-/* ── Rendered panel ── */
-
-
-/* ── Spec strip ── */
-
-.fc-spec-strip {
-  @apply relative border-t border-fc-rule overflow-hidden;
-  background: var(--plate);
-  box-shadow: inset 0 1px 0 var(--lit);
-}
-
-.fc-spec-strip__inner {
-  @apply grid mx-auto max-w-310 px-10;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-}
-
-.fc-spec-strip__cell {
-  border-radius: var(--r-inner);
-  @apply py-5;
-  transition: background-color var(--motion-hover);
-}
-
-.fc-spec-strip__cell:hover {
-  background: var(--surface2);
-}
-
-.fc-spec-strip__cell + .fc-spec-strip__cell {
-  @apply pl-6 border-l border-fc-rule;
-}
-
-.fc-spec-strip__head {
-  @apply flex items-baseline gap-2;
-}
-
-.fc-spec-strip__pip {
-  @apply w-1 h-1 bg-fc-teal;
-}
-
-.fc-spec-strip__value {
-  @apply font-display text-2xl font-semibold tracking-fc-subhead;
-  @apply text-fc-ink-strong;
-  /* Tabular figures: the counter changes digits without shifting width. */
-  font-variant-numeric: tabular-nums;
-}
-
-.fc-spec-strip__label {
-  @apply font-mono text-[9.5px] tracking-[0.12em];
-  @apply uppercase text-fc-muted mt-1.5 pl-3;
-}
-
-/* ── Responsive: tablet ── */
-
-@media (max-width: 1023px) {
-  .fc-hero__inner {
-    @apply px-6 pt-16 pb-14 gap-10;
-    grid-template-columns: 1fr;
-  }
-
-  .fc-hero__sub {
-    @apply max-w-full;
-  }
-
-  .fc-spec-strip__inner {
-    @apply px-6;
-  }
-}
-
-/* ── Responsive: mobile ── */
-
-@media (max-width: 639px) {
-  .fc-hero__inner {
-    @apply px-5 pt-12 pb-10 gap-8;
-  }
-
-  .fc-hero__sub {
-    @apply text-[15px];
-  }
-
-  /* Keep the split panel inside the viewport. It stacks at this width via
-     the auto-fit minmax, so the code pane gets the full column. */
-  .fc-hero-panel {
-    @apply min-w-0 overflow-hidden;
-  }
-
-  .fc-hero-code-block .fc-code-block__content {
-    @apply max-h-[320px];
-  }
-
-  .fc-hero-panel__preview {
-    @apply p-5;
-    /* Stacked now, so the divider belongs on top rather than the side. */
-    border-left: 0;
-    border-top: 1px solid var(--rule);
-  }
-
-  .fc-spec-strip__inner {
-    @apply px-5;
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .fc-spec-strip__cell + .fc-spec-strip__cell {
-    @apply pl-0 border-l-0;
-  }
-
-  .fc-spec-strip__cell:nth-child(even) {
-    @apply pl-6 border-l border-fc-rule;
-  }
-
-  .fc-spec-strip__cell:nth-child(n+3) {
-    @apply border-t border-fc-rule;
-  }
-
-  /* Last (5th) cell spans full width */
-  .fc-spec-strip__cell:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    @apply border-l-0 pl-0;
-  }
-}
-
-/* ── Hero panel ──
-   Schema and rendered result side by side, full width. Replaces the tabbed
-   card (.fc-hero-card), which could only ever show one of the two. */
 .fc-hero-panel {
   @apply relative mx-auto max-w-290 overflow-hidden;
   border: 1px solid var(--rule);
   border-radius: var(--r);
   background: var(--surface);
-  /* Direction B's deeper card shadow (30/60 with a teal ring) rather than
-     --e3. The panel is the heaviest object on the page and should sit
-     clearly above the dot field, not hover a few pixels over it. */
+  /* The heaviest object on the page: it should sit clearly above the dot
+     field rather than hover a few pixels over it. */
   box-shadow: var(--card-shadow);
 }
 
@@ -393,6 +159,27 @@
   background: var(--plate);
 }
 
+/* Three colours, as window lights actually are. */
+.fc-hero-panel__lights {
+  @apply flex gap-1.5 pr-2.5 pl-1;
+}
+
+.fc-hero-panel__lights i {
+  @apply w-2.5 h-2.5 rounded-full;
+}
+
+.fc-hero-panel__lights i:nth-child(1) {
+  background: color-mix(in srgb, var(--danger) 70%, var(--rule));
+}
+
+.fc-hero-panel__lights i:nth-child(2) {
+  background: color-mix(in srgb, var(--amber) 70%, var(--rule));
+}
+
+.fc-hero-panel__lights i:nth-child(3) {
+  background: color-mix(in srgb, var(--teal) 55%, var(--rule));
+}
+
 .fc-hero-panel__file {
   @apply px-3 py-1.5 text-fc-ink;
   border-radius: var(--r-chip);
@@ -400,7 +187,7 @@
   box-shadow: inset 0 0 0 1px var(--rule);
 }
 
-.fc-hero-panel__file--muted {
+.fc-hero-panel__file[data-muted] {
   @apply text-fc-muted;
   background: transparent;
   box-shadow: none;
@@ -411,13 +198,14 @@
   @apply font-mono text-[11px] text-fc-teal;
 }
 
-.fc-hero-panel__pip {
-  @apply w-[7px] h-[7px] rounded-full bg-fc-teal;
+.fc-hero-panel__status i {
+  @apply w-[7px] h-[7px] rounded-full;
+  background: var(--teal);
   box-shadow: 0 0 10px var(--teal);
 }
 
-/* Two equal halves on desktop; stacks below, where a 340px code column
-   would scroll horizontally against a cramped form. */
+/* Two halves on desktop; stacks below, where a 340px code column would
+   scroll horizontally against a cramped form. */
 .fc-hero-panel__split {
   @apply grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 21.25rem), 1fr));
@@ -427,76 +215,79 @@
   @apply min-w-0 overflow-x-auto text-left;
 }
 
-.fc-hero-panel__preview {
-  @apply p-7 text-left;
-  background: var(--surface2);
-  border-left: 1px solid var(--rule);
-}
-
 /* The code pane owns the left edge, so the panel's own radius handles the
-   corner — an inner radius here would show a sliver of panel ground. */
+   corner — an inner radius would show a sliver of panel ground. */
 .fc-hero-panel__code .fc-hero-code-block {
   @apply h-full;
   border: 0;
   border-radius: 0;
 }
 
-/* Validation state on the mockup. Amber, matching the reference and the
-   Scope section's single-colour-moment convention. */
-
-
-/* ── Hero form: the evidence panel ──
-   Every rule here exists to make one engine behaviour visible. See
-   RenderedPanel.tsx for which device proves which claim. */
-
-.fc-hero-form {
-  @apply text-left;
+.fc-hero-panel__preview {
+  @apply p-7 text-left;
+  background: var(--surface2);
+  border-left: 1px solid var(--rule);
 }
 
-/* Step indicator: two segments so "of 2" is shown, not just stated. */
-.fc-hero-form__steps {
-  @apply flex items-center gap-2.5 mb-5.5;
-}
+/* ── Form ───────────────────────────────────────────────────────────────
+   Element-scoped throughout: labels, inputs, legends and the footer are
+   addressed by tag inside .fc-hero-form. State is data-attributes. */
 
-.fc-hero-form__seg {
-  @apply flex-1 h-[3px] rounded-full;
-  background: var(--rule);
-}
-
-.fc-hero-form__seg--on {
-  background: var(--teal);
-}
-
-.fc-hero-form__steps-label {
-  @apply font-mono text-[11px] text-fc-muted shrink-0;
-}
-
-.fc-hero-form__title {
+.fc-hero-form h3 {
   @apply font-display m-0 text-[22px] text-fc-ink-strong;
   font-weight: var(--display-weight);
   letter-spacing: -0.02em;
 }
 
-.fc-hero-form__hint {
+.fc-hero-form h3 + p {
   @apply mt-1 mb-5.5 text-[13.5px] text-fc-muted;
+}
+
+/* Step bar: two segments, so "of 2" is shown and not just stated. */
+.fc-hero-form__steps {
+  @apply flex items-center gap-2.5 mb-5.5;
+}
+
+.fc-hero-form__steps span {
+  @apply flex-1 h-[3px] rounded-full;
+  background: var(--rule);
+  transition: background var(--motion-enter);
+}
+
+.fc-hero-form__steps span[data-on] {
+  background: var(--teal);
+}
+
+.fc-hero-form__steps small {
+  @apply font-mono text-[11px] text-fc-muted shrink-0;
 }
 
 .fc-hero-form__fields {
   @apply grid gap-4;
 }
 
-.fc-hero-form__label {
-  @apply block mb-1.5 text-[13px] font-medium text-fc-ink;
+.fc-hero-form label {
+  @apply block text-[13px] font-medium text-fc-ink;
 }
 
-/* Amber, matching the engine's own required marker and the error colour —
-   one hue for "this needs your attention". */
-.fc-hero-form__req {
+.fc-hero-form fieldset {
+  @apply m-0 p-0 border-0;
+}
+
+.fc-hero-form legend {
+  @apply p-0 mb-1.5 text-[13px] font-medium text-fc-ink;
+}
+
+/* Amber for "needs your attention" — the required marker and the error
+   message share one hue. */
+.fc-hero-form b {
+  @apply font-normal;
   color: var(--amber);
 }
 
-.fc-hero-form__input {
-  @apply w-full px-3.5 py-2.75 text-[14px] text-fc-ink;
+.fc-hero-form input[type='text'],
+.fc-hero-form input[type='email'] {
+  @apply block w-full mt-1.5 px-3.5 py-2.75 text-[14px] font-normal text-fc-ink;
   @apply border border-fc-rule;
   border-radius: var(--r-inner);
   background: var(--surface);
@@ -504,88 +295,86 @@
   transition: border-color var(--motion-hover), box-shadow var(--motion-hover);
 }
 
-.fc-hero-form__input::placeholder {
+.fc-hero-form input::placeholder {
   color: var(--placeholder);
 }
 
-.fc-hero-form__input:focus {
+.fc-hero-form input:focus {
   @apply outline-none border-fc-teal-border;
   box-shadow: var(--focus-ring);
 }
 
-.fc-hero-form__input--invalid {
+.fc-hero-form input[aria-invalid='true'] {
   border-color: var(--amber);
 }
 
-.fc-hero-form__error {
-  @apply mt-1.5 text-[12px];
+.fc-hero-form small[data-error] {
+  @apply block mt-1.5 text-[12px] font-normal;
   color: var(--amber-ink);
-}
-
-.fc-hero-form__group {
-  @apply m-0 p-0 border-0;
+  animation: fc-hero-reveal var(--motion-enter) both;
 }
 
 .fc-hero-form__options {
   @apply grid grid-cols-2 gap-2;
 }
 
-.fc-hero-form__option {
-  @apply px-3.5 py-2.75 text-[14px] text-fc-soft cursor-pointer;
+.fc-hero-form__options label {
+  @apply px-3.5 py-2.75 text-[14px] font-normal text-fc-soft cursor-pointer;
   @apply border border-fc-rule;
   border-radius: var(--r-inner);
   background: var(--surface);
   transition:
-    border-color var(--motion-hover),
-    box-shadow var(--motion-hover),
-    color var(--motion-hover);
+    border-color var(--motion-enter),
+    box-shadow var(--motion-enter),
+    background var(--motion-enter),
+    color var(--motion-enter);
 }
 
-/* The selected option is lit rather than merely outlined: a tinted ground
-   plus a soft teal bloom, so "Workshop is chosen" is readable at a glance
-   and the conditional field below has a visible cause. */
-.fc-hero-form__option--on {
+/* Selected is LIT, not merely outlined: a tinted ground plus a soft teal
+   bloom, so the choice is readable at a glance and the conditional field
+   below has a visible cause. */
+.fc-hero-form__options label[data-on] {
   @apply text-fc-ink;
   border-color: var(--teal);
   background: color-mix(in srgb, var(--teal) 10%, var(--surface));
   box-shadow: 0 0 24px -10px var(--teal);
 }
 
-.fc-hero-form__option:has(input:focus-visible) {
+.fc-hero-form__options label:has(input:focus-visible) {
   box-shadow: var(--focus-ring);
 }
 
 /* ── The conditional field ──
-   A dashed teal border with the rule notched into its top edge. Dashed
-   because the field is contingent — it is not always there — and the label
-   names the schema line responsible, so the reader sees rule, input and
-   result at once instead of taking "conditional logic" on trust. */
+   Dashed because the field is contingent, and its label names the schema
+   line responsible — so rule, cause and result are visible together
+   instead of "conditional logic" being taken on trust. */
 .fc-hero-form__conditional {
-  @apply relative px-3.5 pt-3.5 pb-3.5 mt-1;
+  @apply relative block px-3.5 pt-3.5 pb-3.5 mt-1;
   border: 1px dashed var(--teal);
   border-radius: var(--r-inner);
 }
 
-.fc-hero-form__rule {
+.fc-hero-form__conditional code {
   @apply absolute px-1.5 font-mono text-[10.5px] text-fc-teal;
   top: -0.5625rem;
   left: 0.75rem;
-  /* Matches the pane ground so the border appears to pass behind the text.
-     Any other value shows as a visible patch over the dashes. */
+  /* Matches the pane ground so the dashed border appears to pass behind
+     the text; any other value shows as a patch over the dashes. */
   background: var(--surface2);
 }
 
-.fc-hero-form__foot {
+.fc-hero-form footer {
   @apply flex items-center justify-between gap-3 mt-6;
 }
 
-.fc-hero-form__draft {
+.fc-hero-form footer small {
   @apply font-mono text-[11px] text-fc-muted;
 }
 
-.fc-hero-form__continue {
-  @apply font-display text-[14px] px-5 py-2.5;
+.fc-hero-form button {
+  @apply font-display text-[14px] px-5 py-2.5 cursor-pointer;
   font-weight: var(--display-weight);
+  border: 0;
   border-radius: var(--r-pill);
   background: var(--teal-plate);
   color: var(--teal-on);
@@ -593,17 +382,146 @@
   transition: filter var(--motion-hover);
 }
 
-.fc-hero-form__continue:hover {
+.fc-hero-form button:hover {
   filter: brightness(1.06);
 }
 
-/* Window lights. Inert and unlabelled — they say "this is an editor" with
-   no claim attached, which is the only honest thing chrome can do. */
-.fc-hero-panel__lights {
-  @apply flex gap-1.5 pr-2.5 pl-1;
+.fc-hero-form button[data-ghost] {
+  @apply border border-fc-rule text-fc-soft;
+  background: var(--plate);
+  box-shadow: inset 0 1px 0 var(--lit);
 }
 
-.fc-hero-panel__lights span {
-  @apply w-2.5 h-2.5 rounded-full;
-  background: var(--rule);
+.fc-hero-form button[data-ghost]:hover {
+  @apply text-fc-ink;
+  filter: none;
+}
+
+/* Submitted state. */
+.fc-hero-form__done {
+  @apply flex items-center gap-2.5 m-0 mb-2;
+  @apply font-display text-[18px] text-fc-ink-strong;
+  font-weight: var(--display-weight);
+}
+
+.fc-hero-form__done i {
+  @apply w-2 h-2 rounded-full;
+  background: var(--teal);
+  box-shadow: 0 0 12px var(--teal);
+}
+
+.fc-hero-form__done + p {
+  @apply m-0 text-[13.5px] leading-[1.7] text-fc-muted;
+}
+
+/* ── Reveal ─────────────────────────────────────────────────────────────
+   Conditional content was snapping into place with a jerk — it appeared
+   at full size with no transition, which reads as a glitch rather than a
+   response. Anything that mounts in response to an answer fades and
+   rises slightly instead.
+
+   Height is deliberately NOT animated: auto-height transitions need a
+   measured pixel value and reflow everything below mid-animation, which
+   is a worse artefact than the one being fixed. Opacity and a small
+   translate are composited and cost nothing. */
+@keyframes fc-hero-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fc-hero-form [data-reveal] {
+  animation: fc-hero-reveal var(--motion-enter) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-hero-form [data-reveal],
+  .fc-hero-form small[data-error] {
+    animation: none;
+  }
+
+  .fc-hero-form__steps span,
+  .fc-hero-form__options label {
+    transition: none;
+  }
+}
+
+/* ── Spec strip ─────────────────────────────────────────────────────── */
+
+.fc-spec-strip {
+  @apply relative border-t border-fc-rule;
+  background: var(--ground-2);
+}
+
+.fc-spec-strip__inner {
+  @apply mx-auto max-w-310 px-10 grid;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.fc-spec-strip__cell {
+  @apply py-5 px-5;
+  border-radius: var(--r-inner);
+  transition: background var(--motion-hover);
+}
+
+.fc-spec-strip__cell:hover {
+  background: var(--plate);
+}
+
+.fc-spec-strip__cell + .fc-spec-strip__cell {
+  @apply border-l border-fc-rule;
+}
+
+.fc-spec-strip__head {
+  @apply flex items-center gap-2;
+}
+
+.fc-spec-strip__pip {
+  @apply w-1 h-1 bg-fc-teal;
+}
+
+.fc-spec-strip__value {
+  @apply font-display text-2xl font-semibold tracking-fc-subhead;
+  @apply text-fc-ink-strong tabular-nums;
+}
+
+.fc-spec-strip__label {
+  @apply mt-1.5 font-mono text-[10px] tracking-widest uppercase text-fc-muted;
+}
+
+/* ── Narrow ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 1080px) {
+  .fc-hero__copy {
+    @apply px-5 pt-12 pb-10;
+  }
+
+  .fc-hero-panel {
+    @apply min-w-0;
+  }
+
+  /* Stacked, so the divider belongs on top rather than the side. */
+  .fc-hero-panel__preview {
+    @apply p-5;
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+  }
+
+  .fc-hero-code-block .fc-code-block__content {
+    @apply max-h-[320px];
+  }
+
+  .fc-spec-strip__inner {
+    @apply px-5;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .fc-spec-strip__cell:nth-child(odd) {
+    @apply border-l-0;
+  }
 }

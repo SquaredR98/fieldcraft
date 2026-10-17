@@ -164,24 +164,30 @@
   --r-chip: calc(var(--r) * 0.4);  /* file tabs, inline code, small labels */
   --r-pill: 999px;                 /* buttons, badges, release pill */
 
-  /* ── Direction B ──
-     The handoff carries two complete directions, not a radius switch:
-     `data-dir="b"` moves radius, display weight, ground depth, background
-     pattern, accent gradient, card shadow and the hover ring together.
-     Rounding without the rest is why the first attempt read as the same
-     page with softer corners. These are the other seven. */
-  --display-weight: 700;          /* was 600 — soft corners need more spine */
+  /* Heavier display weight to carry the softer corners. The only part of
+     the handoff's second direction adopted wholesale: its accent gradient
+     and amber hover ring were dropped, because amber is this page's single
+     deliberate colour moment and belongs to Scope alone. */
+  --display-weight: 700;
+
+  /* Dot field for the hero backdrop. --grid-major is already theme-aware,
+     so this adapts without a dark override. */
   --hero-pattern: radial-gradient(var(--grid-major) 1px, transparent 1.2px);
-  --hero-pattern-size: 20px 20px; /* dots, not the 32px line grid */
-  --accent-text: linear-gradient(90deg, #1F6B6E 0%, #3F8F84 50%, #A06D22 100%);
+  --hero-pattern-size: 20px 20px;
+
+  /* Deeper card shadow for the heaviest object on a page. Built from the
+     same ink and teal the rest of the depth system uses — no new hues. */
   --card-shadow:
     inset 0 1px 0 var(--lit-strong),
-    0 0 0 1px rgba(31, 107, 110, 0.05),
-    0 30px 60px -30px rgba(18, 34, 42, 0.16);
-  /* Amber on hover, teal at rest: the interaction layer gets its own hue so
-     a hovered card is unmistakably hovered rather than slightly brighter. */
-  --hover-ring: 0 0 0 1px rgba(160, 109, 34, 0.32),
-    0 30px 70px -26px rgba(160, 109, 34, 0.18);
+    0 0 0 1px color-mix(in srgb, var(--teal) 6%, transparent),
+    0 30px 60px -30px color-mix(in srgb, var(--ink) 18%, transparent);
+
+  /* One colour, the CTA's own teal, at three strengths. The glows are a
+     single hue by design: a second hue in the backdrop competes with the
+     content and spends a colour that means something elsewhere. */
+  --glow-strong: color-mix(in srgb, var(--teal) 11%, transparent);
+  --glow-mid: color-mix(in srgb, var(--teal) 8%, transparent);
+  --glow-soft: color-mix(in srgb, var(--teal) 6%, transparent);
 
   /* ── Layout scale (site-wide) ──
      Section heading size, tracking and vertical rhythm. Declared here
@@ -280,18 +286,19 @@
   --inset: inset 0 1px 3px rgba(0, 0, 0, 0.35);
   --cta-glow: 0 8px 18px -8px rgba(99, 189, 180, 0.28);
 
-  /* ── Direction B (dark) ──
-     Radius and display weight are hue-independent, so they stay on :root.
-     These four carry light values that would be wrong here: the accent
-     gradient needs the brighter mint stop to survive a dark ground, and the
-     shadows need black rather than ink. */
-  --accent-text: linear-gradient(90deg, #63BDB4 0%, #A9DCC8 45%, #E0A94F 100%);
+  /* Radius, display weight and the glow mixes are hue-independent — they
+     resolve through --teal, which this block already redefines, so they
+     need no dark variant. Only the card shadow does: it needs black rather
+     than ink to read on a dark ground. */
   --card-shadow:
     inset 0 1px 0 var(--lit),
-    0 0 0 1px rgba(99, 189, 180, 0.06),
+    0 0 0 1px color-mix(in srgb, var(--teal) 8%, transparent),
     0 30px 60px -30px rgba(0, 0, 0, 0.8);
-  --hover-ring: 0 0 0 1px rgba(224, 169, 79, 0.35),
-    0 30px 70px -26px rgba(224, 169, 79, 0.28);
+
+  /* Glows need more presence on a dark ground to be visible at all. */
+  --glow-strong: color-mix(in srgb, var(--teal) 18%, transparent);
+  --glow-mid: color-mix(in srgb, var(--teal) 13%, transparent);
+  --glow-soft: color-mix(in srgb, var(--teal) 10%, transparent);
 
   /* Dark surface2 is already a clear step below surface, so the alias
      just points at it. */
