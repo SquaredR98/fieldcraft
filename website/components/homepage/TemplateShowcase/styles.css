@@ -35,18 +35,10 @@
   @apply shrink-0;
 }
 
-/* ── Grid ──
- * Three cards, each its own plate. Not shared-border cells here: these
- * are separate links to separate pages, so they should read as discrete
- * objects rather than rows of one table.
- */
-
 /* ── Strip ──
    Shared-border cells matching the hero's spec strip: gap-px over a
    rule-coloured ground, so the gap IS the divider and the three read as
-   one object rather than three floating cards. Was a `gap-5` grid of
-   TemplateCards, which carried six elements each — right for
-   /templates, too much for a section whose job is "these exist". */
+   one object rather than three floating cards. */
 .fc-showcase__strip {
   @apply grid gap-px overflow-hidden;
   @apply border border-fc-rule rounded-lg;
@@ -58,21 +50,15 @@
 /* A cell, not a card: no border, no radius, no lift of its own — the
    container owns all three. Everything else carries over from
    TemplateCard, which still renders on /templates unchanged. */
+/* The cell itself has NO hover and no transition.
+   It used to move `background` from --surface to --plate — a colour to
+   a GRADIENT, which CSS cannot interpolate, so it snapped rather than
+   eased and snapped back out of sync on leave. That was the flicker.
+   The cell's ground now stays put; the badge, description and id still
+   respond, which is enough to show the whole cell is a link. */
 .fc-showcase__cell {
   @apply flex flex-col p-6 no-underline text-inherit;
   background: var(--surface);
-  /* NOT `background`. --surface is a colour and --plate is a gradient,
-     and CSS cannot interpolate between the two — it snaps instead of
-     easing, and snaps back out of sync with the other transitions on
-     leave, which is the flicker. box-shadow interpolates cleanly, so
-     the ground stays put and the lift does the work.
-
-     The exact bug fixed on the spec strip, reintroduced here. */
-  transition: box-shadow var(--motion-hover);
-}
-
-.fc-showcase__cell:hover {
-  /* box-shadow: inset 0 0 0 1px var(--teal-border); */
 }
 
 .fc-showcase__cell:focus-visible {
@@ -164,7 +150,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fc-showcase__cell,
   .fc-showcase__cell-cat,
   .fc-showcase__cell-desc,
   .fc-showcase__cell-id {
@@ -172,7 +157,7 @@
   }
 }
 
-/* Count line under the grid — says how many exist beyond these three. */
+/* Count line under the strip — says how many exist beyond these three. */
 .fc-showcase__foot {
   @apply flex items-center gap-2.5 mt-6 pt-4;
   @apply border-t border-fc-rule;
