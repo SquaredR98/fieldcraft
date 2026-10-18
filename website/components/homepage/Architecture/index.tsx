@@ -1,5 +1,23 @@
 import './styles.css';
 
+/*
+ * Two layers, four packages.
+ *
+ * Counts and names verified against source 2026-10-18:
+ *   adapters   packages/adapters/src — postgres, supabase, webhook. The
+ *              package's own dev banner prints the same three. This
+ *              section used to claim they loaded schemas "over HTTP,
+ *              from localStorage, or from a custom source", which was
+ *              wrong on both the names and the job: they DELIVER
+ *              submissions, they do not load schemas.
+ *   templates  16 schemas in packages/templates/src (17 files, one of
+ *              which is types.ts).
+ *
+ * The nested diagram is the point of the section — core drawn inside
+ * react, so the dependency is visible rather than described. The prose
+ * that used to explain how to read it has gone: a diagram needing an
+ * instruction manual is not working.
+ */
 export function Architecture() {
   return (
     <section id="layers" className="fc-arch fc-ground-surface">
@@ -17,53 +35,54 @@ export function Architecture() {
         <div className="fc-arch__grid">
           {/* ── Left column: nested layer diagram ── */}
           <div>
-            {/* PRO: layer hidden 2026-09-02 — restore when revisiting Pro */}
-              <div className="fc-arch__layer fc-arch__layer--react" style={{ opacity: 1 }}>
+            <div className="fc-arch__layer fc-arch__layer--react">
+              <div className="fc-arch__layer-header">
+                <span className="fc-arch__layer-label">
+                  Layer 02 &middot; renderer &middot; MIT
+                </span>
+                <span className="fc-arch__layer-badge fc-arch__layer-badge--teal">
+                  React
+                </span>
+              </div>
+              <div className="fc-arch__layer-pkg">
+                @squaredr/fieldcraft-react
+              </div>
+              <div className="fc-arch__layer-desc">
+                Accessible components for every field type, themeable from
+                CSS custom properties.
+              </div>
+
+              <div className="fc-arch__layer fc-arch__layer--core">
                 <div className="fc-arch__layer-header">
                   <span className="fc-arch__layer-label">
-                    Layer 02 &middot; renderer &middot; MIT
+                    Layer 01 &middot; engine &middot; MIT
                   </span>
-                  <span className="fc-arch__layer-badge fc-arch__layer-badge--teal">
-                    React
+                  <span className="fc-arch__layer-badge fc-arch__layer-badge--muted">
+                    Framework-free
                   </span>
                 </div>
                 <div className="fc-arch__layer-pkg">
-                  @squaredr/fieldcraft-react
+                  @squaredr/fieldcraft-core
                 </div>
                 <div className="fc-arch__layer-desc">
-                  Pre-built, accessible React components for every field type.
-                  Themeable with CSS custom properties or Tailwind presets.
-                </div>
-
-                <div className="fc-arch__layer fc-arch__layer--core">
-                  <div className="fc-arch__layer-header">
-                    <span className="fc-arch__layer-label">
-                      Layer 01 &middot; engine &middot; MIT
-                    </span>
-                    <span className="fc-arch__layer-badge fc-arch__layer-badge--muted">
-                      Framework-free
-                    </span>
-                  </div>
-                  <div className="fc-arch__layer-pkg">
-                    @squaredr/fieldcraft-core
-                  </div>
-                  <div className="fc-arch__layer-desc">
-                    Pure TypeScript engine &mdash; validation, conditions,
-                    navigation, drafts, and submission. Zero UI dependencies.
-                  </div>
+                  Validation, conditions, navigation, drafts and submission.
+                  Zero UI dependencies.
                 </div>
               </div>
+            </div>
 
             <div className="fc-arch__callout">
               <div className="fc-arch__callout-title">
                 Built for React. Open to every framework.
               </div>
+              {/* Kept, and it is not an empty invitation: the engine is
+                  MIT and the React renderer is in the same repo, so a
+                  Vue or Svelte renderer has a working reference to read
+                  rather than an API to guess at. */}
               <div className="fc-arch__callout-text">
-                The core engine is pure TypeScript with zero UI dependencies.
-                React is the official renderer, but the engine API is designed
-                for any framework. Vue, Svelte, Angular, Solid &mdash;
-                community renderers are welcome and the architecture supports
-                them out of the box.
+                Layer 01 has no UI dependencies, and the React renderer is
+                MIT in the same repo &mdash; a working reference for anyone
+                writing one for Vue, Svelte or Solid.
               </div>
               <a
                 href="https://github.com/SquaredR98/fieldcraft"
@@ -79,24 +98,18 @@ export function Architecture() {
 
           {/* ── Right column: hairline-stacked sidebar ── */}
           <div className="fc-arch__sidebar">
-            <div className="fc-arch__sidebar-item">
-              <div className="fc-arch__sidebar-title">Reading the diagram</div>
-              <div className="fc-arch__sidebar-text">
-                Each box nests inside the one above it. The inner-most layer has
-                no dependencies; each outer layer adds capability. Install only
-                the outermost layer you need &mdash; its dependencies come along
-                automatically.
-              </div>
-            </div>
-
+            {/* "Reading the diagram" was a paragraph explaining that each
+                box nests inside the one above. The diagram shows that. */}
             <div className="fc-arch__sidebar-item">
               <div className="fc-arch__sidebar-pkg">
                 @squaredr/fieldcraft-adapters
               </div>
+              {/* Named, not described. This said they load schemas "over
+                  HTTP, from localStorage, or from a custom source" — wrong
+                  on the names AND the job. They deliver submissions. */}
               <div className="fc-arch__sidebar-text">
-                Plug-in adapters for loading schemas and submitting responses
-                over HTTP, from localStorage, or from a custom source. Depends
-                on core types only &mdash; no React.
+                Postgres, Supabase and webhook destinations for submitted
+                responses. Core types only &mdash; no React.
               </div>
             </div>
 
@@ -105,9 +118,8 @@ export function Architecture() {
                 @squaredr/fieldcraft-templates
               </div>
               <div className="fc-arch__sidebar-text">
-                Ready-made form schemas for common use cases &mdash; contact,
-                feedback, onboarding, and more. Drop one into your project and
-                customise.
+                16 ready-made schemas &mdash; contact, feedback, onboarding,
+                intake. Import one and edit it.
               </div>
             </div>
 
@@ -117,27 +129,12 @@ export function Architecture() {
                 <tbody>
                   <tr className="fc-arch__entry-row">
                     <td>Core</td>
-                    <td>
-                      Bring your own UI. You get the engine, validation, and
-                      state management.
-                    </td>
+                    <td>Bring your own UI.</td>
                   </tr>
                   <tr className="fc-arch__entry-row">
                     <td>React</td>
-                    <td>
-                      Full renderer with accessible, themeable components out
-                      of the box.
-                    </td>
+                    <td>Components included.</td>
                   </tr>
-                  {/* PRO: hidden 2026-09-02 — restore when revisiting Pro
-                  <tr className="fc-arch__entry-row" style={{ opacity: 0.55 }}>
-                    <td>Pro</td>
-                    <td>
-                      Visual builder and dashboard on top of the React
-                      renderer. Coming soon.
-                    </td>
-                  </tr>
-                  */}
                 </tbody>
               </table>
             </div>
