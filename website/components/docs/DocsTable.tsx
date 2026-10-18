@@ -3,7 +3,11 @@ interface DocsTableProps {
 }
 
 export function DocsTable({ children }: DocsTableProps) {
-  return <table className="fc-docs__table">{children}</table>;
+  return (
+    <div className="fc-docs__table-wrap">
+      <table className="fc-docs__table">{children}</table>
+    </div>
+  );
 }
 
 export function DocsTableHead({ children }: DocsTableProps) {

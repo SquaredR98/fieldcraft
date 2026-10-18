@@ -128,5 +128,6 @@ const myContactForm = {
 
 ## Next steps
 
-- [Visual builder](/docs/pro/visual-builder) — create forms visually
-- [Licence & activation](/docs/pro/licence-and-activation) — pricing details
+- [<FormEngineRenderer />](/docs/react/form-renderer) — render forms with React
+- [Custom field types](/docs/react/custom-field-types) — register your own components
+- [Theming](/docs/react/theming) — style your forms

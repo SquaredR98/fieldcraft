@@ -1,4 +1,4 @@
 {
   "title": "React",
-  "pages": ["form-renderer", "hooks", "theming", "custom-field-types"]
+  "pages": ["form-renderer", "hooks", "theming", "custom-field-types", "templates"]
 }

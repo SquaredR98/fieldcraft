@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useDocsShell } from './DocsShellContext';
 import { cn } from '@/lib/utils';
 
 interface TocItem {
@@ -14,28 +15,30 @@ interface DocsTocProps {
 }
 
 export function DocsToc({ toc }: DocsTocProps) {
-  const [activeId, setActiveId] = useState<string>('');
+  const { activeHeadingId, setActiveHeadingId, contentScrollRef, scrollToHeading } = useDocsShell();
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const headings = toc
       .map((item) => {
-        const id = item.url.replace('#', '');
+        const id = item.url.replace(/^#/, '');
         return document.getElementById(id);
       })
       .filter(Boolean) as HTMLElement[];
 
     if (headings.length === 0) return;
 
+    const root = contentScrollRef.current;
+
     observerRef.current = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+            setActiveHeadingId(entry.target.id);
           }
         }
       },
-      { rootMargin: '-80px 0px -60% 0px', threshold: 0 }
+      { root: root ?? undefined, rootMargin: '-20px 0px -70% 0px', threshold: 0 }
     );
 
     for (const heading of headings) {
@@ -45,7 +48,7 @@ export function DocsToc({ toc }: DocsTocProps) {
     return () => {
       observerRef.current?.disconnect();
     };
-  }, [toc]);
+  }, [toc, contentScrollRef, setActiveHeadingId]);
 
   // Only show h2 entries (depth 2)
   const h2Items = toc.filter((item) => item.depth === 2);
@@ -53,38 +56,52 @@ export function DocsToc({ toc }: DocsTocProps) {
   if (h2Items.length === 0) return null;
 
   return (
-    <div className="fc-docs__toc">
-      <div className="fc-docs__toc-label">On this page</div>
-      <div className="fc-docs__toc-list">
-        {h2Items.map((item) => {
-          const id = item.url.replace('#', '');
-          return (
-            <a
-              key={item.url}
-              href={item.url}
-              className={cn(
-                'fc-docs__toc-link',
-                activeId === id && 'fc-docs__toc-link--active'
-              )}
-              onClick={(e) => {
-                e.preventDefault();
-                const el = document.getElementById(id);
-                if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  setActiveId(id);
-                }
-              }}
-            >
-              {item.title}
-            </a>
-          );
-        })}
+    <aside className="fc-docs__toc" aria-label="Table of contents">
+      <div className="fc-docs__toc-inner">
+        <div className="fc-docs__toc-label">
+          <span className="fc-docs__toc-indicator" />
+          On this page
+        </div>
+        <nav className="fc-docs__toc-list">
+          {h2Items.map((item) => {
+            const id = item.url.replace(/^#/, '');
+            const isActive = activeHeadingId === id;
+            return (
+              <a
+                key={item.url}
+                href={item.url}
+                className={cn(
+                  'fc-docs__toc-link',
+                  isActive && 'fc-docs__toc-link--active'
+                )}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToHeading(item.url);
+                }}
+              >
+                {item.title}
+              </a>
+            );
+          })}
+        </nav>
+        <div className="fc-docs__toc-extras">
+          <a
+            href="https://github.com/SquaredR98/fieldcraft/issues"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Report an issue &rarr;
+          </a>
+          <a
+            href="https://github.com/SquaredR98/fieldcraft/discussions"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Discussions
+          </a>
+          <a href="/changelog">Changelog</a>
+        </div>
       </div>
-      <div className="fc-docs__toc-extras">
-        <a href="#">Report an issue</a>
-        <a href="#">Discussions</a>
-        <a href="#">Changelog</a>
-      </div>
-    </div>
+    </aside>
   );
 }

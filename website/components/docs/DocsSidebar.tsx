@@ -7,35 +7,42 @@ import type { DocNavSection } from './docs-types';
 
 interface DocsSidebarProps {
   nav: DocNavSection[];
+  onItemClick?: () => void;
 }
 
-export function DocsSidebar({ nav }: DocsSidebarProps) {
+export function DocsSidebar({ nav, onItemClick }: DocsSidebarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="fc-docs__sidebar">
-      {nav.map((section) => (
-        <div key={section.label} className="fc-docs__sidebar-group">
-          <div className="fc-docs__sidebar-group-label">{section.label}</div>
-          <div className="fc-docs__sidebar-links">
-            {section.items.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'fc-docs__sidebar-link',
-                  pathname === item.href && 'fc-docs__sidebar-link--active'
-                )}
-              >
-                <span>{item.title}</span>
-                {item.badge && (
-                  <span className="fc-docs__sidebar-badge">{item.badge}</span>
-                )}
-              </Link>
-            ))}
+    <aside className="fc-docs__sidebar" aria-label="Documentation sidebar">
+      <div className="fc-docs__sidebar-inner">
+        {nav.map((section) => (
+          <div key={section.label} className="fc-docs__sidebar-group">
+            <div className="fc-docs__sidebar-group-label">{section.label}</div>
+            <div className="fc-docs__sidebar-links">
+              {section.items.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={onItemClick}
+                    className={cn(
+                      'fc-docs__sidebar-link',
+                      isActive && 'fc-docs__sidebar-link--active'
+                    )}
+                  >
+                    <span className="fc-docs__sidebar-link-text">{item.title}</span>
+                    {item.badge && (
+                      <span className="fc-docs__sidebar-badge">{item.badge}</span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      ))}
-    </nav>
+        ))}
+      </div>
+    </aside>
   );
 }

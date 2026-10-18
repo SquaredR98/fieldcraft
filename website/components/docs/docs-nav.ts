@@ -21,6 +21,7 @@ export const docsNav: DocNavSection[] = [
       { title: 'Validation', href: `${base}/core-concepts/validation` },
       { title: 'Computed fields', href: `${base}/core-concepts/computed-fields` },
       { title: 'Multi-step forms', href: `${base}/core-concepts/multi-step-forms` },
+      { title: 'Display modes', href: `${base}/core-concepts/display-modes` },
       { title: 'Telemetry', href: `${base}/core-concepts/telemetry` },
     ],
   },
@@ -31,8 +32,10 @@ export const docsNav: DocNavSection[] = [
       { title: 'Hooks', href: `${base}/react/hooks` },
       { title: 'Theming', href: `${base}/react/theming` },
       { title: 'Custom field types', href: `${base}/react/custom-field-types` },
+      { title: 'Templates', href: `${base}/react/templates` },
     ],
   },
+  /*
   {
     label: 'Submission',
     items: [
@@ -49,6 +52,13 @@ export const docsNav: DocNavSection[] = [
       { title: 'Response viewer', href: `${base}/pro/response-viewer`, badge: 'Pro' },
       { title: 'Templates', href: `${base}/pro/templates` },
       { title: 'Licence & activation', href: `${base}/pro/licence-and-activation` },
+    ],
+  },
+  */
+  {
+    label: 'Reference',
+    items: [
+      { title: 'Deprecations', href: `${base}/deprecations` },
     ],
   },
 ];

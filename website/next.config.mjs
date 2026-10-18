@@ -21,6 +21,8 @@ const nextConfig = {
     return [
       // /roadmap became /changelog — keep old links and search results working.
       { source: '/roadmap', destination: '/changelog', permanent: true },
+      // /docs/pro/templates moved to /docs/react/templates
+      { source: '/docs/pro/templates', destination: '/docs/react/templates', permanent: true },
     ];
   },
 };
