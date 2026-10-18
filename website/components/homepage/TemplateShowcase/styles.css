@@ -41,9 +41,135 @@
  * objects rather than rows of one table.
  */
 
-.fc-showcase__grid {
-  @apply grid gap-5;
+/* ── Strip ──
+   Shared-border cells matching the hero's spec strip: gap-px over a
+   rule-coloured ground, so the gap IS the divider and the three read as
+   one object rather than three floating cards. Was a `gap-5` grid of
+   TemplateCards, which carried six elements each — right for
+   /templates, too much for a section whose job is "these exist". */
+.fc-showcase__strip {
+  @apply grid gap-px overflow-hidden;
+  @apply border border-fc-rule rounded-lg;
   grid-template-columns: repeat(3, 1fr);
+  background: var(--rule);
+  box-shadow: var(--e1);
+}
+
+/* A cell, not a card: no border, no radius, no lift of its own — the
+   container owns all three. Everything else carries over from
+   TemplateCard, which still renders on /templates unchanged. */
+.fc-showcase__cell {
+  @apply flex flex-col p-6 no-underline text-inherit;
+  background: var(--surface);
+  /* NOT `background`. --surface is a colour and --plate is a gradient,
+     and CSS cannot interpolate between the two — it snaps instead of
+     easing, and snaps back out of sync with the other transitions on
+     leave, which is the flicker. box-shadow interpolates cleanly, so
+     the ground stays put and the lift does the work.
+
+     The exact bug fixed on the spec strip, reintroduced here. */
+  transition: box-shadow var(--motion-hover);
+}
+
+.fc-showcase__cell:hover {
+  /* box-shadow: inset 0 0 0 1px var(--teal-border); */
+}
+
+.fc-showcase__cell:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+.fc-showcase__cell-head {
+  @apply flex items-center justify-between gap-2 mb-3;
+}
+
+.fc-showcase__cell-cat {
+  @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
+  @apply px-[7px] py-[3px] border border-fc-teal-border leading-[1.3];
+  @apply rounded-full;
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
+  transition:
+    background-color var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-showcase__cell:hover .fc-showcase__cell-cat {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--teal-on);
+}
+
+.fc-showcase__cell-stats {
+  @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+  font-variant-numeric: tabular-nums;
+}
+
+.fc-showcase__cell-name {
+  @apply font-display font-semibold text-base md:text-lg;
+  @apply tracking-fc-subhead leading-[1.25] text-fc-ink-strong m-0 mb-2;
+}
+
+/* Clamped to three lines so the three cells stay the same height —
+   a strip with ragged rows reads as three cards again. */
+.fc-showcase__cell-desc {
+  @apply text-fc-sm-body leading-[1.65] text-fc-muted m-0 mb-4;
+  text-wrap: pretty;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color var(--motion-hover);
+}
+
+.fc-showcase__cell:hover .fc-showcase__cell-desc {
+  @apply text-fc-soft;
+}
+
+/* `mt-auto` pins the foot to the bottom of every cell, so tags and ids
+   line up across the strip whatever the description's length. */
+.fc-showcase__cell-foot {
+  @apply mt-auto pt-3.5 border-t border-fc-rule;
+  @apply flex items-center justify-between gap-3;
+}
+
+.fc-showcase__cell-tags {
+  @apply flex flex-wrap gap-1.5;
+}
+
+.fc-showcase__cell-tag {
+  @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+}
+
+/* The id is what a developer actually types, so it earns a place. */
+.fc-showcase__cell-id {
+  @apply flex items-center gap-1.5 shrink-0 min-w-0;
+  @apply font-mono text-fc-2xs text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-showcase__cell-id-pip {
+  @apply w-1 h-1 bg-fc-teal shrink-0 rounded-full;
+}
+
+/* The TEXT truncates, not the element — otherwise the pip is clipped
+   before the id is. */
+.fc-showcase__cell-id-text {
+  @apply truncate;
+}
+
+.fc-showcase__cell:hover .fc-showcase__cell-id {
+  @apply text-fc-teal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-showcase__cell,
+  .fc-showcase__cell-cat,
+  .fc-showcase__cell-desc,
+  .fc-showcase__cell-id {
+    transition: none;
+  }
 }
 
 /* Count line under the grid — says how many exist beyond these three. */
@@ -60,13 +186,24 @@
 
 /* ── Responsive ── */
 
+/* Horizontal on desktop, vertical below. The shared-border grid needs
+   no other change: at one column the gap-px dividers simply run
+   horizontally instead of vertically, and the container's border and
+   radius still wrap the set. */
 @media (max-width: 1023px) {
   .fc-showcase__inner {
     @apply px-6;
   }
 
-  .fc-showcase__grid {
-    grid-template-columns: repeat(2, 1fr);
+  .fc-showcase__strip {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stacked, each cell is read on its own rather than compared across a
+     row, so the clamp that kept the three the same height is just
+     hiding text. */
+  .fc-showcase__cell-desc {
+    -webkit-line-clamp: unset;
   }
 }
 
@@ -75,8 +212,8 @@
     @apply px-5;
   }
 
-  .fc-showcase__grid {
-    grid-template-columns: 1fr;
+  .fc-showcase__cell {
+    @apply p-5;
   }
 
   .fc-showcase__head {
