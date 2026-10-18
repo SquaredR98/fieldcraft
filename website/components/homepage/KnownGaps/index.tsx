@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react';
 import './styles.css';
 
 /*
@@ -19,12 +18,23 @@ const gaps = [
     body: 'The core is framework-free by design and ships no UI, but React is the only renderer that exists today. Another framework means writing that layer yourself.',
   },
   {
+    // Was "A visual builder exists and ships in Pro." Pro is hidden
+    // everywhere else on the site — nav CTA, the builder teaser,
+    // Architecture's entry table — and this was the one surface still
+    // advertising it, in the place a reader is most primed to trust.
+    // It is a real constraint for an OSS reader either way, so it is
+    // reframed rather than deleted.
     title: 'Schemas are written, not drawn',
-    body: 'A visual builder exists and ships in Pro. On the free tier, schemas are hand-written or started from one of the 16 templates.',
+    body: 'There is no visual builder. Schemas are hand-written, or started from one of the 16 templates and edited.',
   },
   {
-    title: 'Four adapters, not an ecosystem',
-    body: 'http, supabase, postgres and webhook are included. Anywhere else is a small adapter you write — the interface is one method, but it is still work.',
+    // Was "Four adapters" listing "http, supabase, postgres and
+    // webhook". There is no http adapter — packages/adapters/src holds
+    // exactly three, and the package's own dev banner prints the same
+    // three. The same invented "HTTP" claim was in the Architecture
+    // section.
+    title: 'Three adapters, not an ecosystem',
+    body: 'Postgres, Supabase and webhook are included. Anywhere else is a small adapter you write — the interface is one method, but it is still work.',
   },
   {
     title: 'Docs cover the common path',
@@ -59,12 +69,11 @@ export function KnownGaps() {
         </div>
 
         <div className="fc-gaps__ledger">
+          {/* No `--i` style prop: it fed a row stagger whose CSS was
+              scoped to ScrollReveal ancestors this section no longer
+              has. `i` is still used, for the printed index. */}
           {gaps.map((gap, i) => (
-            <div
-              key={gap.title}
-              className="fc-gaps__row"
-              style={{ "--i": i } as CSSProperties}
-            >
+            <div key={gap.title} className="fc-gaps__row">
               <div className="fc-gaps__row-n">
                 {String(i + 1).padStart(2, '0')}
               </div>

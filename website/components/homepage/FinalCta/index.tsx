@@ -13,12 +13,17 @@ const packages = [
   },
   {
     name: '@squaredr/fieldcraft-adapters',
-    desc: 'HTTP, Supabase, Postgres, webhooks',
+    // Was "HTTP, Supabase, Postgres, webhooks". There is no HTTP
+    // adapter — packages/adapters/src holds exactly three, and the
+    // package's own dev banner prints the same three. This was the
+    // THIRD surface carrying that invented claim, after Architecture
+    // and Scope.
+    desc: 'Postgres, Supabase, webhook',
     license: 'MIT',
   },
   {
     name: '@squaredr/fieldcraft-templates',
-    desc: 'Starter schemas for common forms',
+    desc: '16 starter schemas',
     license: 'MIT',
   },
 ];

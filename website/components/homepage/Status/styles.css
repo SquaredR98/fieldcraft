@@ -26,8 +26,12 @@
 
 /* ── Grid: shared-border cells ── */
 
+/* overflow-hidden so the first and last cards inherit the corners —
+   they paint their own grounds and would square them off. Safe here:
+   nothing inside is positioned outside the box now the corner bracket
+   is gone. */
 .fc-status__grid {
-  @apply grid border border-fc-rule;
+  @apply grid border border-fc-rule rounded-lg overflow-hidden;
   /* Latest release carries more weight than the two supporting cards. */
   grid-template-columns: 1.2fr 1fr 1fr;
   gap: 1px;

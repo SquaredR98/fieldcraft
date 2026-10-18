@@ -49,7 +49,7 @@
 
 /* Sits against the foot of the ledger, not floating under the prose. */
 .fc-gaps__callout {
-  @apply mt-auto border border-fc-amber-border px-4.5 py-4;
+  @apply mt-auto border border-fc-amber-border px-4.5 py-4 rounded-lg;
   @apply text-[13px] leading-[1.6] text-fc-soft;
   background: var(--amber-bg);
   box-shadow: var(--inset);
@@ -62,8 +62,10 @@
 
 /* ── Ledger ── */
 
+/* overflow-hidden so the first and last rows inherit the corners —
+   they carry their own borders and would square them off. */
 .fc-gaps__ledger {
-  @apply border border-fc-rule;
+  @apply border border-fc-rule rounded-lg overflow-hidden;
   background: var(--plate);
   box-shadow: var(--e1);
 }
@@ -81,7 +83,7 @@
 /* Numbered because the callout counts them — the figure is the index
    into this list, not decoration. */
 .fc-gaps__row-n {
-  @apply font-mono text-[11px] text-fc-amber-ink;
+  @apply font-mono text-[11px] text-fc-amber-ink rounded-sm;
   @apply border border-fc-amber-border grid place-items-center;
   background: var(--amber-bg);
   height: 24px;
@@ -150,25 +152,14 @@
   color: var(--bg);
 }
 
-/* Rows land in sequence, top to bottom, like a list being written. */
-.fc-scroll-reveal .fc-gaps__row {
-  opacity: 0;
-}
-
-.fc-revealed .fc-gaps__row {
-  opacity: 1;
-  transition: opacity 240ms ease-out;
-  transition-delay: calc(var(--i, 0) * 60ms);
-}
+/* The row stagger that lived here is gone with ScrollReveal: both rules
+   were scoped to `.fc-scroll-reveal` / `.fc-revealed` ancestors that no
+   longer wrap this section, so they had stopped doing anything. Dead
+   rather than broken — the rows were never left hidden — but dead. */
 
 @media (prefers-reduced-motion: reduce) {
-  .fc-scroll-reveal .fc-gaps__row {
-    opacity: 1;
-  }
-
   .fc-gaps__row,
-  .fc-gaps__row-n,
-  .fc-revealed .fc-gaps__row {
+  .fc-gaps__row-n {
     transition: none;
   }
 }

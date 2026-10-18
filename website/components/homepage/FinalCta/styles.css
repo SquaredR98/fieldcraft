@@ -42,8 +42,11 @@
 
 /* ── Right column: packages card ── */
 
+/* overflow-hidden so the header and the last package row inherit the
+   corners — both carry their own borders and would square them off. */
 .fc-cta__card {
-  @apply border border-fc-rule bg-fc-surface;
+  @apply border border-fc-rule bg-fc-surface rounded-lg overflow-hidden;
+  box-shadow: var(--e1);
 }
 
 .fc-cta__card-header {
