@@ -14,7 +14,9 @@ import './styles.css';
 
 const readout = [
   { k: 'engine', v: 'fieldcraft-react', teal: true },
-  { k: 'fields', v: '34' },
+  // Post-split: 34 today, 18 once the 19 deprecated types are removed on
+  // 2027-07-01. See SpecStrip for the full reasoning.
+  { k: 'fields', v: '18' },
   { k: 'operators', v: '25' },
 ];
 

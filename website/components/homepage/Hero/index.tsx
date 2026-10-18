@@ -99,7 +99,7 @@ export function Hero({ version }: HeroProps) {
       {/* Above the panel, not below.
           Below, the numbers were an afterthought the eye reached only
           after the demo had already made its case; above, they are the
-          context you read the demo THROUGH — 34 field types and 1,384
+          context you read the demo THROUGH — 18 field types and 1,384
           tests, then a form built from them.
 
           This replaced the badge row that used to close the copy column
