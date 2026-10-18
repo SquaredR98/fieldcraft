@@ -198,13 +198,8 @@
 /* ── Shell Body & 3 Columns ── */
 
 .fc-docs-shell__body {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: row;
-  overflow: hidden;
-  width: 100%;
+  @apply relative flex flex-row overflow-hidden;
+  @apply flex-1 w-full min-h-0;
 }
 
 /* Column 1: Left Desktop Sidebar */
@@ -254,9 +249,7 @@
 }
 
 .fc-docs__sidebar-links {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  @apply flex flex-col gap-0.5;
 }
 
 .fc-docs__sidebar-link {
@@ -366,9 +359,7 @@
 }
 
 .fc-docs__mobile-nav-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  @apply flex flex-col gap-5;
 }
 
 .fc-docs__mobile-nav-group-label {
@@ -392,9 +383,7 @@
 }
 
 .fc-docs__mobile-nav-links {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  @apply flex flex-col gap-0.5;
 }
 
 .fc-docs__mobile-nav-link {
@@ -432,24 +421,13 @@
   outline: none;
 }
 
+/* The two media queries here changed padding and nothing else, so they
+   are responsive utilities now: 24/20/64 -> 32/36/80 -> 36/48/96. */
 .fc-docs__article {
-  max-width: 820px;
-  width: 100%;
-  min-width: 0;
-  margin: 0 auto;
-  padding: 24px 20px 64px;
-}
-
-@media (min-width: 640px) {
-  .fc-docs__article {
-    padding: 32px 36px 80px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .fc-docs__article {
-    padding: 36px 48px 96px;
-  }
+  @apply w-full min-w-0 mx-auto max-w-[820px];
+  @apply px-5 pt-6 pb-16;
+  @apply sm:px-9 sm:pt-8 sm:pb-20;
+  @apply lg:px-12 lg:pt-9 lg:pb-24;
 }
 
 /* Column 3: Right In-page TOC */
@@ -477,7 +455,7 @@
 }
 
 .fc-docs__toc-inner {
-  padding: 24px 16px 48px 20px;
+  @apply pt-6 pr-4 pb-12 pl-5;
 }
 
 .fc-docs__toc-label {
@@ -500,8 +478,7 @@
 }
 
 .fc-docs__toc-list {
-  display: flex;
-  flex-direction: column;
+  @apply flex flex-col;
 }
 
 .fc-docs__toc-link {
@@ -625,9 +602,7 @@
 }
 
 .fc-docs-mobile-toc__list {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  @apply flex flex-col gap-0.5;
 }
 
 .fc-docs-mobile-toc__item {
@@ -830,18 +805,12 @@
 }
 
 .fc-docs__code-chrome-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
+  @apply flex items-center gap-3 min-w-0;
 }
 
 /* Three Chrome window dots */
 .fc-docs__code-lights {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-shrink: 0;
+  @apply flex items-center gap-1.5 shrink-0;
 }
 
 .fc-docs__code-lights i {
