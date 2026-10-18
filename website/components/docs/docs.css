@@ -7,47 +7,23 @@
 
 /* ── Option A Fixed Center Frame & Shell ── */
 
+/* The three padding breakpoints were three separate media queries that
+   changed nothing else; as responsive utilities they are one line. */
 .fc-docs-frame {
-  position: fixed;
-  inset: 0;
+  @apply fixed inset-0 z-20 overflow-hidden;
+  @apply flex items-center justify-center;
+  @apply w-screen p-2 sm:p-3 xl:p-4;
   height: 100dvh;
-  width: 100vw;
-  overflow: hidden;
   background: var(--bg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  z-index: 20;
-}
-
-@media (min-width: 640px) {
-  .fc-docs-frame {
-    padding: 12px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .fc-docs-frame {
-    padding: 16px;
-  }
 }
 
 .fc-docs-shell {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  /* 1240px is what max-w-310 resolves to — the one container width the
-     whole site uses. Written as the utility so it follows the scale
-     rather than drifting from it as a literal. */
-  @apply max-w-310;
-  background: var(--surface);
-  border: 1px solid var(--rule);
+  @apply relative flex flex-col overflow-hidden;
+  /* max-w-310 is the one container width the whole site uses. */
+  @apply w-full h-full max-w-310;
+  @apply border border-fc-rule bg-fc-surface;
   border-radius: var(--radius);
   box-shadow: inset 0 1px 0 var(--lit), 0 20px 48px -16px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
 }
 
 /* ── Top Bar ── */
@@ -61,52 +37,32 @@
 }
 
 .fc-docs-topbar__inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  padding: 0 16px;
-  gap: 16px;
-}
-
-@media (min-width: 768px) {
-  .fc-docs-topbar__inner {
-    padding: 0 24px;
-  }
+  @apply flex items-center justify-between;
+  @apply h-full gap-4 px-4 md:px-6;
 }
 
 .fc-docs-topbar__left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  @apply flex items-center gap-2.5 shrink-0;
 }
 
 .fc-docs-topbar__logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  color: var(--ink);
+  @apply flex items-center gap-2.5 no-underline text-fc-ink;
 }
 
 .fc-docs-topbar__logo:hover {
-  color: var(--ink);
+  @apply text-fc-ink;
 }
 
 .fc-docs-topbar__logo-mark {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  @apply flex flex-col gap-0.5;
 }
 
 .fc-docs-topbar__logo-bar {
-  width: 18px;
-  height: 4.5px;
+  @apply w-[18px] h-[4.5px];
 }
 
 .fc-docs-topbar__logo-bar--outline {
-  border: 1px solid var(--ink);
+  @apply border border-fc-ink;
 }
 
 .fc-docs-topbar__logo-bar--filled {
@@ -114,66 +70,42 @@
 }
 
 .fc-docs-topbar__logo-bar--amber {
-  border: 1px solid var(--amber);
+  @apply border border-fc-amber;
 }
 
 .fc-docs-topbar__logo-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  @apply flex flex-col gap-0.5;
 }
 
 .fc-docs-topbar__logo-name {
-  font-family: var(--font-display);
-  font-size: 15.5px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--ink);
+  @apply font-display text-[15.5px] font-semibold leading-none;
+  @apply tracking-fc-subhead text-fc-ink;
 }
 
 .fc-docs-topbar__logo-version {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  color: var(--teal);
-  background: var(--wash);
-  border: 1px solid var(--wash-rule);
-  padding: 1.5px 5px;
+  @apply font-mono text-[8.5px] font-semibold leading-none;
+  @apply tracking-fc-mono text-fc-teal;
+  @apply border border-fc-wash-rule bg-fc-wash;
+  @apply px-[5px] py-[1.5px] w-fit;
   border-radius: var(--radius-sm);
-  width: fit-content;
 }
 
+/* `hidden sm:flex` replaces a display declaration plus a media query
+   that existed only to flip it. */
 .fc-docs-topbar__search {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  border: 1px solid var(--rule);
-  background: var(--bg);
-  padding: 6px 12px;
+  @apply hidden sm:flex items-center gap-2.5 cursor-pointer;
+  @apply border border-fc-rule bg-fc-bg;
+  @apply px-3 py-1.5 w-[260px] max-w-[380px];
   border-radius: var(--radius-sm);
-  width: 260px;
-  max-width: 380px;
-  cursor: pointer;
-  transition: border-color 120ms linear;
-}
-
-@media (min-width: 640px) {
-  .fc-docs-topbar__search {
-    display: flex;
-  }
+  transition: border-color var(--motion-hover);
 }
 
 .fc-docs-topbar__search:hover {
-  border-color: var(--teal-border);
+  @apply border-fc-teal-border;
 }
 
 .fc-docs-topbar__search-slash {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--muted);
+  @apply font-mono text-[11px] text-fc-muted;
 }
 
 .fc-docs-topbar__search-placeholder {
