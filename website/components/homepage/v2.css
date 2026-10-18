@@ -112,7 +112,7 @@ section.fc-ground-surface2 {
 }
 
 .fc-v2-section__inner {
-  @apply mx-auto max-w-320 px-10;
+  @apply mx-auto max-w-310 px-4 sm:px-6 lg:px-0;
 }
 
 /* Blueprint grid — 24px minor over 120px major, radial-masked so it

@@ -30,7 +30,7 @@
 }
 
 .fc-how__inner {
-  @apply max-w-310 mx-auto px-10 ;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 ;
   padding-block: var(--fc-section-y);
 }
 
@@ -149,17 +149,11 @@
 /* ── Responsive: tablet ── */
 
 @media (max-width: 1023px) {
-  .fc-how__inner {
-    @apply px-6;
-  }
 }
 
 /* ── Responsive: mobile ── */
 
 @media (max-width: 639px) {
-  .fc-how__inner {
-    @apply px-5;
-  }
 
   .fc-how__grid {
     grid-template-columns: 1fr;

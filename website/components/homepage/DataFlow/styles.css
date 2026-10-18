@@ -14,7 +14,7 @@
    The aside stretches so the delta readout can sit against the foot of
    the drawing rather than leaving a void under the paragraph. */
 .fc-flow__inner {
-  @apply relative mx-auto max-w-320 px-10;
+  @apply relative mx-auto max-w-310 px-4 sm:px-6 lg:px-0;
   padding-top: var(--fc-section-y);
   padding-bottom: calc(var(--fc-section-y) * 0.7);
   @apply grid items-stretch gap-14;
@@ -190,7 +190,7 @@
 /* Same container as every other section: max-width and gutter on one
    element, so the band aligns with the drawing above it. */
 .fc-flow__consequences-wrap {
-  @apply mx-auto max-w-320 px-10 pt-10 pb-2;
+  @apply mx-auto max-w-310 px-4 sm:px-6 lg:px-0 pt-10 pb-2;
 }
 
 /* Shared borders via a 1px gap over a rule-coloured ground — cells of a

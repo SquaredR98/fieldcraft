@@ -14,7 +14,7 @@
 
 .fc-cta__inner {
   @apply grid items-start mx-auto max-w-310;
-  @apply px-10 gap-14;
+  @apply gap-14;
   padding-block: var(--fc-section-y);
   grid-template-columns: 1.1fr 1fr;
 }
@@ -86,7 +86,7 @@
 
 @media (max-width: 1023px) {
   .fc-cta__inner {
-    @apply px-6 gap-10;
+    @apply gap-10;
     grid-template-columns: 1fr;
   }
 }
@@ -94,9 +94,6 @@
 /* ── Responsive: mobile ── */
 
 @media (max-width: 639px) {
-  .fc-cta__inner {
-    @apply px-5;
-  }
 
   .fc-cta__h2 {
     @apply text-[28px];

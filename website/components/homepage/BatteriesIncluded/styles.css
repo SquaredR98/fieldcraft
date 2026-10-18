@@ -17,7 +17,7 @@
 }
 
 .fc-batteries__inner {
-  @apply max-w-320 mx-auto px-10;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
 }
 
@@ -164,9 +164,6 @@
    lines of monospace is cramped much below this, so it steps to two
    rather than holding four until it breaks. */
 @media (max-width: 1023px) {
-  .fc-batteries__inner {
-    @apply px-6;
-  }
 
   .fc-batteries__grid {
     grid-template-columns: repeat(2, 1fr);
@@ -180,9 +177,6 @@
 }
 
 @media (max-width: 639px) {
-  .fc-batteries__inner {
-    @apply px-5;
-  }
 
   .fc-batteries__card-head,
   .fc-batteries__code {

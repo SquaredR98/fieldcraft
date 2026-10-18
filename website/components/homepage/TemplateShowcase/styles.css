@@ -11,7 +11,7 @@
 }
 
 .fc-showcase__inner {
-  @apply max-w-320 mx-auto px-10;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
 }
 
@@ -176,9 +176,6 @@
    horizontally instead of vertically, and the container's border and
    radius still wrap the set. */
 @media (max-width: 1023px) {
-  .fc-showcase__inner {
-    @apply px-6;
-  }
 
   .fc-showcase__strip {
     grid-template-columns: 1fr;
@@ -193,9 +190,6 @@
 }
 
 @media (max-width: 639px) {
-  .fc-showcase__inner {
-    @apply px-5;
-  }
 
   .fc-showcase__cell {
     @apply p-5;

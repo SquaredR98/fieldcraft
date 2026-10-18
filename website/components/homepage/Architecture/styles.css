@@ -40,7 +40,7 @@
 
 /* Above the ::before grid, which would otherwise paint over it. */
 .fc-arch__inner {
-  @apply relative max-w-310 mx-auto px-10;
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
 }
 
@@ -207,9 +207,6 @@
 /* ── Responsive: tablet ── */
 
 @media (max-width: 1023px) {
-  .fc-arch__inner {
-    @apply px-6;
-  }
 
   .fc-arch__grid {
     grid-template-columns: 1fr;
@@ -219,7 +216,4 @@
 /* ── Responsive: mobile ── */
 
 @media (max-width: 639px) {
-  .fc-arch__inner {
-    @apply px-5;
-  }
 }

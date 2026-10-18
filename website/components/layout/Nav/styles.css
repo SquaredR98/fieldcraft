@@ -40,8 +40,11 @@
   /* Positioning context for the mobile drawer, which hangs off the bar
      rather than off the viewport. */
   @apply relative pointer-events-auto;
-  @apply flex items-center justify-between mx-auto;
-  @apply max-w-290 h-14 gap-6 px-4;
+  @apply flex items-center justify-between;
+  /* mx, not px: the bar is a bordered box, so the gutter has to move the
+     BOX rather than inset its contents. Matches the hero panel. The
+     centring lives in the same declaration, as lg:mx-auto. */
+  @apply mx-4 sm:mx-6 lg:mx-auto max-w-310 h-14 gap-6 px-4;
   border: 1px solid var(--rule);
   @apply rounded-lg;
   background: color-mix(in srgb, var(--surface) 72%, transparent);

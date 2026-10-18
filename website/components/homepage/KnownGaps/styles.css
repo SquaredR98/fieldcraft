@@ -11,7 +11,7 @@
 /* Asymmetric: framing anchored left, ledger runs right. The aside
    stretches so the callout can sit against the foot of the ledger. */
 .fc-gaps__inner {
-  @apply mx-auto max-w-320 px-10;
+  @apply mx-auto max-w-310 px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
   @apply grid items-stretch gap-14;
   grid-template-columns: 1fr 1.5fr;
@@ -110,9 +110,6 @@
 }
 
 @media (max-width: 620px) {
-  .fc-gaps__inner {
-    @apply px-5;
-  }
 
   .fc-gaps__row {
     @apply px-4.5;

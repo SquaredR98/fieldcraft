@@ -5,7 +5,7 @@
 }
 
 .fc-why__inner {
-  @apply max-w-310 mx-auto px-10 py-19;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 py-19;
   @apply grid gap-13 items-start;
   grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }

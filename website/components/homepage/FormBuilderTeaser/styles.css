@@ -5,7 +5,7 @@
 }
 
 .fc-builder-teaser__inner {
-  @apply max-w-310 mx-auto px-10 ;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 ;
   padding-block: var(--fc-section-y);
 }
 

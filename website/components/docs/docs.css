@@ -14,7 +14,7 @@
 }
 
 .fc-docs-topbar__inner {
-  @apply mx-auto flex items-center gap-5 max-w-310 px-10;
+  @apply mx-auto flex items-center gap-5 max-w-310 px-4 sm:px-6 lg:px-0;
   height: 60px;
 }
 
@@ -114,7 +114,7 @@
 /* --- 3-Column Shell --- */
 
 .fc-docs {
-  @apply mx-auto items-start max-w-310 px-10;
+  @apply mx-auto items-start max-w-310 px-4 sm:px-6 lg:px-0;
   display: grid;
   grid-template-columns: 246px minmax(0, 1fr) 210px;
 }

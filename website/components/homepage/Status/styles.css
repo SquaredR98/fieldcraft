@@ -14,7 +14,7 @@
 }
 
 .fc-status__inner {
-  @apply max-w-320 mx-auto px-10;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
 }
 
@@ -124,9 +124,6 @@
 /* ── Responsive ── */
 
 @media (max-width: 1023px) {
-  .fc-status__inner {
-    @apply px-6;
-  }
 }
 
 @media (max-width: 860px) {
@@ -136,9 +133,6 @@
 }
 
 @media (max-width: 639px) {
-  .fc-status__inner {
-    @apply px-5;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

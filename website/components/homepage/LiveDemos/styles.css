@@ -90,7 +90,7 @@
 }
 
 .fc-demos__inner {
-  @apply relative max-w-310 mx-auto px-10;
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
 }
 
@@ -601,9 +601,6 @@
 /* ── Responsive: tablet ── */
 
 @media (max-width: 1023px) {
-  .fc-demos__inner {
-    @apply px-6;
-  }
 
   .fc-demos__body {
     grid-template-columns: 1fr;
@@ -632,9 +629,6 @@
 /* ── Responsive: mobile ── */
 
 @media (max-width: 639px) {
-  .fc-demos__inner {
-    @apply px-5;
-  }
 
   .fc-demos__explain {
     @apply px-5 py-6;

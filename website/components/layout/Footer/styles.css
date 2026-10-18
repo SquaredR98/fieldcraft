@@ -5,8 +5,8 @@
 }
 
 .fc-footer__grid {
-  @apply grid mx-auto max-w-310 gap-10;
-  @apply px-10 pt-12 pb-9;
+  @apply grid mx-auto max-w-310 px-4 sm:px-6 lg:px-0 gap-10;
+  @apply pt-12 pb-9;
   grid-template-columns: 1.4fr 1fr 1fr 1fr;
 }
 
@@ -42,7 +42,7 @@
 
 .fc-footer__bottom-inner {
   @apply flex justify-between items-center gap-4 mx-auto;
-  @apply max-w-310 px-10 py-4.5;
+  @apply max-w-310 px-4 sm:px-6 lg:px-0 py-4.5;
   @apply font-mono text-[10.5px] tracking-[0.08em];
   @apply uppercase text-fc-muted;
 }
@@ -55,7 +55,7 @@
 
 @media (max-width: 1023px) {
   .fc-footer__grid {
-    @apply px-6 pt-10 pb-8;
+    @apply pt-10 pb-8;
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -68,7 +68,7 @@
 
 @media (max-width: 639px) {
   .fc-footer__grid {
-    @apply px-5 pt-8 pb-6;
+    @apply pt-8 pb-6;
     grid-template-columns: 1fr;
   }
 

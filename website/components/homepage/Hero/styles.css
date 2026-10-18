@@ -148,7 +148,10 @@
 /* ── Panel ──────────────────────────────────────────────────────────── */
 
 .fc-hero-panel {
-  @apply relative mx-4 sm:mx-auto max-w-290 overflow-hidden mb-12 sm:mb-16;
+  /* mx, not px: this is a bordered box, so the gutter has to move the
+     BOX off the screen edge. Padding would inset its contents and leave
+     the border where it was. Mirrors the sections' px-4 sm:px-6 lg:px-0. */
+  @apply relative mx-4 sm:mx-6 lg:mx-auto max-w-310 overflow-hidden mb-12 sm:mb-16;
   border: 1px solid var(--rule);
   @apply rounded-lg;
   background: var(--surface);
@@ -515,7 +518,7 @@
   /* Sits ABOVE the panel now, so the margin belongs on top of it and
      below the copy — close enough to the copy to read as part of the
      same block, with clear air before the panel. */
-  @apply relative mx-auto max-w-310 mb-10 px-10;
+  @apply relative mx-auto max-w-310 mb-10 px-4 sm:px-6 lg:px-0;
 }
 
 /* Asymmetric, because that is how this page encodes emphasis everywhere

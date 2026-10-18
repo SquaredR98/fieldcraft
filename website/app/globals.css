@@ -437,7 +437,7 @@ body::-webkit-scrollbar-corner,
 
 /* Content container */
 .fc-container {
-  @apply max-w-310 mx-auto px-10 py-20;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 py-20;
 }
 
 /* ── Radix portal content (Select dropdown, Popover) ──

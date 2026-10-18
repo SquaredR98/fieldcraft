@@ -15,7 +15,7 @@
 }
 
 .fc-trust__inner {
-  @apply max-w-320 mx-auto px-10;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   padding-block: var(--fc-section-y);
   @apply grid items-stretch gap-14;
   grid-template-columns: 1fr 1.5fr;
