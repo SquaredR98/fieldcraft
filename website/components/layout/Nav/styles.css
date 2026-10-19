@@ -48,11 +48,20 @@
   border: 1px solid var(--rule);
   @apply rounded-lg;
   background: color-mix(in srgb, var(--surface) 72%, transparent);
-  @apply backdrop-blur-[14px] backdrop-saturate-150;
+  /* The saturate is what stops blurred content going grey. An earlier
+     edit used `backdrop-saturate-310`, which is not a real utility —
+     Tailwind drops an invalid one silently with no build error, so the
+     bar ran blur with no saturation at all. The drawer matches these
+     two values exactly; if either changes, both change. */
+  @apply backdrop-blur-lg backdrop-saturate-150;
   box-shadow: var(--e2);
+  /* border-radius is in the list because the bottom corners square off
+     when the drawer opens — without it they would snap while the
+     drawer animates and the shadow fades. */
   transition:
     background var(--motion-enter),
     border-color var(--motion-enter),
+    border-radius var(--motion-enter),
     box-shadow var(--motion-enter);
 }
 
@@ -250,44 +259,151 @@ main h3[id] {
   @apply hidden items-center gap-4;
 }
 
+/* The icon is 22px in a 36px box, and the box is pulled right by the
+   padding left over on that side.
+
+   Before: a 20px glyph centred in a 40px button, so 10px of dead space
+   on every side. Two problems followed — the icon read small inside an
+   oversized hit area, and it is the BUTTON that aligns to the bar's
+   px-4, so the visible glyph stopped ~10px short of the right inset
+   and looked indented. The negative margin aligns the GLYPH to the
+   edge instead of the invisible box around it, while the 36px box
+   keeps a comfortable touch target. */
 .fc-nav__hamburger {
   @apply flex items-center justify-center;
-  @apply w-10 h-10 p-0 border-0 bg-transparent;
-  @apply text-fc-muted cursor-pointer;
+  @apply w-9 h-9 p-0 border-0 bg-transparent;
+  @apply text-fc-ink cursor-pointer;
+  margin-right: -7px;
+  transition: color var(--motion-hover);
+}
+
+.fc-nav__hamburger svg {
+  @apply w-5.5 h-5.5;
 }
 
 .fc-nav__hamburger:focus-visible {
   box-shadow: 0 0 0 1.5px var(--teal), 0 0 0 3px rgba(31, 107, 110, 0.14);
 }
 
-/* ── Drawer ── */
+/* ── Drawer ──
+   FLUSH-JOINED to the bar, not floating under it. Three things make
+   them read as one object:
 
-/* Hangs off the floating bar rather than off the viewport top, and
-   matches it: inset, rounded, glass. `top-16` was measured against the
-   old welded bar and would now leave a gap. */
+   1. `top: 100%` with no offset — it was `calc(100% + 0.5rem)`, and
+      that 8px gap is what made the two look detached.
+   2. No top border, and the top corners square. The bar's bottom
+      border becomes the seam between them, so there is one hairline
+      where they meet rather than two.
+   3. The bar squares its own bottom corners while open (below), or a
+      rounded edge would meet a straight one.
+
+   Pulled 1px up so its side borders sit on top of the bar's, which
+   otherwise double into a 2px step at the join. */
 .fc-nav__drawer {
-  @apply absolute left-0 right-0 z-40;
-  top: calc(100% + 0.5rem);
-  @apply flex flex-col px-5 py-3;
+  @apply absolute z-40;
+  top: 100%;
+  /* -1px, not 0. `left: 0` resolves against the PADDING box, which sits
+     inside the bar's 1px border — so a drawer at 0 was inset by a
+     pixel on each side and its edges visibly missed the bar's. */
+  left: -1px;
+  right: -1px;
+  /* No -1px pull and no border-top removal: the bar KEEPS its bottom
+     border as the seam between the two. Sitting flush at top:100%
+     means the drawer begins immediately below that border — one
+     hairline, visible, separating the bar's row from the links. */
   border: 1px solid var(--rule);
-  @apply rounded-lg;
-  /* Heavier glass than the bar, not lighter.
-     This was 92% opaque against the bar's 72%, with the same 14px blur —
-     so it was very nearly a solid panel and the blur had almost nothing
-     left to do. It also covers far more area, over the busiest part of
-     the page, so the content behind it needs to be pushed further out of
-     focus before the links read cleanly: 28px of blur against a ground
-     that now lets some of the page through. */
-  background: color-mix(in srgb, var(--surface) 78%, transparent);
-  @apply backdrop-blur-[28px] backdrop-saturate-[1.8];
-  box-shadow: var(--e3);
+  border-top: 0;
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+  /* SOLID, and no backdrop-filter.
+     The drawer cannot blur the page: it renders inside .fc-nav__inner,
+     which has its own backdrop-filter, and per spec that makes a
+     child's backdrop the parent's already-composited output rather
+     than the page. Identical blur values to the bar produced no blur
+     at all — the glass just stayed translucent and the hero showed
+     through the links.
+     An opaque ground gets the readability the glass was failing to,
+     and the bar above still reads as glass because it genuinely is. */
+  background: var(--surface);
+  /* NO shadow of its own. The drawer had --e3 against the bar's --e2,
+     so once they were joined the lower half looked lifted off the
+     upper one — two materials rather than one object. The bar now
+     casts for both (below), which is what a single silhouette does. */
+
+  /* ── The transition ──
+     grid-template-rows 0fr→1fr is what allows a height animation to an
+     unknown content height; `height: auto` is not animatable. The child
+     must be min-h-0 + overflow hidden or it refuses to compress. */
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  opacity: 0;
+  /* 200ms matches --motion-enter's duration. Hardcoded because a
+     transition delay needs the time alone, and that token carries its
+     easing too ("200ms ease-out"), which is invalid as a delay. */
+  transition:
+    grid-template-rows var(--motion-enter),
+    opacity var(--motion-enter),
+    visibility 0s linear 200ms;
 }
 
-@supports not (backdrop-filter: blur(1px)) {
-  .fc-nav__drawer {
-    background: var(--surface);
+.fc-nav__drawer[data-open='true'] {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  opacity: 1;
+  /* Visibility flips immediately on open; on close it waits out the
+     collapse so the drawer does not disappear mid-animation. */
+  transition:
+    grid-template-rows var(--motion-enter),
+    opacity var(--motion-enter),
+    visibility 0s;
+}
+
+/* The row that actually collapses. Padding lives here, not on the
+   drawer: padding on a 0fr grid row still occupies height, so a closed
+   drawer would leave a visible stub. */
+.fc-nav__drawer-inner {
+  @apply flex flex-col px-5 min-h-0 overflow-hidden;
+}
+
+.fc-nav__drawer[data-open='true'] .fc-nav__drawer-inner {
+  @apply py-3;
+}
+
+/* Squares the bar's bottom corners while the drawer is open, so the
+   two meet on a straight edge. `:has()` keeps this in CSS — the open
+   state lives in NavMobile, and lifting it into NavShell just to pass
+   a class would make the whole header client-side. */
+/* ── Open state: ONE object ──
+   Everything that defines the material is set on the bar and matched
+   by the drawer, so the two halves cannot drift apart. */
+.fc-nav__inner:has(.fc-nav__drawer[data-open='true']),
+.fc-nav[data-pinned='true']
+  .fc-nav__inner:has(.fc-nav__drawer[data-open='true']) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  /* --e3 for the taller open silhouette. The pinned selector is listed
+     explicitly because at the top of the page that rule sets
+     `box-shadow: inset 0 1px 0 var(--lit)` — a flat bar against an
+     elevated drawer, which is exactly the mismatch reported. Equal
+     specificity would leave it a coin toss on source order. */
+  box-shadow: var(--e3);
+  /* The bar steps up to meet the drawer's solid ground while open —
+     72% glass above an opaque panel reads as a colour step across the
+     seam. It stays glass (the blur is still doing work), just less
+     transparent, so the two halves sit close enough to read as one. */
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-nav__drawer,
+  .fc-nav__drawer[data-open='true'] {
+    transition: none;
   }
 }
+
+/* No @supports fallback needed here any more: the drawer's ground is
+   opaque in every browser, so there is no translucency to rescue. */
 
 .fc-nav__drawer-link {
   @apply block no-underline text-fc-muted;
@@ -347,7 +463,10 @@ main h3[id] {
 /* ── Responsive: mobile (640px) ── */
 
 @media (max-width: 639px) {
-  .fc-nav__drawer {
+  /* The inner, not the drawer: padding moved off the drawer because a
+     0fr grid row still renders its own padding, which would leave a
+     visible stub when closed. */
+  .fc-nav__drawer-inner {
     @apply px-5;
   }
 }

@@ -16,14 +16,15 @@ export function NavMobile() {
         aria-label={open ? 'Close menu' : 'Open menu'}
         aria-expanded={open}
       >
+        {/* No width/height attributes — the size comes from CSS so the
+            glyph can be tuned with the button box it aligns against. */}
         <svg
-          width="20"
-          height="20"
           viewBox="0 0 20 20"
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
-          strokeLinecap="square"
+          strokeLinecap="round"
+          aria-hidden="true"
         >
           {open ? (
             <>
@@ -40,13 +41,21 @@ export function NavMobile() {
         </svg>
       </button>
 
-      {open && (
-        <div className="fc-nav__drawer">
+      {/* Always mounted, toggled by a data attribute rather than
+          `{open && ...}`. Unmounting destroys the element, so there is
+          nothing left to animate out — the drawer would appear with a
+          transition and vanish without one. `inert` and `hidden=until-found`
+          are not used because the closed drawer must stay in the layout
+          for the height transition; instead it is removed from the
+          accessibility tree and tab order while collapsed. */}
+      <div className="fc-nav__drawer" data-open={open} aria-hidden={!open}>
+        <div className="fc-nav__drawer-inner">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className="fc-nav__drawer-link"
+              tabIndex={open ? undefined : -1}
               onClick={() => setOpen(false)}
             >
               {link.label}
@@ -57,6 +66,7 @@ export function NavMobile() {
             target="_blank"
             rel="noopener noreferrer"
             className="fc-nav__drawer-link"
+            tabIndex={open ? undefined : -1}
             onClick={() => setOpen(false)}
           >
             GitHub
@@ -65,6 +75,7 @@ export function NavMobile() {
           <Link
             href="/docs"
             className="fc-nav__drawer-cta"
+            tabIndex={open ? undefined : -1}
             onClick={() => setOpen(false)}
           >
             Docs
@@ -73,7 +84,7 @@ export function NavMobile() {
             </svg>
           </Link>
         </div>
-      )}
+      </div>
     </>
   );
 }
