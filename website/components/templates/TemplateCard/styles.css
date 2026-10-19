@@ -48,6 +48,39 @@
   height: 11px;
 }
 
+/* ── Cell variant ──
+   Inside a shared-border block the CONTAINER owns the border, the
+   radius and the lift, so the cell drops all three. Without this a
+   group of six would show six bordered cards inside one bordered box.
+
+   The corner bracket goes too: it is an 11px square at -1px, built for
+   a square box, and against the container's radius it detaches and
+   floats outside — the same geometry problem that broke the demos
+   panel and the Status lead card.
+
+   The ground is flat --surface rather than the --plate gradient,
+   because a cell sits on the container's rule-coloured ground and the
+   gradient would read as a seam between neighbours. */
+.fc-tpl-card[data-variant='cell'] {
+  @apply border-0;
+  background: var(--surface);
+  box-shadow: none;
+  transition: background var(--motion-hover);
+}
+
+.fc-tpl-card[data-variant='cell']::before {
+  content: none;
+}
+
+.fc-tpl-card[data-variant='cell']:hover {
+  background: var(--wash);
+  box-shadow: none;
+}
+
+.fc-tpl-card[data-variant='cell']:focus-visible {
+  outline-offset: -2px;
+}
+
 .fc-tpl-card__header {
   @apply flex items-center justify-between gap-2 mb-3;
 }

@@ -37,9 +37,14 @@ export function TemplateListView({
               <h2 className="fc-tpl-list__category-title">
                 {categoryLabels[cat]}
               </h2>
+              {/* One shared-border block per category, only as wide as
+                  its cells: six templates make a 3x2 block that fills
+                  the row, one makes a single-cell block that stops
+                  after one column. The width shows the size of the
+                  category before you read a count. */}
               <div className="fc-tpl-list__grid">
                 {templates.map((t) => (
-                  <TemplateCard key={t.meta.id} meta={t.meta} />
+                  <TemplateCard key={t.meta.id} meta={t.meta} variant="cell" />
                 ))}
               </div>
             </section>

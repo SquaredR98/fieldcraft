@@ -2,13 +2,32 @@ import Link from 'next/link';
 import type { TemplateMeta } from '@/lib/templates';
 import './styles.css';
 
+/*
+ * One component, two treatments.
+ *
+ * The same seven fields were being rendered by this card AND by
+ * hand-written markup in the homepage strip, with the templates page
+ * about to become a third copy. A `variant` keeps the content in one
+ * place:
+ *
+ *   card  a bordered, lifted plate that stands on its own
+ *   cell  the same content with no border, radius or lift, for use
+ *         inside a shared-border block where the CONTAINER owns all
+ *         three — which is what keeps a group of six to two rounded
+ *         corners per side rather than four per card
+ */
 interface TemplateCardProps {
   meta: TemplateMeta;
+  variant?: 'card' | 'cell';
 }
 
-export function TemplateCard({ meta }: TemplateCardProps) {
+export function TemplateCard({ meta, variant = 'card' }: TemplateCardProps) {
   return (
-    <Link href={`/templates/${meta.id}`} className="fc-tpl-card">
+    <Link
+      href={`/templates/${meta.id}`}
+      className="fc-tpl-card"
+      data-variant={variant}
+    >
       <div className="fc-tpl-card__header">
         <span className="fc-tpl-card__badge">{meta.category}</span>
         <span className="fc-tpl-card__stats">
