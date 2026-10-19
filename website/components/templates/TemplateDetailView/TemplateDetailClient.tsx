@@ -71,19 +71,15 @@ export function TemplateDetailClient({ schema, schemaJson }: TemplateDetailClien
       </div>
 
       <div className="fc-tpl-detail__panels">
-        {/* Schema panel — scrolls within form panel's height */}
-        <div className={`fc-tpl-detail__panel fc-tpl-detail__panel--schema ${activeTab !== 'schema' ? 'fc-tpl-detail__panel--hidden' : ''}`}>
-          <div className="fc-tpl-detail__panel-label">Schema</div>
-          <div className="fc-tpl-detail__schema">
-            <CodeBlockClient code={schemaJson} lang="json" />
-          </div>
-        </div>
-
-        {/* Form panel — drives the container height */}
+        {/* Preview FIRST — it is what the page is for, so it reads
+            first on the left. It also drives the row height; the
+            schema beside it matches and scrolls. */}
         <div className={`fc-tpl-detail__panel fc-tpl-detail__panel--form ${activeTab !== 'form' ? 'fc-tpl-detail__panel--hidden' : ''}`}>
           <div className="fc-tpl-detail__panel-label">
             <span>Preview</span>
-            {/* Display mode toggle */}
+            {/* Stays on the preview panel rather than moving to the
+                card header: it changes only what this panel renders,
+                and in the header it would read as governing the page. */}
             <span className="fc-tpl-detail__mode-toggle">
               {DISPLAY_MODES.map(({ value, label }) => (
                 <button
@@ -107,6 +103,14 @@ export function TemplateDetailClient({ schema, schemaJson }: TemplateDetailClien
             ) : submittedData ? (
               <SubmissionResult data={submittedData} onReset={handleReset} />
             ) : null}
+          </div>
+        </div>
+
+        {/* Schema — scrolls within the preview panel's height */}
+        <div className={`fc-tpl-detail__panel fc-tpl-detail__panel--schema ${activeTab !== 'schema' ? 'fc-tpl-detail__panel--hidden' : ''}`}>
+          <div className="fc-tpl-detail__panel-label">Schema</div>
+          <div className="fc-tpl-detail__schema">
+            <CodeBlockClient code={schemaJson} lang="json" />
           </div>
         </div>
       </div>

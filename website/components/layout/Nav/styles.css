@@ -7,7 +7,7 @@
    The bottom border is gone — a floating object is defined by its edges
    and shadow, not by a rule joining it to something. */
 .fc-nav {
-  @apply fixed z-50 left-0 right-0 px-10;
+  @apply fixed z-50 left-0 right-0;
   top: 0.875rem;
   /* The nav itself is a positioning frame only; the visible bar is
      __inner. Keeping them separate means the frame can span the viewport
@@ -44,7 +44,7 @@
   /* mx, not px: the bar is a bordered box, so the gutter has to move the
      BOX rather than inset its contents. Matches the hero panel. The
      centring lives in the same declaration, as lg:mx-auto. */
-  @apply mx-4 sm:mx-6 lg:mx-auto max-w-310 h-14 gap-6 px-4;
+  @apply sm:mx-6 lg:mx-auto max-w-310 h-14 gap-6 px-4;
   border: 1px solid var(--rule);
   @apply rounded-lg;
   background: color-mix(in srgb, var(--surface) 72%, transparent);
@@ -347,10 +347,6 @@ main h3[id] {
 /* ── Responsive: mobile (640px) ── */
 
 @media (max-width: 639px) {
-  .fc-nav__inner {
-    @apply px-5;
-  }
-
   .fc-nav__drawer {
     @apply px-5;
   }

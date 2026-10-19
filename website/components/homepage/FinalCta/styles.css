@@ -13,7 +13,7 @@
 }
 
 .fc-cta__inner {
-  @apply grid items-start mx-auto max-w-310;
+  @apply grid items-start mx-auto max-w-310 px-4 sm:px-6 lg:px-0;
   @apply gap-14;
   padding-block: var(--fc-section-y);
   grid-template-columns: 1.1fr 1fr;

@@ -1,6 +1,11 @@
 import { TemplateCard } from '@/components/templates/TemplateCard';
 import type { Template, TemplateCategory } from '@/lib/templates';
 import { categoryLabels } from '@/lib/templates';
+/* .fc-v2-grid lives here. Imported explicitly, the way AboutView and
+   the Pro sections do — without it the masthead's grid div renders
+   unstyled on a direct visit to /templates, even though a build that
+   also compiles the homepage makes it look fine. */
+import '@/components/homepage/v2.css';
 import './styles.css';
 
 interface TemplateListViewProps {
@@ -16,8 +21,19 @@ export function TemplateListView({
 }: TemplateListViewProps) {
   return (
     <div className="fc-tpl-list">
-      <div className="fc-tpl-list__inner">
-        <div className="fc-tpl-list__header">
+      {/* The backdrop belongs to the PAGE, not to the heading band —
+          scoped to a section it would end on a hard horizontal edge
+          where that section stops. It spans the full height and the
+          mask fades it out, so there is no seam to see. */}
+      <div className="fc-tpl-list__backdrop" aria-hidden="true">
+        <div className="fc-v2-grid fc-v2-grid--center" />
+        <div className="fc-tpl-list__glows">
+          <i />
+          <i />
+        </div>
+      </div>
+      <header className="fc-tpl-list__masthead">
+        <div className="fc-tpl-list__masthead-inner">
           <div className="fc-tpl-list__eyebrow">
             Templates &middot; {totalCount}
           </div>
@@ -29,6 +45,8 @@ export function TemplateListView({
             FieldCraft.
           </p>
         </div>
+      </header>
+      <div className="fc-tpl-list__inner">
         {categories.map((cat) => {
           const templates = templatesByCategory[cat];
           if (!templates || templates.length === 0) return null;

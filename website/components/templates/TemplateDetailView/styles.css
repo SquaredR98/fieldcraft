@@ -1,20 +1,124 @@
 @reference "../../../app/globals.css";
 
+/* Same treatment as /templates: the backdrop belongs to the PAGE, so
+   it spans the full height and fades out rather than ending on an
+   edge. `isolate` is the stacking context its z-index resolves
+   against; overflow-x-clip rather than hidden, which would create a
+   scroll container and break sticky positioning inside. */
 .fc-tpl-detail {
+  @apply relative isolate overflow-x-clip;
   @apply border-b border-fc-rule;
+  background-color: var(--bg);
 }
 
+.fc-tpl-detail__backdrop {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: -1;
+}
+
+/* vh-based rather than the homepage's percentage mask, which is sized
+   to a hero of known height — this page grows with the schema, so a
+   percentage would stretch and never fade. */
+.fc-tpl-detail__backdrop .fc-v2-grid {
+  -webkit-mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+  mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+}
+
+.fc-tpl-detail__glows {
+  @apply absolute inset-x-0 top-0 pointer-events-none;
+  height: 100vh;
+}
+
+.fc-tpl-detail__glows i {
+  @apply absolute rounded-full;
+}
+
+.fc-tpl-detail__glows i:nth-child(1) {
+  width: 60rem;
+  height: 34rem;
+  left: 50%;
+  top: -17rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 10%, transparent),
+    transparent
+  );
+  filter: blur(30px);
+}
+
+.fc-tpl-detail__glows i:nth-child(2) {
+  width: 38rem;
+  height: 24rem;
+  left: 78%;
+  top: 6rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 7%, transparent),
+    transparent
+  );
+  filter: blur(44px);
+}
+
+/* pt-22 sm:pt-32, not py-20. 80px is LESS than --fc-nav-space
+   (5.25rem = 84px), the clearance the floating header needs — which
+   is why the card slid under the bar on mobile. Matches the hero and
+   the /templates masthead. */
 .fc-tpl-detail__inner {
-  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 py-20;
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
+  @apply py-20 ;
 }
 
-/* ── Header ── */
+/* ── The card ──
+   One object holding the header band and both panels. It owns the
+   border, the radius and the shadow; its children own none of the
+   three and are separated by the 1px gap showing the rule-coloured
+   ground through — the construction used by the hero spec strip and
+   the category blocks on /templates.
+
+   `overflow: hidden` is what makes the children respect the radius:
+   without it the header's ground would square off the top corners it
+   sits in. */
+.fc-tpl-detail__card {
+  @apply grid overflow-hidden;
+  @apply border border-fc-rule;
+  /* Clear air between the floating site header and the top of the
+     card, on top of the inner's nav clearance — the card is a solid
+     plate, so without it the bar appears to rest on its edge. */
+  @apply mt-6 sm:mt-8;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--e1);
+}
+
+/* ── Header band ──
+   Spans both columns, so the split below it starts under a full-width
+   header rather than beside it. */
 .fc-tpl-detail__header {
-  @apply mb-10;
+  @apply p-7 sm:p-8;
+  grid-column: 1 / -1;
+  background: var(--surface);
 }
 
+/* Between the title and the description. The title carries the name
+   already, so the trail is a quiet locator under it rather than a
+   lead-in above the card. */
 .fc-tpl-detail__breadcrumb {
-  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted mb-4;
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted;
+  @apply mt-0 mb-4;
 }
 
 .fc-tpl-detail__breadcrumb a {
@@ -26,12 +130,18 @@
   @apply text-fc-teal;
 }
 
+/* A pill on a teal mix, matching the badges on the template cells and
+   the quick-start steps. It was square on --wash, which in dark is a
+   green-tinted surface that reads as a different material. */
 .fc-tpl-detail__badge {
-  @apply inline-block font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal px-[7px] py-[3px] border border-fc-teal-border bg-fc-wash leading-[1.3] mb-3;
+  @apply inline-block font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
+  @apply px-2.5 py-[3px] border border-fc-teal-border leading-[1.3] mb-4;
+  @apply rounded-full;
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
 }
 
 .fc-tpl-detail__title {
-  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 mb-3 text-fc-ink-strong;
+  @apply font-display text-[38px] font-semibold tracking-[-0.03em] leading-[1.1] m-0 mb-2.5 text-fc-ink-strong;
 }
 
 .fc-tpl-detail__desc {
@@ -42,9 +152,17 @@
   @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted flex gap-3;
 }
 
-/* ── Panels container ── */
+/* ── Panels ──
+   `display: contents` so the two panels become direct grid items of
+   the CARD rather than children of a nested box. That is what lets the
+   1px gap between them come from the same grid that separates them
+   from the header — one continuous rule down and across, instead of a
+   nested container drawing its own.
+
+   The wrapper still exists in the markup because the tab bar and the
+   panels are siblings produced by one client component. */
 .fc-tpl-detail__panels {
-  @apply grid grid-cols-2 border border-fc-rule;
+  display: contents;
 }
 
 /* ── Tab bar (mobile only) ── */
@@ -52,36 +170,54 @@
   @apply hidden;
 }
 
-/* ── Individual panels ── */
+/* ── Individual panels ──
+   Each carries its own ground so the card's rule colour shows only
+   through the 1px gaps. No borders: the gap IS the divider. */
 .fc-tpl-detail__panel {
   @apply min-w-0;
+  background: var(--surface);
 }
 
-/* Schema panel — scrolls, height matched to form panel */
+/* Schema panel — a flex column so the label stays put and the code
+   area below it is the only thing that scrolls.
+
+   The scrolling moved OFF this element and onto .fc-tpl-detail__schema
+   inside it. When the panel itself scrolled, the horizontal scrollbar
+   belonged to the full content height, so reaching it meant scrolling
+   to the bottom of the JSON first. Now the inner box is the scroll
+   container in both axes and its bar sits at the visible edge. */
 .fc-tpl-detail__panel--schema {
-  @apply overflow-y-auto;
-  /* Force this panel to match sibling height instead of expanding */
+  @apply flex flex-col overflow-hidden;
+  /* Match the sibling's height instead of expanding to content. */
   height: 0;
   min-height: 100%;
 }
 
-/* Form panel — drives the row height */
+/* Preview panel — drives the row height. A flex column too, so its
+   label is measured the same way as the schema's. */
 .fc-tpl-detail__panel--form {
-  @apply overflow-visible;
+  @apply flex flex-col overflow-visible;
 }
 
-/* Hairline divider between panels */
-.fc-tpl-detail__panel + .fc-tpl-detail__panel {
-  @apply border-l border-fc-rule;
-}
-
+/* Fixed height on BOTH labels. The preview label carries the mode
+   toggle — a bordered control — while the schema label holds only
+   text, so letting them size to content made the two panel heads sit
+   at different heights and the rule between the columns stepped.
+   py-3 is replaced by a height plus centring so the toggle no longer
+   drives the measurement. */
 .fc-tpl-detail__panel-label {
-  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted sticky top-0 z-10 bg-fc-surface px-5 py-3 border-b border-fc-rule flex items-center justify-between;
+  @apply font-mono text-[10.5px] tracking-[0.16em] uppercase text-fc-muted;
+  @apply sticky top-0 z-10 bg-fc-surface px-5 border-b border-fc-rule;
+  @apply flex items-center justify-between;
+  height: 46px;
+  flex: none;
 }
 
-/* ── Display mode toggle ── */
+/* ── Display mode toggle ──
+   rounded-full rather than the old literal 3px, which predated
+   --radius and was the last square control on the page. */
 .fc-tpl-detail__mode-toggle {
-  @apply flex gap-0 border border-fc-rule rounded-[3px] overflow-hidden;
+  @apply flex gap-0 border border-fc-rule overflow-hidden rounded-full;
 }
 
 .fc-tpl-detail__mode-btn {
@@ -101,9 +237,20 @@
   @apply text-fc-teal bg-fc-wash;
 }
 
-/* Schema panel */
+/* The scroll container: takes the height left by the label and scrolls
+   in both axes, so both bars sit at the panel's visible edges. */
 .fc-tpl-detail__schema {
-  @apply overflow-x-auto;
+  @apply flex-1 min-h-0 overflow-auto;
+}
+
+/* The shared CodeBlock draws its own border on all four sides. Inside
+   a shared-border card that stacks against the 1px gap and reads as a
+   thicker, doubled rule. Neutralised HERE rather than in the shared
+   component, which still needs its border everywhere else it is used.
+   Its ground goes too — the panel already supplies --surface. */
+.fc-tpl-detail__schema .fc-code-block {
+  @apply border-0 overflow-visible;
+  background: transparent;
 }
 
 /* Form panel */
@@ -113,37 +260,62 @@
 
 /* ── Mobile ── */
 @media (max-width: 1023px) {
+  /* pb only. This used to be py-12, whose 48px top was well under the
+     84px the floating header needs — the actual cause of the card
+     sliding behind the bar on mobile. The pt-22 above now stands. */
   .fc-tpl-detail__inner {
-    @apply px-5 py-12;
+    @apply px-5 pb-12;
   }
 
   .fc-tpl-detail__title {
     @apply text-2xl;
   }
 
-  .fc-tpl-detail__panels {
-    @apply grid-cols-1 border-0;
-    max-height: none;
+  /* One column. Only one panel is rendered at a time here, so the card
+     holds the header, the tab bar and whichever panel is active —
+     still one object, just stacked. */
+  .fc-tpl-detail__card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fc-tpl-detail__header {
+    @apply p-6;
   }
 
   .fc-tpl-detail__panel,
   .fc-tpl-detail__panel--schema,
   .fc-tpl-detail__panel--form {
-    @apply overflow-visible border border-fc-rule;
+    @apply overflow-visible;
     height: auto;
     min-height: 0;
   }
 
-  .fc-tpl-detail__panel + .fc-tpl-detail__panel {
-    @apply border-l border-fc-rule;
+  /* The page scrolls here, not the panel, so the schema grows to its
+     content. overflow-y stays `auto` rather than `visible`: pairing
+     visible with auto is invalid and the browser computes it back to
+     auto anyway. With no height constraint there is nothing to scroll
+     vertically, so only the horizontal bar appears. */
+  .fc-tpl-detail__schema {
+    @apply flex-none overflow-x-auto;
   }
 
+  /* The panel bodies carry the inset on mobile, so the label needs it
+     too — it was flush at px-0 because a panel border used to supply
+     the edge. */
+  /* Height released: one panel shows at a time here, so there is no
+     sibling to align with, and the toggle wraps below the label on
+     narrow screens — a fixed 46px would clip it. */
   .fc-tpl-detail__panel-label {
-    @apply static bg-transparent px-0 py-0 border-b-0 mb-3 flex-wrap gap-2;
+    @apply static bg-transparent px-6 pt-5 pb-0 border-b-0 mb-3 flex-wrap gap-2;
+    height: auto;
   }
 
+  /* A grid row of the card, not a free-floating bar — so the 1px gap
+     separates it from the header above and the panel below, the same
+     as every other division in the card. */
   .fc-tpl-detail__tabs {
-    @apply flex border-b border-fc-rule mb-6;
+    @apply flex mb-0 px-6;
+    background: var(--surface);
   }
 
   .fc-tpl-detail__tab {

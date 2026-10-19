@@ -1,15 +1,99 @@
 @reference "../../../app/globals.css";
 
+/* `isolate` here, not on the masthead: the backdrop spans the whole
+   page, so its stacking context has to be the page too. `overflow-x`
+   rather than `overflow: hidden`, which would create a scroll container
+   and break position:sticky anywhere inside. */
 .fc-tpl-list {
+  @apply relative isolate overflow-x-clip;
   @apply border-b border-fc-rule;
+  background-color: var(--bg);
+}
+
+/* Full-height backdrop. Both layers are masked, so the treatment
+   thins out down the page instead of stopping on an edge. */
+.fc-tpl-list__backdrop {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: -1;
+}
+
+/* The homepage mask is a PERCENTAGE radial, sized to a hero of known
+   height. This page grows with the template count, so a percentage
+   mask would stretch with it and never actually fade. Overriding with
+   a vh-based fade keeps the falloff at a fixed distance from the top
+   however long the page runs. */
+.fc-tpl-list__backdrop .fc-v2-grid {
+  -webkit-mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+  mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+}
+
+/* ── Masthead ──
+   pt-22 sm:pt-32 matches the hero. The old py-20 (5rem) was LESS than
+   --fc-nav-space (5.25rem), the clearance the floating header needs, so
+   the h1 was starting above where the bar ends — that is why the
+   heading read as cramped against the header rather than merely tight. */
+.fc-tpl-list__masthead {
+  @apply relative;
+  @apply pt-22 sm:pt-32 pb-10 sm:pb-12;
+}
+
+.fc-tpl-list__masthead-inner {
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
+}
+
+/* Patches sit in the top region of the page and fade with it, rather
+   than being distributed down a page whose length depends on how many
+   templates exist. Single teal at low alpha — the same colour as the
+   CTA, never a second hue. */
+.fc-tpl-list__glows {
+  @apply absolute inset-x-0 top-0 pointer-events-none;
+  height: 100vh;
+}
+
+.fc-tpl-list__glows i {
+  @apply absolute rounded-full;
+}
+
+.fc-tpl-list__glows i:nth-child(1) {
+  width: 60rem;
+  height: 34rem;
+  left: 50%;
+  top: -17rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 10%, transparent),
+    transparent
+  );
+  filter: blur(30px);
+}
+
+.fc-tpl-list__glows i:nth-child(2) {
+  width: 38rem;
+  height: 24rem;
+  left: 78%;
+  top: 6rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 7%, transparent),
+    transparent
+  );
+  filter: blur(44px);
 }
 
 .fc-tpl-list__inner {
-  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 py-20;
-}
-
-.fc-tpl-list__header {
-  @apply mb-14;
+  @apply max-w-310 mx-auto px-4 sm:px-6 lg:px-0 pb-20;
 }
 
 .fc-tpl-list__eyebrow {
@@ -27,6 +111,7 @@
 .fc-tpl-list__category {
   @apply mb-14 last:mb-0;
 }
+
 
 .fc-tpl-list__category-title {
   @apply font-display text-xl font-semibold text-fc-ink-strong m-0 mb-5;
@@ -46,9 +131,14 @@
    the right is honest — the width shows the size of the category before
    you read the count.
 
-   The track is a calc rather than a literal 412px so the cell width
-   follows the container: a third of max-w-310 (1240px) minus the two
-   1px gaps and the container's own border. */
+   The track is a calc rather than a literal pixel width so the cell
+   follows the container: a third of max-w-310 (77.5rem = 1240px) minus
+   the two 1px gaps and the container's own 1px border on each side —
+   4px total, leaving 412px per cell.
+
+   max-w-310 is the SITE-WIDE container, used by every section from the
+   nav down to the footer. If it ever changes, these two calcs change
+   with it or the block stops landing on the section edge. */
 .fc-tpl-list__grid {
   @apply grid overflow-hidden;
   @apply border border-fc-rule rounded-lg;
@@ -57,7 +147,14 @@
   gap: 1px;
   background: var(--rule);
   box-shadow: var(--e1);
-  grid-template-columns: repeat(3, minmax(0, calc((77.5rem - 4px) / 3)));
+  /* `auto-fit`, not a fixed `repeat(3, ...)`.
+     fit-content sizes the box to the TRACK DEFINITION, not the cell
+     count — so three declared tracks meant a two-template category
+     still reserved a third column, and the empty track showed the
+     container's --rule ground as a grey panel beside the cells.
+     auto-fit collapses tracks that hold nothing, so the block ends
+     after its last cell. */
+  grid-template-columns: repeat(auto-fit, calc((77.5rem - 4px) / 3));
 }
 
 /* Tablet: two columns. Mobile: one, and the block fills the width
@@ -77,14 +174,14 @@
 
 @media (max-width: 768px) {
   .fc-tpl-list__inner {
-    @apply px-5 py-12;
+    @apply px-5 pb-12;
+  }
+
+  .fc-tpl-list__masthead-inner {
+    @apply px-5;
   }
 
   .fc-tpl-list__h1 {
     @apply text-2xl;
-  }
-
-  .fc-tpl-list__header {
-    @apply mb-10;
   }
 }

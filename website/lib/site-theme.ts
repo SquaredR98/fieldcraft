@@ -28,11 +28,16 @@ export const siteTheme: FormEngineTheme = {
     helpTextSize: '0.8125rem',
     bodySize: '0.9375rem',
   },
+  /* Dates from when --radius was 0 site-wide. The three explicit
+     overrides win over the preset, so all four had to change or the
+     fields would stay square: 'lg' is the engine's 12px step, the
+     closest preset to the site's 14px, and buttons take the pill the
+     rest of the site's CTAs use. */
   shape: {
-    radius: 'none',
-    inputRadius: '0px',
-    buttonRadius: '0px',
-    cardRadius: '0px',
+    radius: 'lg',
+    inputRadius: '10px',
+    buttonRadius: '9999px',
+    cardRadius: '12px',
   },
   spacing: {
     base: 16,

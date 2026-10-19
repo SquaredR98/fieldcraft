@@ -67,11 +67,11 @@
    below get one rhythm. */
 .fc-tpl-card[data-variant='cell'] {
   @apply border-0 p-7;
-  /* The page ground, not --surface. The cell was lighter than the page
-     it sat on, so each one read as a card floating in the block; on the
-     same ground the group reads as one surface divided by hairlines,
-     which is the point of a shared-border grid. */
-  background: var(--bg);
+  /* --surface, a step above the page. An earlier pass moved this to
+     --bg to fix a grey panel beside short categories, but that panel
+     was the CONTAINER's empty grid track, not the cells — fixed there
+     with auto-fit. The cells were right to begin with. */
+  background: var(--surface);
   box-shadow: none;
   transition: background var(--motion-hover);
 }
@@ -80,11 +80,12 @@
   content: none;
 }
 
-/* A step UP from the page ground, not --wash: in dark that is a
-   green-tinted surface that reads as a different material, the same
-   mismatch fixed in BatteriesIncluded and the demos section. */
+/* A teal tint rather than --wash, which in dark is a green surface that
+   reads as a different material — the same mismatch fixed in
+   BatteriesIncluded and the demos section. Low enough not to shout, and
+   it matches the badge's own ground. */
 .fc-tpl-card[data-variant='cell']:hover {
-  background: var(--surface);
+  background: color-mix(in srgb, var(--teal) 6%, var(--surface));
   box-shadow: none;
 }
 
