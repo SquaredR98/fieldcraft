@@ -69,6 +69,18 @@ export function Nav() {
         <div className="fc-nav__mobile-actions">
           <NavMobile />
         </div>
+
+        {/* Reading progress, on the bar's own bottom edge. Inside the
+            bar rather than a sibling of it: as a sibling it had to
+            restate the bar's margins and max-width to line up, which
+            would drift the moment that box changed. NavShell writes
+            the width as a custom property on the header.
+
+            Decorative — the value is not announced, and the scrollbar
+            already conveys position to assistive tech. */}
+        <div className="fc-nav__progress" aria-hidden="true">
+          <i className="fc-nav__progress-fill" />
+        </div>
       </nav>
     </NavShell>
   );

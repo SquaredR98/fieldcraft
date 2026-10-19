@@ -95,6 +95,72 @@
   }
 }
 
+/* ── Reading progress ──
+   Lives INSIDE the header so it rides the same translate when the bar
+   hides on scroll-down. As a separate `fixed` element it stayed
+   pinned while the header slid away, leaving a stray teal line
+   floating over the page.
+
+   Matches the bar's own box (same margins and max-width) rather than
+   spanning the viewport, and is clipped to the bar's radius so it
+   cannot poke past the rounded bottom corners.
+
+   Only paints when NavShell measures enough scrollable distance to be
+   worth tracking — on a short page a bar sitting at 100% for the
+   whole visit reads as decoration, not progress. */
+/* A child of .fc-nav__inner, pinned to its bottom edge — so it
+   inherits the bar's box instead of restating its margins and
+   max-width, which is what a sibling would have had to do.
+
+   left/right -1px: inset 0 resolves against the PADDING box, inside
+   the bar's 1px border, so the line would stop a pixel short at each
+   end. Same reason the drawer uses -1px. */
+/* The strip is as TALL as the bar, not 1px, and the fill is pinned to
+   its bottom edge.
+
+   A 1px-tall box cannot show a 14px radius: the browser scales a
+   radius down to fit its box, so a hairline strip clipped as a
+   straight line and the fill ran square into the bar's rounded
+   corner. Matching the bar's height gives the corner the vertical
+   room it needs, and overflow:hidden then cuts the fill to the
+   bar's actual curve.
+
+   inset -1px rather than 0: `inset: 0` resolves against the PADDING
+   box, inside the bar's 1px border, so the clip shape would be a
+   pixel smaller than the border it has to follow. */
+.fc-nav__progress {
+  @apply absolute pointer-events-none overflow-hidden;
+  inset: -1px;
+  border-radius: var(--radius);
+  opacity: 0;
+  transition: opacity var(--motion-enter);
+}
+
+.fc-nav[data-progress='true'] .fc-nav__progress {
+  opacity: 1;
+}
+
+/* Absolute, pinned to the bottom of the full-height strip — the strip
+   now spans the bar so the fill has to place itself rather than fill
+   its parent. */
+.fc-nav__progress-fill {
+  @apply absolute bottom-0 left-0 h-px;
+  width: var(--fc-read-progress, 0%);
+  background: var(--teal);
+}
+
+/* The drawer hangs off the bar's bottom edge, so a progress line
+   there would cut across the join between them. */
+.fc-nav__inner:has(.fc-nav__drawer[data-open='true']) .fc-nav__progress {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-nav__progress {
+    transition: none;
+  }
+}
+
 .fc-nav__links {
   @apply flex items-center gap-6.5;
   @apply text-[13.5px] text-fc-muted;
