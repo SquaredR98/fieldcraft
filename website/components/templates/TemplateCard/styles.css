@@ -61,9 +61,17 @@
    The ground is flat --surface rather than the --plate gradient,
    because a cell sits on the container's rule-coloured ground and the
    gradient would read as a seam between neighbours. */
+/* More room. The content was on four different gaps — mb-3, mb-2, mb-4,
+   pt-3.5 — which is what made it read as a dense text block rather than
+   a set of parts. The cell gets a larger, even pad and the children
+   below get one rhythm. */
 .fc-tpl-card[data-variant='cell'] {
-  @apply border-0;
-  background: var(--surface);
+  @apply border-0 p-7;
+  /* The page ground, not --surface. The cell was lighter than the page
+     it sat on, so each one read as a card floating in the block; on the
+     same ground the group reads as one surface divided by hairlines,
+     which is the point of a shared-border grid. */
+  background: var(--bg);
   box-shadow: none;
   transition: background var(--motion-hover);
 }
@@ -72,8 +80,11 @@
   content: none;
 }
 
+/* A step UP from the page ground, not --wash: in dark that is a
+   green-tinted surface that reads as a different material, the same
+   mismatch fixed in BatteriesIncluded and the demos section. */
 .fc-tpl-card[data-variant='cell']:hover {
-  background: var(--wash);
+  background: var(--surface);
   box-shadow: none;
 }
 
@@ -81,14 +92,21 @@
   outline-offset: -2px;
 }
 
+/* One rhythm through the card: header, title, description and foot are
+   each separated by the same step rather than the mb-3 / mb-2 / mb-4 /
+   pt-3.5 mix that made the content read as one dense block. */
 .fc-tpl-card__header {
-  @apply flex items-center justify-between gap-2 mb-3;
+  @apply flex items-center justify-between gap-3 mb-4;
 }
 
+/* A pill, matching the badges on the quick-start steps, the batteries
+   cards and the nav CTA. It was square while the rest of the site had
+   moved to --radius. */
 .fc-tpl-card__badge {
   @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
-  @apply px-[7px] py-[3px] border border-fc-teal-border leading-[1.3];
-  background: var(--wash);
+  @apply px-2.5 py-[3px] border border-fc-teal-border leading-[1.3];
+  @apply rounded-full;
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
   transition:
     background-color var(--motion-hover),
     border-color var(--motion-hover),
@@ -108,11 +126,13 @@
 
 .fc-tpl-card__title {
   @apply font-display font-semibold text-base md:text-lg;
-  @apply tracking-fc-subhead leading-[1.25] text-fc-ink-strong m-0 mb-2;
+  @apply tracking-fc-subhead leading-[1.3] text-fc-ink-strong m-0 mb-2.5;
 }
 
+/* 1.75 leading, up from 1.65: three clamped lines of 13.5px copy is the
+   densest thing in the cell, so it gets the most air. */
 .fc-tpl-card__desc {
-  @apply text-fc-sm-body leading-[1.65] text-fc-muted m-0 mb-4;
+  @apply text-fc-sm-body leading-[1.75] text-fc-muted m-0 mb-6;
   text-wrap: pretty;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -130,7 +150,7 @@
  */
 
 .fc-tpl-card__foot {
-  @apply mt-auto pt-3.5 border-t border-fc-rule;
+  @apply mt-auto pt-4 border-t border-fc-rule;
   @apply flex items-center justify-between gap-3;
 }
 
@@ -149,7 +169,7 @@
 }
 
 .fc-tpl-card__id-pip {
-  @apply w-1 h-1 bg-fc-teal shrink-0;
+  @apply w-1 h-1 bg-fc-teal shrink-0 rounded-full;
 }
 
 .fc-tpl-card:hover .fc-tpl-card__id {
