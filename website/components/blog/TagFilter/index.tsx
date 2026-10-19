@@ -24,6 +24,11 @@ export function FilterRail({
     } else {
       params.delete('category');
     }
+    /* Back to page 1. Changing the filter changes how many pages
+       exist, so keeping ?page=3 could land on a page the new category
+       does not have — the server clamps it, but the URL would still
+       claim a page the user never asked for. */
+    params.delete('page');
     const query = params.toString();
     router.push(query ? `/blog?${query}` : '/blog', { scroll: false });
   }

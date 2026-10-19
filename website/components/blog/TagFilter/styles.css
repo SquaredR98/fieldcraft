@@ -1,16 +1,24 @@
 @reference "../../../app/globals.css";
 
-/* --- Filter Rail --- */
+/* ── Window chrome ──
+   The first row of the window: a control bar across the top, the way
+   the demos panel and the template detail card label their panels.
+   Filters left, post count right.
+
+   No border-bottom of its own — the window's 1px gap is the divider,
+   and a border here would stack with it into a 2px step. No max-width
+   or gutter either: it is a cell now, so the inset is its own padding
+   and the ground runs edge to edge. */
 .fc-blog-filter-rail {
-  @apply border-b border-fc-rule bg-fc-surface;
+  background: var(--surface);
 }
 
 .fc-blog-filter-rail__inner {
-  @apply max-w-[1280px] mx-auto px-10 flex items-center gap-0.5;
+  @apply flex items-center gap-0.5 px-4 sm:px-5;
 }
 
 .fc-blog-filter-rail__tabs {
-  @apply flex items-center gap-0.5 overflow-x-auto;
+  @apply flex items-center gap-0.5 overflow-x-auto min-w-0;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -20,7 +28,8 @@
 }
 
 .fc-blog-filter-rail__tab {
-  @apply font-mono uppercase bg-none border-none cursor-pointer whitespace-nowrap leading-none p-4 text-fc-xs-tab tracking-fc-mono text-fc-muted;
+  @apply font-mono uppercase bg-none border-none cursor-pointer whitespace-nowrap leading-none;
+  @apply px-3.5 py-4 text-fc-xs-tab tracking-fc-mono text-fc-muted;
   transition: color var(--motion-hover);
 }
 
@@ -39,11 +48,17 @@
 
 .fc-blog-filter-rail__count {
   @apply ml-auto font-mono uppercase shrink-0 pl-6 text-fc-xs tracking-fc-mono text-fc-muted;
+  font-variant-numeric: tabular-nums;
 }
 
-/* --- Responsive --- */
-@media (max-width: 768px) {
-  .fc-blog-filter-rail__inner {
-    @apply px-5;
+@media (max-width: 639px) {
+  .fc-blog-filter-rail__tab {
+    @apply px-3 py-3.5;
+  }
+
+  /* The count is the first thing to give way when the tab strip needs
+     the width. */
+  .fc-blog-filter-rail__count {
+    @apply hidden;
   }
 }

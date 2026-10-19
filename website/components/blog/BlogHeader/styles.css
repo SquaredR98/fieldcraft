@@ -1,12 +1,16 @@
 @reference "../../../app/globals.css";
 
-/* --- Masthead --- */
+/* ── Masthead ──
+   No ground, no bottom border and no container of its own: it sits
+   inside .fc-blog-page__inner now, which supplies the max-w-310 and
+   the gutter. It had `bg-fc-surface` plus a rule, which made it a
+   solid band across a page that is meant to show its backdrop. */
 .fc-blog-masthead {
-  @apply border-b border-fc-rule bg-fc-surface;
+  @apply relative;
 }
 
 .fc-blog-masthead__inner {
-  @apply max-w-[1280px] mx-auto px-10 pt-14 pb-10 flex items-end justify-between gap-12;
+  @apply flex items-end justify-between gap-12;
 }
 
 .fc-blog-masthead__left {
@@ -42,8 +46,10 @@
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
+  /* No px/pt/pb here any more — the page inner owns both the gutter
+     and the top clearance for the floating header. */
   .fc-blog-masthead__inner {
-    @apply flex-col items-start gap-8 px-5 pt-10 pb-8;
+    @apply flex-col items-start gap-8;
   }
 
   .fc-blog-masthead__heading {

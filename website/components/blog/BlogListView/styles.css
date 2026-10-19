@@ -1,8 +1,108 @@
 @reference "../../../app/globals.css";
 
+/* ── Page shell ──
+   `isolate` is the stacking context the backdrop's z-index resolves
+   against; overflow-x-clip rather than hidden, which would create a
+   scroll container. */
+.fc-blog-page {
+  @apply relative isolate overflow-x-clip;
+  background-color: var(--bg);
+}
+
+.fc-blog-page__backdrop {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: -1;
+}
+
+/* The homepage mask is a PERCENTAGE radial sized to a hero of known
+   height. This page grows with the post count, so a percentage mask
+   would stretch with it and never actually fade. */
+.fc-blog-page__backdrop .fc-v2-grid {
+  -webkit-mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+  mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+}
+
+.fc-blog-page__glows {
+  @apply absolute inset-x-0 top-0 pointer-events-none;
+  height: 100vh;
+}
+
+.fc-blog-page__glows i {
+  @apply absolute rounded-full;
+}
+
+.fc-blog-page__glows i:nth-child(1) {
+  width: 60rem;
+  height: 34rem;
+  left: 50%;
+  top: -17rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 10%, transparent),
+    transparent
+  );
+  filter: blur(30px);
+}
+
+.fc-blog-page__glows i:nth-child(2) {
+  width: 38rem;
+  height: 24rem;
+  left: 78%;
+  top: 6rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 7%, transparent),
+    transparent
+  );
+  filter: blur(44px);
+}
+
+/* pt-22 sm:pt-32 clears the floating header, whose --fc-nav-space is
+   5.25rem (84px) — the old py-20 was 80px, so the masthead started
+   above where the bar ends. max-w-310 is the site container; every
+   blog section previously used an arbitrary max-w-[1280px], which is
+   40px wider and so misaligned with the nav above it. */
+.fc-blog-page__inner {
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
+  @apply pt-22 sm:pt-32 pb-20;
+}
+
+/* ── The window ──
+   One object: chrome bar, featured row, then every other post as a
+   row. The CONTAINER owns the border, radius and shadow; rows own
+   none of the three and are divided by the 1px gap showing the
+   rule-coloured ground — the construction used by the hero spec
+   strip, the template category blocks and the template detail card.
+
+   `overflow: hidden` is what makes the rows respect the radius:
+   without it the chrome bar's ground squares off the top corners. */
+.fc-blog-window {
+  @apply grid overflow-hidden;
+  @apply border border-fc-rule;
+  @apply mt-10 sm:mt-12;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border-radius: var(--radius);
+  box-shadow: var(--e1);
+}
+
 /* --- Empty State --- */
 .fc-blog-empty {
-  @apply max-w-[1280px] mx-auto text-center px-10 py-20;
+  @apply text-center px-6 py-20;
+  background: var(--surface);
 }
 
 .fc-blog-empty p {

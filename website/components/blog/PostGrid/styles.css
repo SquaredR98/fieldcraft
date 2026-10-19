@@ -1,27 +1,11 @@
 @reference "../../../app/globals.css";
 
-/* --- Post Grid --- */
-.fc-blog-grid-wrap {
-  @apply max-w-[1280px] mx-auto p-10;
-}
+/* No box of its own: the rows are direct grid items of .fc-blog-window,
+   so the gap separating them is the same one that separates them from
+   the chrome bar. A nested grid here would draw its own divisions and
+   the rule down the page would break at the seam.
 
-.fc-blog-grid {
-  @apply grid grid-cols-3 gap-px bg-fc-rule border border-fc-rule;
-}
-
-/* --- Responsive --- */
-@media (max-width: 1024px) {
-  .fc-blog-grid {
-    @apply grid-cols-2;
-  }
-}
-
-@media (max-width: 768px) {
-  .fc-blog-grid-wrap {
-    @apply px-5 py-6;
-  }
-
-  .fc-blog-grid {
-    @apply grid-cols-1;
-  }
+   This replaced a 3-column card grid in its own padded wrapper. */
+.fc-blog-rows {
+  display: contents;
 }

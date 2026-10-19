@@ -1,15 +1,61 @@
 @reference "../../../app/globals.css";
 
-/* --- Share Buttons --- */
+/* ── Share strip ──
+   The docs top bar treatment: two icon buttons sharing ONE bordered
+   strip with a hairline between them, rather than two separate
+   bordered pills. Replaces text labels ("Copy link" / "Share"), which
+   took the width of a sentence for two actions.
+
+   The strip owns the border, radius and inset highlight; the buttons
+   inside own none of them. */
 .fc-blog-share {
-  @apply flex gap-2;
+  @apply inline-flex items-center shrink-0;
+  border: 1px solid var(--rule);
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 2px 3px;
+  box-shadow: inset 0 1px 0 var(--lit);
+}
+
+.fc-blog-share__divider {
+  @apply shrink-0 w-px h-3.5 mx-px;
+  background: var(--rule);
 }
 
 .fc-blog-share__btn {
-  @apply font-mono uppercase bg-none cursor-pointer border border-fc-rule px-[11px] py-[7px] text-fc-2xs tracking-fc-mono-sm text-fc-muted;
-  transition: border-color var(--motion-hover), color var(--motion-hover);
+  @apply flex items-center justify-center shrink-0;
+  @apply min-w-8 min-h-8 px-2 py-[5px];
+  @apply border-0 bg-transparent cursor-pointer text-fc-muted;
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--motion-hover),
+    background-color var(--motion-hover);
+}
+
+.fc-blog-share__btn svg {
+  @apply w-[18px] h-[18px];
 }
 
 .fc-blog-share__btn:hover {
-  @apply border-fc-teal text-fc-teal;
+  @apply text-fc-ink;
+  background: var(--wash);
+}
+
+/* The copied state is the only feedback left once the label is gone,
+   so it reads in the accent rather than merely darkening. */
+.fc-blog-share__btn--done,
+.fc-blog-share__btn--done:hover {
+  @apply text-fc-teal;
+  background: color-mix(in srgb, var(--teal) 12%, transparent);
+}
+
+.fc-blog-share__btn:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-blog-share__btn {
+    transition: none;
+  }
 }

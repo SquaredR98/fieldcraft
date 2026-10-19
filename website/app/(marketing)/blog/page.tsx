@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { getAllPosts, getCategories } from '@/lib/blog';
-import { authors } from '@/lib/authors';
 import { BlogListView } from '@/components/blog/BlogListView';
 
 export const metadata: Metadata = {
@@ -14,17 +13,36 @@ export const metadata: Metadata = {
   },
 };
 
+/* Six per page, the featured row included — so page 1 is the featured
+   post plus five rows and every later page is six rows. Kept here
+   rather than in the view because slicing is data work, and Rule 11
+   puts data in page.tsx. */
+const POSTS_PER_PAGE = 6;
+
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{ category?: string; page?: string }>;
 }) {
-  const { category } = await searchParams;
+  const { category, page } = await searchParams;
   const allPosts = getAllPosts();
   const categories = getCategories();
-  const posts = category
+  const filtered = category
     ? allPosts.filter((p) => p.category === category)
     : allPosts;
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / POSTS_PER_PAGE));
+  /* Clamped rather than trusted: ?page=0, ?page=99 and ?page=abc are
+     all reachable by hand and would otherwise render an empty list. */
+  const parsed = Number.parseInt(page ?? '1', 10);
+  const currentPage = Number.isNaN(parsed)
+    ? 1
+    : Math.min(Math.max(parsed, 1), totalPages);
+
+  const posts = filtered.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -54,8 +72,10 @@ export default async function BlogPage({
       allPosts={allPosts}
       categories={categories}
       activeCategory={category ?? null}
-      authors={authors}
       jsonLd={jsonLd}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      filteredCount={filtered.length}
     />
   );
 }

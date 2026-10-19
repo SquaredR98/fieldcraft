@@ -1,17 +1,45 @@
 @reference "../../../app/globals.css";
 
-/* --- Blog Card --- */
+/* ── A post row ──
+   Horizontal at EVERY width: illustration left, content right. The
+   previous version was a vertical card with a fixed 168px letterbox
+   image band, three to a row — which made the image a thin strip on
+   desktop and the title secondary to it everywhere.
+
+   A row is a cell of the window: no border, no radius, no shadow. The
+   container owns all three and the 1px gap is the divider, so thirteen
+   posts read as one publication rather than thirteen plates.
+
+   The inset is the row's OWN padding rather than a wrapper's, which is
+   what lets the row's ground run edge to edge. */
 .fc-blog-card {
-  @apply bg-fc-surface flex flex-col no-underline text-inherit cursor-pointer;
+  @apply grid no-underline text-inherit cursor-pointer;
+  @apply items-center gap-6 p-6 sm:gap-7 sm:p-7;
+  /* Image column, then content. The image is a fraction rather than a
+     fixed width so it tracks the container; it collapses to a fixed
+     thumbnail below 640px (see the end of this file). */
+  grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
+  background: var(--surface);
   transition: background var(--motion-hover);
 }
 
 .fc-blog-card:hover {
-  @apply bg-fc-surface2;
+  background: color-mix(in srgb, var(--teal) 5%, var(--surface));
 }
 
+.fc-blog-card:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+/* An aspect ratio, not a fixed height: the frame now tracks the column
+   so the illustration keeps its proportions at every width. The
+   illustrations are CSS-drawn and fluid, so they take any shape. */
 .fc-blog-card__image {
-  @apply relative h-[168px] border-b border-fc-rule;
+  @apply relative overflow-hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--rule);
+  border-radius: calc(var(--radius) - 4px);
 }
 
 .fc-blog-card__img {
@@ -19,39 +47,90 @@
 }
 
 .fc-blog-card__placeholder {
-  @apply absolute inset-0 bg-fc-wash;
+  @apply absolute inset-0;
+  background: var(--wash);
 }
 
 .fc-blog-card__illustration {
   @apply absolute inset-0 w-full h-full;
 }
 
+/* No flex-1 and no fixed paddings: the row's own padding provides the
+   inset, and the column is sized by the grid. */
 .fc-blog-card__body {
-  @apply flex flex-col flex-1 px-[22px] pt-5 pb-6;
+  @apply flex flex-col min-w-0;
 }
 
 .fc-blog-card__meta-row {
-  @apply flex items-center gap-[9px] mb-[13px];
+  @apply flex items-center gap-2.5 mb-3;
 }
 
+/* A pill on a teal mix, matching the template cells, the detail page
+   badge and the quick-start steps. It was square on --wash, which in
+   dark is a green-tinted surface reading as a different material. */
 .fc-blog-card__tag {
-  @apply font-mono uppercase border border-fc-teal-border bg-fc-wash leading-[1.3] text-fc-2xs tracking-fc-mono text-fc-teal px-[7px] py-[3px];
+  @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
+  @apply px-2.5 py-[3px] border border-fc-teal-border leading-[1.3];
+  @apply rounded-full;
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
+  transition:
+    background-color var(--motion-hover),
+    border-color var(--motion-hover),
+    color var(--motion-hover);
+}
+
+.fc-blog-card:hover .fc-blog-card__tag {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--teal-on);
 }
 
 .fc-blog-card__date {
   @apply font-mono uppercase text-fc-2xs tracking-fc-mono-sm text-fc-muted;
 }
 
+/* In a row the title is the primary element, where in a 3-up grid it
+   competed with the image above it. Mobile steps down to 15.5px and
+   medium weight: at 18px semibold beside a 92px thumbnail the title
+   was the heaviest thing on the screen, and a list of them read as a
+   wall rather than as scannable rows. */
 .fc-blog-card__title {
-  @apply font-display font-semibold m-0 text-lg tracking-fc-subhead leading-[1.25] text-fc-ink-strong;
+  @apply font-display font-medium sm:font-semibold m-0;
+  @apply text-[15.5px] sm:text-xl tracking-fc-subhead leading-[1.35] text-fc-ink-strong;
   text-wrap: pretty;
+  transition: color var(--motion-hover);
 }
 
 .fc-blog-card__excerpt {
-  @apply text-fc-sm-body leading-[1.65] text-fc-muted mt-[11px] mb-0;
+  @apply text-fc-sm-body leading-[1.7] text-fc-muted mt-2.5 mb-0;
   text-wrap: pretty;
+  /* Two lines in a row layout: the row is wide, so an unclamped
+     excerpt would set the row height from the longest description. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.fc-blog-card__author {
-  @apply mt-auto pt-5 font-mono uppercase text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+
+/* ── Mobile: the SAME row, not a stack ──
+   The image becomes a fixed thumbnail rather than a fraction — below
+   640px a proportional column would squeeze the text into a strip.
+   The illustrations are abstract, so they survive being small, and
+   the list still reads as a list. */
+@media (max-width: 639px) {
+  .fc-blog-card {
+    @apply gap-4 p-5 items-start;
+    grid-template-columns: 92px minmax(0, 1fr);
+  }
+
+  .fc-blog-card__image {
+    aspect-ratio: 1 / 1;
+  }
+
+  /* The excerpt is what a 92px-thumbnail row has no room for; the
+     title and meta carry it. */
+  .fc-blog-card__excerpt {
+    @apply hidden;
+  }
 }

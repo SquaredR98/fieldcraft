@@ -1,41 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useActiveHeading, scrollToHeading, type Heading } from './useActiveHeading';
 import './styles.css';
-
-interface Heading {
-  id: string;
-  text: string;
-}
 
 interface TableOfContentsProps {
   headings: Heading[];
 }
 
 export function TableOfContents({ headings }: TableOfContentsProps) {
-  const [activeId, setActiveId] = useState<string>('');
-
-  useEffect(() => {
-    if (headings.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
-          }
-        }
-      },
-      { rootMargin: '-66px 0px -80% 0px' }
-    );
-
-    for (const heading of headings) {
-      const el = document.getElementById(heading.id);
-      if (el) observer.observe(el);
-    }
-
-    return () => observer.disconnect();
-  }, [headings]);
+  const activeId = useActiveHeading(headings);
 
   if (headings.length === 0) return null;
 
@@ -47,9 +20,12 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
           key={h.id}
           href={`#${h.id}`}
           className={`fc-blog-toc__link${activeId === h.id ? ' fc-blog-toc__link--active' : ''}`}
+          aria-current={activeId === h.id ? 'location' : undefined}
           onClick={(e) => {
             e.preventDefault();
-            document.getElementById(h.id)?.scrollIntoView({ behavior: 'smooth' });
+            /* Not scrollIntoView: that aligns to y=0, which is behind
+               the floating header. */
+            scrollToHeading(h.id);
           }}
         >
           {h.text}

@@ -87,7 +87,6 @@ export default async function BlogPostPage({
   return (
     <BlogPostView
       post={post}
-      author={author}
       headings={headings}
       formattedDate={formatDate(post.date)}
       prevPost={prev}

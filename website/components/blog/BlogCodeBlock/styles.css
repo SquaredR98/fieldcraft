@@ -1,0 +1,161 @@
+@reference "../../../app/globals.css";
+
+/* ── Code block chrome ──
+   The docs treatment: a bordered well with a chrome bar carrying three
+   lights, the language and a copy control.
+
+   The CONTAINER owns the border and radius; the <pre> inside drops
+   both (see BlogPostBody) so the two do not stack into a doubled rule
+   at the seam. overflow:hidden clips the pre's corners and the chrome
+   bar's ground to the container's radius. */
+.fc-blog-code {
+  @apply overflow-hidden mt-0 mb-7;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+/* On mobile the article drops its plate and sits on the page ground,
+   so a --bg code well would be the same colour as everything around
+   it and read as unbounded text. --surface lifts it back out. */
+@media (max-width: 639px) {
+  .fc-blog-code {
+    background: var(--surface);
+  }
+}
+
+/* ── Line numbers ──
+   CSS counters on the .line spans rehype-pretty-code emits — no JS
+   and no extra DOM. Ported from the docs treatment so the two match.
+
+   `display: grid` + `width: max-content` on the code is what lets a
+   long line scroll horizontally while every number stays pinned to
+   the left edge; with normal block layout the numbers would scroll
+   out of view with the code.
+
+   user-select: none keeps the numbers out of a copied selection —
+   copying code with line numbers baked in is the classic failure of
+   this pattern. The copy button reads textContent, which would
+   otherwise include them. */
+/* `[data-line]`, NOT `.line`. rehype-pretty-code 0.14 emits
+   <span data-line=""> — the `.line` CLASS is what fumadocs' Shiki
+   pipeline produces, which is where the docs treatment gets it. The
+   two highlighters differ, and a selector copied across matched
+   nothing at all.
+
+   The library already sets display:grid inline on the <code>; the
+   width rules here are what let a long line scroll horizontally
+   while the numbers stay pinned to the left edge. */
+.fc-blog-code pre code {
+  counter-reset: fc-line;
+  min-width: 100%;
+  width: max-content;
+}
+
+.fc-blog-code pre [data-line] {
+  counter-increment: fc-line;
+  @apply relative block;
+  min-height: 1.5em;
+  padding-left: 48px;
+  padding-right: 20px;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.fc-blog-code pre [data-line]::before {
+  content: counter(fc-line);
+  @apply absolute left-0 w-8 text-right select-none pointer-events-none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+  opacity: 0.38;
+}
+
+/* A trailing blank line from the fence gets a number it has not
+   earned. */
+.fc-blog-code pre [data-line]:last-child:empty::before {
+  content: '';
+}
+
+/* ── Height cap ──
+   A 200-line block pushes the rest of the article off the screen and
+   stops being readable — you lose the thread of the prose scrolling
+   past it. 28rem (~448px, roughly 22 lines) shows a meaningful chunk
+   while keeping the surrounding text reachable; past that the block
+   scrolls inside itself.
+
+   The cap is on the PRE, not the container: the chrome bar has to
+   stay pinned at the top rather than scrolling away with the code. */
+.fc-blog-code pre {
+  max-height: 28rem;
+  overflow: auto;
+  /* Stops a flick-scroll inside the block from continuing into the
+     page once it hits the end. */
+  overscroll-behavior: contain;
+}
+
+.fc-blog-code__chrome {
+  @apply flex items-center gap-3 px-3.5 h-9 select-none;
+  border-bottom: 1px solid var(--rule);
+  background: var(--surface2);
+}
+
+.fc-blog-code__lights {
+  @apply flex items-center gap-1.5 shrink-0;
+}
+
+/* Three colours, matching the docs chrome and the hero demo panel. */
+.fc-blog-code__lights i {
+  @apply inline-block w-[9.5px] h-[9.5px] rounded-full;
+}
+
+.fc-blog-code__lights i:nth-child(1) {
+  background: color-mix(in srgb, var(--danger) 75%, var(--rule));
+}
+
+.fc-blog-code__lights i:nth-child(2) {
+  background: color-mix(in srgb, var(--amber) 75%, var(--rule));
+}
+
+.fc-blog-code__lights i:nth-child(3) {
+  background: color-mix(in srgb, var(--teal) 60%, var(--rule));
+}
+
+.fc-blog-code__lang {
+  @apply font-mono text-[11.5px] text-fc-muted truncate min-w-0;
+}
+
+/* ml-auto so it holds the right edge whether or not a language is
+   present — a flex gap alone would leave it adrift next to the
+   lights on an unlabelled block. */
+.fc-blog-code__copy {
+  @apply ml-auto shrink-0 border-0 bg-transparent cursor-pointer;
+  @apply font-mono uppercase text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+  @apply px-2 py-1 rounded-full;
+  transition:
+    color var(--motion-hover),
+    background-color var(--motion-hover);
+}
+
+.fc-blog-code__copy:hover {
+  @apply text-fc-ink;
+  background: color-mix(in srgb, var(--teal) 8%, transparent);
+}
+
+.fc-blog-code__copy--copied,
+.fc-blog-code__copy--copied:hover {
+  @apply text-fc-teal;
+  background: color-mix(in srgb, var(--teal) 12%, transparent);
+}
+
+.fc-blog-code__copy:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-blog-code__copy {
+    transition: none;
+  }
+}

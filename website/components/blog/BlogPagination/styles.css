@@ -1,0 +1,83 @@
+@reference "../../../app/globals.css";
+
+/* ── Pagination: the foot of the window ──
+   A cell like every other, so no border, radius or ground of its own
+   beyond --surface — the window's 1px gap divides it from the last
+   post row, the same way the chrome bar is divided from the first. */
+.fc-blog-pagination {
+  @apply flex items-center justify-between gap-4 px-4 sm:px-5 py-3;
+  background: var(--surface);
+}
+
+.fc-blog-pagination__pages {
+  @apply flex items-center gap-1;
+}
+
+/* Square-ish targets rather than text links: at the foot of a long
+   list these are the primary control, and a 34px box is reachable on
+   touch where a bare numeral is not. */
+.fc-blog-pagination__page {
+  @apply flex items-center justify-center min-w-[34px] h-[34px] px-2;
+  @apply font-mono text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+  @apply border-0 bg-transparent cursor-pointer rounded-full;
+  font-variant-numeric: tabular-nums;
+  transition:
+    color var(--motion-hover),
+    background-color var(--motion-hover);
+}
+
+.fc-blog-pagination__page:hover {
+  @apply text-fc-ink;
+  background: color-mix(in srgb, var(--teal) 8%, transparent);
+}
+
+.fc-blog-pagination__page--active,
+.fc-blog-pagination__page--active:hover {
+  color: var(--teal-on);
+  background: var(--teal);
+}
+
+.fc-blog-pagination__step {
+  @apply flex items-center gap-1.5 h-[34px] px-3;
+  @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-muted;
+  @apply border-0 bg-transparent cursor-pointer rounded-full whitespace-nowrap;
+  transition:
+    color var(--motion-hover),
+    background-color var(--motion-hover);
+}
+
+.fc-blog-pagination__step:hover:not(:disabled) {
+  @apply text-fc-ink;
+  background: color-mix(in srgb, var(--teal) 8%, transparent);
+}
+
+/* Kept in the layout rather than hidden at the ends: the control row
+   would otherwise reflow as you page through it. */
+.fc-blog-pagination__step:disabled {
+  @apply cursor-default opacity-35;
+}
+
+.fc-blog-pagination__page:focus-visible,
+.fc-blog-pagination__step:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-blog-pagination__page,
+  .fc-blog-pagination__step {
+    transition: none;
+  }
+}
+
+/* The numbered pages carry the navigation on narrow screens; the
+   Prev/Next labels are what crowd first. */
+@media (max-width: 479px) {
+  .fc-blog-pagination {
+    @apply justify-center;
+  }
+
+  .fc-blog-pagination__step {
+    @apply hidden;
+  }
+}

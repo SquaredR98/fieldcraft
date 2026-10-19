@@ -1,0 +1,94 @@
+@reference "../../../app/globals.css";
+
+/* ── Mobile table of contents ──
+   Desktop has the sticky sidebar, so this never shows there. */
+.fc-blog-mtoc {
+  @apply hidden;
+}
+
+@media (max-width: 1023px) {
+  .fc-blog-mtoc {
+    @apply block my-7;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--bg);
+    overflow: hidden;
+  }
+}
+
+.fc-blog-mtoc__trigger {
+  @apply flex items-center justify-between gap-3 w-full;
+  @apply px-4 py-3 border-0 bg-transparent cursor-pointer text-left;
+  @apply font-mono uppercase text-fc-2xs tracking-fc-mono-sm text-fc-muted;
+  transition: color var(--motion-hover);
+}
+
+.fc-blog-mtoc__trigger:hover {
+  @apply text-fc-ink;
+}
+
+.fc-blog-mtoc__trigger:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: -2px;
+}
+
+/* Truncates rather than wrapping: the label is whichever heading you
+   are currently in, and headings can be long. */
+.fc-blog-mtoc__label {
+  @apply min-w-0 truncate;
+}
+
+.fc-blog-mtoc__chevron {
+  @apply w-4 h-4 shrink-0;
+  transition: transform var(--motion-enter);
+}
+
+.fc-blog-mtoc[data-open='true'] .fc-blog-mtoc__chevron {
+  transform: rotate(180deg);
+}
+
+/* grid-template-rows 0fr -> 1fr is what allows a height animation to
+   an unknown content height; `height: auto` is not animatable. The
+   child needs min-h-0 + overflow hidden or it refuses to compress. */
+.fc-blog-mtoc__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--motion-enter);
+}
+
+.fc-blog-mtoc[data-open='true'] .fc-blog-mtoc__panel {
+  grid-template-rows: 1fr;
+}
+
+/* Padding lives here, not on the panel: a 0fr grid row still renders
+   its own padding, which would leave a visible stub when closed. */
+.fc-blog-mtoc__inner {
+  @apply min-h-0 overflow-hidden flex flex-col;
+}
+
+.fc-blog-mtoc[data-open='true'] .fc-blog-mtoc__inner {
+  @apply px-4 pb-3;
+}
+
+.fc-blog-mtoc__link {
+  @apply block no-underline py-2 pl-3 border-l border-fc-rule;
+  @apply text-fc-sm-code leading-normal text-fc-muted;
+  transition:
+    color var(--motion-hover),
+    border-color var(--motion-hover);
+}
+
+.fc-blog-mtoc__link:hover {
+  @apply text-fc-ink;
+}
+
+.fc-blog-mtoc__link--active {
+  @apply text-fc-teal border-l-fc-teal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fc-blog-mtoc__panel,
+  .fc-blog-mtoc__chevron {
+    transition: none;
+  }
+}

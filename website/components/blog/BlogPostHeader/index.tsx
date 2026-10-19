@@ -1,13 +1,10 @@
 import Link from 'next/link';
-import type { Author } from '@/lib/authors';
-import { AuthorAvatar } from '../AuthorAvatar';
 import { ShareButtons } from '../ShareButtons';
 import './styles.css';
 
 interface ArticleHeaderProps {
   title: string;
   description: string;
-  author: Author;
   category: string;
   date: string;
   formattedDate: string;
@@ -18,7 +15,6 @@ interface ArticleHeaderProps {
 export function ArticleHeader({
   title,
   description,
-  author,
   category,
   date,
   formattedDate,
@@ -34,14 +30,17 @@ export function ArticleHeader({
       <h1 className="fc-blog-post__title">{title}</h1>
       <p className="fc-blog-post__desc">{description}</p>
 
-      <div className="fc-blog-post__author-strip">
-        <AuthorAvatar name={author.name} size={38} className="fc-blog-post__avatar" />
-        <div className="fc-blog-post__author-info">
-          <div className="fc-blog-post__author-name">{author.name}</div>
-          <div className="fc-blog-post__author-meta">
-            {author.role} &middot;{' '}
-            <time dateTime={date}>{formattedDate}</time> &middot; {readingTime}
-          </div>
+      {/* Date and reading time only. The avatar, name and "Maintainer"
+          role are gone: every post has the same author, so a byline
+          that never varies carries no information — and "Maintainer"
+          describes a relationship to the code, not to the article.
+          The author is still in the page's JSON-LD, where structured
+          data should name one. */}
+      <div className="fc-blog-post__meta-strip">
+        <div className="fc-blog-post__meta">
+          <time dateTime={date}>{formattedDate}</time>
+          <span aria-hidden="true">&middot;</span>
+          <span>{readingTime}</span>
         </div>
         <ShareButtons url={`https://fieldcraft.squaredr.tech/blog/${slug}`} />
       </div>

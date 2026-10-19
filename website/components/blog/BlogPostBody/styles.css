@@ -1,23 +1,41 @@
 @reference "../../../app/globals.css";
 
-/* --- Article Body --- */
+/* ── Article Body ──
+   No measure cap: everything runs the full width of the plate.
+
+   A 44rem cap was tried and removed. Capping prose while code blocks
+   and tables spanned the full row made the article look ragged — two
+   different column widths alternating down the page reads as a bug
+   rather than as typography. The plate's own padding plus the
+   narrower column on desktop keeps the line length reasonable.
+
+   Size is 15.5px, down from 17px. The blog was running 2px larger
+   than docs (15px) in the stronger --ink rather than --muted, which
+   is what made it read heavy against the rest of the site. The ink
+   colour STAYS: docs is scanned, an article is read start to finish
+   and wants the stronger value. */
 .fc-blog-post__content {
-  @apply mt-8 font-body text-fc-body leading-[1.78] text-fc-ink;
+  @apply mt-8 font-body text-fc-body-lg leading-[1.75] text-fc-ink;
 }
 
+/* 23px rather than the shared --text-fc-h2 (26px), scaled down with
+   the body. Set here rather than on the token, which the legal pages
+   also use and which should not move for a blog change. */
 .fc-blog-post__content h2 {
-  @apply font-display font-semibold text-fc-h2 tracking-fc-heading text-fc-ink-strong;
-  margin: 48px 0 16px;
+  @apply font-display font-semibold tracking-fc-heading text-fc-ink-strong;
+  font-size: 23px;
+  margin: 44px 0 14px;
 }
 
 .fc-blog-post__content h3 {
-  @apply font-display font-semibold text-xl tracking-fc-h3 text-fc-ink-strong;
-  margin: 36px 0 12px;
+  @apply font-display font-semibold tracking-fc-h3 text-fc-ink-strong;
+  font-size: 18.5px;
+  margin: 32px 0 11px;
 }
 
 .fc-blog-post__content h4 {
-  @apply font-display font-semibold text-fc-body text-fc-ink-strong;
-  margin: 28px 0 8px;
+  @apply font-display font-semibold text-fc-body-lg text-fc-ink-strong;
+  margin: 26px 0 8px;
 }
 
 .fc-blog-post__content p {
@@ -59,18 +77,48 @@
   @apply text-fc-muted;
 }
 
-/* --- Code — Inline (exclude fenced blocks inside <pre>) --- */
+/* --- Code — Inline (exclude fenced blocks inside <pre>) ---
+   --radius-sm (10px) is the docs convention for content-level
+   elements; the full --radius is reserved for page containers. Every
+   bordered element in this file was square, dating from when --radius
+   was 0 site-wide. */
 .fc-blog-post__content code:not(pre code) {
   @apply font-mono text-sm px-1.5 py-0.5 bg-fc-wash text-fc-teal border border-fc-wash-rule;
+  border-radius: var(--radius-sm);
 }
 
-/* --- Code — Fenced blocks (Shiki via rehype-pretty-code) --- */
+/* --- Code — Fenced blocks (Shiki via rehype-pretty-code) ---
+   Matching the docs treatment: a recessed well rather than a plate.
+   The article is already --surface, so a code block on --surface had
+   nothing but its border to separate it; --bg sets it INTO the page
+   the way docs does.
+
+   `overflow: hidden` on top of the scroll is what makes the corners
+   actually clip — a long line would otherwise square off the right
+   edge as it scrolls past. */
 .fc-blog-post__content pre {
-  @apply overflow-x-auto bg-fc-surface border border-fc-rule mt-0 mb-7;
+  @apply overflow-x-auto mt-0 mb-7;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
 }
 
+/* Vertical padding only. The horizontal inset moved onto each .line
+   so the line-number gutter is part of the line itself — padding on
+   the <code> would leave the numbers floating inside a margin and
+   scroll them away with the text. 12.5px matches the docs code size
+   exactly (--text-fc-sm-code). */
 .fc-blog-post__content pre code {
-  @apply block bg-transparent border-none p-[18px] text-fc-sm-code leading-[1.85];
+  @apply block bg-transparent border-none text-fc-sm-code;
+  padding: 16px 0;
+  line-height: 1.6;
+  /* The highlighter leaves literal "\n" text nodes between the line
+     spans. Inside <pre> (white-space: pre) those render as a break
+     ON TOP of each line's own block break, double-spacing the whole
+     block. Collapsing whitespace on the code element kills the stray
+     newlines; each [data-line] restores `white-space: pre` for its
+     own content, so indentation is preserved. */
+  white-space: normal;
 }
 
 /* Shiki dual-theme support (rehype-pretty-code).
@@ -87,14 +135,24 @@
   color: var(--shiki-dark) !important;
 }
 
-/* rehype-pretty-code wraps blocks in <figure>; strip its default margin */
-.fc-blog-post__content figure[data-rehype-pretty-code-figure] {
-  @apply m-0;
+/* Inside the chrome wrapper the CONTAINER owns the border, radius and
+   ground, so the pre drops all three — otherwise they stack into a
+   doubled rule at the seam below the chrome bar, the same way the
+   CodeBlock did inside the template detail panel. */
+.fc-blog-code pre {
+  @apply border-0 m-0;
+  border-radius: 0;
+  background: transparent;
 }
 
-/* --- Blockquotes (Callout style from design) --- */
+/* --- Blockquotes (Callout style from design) ---
+   `overflow: hidden` matters here: the ::before accent is a 2px bar
+   flush against the left edge, and without clipping it would square
+   off the two left corners it sits in. */
 .fc-blog-post__content blockquote {
   @apply flex items-stretch border border-fc-teal-border bg-fc-wash p-0 mt-0 mb-7;
+  @apply overflow-hidden;
+  border-radius: var(--radius-sm);
 }
 
 .fc-blog-post__content blockquote::before {
@@ -111,13 +169,27 @@
   @apply my-12 border-0 h-px bg-fc-rule;
 }
 
-/* --- Tables --- */
+/* --- Tables ---
+   A table cannot simply take overflow:hidden to clip its corners —
+   that would kill horizontal scrolling on a wide table. With
+   border-separate the header's own background squares off the top
+   corners instead, so the first and last header cells round
+   individually to match the table's. */
 .fc-blog-post__content table {
   @apply w-full border-separate border-spacing-0 border border-fc-rule mt-0 mb-7 text-fc-sm-body;
+  border-radius: var(--radius-sm);
 }
 
 .fc-blog-post__content thead th {
   @apply font-mono text-left uppercase bg-fc-wash border-b border-fc-rule px-4 py-3 text-fc-xs tracking-fc-mono-sm text-fc-teal;
+}
+
+.fc-blog-post__content thead th:first-child {
+  border-top-left-radius: calc(var(--radius-sm) - 1px);
+}
+
+.fc-blog-post__content thead th:last-child {
+  border-top-right-radius: calc(var(--radius-sm) - 1px);
 }
 
 .fc-blog-post__content tbody td {
@@ -132,18 +204,39 @@
   @apply bg-fc-wash;
 }
 
+/* The hover ground on the last row would otherwise square the two
+   bottom corners it sits in. */
+.fc-blog-post__content tbody tr:last-child td:first-child {
+  border-bottom-left-radius: calc(var(--radius-sm) - 1px);
+}
+
+.fc-blog-post__content tbody tr:last-child td:last-child {
+  border-bottom-right-radius: calc(var(--radius-sm) - 1px);
+}
+
 .fc-blog-post__content tbody td code {
   @apply font-mono text-xs px-1.5 py-0.5 bg-fc-wash text-fc-teal border border-fc-wash-rule;
+  border-radius: var(--radius-sm);
 }
 
 /* --- Images --- */
 .fc-blog-post__content img {
   @apply w-full border border-fc-rule mt-0 mb-2;
+  border-radius: var(--radius-sm);
 }
 
-/* --- Responsive --- */
+/* --- Responsive ---
+   No font-size override. This used to bump to 16px, which made sense
+   when the desktop body was 17px and mobile wanted a step DOWN. With
+   the body now at 15.5px it would be a step UP, undoing the weight
+   fix on exactly the screens with least room. */
 @media (max-width: 768px) {
-  .fc-blog-post__content {
-    @apply text-base;
+  .fc-blog-post__content h2 {
+    font-size: 21px;
+    margin: 36px 0 12px;
+  }
+
+  .fc-blog-post__content h3 {
+    font-size: 17.5px;
   }
 }

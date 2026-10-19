@@ -1,16 +1,17 @@
 import Link from 'next/link';
 import type { BlogPostMeta } from '@/lib/blog';
 import { formatDateShort } from '@/lib/blog';
-import type { Author } from '@/lib/authors';
 import { CoverIllustration } from '../CoverIllustration';
 import './styles.css';
 
+/* No author: every post has the same one, so a byline repeated down
+   the list carries no information. The author is still in the page's
+   JSON-LD, where structured data should name one. */
 interface BlogCardProps {
   post: BlogPostMeta;
-  author: Author;
 }
 
-export function BlogCard({ post, author }: BlogCardProps) {
+export function BlogCard({ post }: BlogCardProps) {
   return (
     <Link href={`/blog/${post.slug}`} className="fc-blog-card">
       <div className="fc-blog-card__image">
@@ -36,7 +37,6 @@ export function BlogCard({ post, author }: BlogCardProps) {
         </div>
         <h3 className="fc-blog-card__title">{post.title}</h3>
         <p className="fc-blog-card__excerpt">{post.description}</p>
-        <div className="fc-blog-card__author">{author.name}</div>
       </div>
     </Link>
   );

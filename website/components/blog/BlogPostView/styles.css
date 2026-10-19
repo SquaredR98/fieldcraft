@@ -1,19 +1,124 @@
 @reference "../../../app/globals.css";
 
-/* --- Two-Column Layout --- */
+/* ── Page shell ── */
+.fc-blog-post-page {
+  @apply relative isolate overflow-x-clip;
+  background-color: var(--bg);
+}
+
+.fc-blog-post-page__backdrop {
+  @apply absolute inset-0 pointer-events-none;
+  z-index: -1;
+}
+
+/* vh-based, not the homepage's percentage radial: an article's height
+   depends on its length, so a percentage mask would stretch with it
+   and never fade. */
+.fc-blog-post-page__backdrop .fc-v2-grid {
+  -webkit-mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+  mask-image: radial-gradient(
+    120vw 70vh at 50% 0%,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.22) 55%,
+    rgba(0, 0, 0, 0) 85%
+  );
+}
+
+.fc-blog-post-page__glows {
+  @apply absolute inset-x-0 top-0 pointer-events-none;
+  height: 100vh;
+}
+
+.fc-blog-post-page__glows i {
+  @apply absolute rounded-full;
+}
+
+.fc-blog-post-page__glows i:nth-child(1) {
+  width: 60rem;
+  height: 34rem;
+  left: 50%;
+  top: -17rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 10%, transparent),
+    transparent
+  );
+  filter: blur(30px);
+}
+
+.fc-blog-post-page__glows i:nth-child(2) {
+  width: 38rem;
+  height: 24rem;
+  left: 78%;
+  top: 6rem;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--teal) 7%, transparent),
+    transparent
+  );
+  filter: blur(44px);
+}
+
+/* ── Two-column layout ──
+   NO overflow property here. `overflow: hidden` on a shared ancestor
+   kills position:sticky inside it, which would break the sidebar —
+   the plate's overflow lives on the article alone.
+
+   max-w-310 is the site container; this was an arbitrary
+   max-w-[1280px], 40px wider, so it misaligned with the nav above. */
 .fc-blog-post-layout {
-  @apply max-w-[1280px] mx-auto px-10 grid items-start gap-14;
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
+  @apply pt-22 sm:pt-32 pb-24;
+  @apply grid items-start gap-10 xl:gap-14;
   grid-template-columns: minmax(0, 1fr) 220px;
 }
 
-/* --- Article --- */
+/* ── The article plate ──
+   A contained surface on the page backdrop, matching the window on
+   /blog and the card on /templates/[id].
+
+   The body text is capped at a reading measure inside this (see
+   BlogPostBody): the column itself used to be ~1000px wide, far past
+   comfortable measure, because it was simply 1fr of a 1280px grid. */
 .fc-blog-post {
-  @apply py-11 pb-24;
+  @apply min-w-0 overflow-hidden;
+  @apply px-5 pt-8 pb-14 sm:px-9 sm:pt-10 sm:pb-16 lg:px-12 lg:pb-20;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--e1);
 }
 
-/* --- Responsive --- */
-@media (max-width: 1024px) {
+/* ── Responsive ── */
+@media (max-width: 1023px) {
   .fc-blog-post-layout {
-    @apply grid-cols-1 gap-0 px-5;
+    @apply grid-cols-1 gap-0;
+  }
+}
+
+/* ── Mobile: no plate ──
+   The border, radius, shadow and horizontal padding cost roughly 40px
+   of width on a phone, inside a page that already has its own px-4
+   gutter — so the text was inset twice. The plate earns its keep on
+   desktop where there is width to spare; here it is pure cost.
+
+   Vertical padding stays: that is rhythm, not decoration. */
+@media (max-width: 639px) {
+  .fc-blog-post {
+    @apply px-0 border-0 overflow-visible;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .fc-blog-post-layout {
+    @apply pt-20;
   }
 }
