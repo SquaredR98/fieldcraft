@@ -112,6 +112,22 @@
   text-wrap: pretty;
 }
 
+/* The inline link to /form-engine. Underlined rather than coloured:
+   a teal word mid-sentence would compete with the CTA below, and an
+   unstyled anchor here renders as default browser blue. */
+.fc-hero__copy > p a {
+  @apply text-fc-ink no-underline;
+  border-bottom: 1px solid var(--teal-border);
+  transition:
+    color var(--motion-hover),
+    border-color var(--motion-hover);
+}
+
+.fc-hero__copy > p a:hover {
+  @apply text-fc-teal;
+  border-bottom-color: var(--teal);
+}
+
 /* Release pill. The version is data — it comes from lib/changelog.ts. */
 .fc-hero__release {
   @apply inline-flex items-center gap-2.5 mb-7 no-underline;

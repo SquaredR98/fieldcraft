@@ -18,6 +18,7 @@ const columns: FooterColumn[] = [
     title: 'The project',
     links: [
       { label: 'Documentation', href: '/docs' },
+      { label: 'What is a form engine?', href: '/form-engine' },
       { label: 'Demos', href: '/#demos' },
       { label: 'Templates', href: '/templates' },
       { label: 'Scope', href: '/#scope' },

@@ -74,10 +74,14 @@ export function Hero({ version }: HeroProps) {
           <span>FieldCraft, the React form engine, renders the rest.</span>
         </h1>
 
+        {/* "form engine" links to the reference page: descriptive
+            anchor text on the term this site targets, from the
+            highest-authority page it has. */}
         <p>
-          A schema-driven form engine for React. Multi-step navigation,
-          conditional logic, validation, computed fields and drafts &mdash;
-          all from one typed object you can version, diff and review.
+          A schema-driven <Link href="/form-engine">form engine</Link> for
+          React. Multi-step navigation, conditional logic, validation,
+          computed fields and drafts &mdash; all from one typed object you
+          can version, diff and review.
         </p>
 
         <div className="fc-hero__actions">
