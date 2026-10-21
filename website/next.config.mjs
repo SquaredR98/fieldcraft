@@ -23,6 +23,9 @@ const nextConfig = {
       { source: '/roadmap', destination: '/changelog', permanent: true },
       // /docs/pro/templates moved to /docs/react/templates
       { source: '/docs/pro/templates', destination: '/docs/react/templates', permanent: true },
+      // /about removed — the page has been indexed, so a 301 passes its
+      // link equity to the homepage rather than leaking it to a 404.
+      { source: '/about', destination: '/', permanent: true },
     ];
   },
 };

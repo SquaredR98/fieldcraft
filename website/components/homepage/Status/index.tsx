@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import './styles.css';
 
 interface StatusProps {
@@ -52,9 +53,9 @@ export function Status({
                 Open an issue{" "}
                 <span className="fc-v2-link__arrow">&rarr;</span>
               </a>
-              <a href="/changelog">
+              <Link href="/changelog">
                 Changelog <span className="fc-v2-link__arrow">&rarr;</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

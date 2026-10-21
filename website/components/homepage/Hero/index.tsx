@@ -1,9 +1,9 @@
+import Link from 'next/link';
 import { CopyInstall } from '@/components/shared/CopyInstall';
 import { HeroPanel } from './HeroPanel';
 import { SchemaPanel } from './SchemaPanel';
 import { SpecStrip } from './SpecStrip';
 import './styles.css';
-import Link from 'next/link';
 
 /*
  * The hero answers "what is this" before "why is it different".
@@ -52,11 +52,11 @@ export function Hero({ version }: HeroProps) {
             lib/changelog.ts — the same source the Status section uses. A
             version typed into markup is a figure that goes stale silently,
             which is how the site advertised 1.7.0 for seven weeks. */}
-        <a className="fc-hero__release" href="/changelog">
+        <Link className="fc-hero__release" href="/changelog">
           <strong>{version}</strong>
           Now on npm &mdash; read the release notes
           <span className="fc-v2-link__arrow">&rarr;</span>
-        </a>
+        </Link>
 
         {/* The second line is emphasised — it is the one naming the
             product. The span needs no class: `.fc-hero__copy h1 span` is
@@ -64,10 +64,14 @@ export function Hero({ version }: HeroProps) {
             emphasis entirely to satisfy Rule 6 after I had built it from
             invented hex values; the fix was to use the real teal tokens,
             not to delete the design decision. */}
+        {/* "React form engine" sits in the H1 rather than only in the
+            paragraph below it: it is the term this page targets, and
+            an H1 carries more weight than body copy. Same rhythm as
+            before — the accent half still completes the sentence. */}
         <h1>
           Declare the form.
           <br />
-          <span>FieldCraft renders the rest.</span>
+          <span>The React form engine renders the rest.</span>
         </h1>
 
         <p>

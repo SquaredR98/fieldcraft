@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import '../shared.css';
 import './styles.css';
 
@@ -42,9 +43,9 @@ export function ProHero() {
               &darr;
             </span>
           </a>
-          <a href="/docs/pro" className="fc-v2-btn">
+          <Link href="/docs/pro" className="fc-v2-btn">
             Read the docs
-          </a>
+          </Link>
         </div>
       </div>
     </section>

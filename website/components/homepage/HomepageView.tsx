@@ -23,8 +23,8 @@ import type { Template } from '@/lib/templates';
  * since every library a developer installs keeps their data local. It is
  * a real argument for a hosted product and belongs there instead.
  *
- * The founder narrative lives at /about. Scope stays here on purpose:
- * it is what makes everything above it credible.
+ * Scope stays here on purpose: it is what makes everything above it
+ * credible.
  */
 
 interface HomepageViewProps {

@@ -19,6 +19,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${template.meta.name} — FieldCraft Templates`,
     description: template.meta.description,
+    alternates: {
+      canonical: `https://fieldcraft.squaredr.tech/templates/${id}`,
+    },
+    openGraph: {
+      title: `${template.meta.name} — free JSON form schema`,
+      description: template.meta.description,
+      type: 'article',
+    },
   };
 }
 

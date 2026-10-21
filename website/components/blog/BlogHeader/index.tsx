@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import './styles.css';
 
 interface BlogMastheadProps {
@@ -30,7 +31,7 @@ export function BlogMasthead({ postCount }: BlogMastheadProps) {
           >
             Releases &rarr;
           </a>
-          <a href="/changelog">Changelog &rarr;</a>
+          <Link href="/changelog">Changelog &rarr;</Link>
           <a
             href="https://github.com/SquaredR98/fieldcraft"
             target="_blank"

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import './styles.css';
 
@@ -59,9 +60,9 @@ export function CookieConsent() {
         <p className="fc-consent__text">
           We use Google Analytics to understand how visitors use this site
           (page views only, no advertising). Your data is anonymised.{' '}
-          <a href="/legal/privacy#cookies" className="fc-consent__link">
+          <Link href="/legal/privacy#cookies" className="fc-consent__link">
             Privacy policy
-          </a>
+          </Link>
         </p>
         <div className="fc-consent__actions">
           <button

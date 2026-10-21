@@ -3,6 +3,7 @@ import { getAllPosts, getCategories } from '@/lib/blog';
 import { BlogListView } from '@/components/blog/BlogListView';
 
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://fieldcraft.squaredr.tech/blog' },
   title: 'Blog',
   description:
     'Tutorials, guides, and deep-dives on building forms with React. Multi-step wizards, conditional logic, validation patterns, and self-hosted form architecture.',

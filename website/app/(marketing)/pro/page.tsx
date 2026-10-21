@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ProView } from '@/components/pro/ProView';
 
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://fieldcraft.squaredr.tech/pro' },
   title: 'FieldCraft Pro — Form Builder, Response Viewer, Theme Editor',
   description:
     'Drop-in React components for form administration: a visual form builder, a response viewer, and a theme editor. One-time licence, unlimited developers.',

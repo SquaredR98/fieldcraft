@@ -4,6 +4,7 @@ import { getAllTemplates, getTemplateById } from '@/lib/templates';
 import { changelog } from '@/lib/changelog';
 
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://fieldcraft.squaredr.tech' },
   title: 'FieldCraft — Self-hosted form engine for React',
   description:
     'Responses go straight from the browser to infrastructure you control — no vendor in the path. Schema-driven form engine for React with 18 input field types, conditional logic, multi-step forms and validation. MIT licensed.',

@@ -18,6 +18,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `${page.title} — FieldCraft`,
+    alternates: {
+      canonical: `https://fieldcraft.squaredr.tech/legal/${slug}`,
+    },
   };
 }
 

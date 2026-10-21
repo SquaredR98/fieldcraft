@@ -49,8 +49,18 @@ export async function generateMetadata(props: {
   const page = source.getPage(params.slug);
   if (!page) notFound();
 
+  const path = params.slug?.length ? `/${params.slug.join('/')}` : '';
+
   return {
     title: page.data.title,
     description: page.data.description,
+    alternates: {
+      canonical: `https://fieldcraft.squaredr.tech/docs${path}`,
+    },
+    openGraph: {
+      title: `${page.data.title} — FieldCraft docs`,
+      description: page.data.description,
+      type: 'article',
+    },
   };
 }

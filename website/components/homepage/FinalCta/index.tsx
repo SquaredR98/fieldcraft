@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import './styles.css';
 
 const packages = [
@@ -43,9 +44,9 @@ export function FinalCta() {
             and the licence is MIT.
           </p>
           <div className="fc-cta__actions">
-            <a href="/docs" className="fc-v2-cta">
+            <Link href="/docs" className="fc-v2-cta">
               Read the docs <span className="fc-v2-cta__arrow">&rarr;</span>
-            </a>
+            </Link>
             <a
               href="https://github.com/SquaredR98/fieldcraft"
               className="fc-v2-btn"

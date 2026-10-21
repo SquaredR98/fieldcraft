@@ -3,6 +3,7 @@ import { ChangelogView } from '@/components/roadmap/RoadmapView';
 import { changelog } from '@/lib/changelog';
 
 export const metadata: Metadata = {
+  alternates: { canonical: 'https://fieldcraft.squaredr.tech/changelog' },
   title: 'Changelog — FieldCraft',
   description:
     'Release history for the FieldCraft core, react, adapters and templates packages. New field types, engine improvements, and fixes.',

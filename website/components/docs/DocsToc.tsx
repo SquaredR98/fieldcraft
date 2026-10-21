@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { useDocsShell } from './DocsShellContext';
 import { cn } from '@/lib/utils';
@@ -99,7 +100,7 @@ export function DocsToc({ toc }: DocsTocProps) {
           >
             Discussions
           </a>
-          <a href="/changelog">Changelog</a>
+          <Link href="/changelog">Changelog</Link>
         </div>
       </div>
     </aside>
