@@ -4,10 +4,6 @@ import { BlogMasthead } from '../BlogHeader';
 import { FilterRail } from '../TagFilter';
 import { PostGrid } from '../PostGrid';
 import { BlogPagination } from '../BlogPagination';
-/* .fc-v2-grid lives here. Imported explicitly — without it the
-   backdrop's grid renders unstyled on a direct visit to /blog, even
-   though a build that also compiles the homepage looks fine. */
-import '@/components/homepage/v2.css';
 import './styles.css';
 
 interface BlogListViewProps {

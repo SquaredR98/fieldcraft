@@ -4,9 +4,6 @@ import { BlogPostBody } from '../BlogPostBody';
 import { PostFooter } from '../PostFooter';
 import { PostSidebar } from '../PostSidebar';
 import { MobileToc } from '../MobileToc';
-/* .fc-v2-grid lives here — without the explicit import the backdrop's
-   grid renders unstyled on a direct visit to a post. */
-import '@/components/homepage/v2.css';
 import './styles.css';
 
 interface Heading {

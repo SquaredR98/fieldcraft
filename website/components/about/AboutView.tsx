@@ -1,4 +1,3 @@
-import '@/components/homepage/v2.css';
 import './styles.css';
 
 /*

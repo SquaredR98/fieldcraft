@@ -36,7 +36,7 @@
   background: linear-gradient(90deg, var(--amber-border), transparent);
 }
 
-/* Size and tracking come from the shared .fc-gaps__h2 rule in v2.css. */
+/* Size and tracking come from the shared .fc-gaps__h2 rule in globals. */
 .fc-gaps__h2 {
   @apply font-display font-semibold m-0 text-fc-ink-strong;
   text-wrap: pretty;

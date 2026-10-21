@@ -2,10 +2,6 @@ import Link from 'next/link';
 import type { Template } from '@/lib/templates';
 import { categoryLabels } from '@/lib/templates';
 import { TemplateDetailClient } from './TemplateDetailClient';
-/* .fc-v2-grid lives here. Imported explicitly — without it the
-   backdrop's grid renders unstyled on a direct visit to this route,
-   even though a build that also compiles the homepage looks fine. */
-import '@/components/homepage/v2.css';
 import './styles.css';
 
 interface TemplateDetailViewProps {

@@ -8,7 +8,6 @@ import { KnownGaps } from '@/components/homepage/KnownGaps';
 import { Status } from '@/components/homepage/Status';
 import { FinalCta } from '@/components/homepage/FinalCta';
 import type { Template } from '@/lib/templates';
-import './v2.css';
 
 /*
  * Order carries the argument:

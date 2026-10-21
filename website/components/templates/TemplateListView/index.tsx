@@ -1,11 +1,6 @@
 import { TemplateCard } from '@/components/templates/TemplateCard';
 import type { Template, TemplateCategory } from '@/lib/templates';
 import { categoryLabels } from '@/lib/templates';
-/* .fc-v2-grid lives here. Imported explicitly, the way AboutView and
-   the Pro sections do — without it the masthead's grid div renders
-   unstyled on a direct visit to /templates, even though a build that
-   also compiles the homepage makes it look fine. */
-import '@/components/homepage/v2.css';
 import './styles.css';
 
 interface TemplateListViewProps {
