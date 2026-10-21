@@ -64,14 +64,14 @@ export function Hero({ version }: HeroProps) {
             emphasis entirely to satisfy Rule 6 after I had built it from
             invented hex values; the fix was to use the real teal tokens,
             not to delete the design decision. */}
-        {/* "React form engine" sits in the H1 rather than only in the
-            paragraph below it: it is the term this page targets, and
-            an H1 carries more weight than body copy. Same rhythm as
-            before — the accent half still completes the sentence. */}
+        {/* Carries both the product name and the term this page
+            targets. Naming only the category drops "FieldCraft" out of
+            the most prominent line on the site; naming only the brand
+            spends the H1 on a word nobody searches yet. */}
         <h1>
           Declare the form.
           <br />
-          <span>The React form engine renders the rest.</span>
+          <span>FieldCraft, the React form engine, renders the rest.</span>
         </h1>
 
         <p>
