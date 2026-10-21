@@ -212,6 +212,45 @@ export function FormEngineView({
             </Link>
           </div>
         </section>
+
+        {/* Outbound links make this a hub rather than a dead end:
+            authority flows on to the posts, and a reader who wants
+            depth has somewhere to go. */}
+        <section className="fc-fe__section">
+          <h2>Going deeper</h2>
+          <ul className="fc-fe__links">
+            <li>
+              <Link href="/blog/why-schema-driven">
+                Why schema-driven forms
+              </Link>
+              <span>The argument for describing a form as data.</span>
+            </li>
+            <li>
+              <Link href="/blog/schema-vs-code-driven-forms">
+                Schema-driven vs code-driven forms
+              </Link>
+              <span>Where each approach stops paying off.</span>
+            </li>
+            <li>
+              <Link href="/blog/build-multi-step-survey">
+                Building a multi-step survey
+              </Link>
+              <span>Navigation and conditional logic in practice.</span>
+            </li>
+            <li>
+              <Link href="/blog/fieldcraft-validation-pipeline">
+                How validation runs
+              </Link>
+              <span>Schema validation, field rules and async checks.</span>
+            </li>
+            <li>
+              <Link href="/docs/core-concepts/schema-anatomy">
+                Schema anatomy
+              </Link>
+              <span>Every property, with types.</span>
+            </li>
+          </ul>
+        </section>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ description: FieldCraft is a schema-driven form engine for React. Define a form 
 
 ## What FieldCraft does
 
-You write a JSON schema that describes a form — its fields, sections, validation rules, conditional logic, and submission behaviour. FieldCraft reads that schema and renders a fully functional form with zero imperative code.
+You write a JSON schema that describes a form — its fields, sections, validation rules, conditional logic, and submission behaviour. FieldCraft reads that schema and renders a fully functional form with zero imperative code. If the term is new to you, [what is a form engine?](/form-engine) covers the idea and when it is the wrong tool.
 
 ```tsx title="app/intake/page.tsx"
 import { FormEngineRenderer } from '@squaredr/fieldcraft-react'

@@ -78,7 +78,7 @@ export function Hero({ version }: HeroProps) {
             anchor text on the term this site targets, from the
             highest-authority page it has. */}
         <p>
-          A schema-driven <Link href="/form-engine">form engine</Link> for
+          A schema-driven <Link href="/form-engine">form engine</Link>{" "}for
           React. Multi-step navigation, conditional logic, validation,
           computed fields and drafts &mdash; all from one typed object you
           can version, diff and review.

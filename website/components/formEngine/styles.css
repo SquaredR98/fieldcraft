@@ -25,10 +25,8 @@
   );
 }
 
-/* Narrower than max-w-310: this is a reading page, not a layout page,
-   so the measure matters more than filling the container. */
 .fc-fe__inner {
-  @apply relative max-w-220 mx-auto px-4 sm:px-6;
+  @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   @apply pt-22 sm:pt-32 pb-24;
 }
 
@@ -164,6 +162,31 @@
 
 .fc-fe__actions {
   @apply flex flex-wrap items-center gap-3 mt-7;
+}
+
+/* ── Going deeper ── */
+.fc-fe__links {
+  @apply m-0 p-0 list-none mt-6;
+  @apply border-t border-fc-rule;
+}
+
+.fc-fe__links li {
+  @apply flex flex-wrap items-baseline gap-x-3 gap-y-1;
+  @apply py-3.5 border-b border-fc-rule;
+}
+
+.fc-fe__links a {
+  @apply font-display font-medium text-fc-ink no-underline;
+  font-size: 15.5px;
+  transition: color var(--motion-hover);
+}
+
+.fc-fe__links a:hover {
+  @apply text-fc-teal;
+}
+
+.fc-fe__links span {
+  @apply text-fc-sm-body text-fc-muted;
 }
 
 @media (max-width: 767px) {
