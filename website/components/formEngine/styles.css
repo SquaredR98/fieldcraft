@@ -150,6 +150,23 @@
   @apply text-fc-ink-strong font-semibold;
 }
 
+/* Inline links in prose — underlined rather than coloured, so they
+   read as part of the sentence. */
+.fc-fe__list a,
+.fc-fe__section > p a {
+  @apply text-fc-ink no-underline;
+  border-bottom: 1px solid var(--teal-border);
+  transition:
+    color var(--motion-hover),
+    border-color var(--motion-hover);
+}
+
+.fc-fe__list a:hover,
+.fc-fe__section > p a:hover {
+  @apply text-fc-teal;
+  border-bottom-color: var(--teal);
+}
+
 .fc-fe__callout {
   @apply mt-7 p-5 border border-fc-rule;
   border-radius: var(--radius-sm);

@@ -19,6 +19,7 @@ const columns: FooterColumn[] = [
     links: [
       { label: 'Documentation', href: '/docs' },
       { label: 'What is a form engine?', href: '/form-engine' },
+      { label: 'Conditional logic', href: '/conditional-logic-forms' },
       { label: 'Demos', href: '/#demos' },
       { label: 'Templates', href: '/templates' },
       { label: 'Scope', href: '/#scope' },

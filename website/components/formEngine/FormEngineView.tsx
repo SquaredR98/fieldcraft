@@ -133,9 +133,10 @@ export function FormEngineView({
               reviewable by people who would not open a React file.
             </li>
             <li>
-              <strong>Logic that outgrows components.</strong> Conditional
-              visibility, computed fields and cross-field validation become
-              unreadable as nested JSX long before they become hard as data.
+              <strong>Logic that outgrows components.</strong>{' '}
+              <Link href="/conditional-logic-forms">Conditional visibility</Link>,
+              computed fields and cross-field validation become unreadable as
+              nested JSX long before they become hard as data.
             </li>
             <li>
               <strong>Forms you must audit.</strong> A schema diffs cleanly in
@@ -219,6 +220,12 @@ export function FormEngineView({
         <section className="fc-fe__section">
           <h2>Going deeper</h2>
           <ul className="fc-fe__links">
+            <li>
+              <Link href="/conditional-logic-forms">
+                Conditional logic in React forms
+              </Link>
+              <span>Show, hide and branch as data rather than state.</span>
+            </li>
             <li>
               <Link href="/blog/why-schema-driven">
                 Why schema-driven forms

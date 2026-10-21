@@ -23,6 +23,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${BASE_URL}/conditional-logic-forms`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
       url: `${BASE_URL}/changelog`,
       lastModified: now,
       changeFrequency: 'weekly',
