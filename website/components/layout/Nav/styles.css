@@ -66,16 +66,9 @@
 }
 
 /* ── At the top ──
-   The bar KEEPS its glass: blur, rounded corners, translucent ground. What
-   changes is only how much it lifts off the page. At the top there is
-   nothing scrolling underneath, so the drop shadow has nothing to
-   separate from and reads as a chip resting on the hero; once content
-   starts passing beneath, the shadow earns its place.
-
-   An earlier pass stripped the background, blur and border here
-   entirely. That was wrong: letting the hero show THROUGH the glass is
-   the point — removing the glass is not the same thing. The ground goes
-   slightly more transparent so more hero comes through, and that is all. */
+   Keeps its glass; only the lift changes. At the top there is nothing
+   scrolling underneath, so the drop shadow has nothing to separate
+   from — it returns once content passes beneath. */
 .fc-nav[data-pinned='true'] .fc-nav__inner {
   background: color-mix(in srgb, var(--surface) 55%, transparent);
   box-shadow: inset 0 1px 0 var(--lit);
@@ -96,38 +89,18 @@
 }
 
 /* ── Reading progress ──
-   Lives INSIDE the header so it rides the same translate when the bar
-   hides on scroll-down. As a separate `fixed` element it stayed
-   pinned while the header slid away, leaving a stray teal line
-   floating over the page.
+   A child of .fc-nav__inner, so it rides the same translate when the
+   bar hides and inherits the bar's box rather than restating its
+   margins and max-width.
 
-   Matches the bar's own box (same margins and max-width) rather than
-   spanning the viewport, and is clipped to the bar's radius so it
-   cannot poke past the rounded bottom corners.
+   The strip is as TALL as the bar, with the fill pinned to its bottom:
+   a 1px box cannot show a 14px radius — the browser scales a radius
+   down to fit, so a hairline strip clipped straight and the fill ran
+   square into the corner. inset -1px rather than 0, which resolves
+   against the padding box inside the 1px border.
 
-   Only paints when NavShell measures enough scrollable distance to be
-   worth tracking — on a short page a bar sitting at 100% for the
-   whole visit reads as decoration, not progress. */
-/* A child of .fc-nav__inner, pinned to its bottom edge — so it
-   inherits the bar's box instead of restating its margins and
-   max-width, which is what a sibling would have had to do.
-
-   left/right -1px: inset 0 resolves against the PADDING box, inside
-   the bar's 1px border, so the line would stop a pixel short at each
-   end. Same reason the drawer uses -1px. */
-/* The strip is as TALL as the bar, not 1px, and the fill is pinned to
-   its bottom edge.
-
-   A 1px-tall box cannot show a 14px radius: the browser scales a
-   radius down to fit its box, so a hairline strip clipped as a
-   straight line and the fill ran square into the bar's rounded
-   corner. Matching the bar's height gives the corner the vertical
-   room it needs, and overflow:hidden then cuts the fill to the
-   bar's actual curve.
-
-   inset -1px rather than 0: `inset: 0` resolves against the PADDING
-   box, inside the bar's 1px border, so the clip shape would be a
-   pixel smaller than the border it has to follow. */
+   NavShell only arms it when there is enough scrollable distance to
+   be worth tracking. */
 .fc-nav__progress {
   @apply absolute pointer-events-none overflow-hidden;
   inset: -1px;
@@ -179,16 +152,10 @@
 }
 
 /* ── Focus-follows-cursor ──
-   Hovering one link blurs and fades the OTHERS, so the one under the
-   cursor is the only sharp thing in the row.
-
-   Pure CSS via :has() — no state, no pointer listener, and the links stay
-   server-rendered. A useState hover index would re-render the row on
-   every pointer move to produce exactly this.
-
-   Pointer-only, and deliberately not tied to :focus: a keyboard user
-   tabbing through should not watch the other items smear, and on touch
-   there is no hover to resolve. */
+   Hovering one link blurs the others. Pure CSS via :has() — a useState
+   hover index would re-render the row on every pointer move for the
+   same effect. Pointer-only and not tied to :focus: a keyboard user
+   tabbing through should not watch the other items smear. */
 @media (hover: hover) and (pointer: fine) {
   .fc-nav__links:has(.fc-nav__link:hover) .fc-nav__link:not(:hover) {
     filter: blur(1.5px);
@@ -203,14 +170,8 @@
 }
 
 /* Bar height (3.5rem) + top inset (0.875rem) + air. Pages make their own
-   room for the floating header out of the top padding they already have
-   — the hero's pt-22 is well past this — rather than a wrapper element
-   being added to <main> to push everything down. A spacer div around the
-   whole site is the structural version of the header not belonging to
-   the page.
-
-   The token is still declared because scroll-margin-top needs the same
-   measurement. */
+   room out of the padding they already have, rather than a spacer div.
+   Declared as a token because scroll-margin-top needs the same figure. */
 :root {
   --fc-nav-space: 5.25rem;
 }
@@ -237,28 +198,6 @@ main h3[id] {
   @apply text-fc-ink;
 }
 
-/* ── Header CTA ──
-   Four problems with the previous version, all visible at a glance:
-
-   - `py-1` against `px-4` made it a thin slab, four pixels of vertical
-     padding inside sixteen horizontal.
-   - Its radius was a step sharper than the bar containing it, which
-     reads as a mistake rather than a choice.
-   - No font-size at all after an earlier edit dropped it, so it
-     inherited whatever the bar happened to set.
-   - A SOLID teal plate sitting inside a translucent glass bar: the
-     heaviest treatment available, fighting the surface it sits on, and
-     the only opaque object in a header whose whole idea is that you can
-     see through it.
-
-   Now a tinted glass chip rather than a filled button. It still reads
-   as the primary action — it is the only coloured thing in the bar — but
-   it belongs to the bar instead of being stuck onto it. Teal text on a
-   teal-tinted translucent ground, with a teal border doing the work the
-   fill used to.
-
-   Height is set to line up with the 56px bar: 32px tall inside a 56px
-   bar leaves 12px either side, matching the bar's own inner gutter. */
 .fc-nav__cta {
   @apply inline-flex items-center gap-1.5 h-8;
   @apply whitespace-nowrap shrink-0 no-underline;
@@ -391,10 +330,6 @@ main h3[id] {
      An opaque ground gets the readability the glass was failing to,
      and the bar above still reads as glass because it genuinely is. */
   background: var(--surface);
-  /* NO shadow of its own. The drawer had --e3 against the bar's --e2,
-     so once they were joined the lower half looked lifted off the
-     upper one — two materials rather than one object. The bar now
-     casts for both (below), which is what a single silhouette does. */
 
   /* ── The transition ──
      grid-template-rows 0fr→1fr is what allows a height animation to an
@@ -482,11 +417,6 @@ main h3[id] {
   @apply text-fc-ink;
 }
 
-/* Stays SOLID, unlike the desktop CTA: this is a full-width button at the
-   foot of an opaque drawer, where a tinted-glass chip would read as
-   disabled rather than primary. It does take the radius and the plate —
-   it was square inside a 14px rounded drawer, with a flat fill rather
-   than the gradient plate every other primary button uses. */
 .fc-nav__drawer-cta {
   @apply flex items-center justify-center gap-1.5;
   @apply no-underline text-center;

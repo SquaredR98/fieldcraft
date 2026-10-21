@@ -1,16 +1,5 @@
 @reference "../../../app/globals.css";
 
-/* ── Batteries included ──
- * Four behaviours, each shown as the line of schema that turns it on.
- *
- * Was a 2x2 shared-border spec sheet where every cell also carried a
- * prose body and a "what you'd write instead" line. The cards are three
- * elements now, so they sit in one row of four rounded plates matching
- * the quick-start cards — header row with a full-width rule, code as the
- * floor at a shared baseline.
- *
- * No bottom rule — the ground step separates this from its neighbours.
- */
 
 .fc-batteries {
   @apply relative;
@@ -32,18 +21,6 @@
   text-wrap: pretty;
 }
 
-/* ── Grid ──
-   Four across, not 2x2. Each card now holds three elements instead of
-   five, so two rows of short cards wasted the width and made the eye
-   zigzag; one row reads in a single pass.
-
-   Separate rounded plates rather than the shared-border cell grid this
-   used to be. That grid (gap:1px over a rule-coloured ground) is square
-   by definition — the cells ARE the border — so it could never take the
-   new radius. It was also the house style for evidence sections, shared
-   with DataFlow and TrustStrip, and both of those are gone: the pattern
-   had become an orphan rather than a convention. These now match the
-   quick-start cards, which is the page's one card treatment. */
 
 .fc-batteries__grid {
   @apply grid gap-5;

@@ -149,10 +149,6 @@
   color: var(--bg);
 }
 
-/* The row stagger that lived here is gone with ScrollReveal: both rules
-   were scoped to `.fc-scroll-reveal` / `.fc-revealed` ancestors that no
-   longer wrap this section, so they had stopped doing anything. Dead
-   rather than broken — the rows were never left hidden — but dead. */
 
 @media (prefers-reduced-motion: reduce) {
   .fc-gaps__row,

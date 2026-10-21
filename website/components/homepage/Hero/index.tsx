@@ -96,20 +96,6 @@ export function Hero({ version }: HeroProps) {
 
       </div>
 
-      {/* Above the panel, not below.
-          Below, the numbers were an afterthought the eye reached only
-          after the demo had already made its case; above, they are the
-          context you read the demo THROUGH — 18 field types and 1,384
-          tests, then a form built from them.
-
-          This replaced the badge row that used to close the copy column
-          (MIT · TypeScript · React 18 & 19 · No backend required). Two
-          horizontal credibility bands stacked back to back, with the
-          panel under them, was three competing bands in one space — and
-          the two were doing the same job. Every badge claim survives
-          elsewhere on the page: MIT in Architecture, ComparisonTable and
-          FinalCta; TypeScript in Architecture; React 18 and 19 in
-          HowItWorks. */}
       <SpecStrip />
 
       {/* Full width and last — the schema/result relationship is the

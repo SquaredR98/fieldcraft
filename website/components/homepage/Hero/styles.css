@@ -464,16 +464,6 @@
   @apply m-0 text-[13.5px] leading-[1.7] text-fc-muted;
 }
 
-/* ── Reveal ─────────────────────────────────────────────────────────────
-   Conditional content was snapping into place with a jerk — it appeared
-   at full size with no transition, which reads as a glitch rather than a
-   response. Anything that mounts in response to an answer fades and
-   rises slightly instead.
-
-   Height is deliberately NOT animated: auto-height transitions need a
-   measured pixel value and reflow everything below mid-animation, which
-   is a worse artefact than the one being fixed. Opacity and a small
-   translate are composited and cost nothing. */
 @keyframes fc-hero-reveal {
   from {
     opacity: 0;
@@ -503,13 +493,6 @@
 
 /* ── Spec strip ─────────────────────────────────────────────────────── */
 
-/* ── Spec strip ─────────────────────────────────────────────────────────
-   It was welded to the panel: no space between them, so the panel's
-   bottom edge and the strip's top border landed on the same line and the
-   strip read as the panel's footer rather than as the hero's closing
-   statement. The border is gone and the gap does the separating — the
-   hero's own border-b already closes the section, so a border here was a
-   third horizontal rule inside about 40px. */
 /* The page gutter lives HERE, not on __inner — __inner now carries the
    border and radius, and a padding on that element would put the gutter
    inside the box. Max-width and gutter on one element is the convention;
@@ -619,12 +602,6 @@
     @apply min-w-0;
   }
 
-  /* ── Tabbed ──
-     Stacked, the JSON sat ON TOP of the form, so the first thing inside
-     the demo was a wall of code and the working form — the part that
-     convinces — was pushed below it. One pane at a time instead, preview
-     first. The schema stays one tap away rather than being dropped: it is
-     half the argument. */
   .fc-hero-panel__split {
     grid-template-columns: 1fr;
   }

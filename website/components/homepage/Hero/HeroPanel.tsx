@@ -101,10 +101,6 @@ export function HeroPanel({ schema }: { schema: ReactNode }) {
           </button>
         </div>
 
-        {/* Not decoration: the schema in SchemaPanel was run through
-            validateSchema() from the published core and passes. It failed
-            the first time — an empty `questions` array on section 2 —
-            which is exactly why this is worth asserting. */}
         <span className="fc-hero-panel__status">
           <i aria-hidden="true" />
           schema valid

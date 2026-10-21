@@ -37,11 +37,6 @@
   );
 }
 
-/* ── Masthead ──
-   pt-22 sm:pt-32 matches the hero. The old py-20 (5rem) was LESS than
-   --fc-nav-space (5.25rem), the clearance the floating header needs, so
-   the h1 was starting above where the bar ends — that is why the
-   heading read as cramped against the header rather than merely tight. */
 .fc-tpl-list__masthead {
   @apply relative;
   @apply pt-22 sm:pt-32 pb-10 sm:pb-12;

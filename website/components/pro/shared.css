@@ -1,13 +1,5 @@
 @reference "../../app/globals.css";
 
-/* ── Shared Pro section layout ──
- * These were a parallel set of primitives to the homepage's: a fixed
- * 34px heading that did not scale, py-20 rhythm, muted eyebrows with
- * dots rather than the fading rule. They now resolve through the same
- * v2 tokens, so the two pages read as one site.
- *
- * Because every Pro section uses these, the whole page moves at once.
- */
 
 .fc-pro-section {
   @apply relative;
@@ -244,9 +236,6 @@
 
 /* ── Responsive ── */
 
-/* Heading size and vertical rhythm come from the tokens, which already
-   scale at 820px — the fixed 28px/26px and py-16/py-12 overrides that
-   used to live here fought them. */
 
 @media (max-width: 1000px) {
   .fc-pro-section__inner {

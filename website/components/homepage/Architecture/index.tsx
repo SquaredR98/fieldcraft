@@ -1,23 +1,5 @@
 import './styles.css';
 
-/*
- * Two layers, four packages.
- *
- * Counts and names verified against source 2026-10-18:
- *   adapters   packages/adapters/src — postgres, supabase, webhook. The
- *              package's own dev banner prints the same three. This
- *              section used to claim they loaded schemas "over HTTP,
- *              from localStorage, or from a custom source", which was
- *              wrong on both the names and the job: they DELIVER
- *              submissions, they do not load schemas.
- *   templates  16 schemas in packages/templates/src (17 files, one of
- *              which is types.ts).
- *
- * The nested diagram is the point of the section — core drawn inside
- * react, so the dependency is visible rather than described. The prose
- * that used to explain how to read it has gone: a diagram needing an
- * instruction manual is not working.
- */
 export function Architecture() {
   return (
     <section id="layers" className="fc-arch fc-ground-surface">

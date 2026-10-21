@@ -1,14 +1,5 @@
 @reference "../../../app/globals.css";
 
-/* ── Blending out of the hero ──
-   There were TWO rules stacked at this boundary — the hero's border-b
-   and this section's — over a hard step from the hero's --bg to this
-   section's --surface2. Both borders are gone and the ground is now a
-   gradient that BEGINS at the hero's colour and settles into its own,
-   so there is no line and no step to see.
-
-   Only the top fades: the section below this one is a separate
-   boundary, and its own ground still steps normally. */
 .fc-how.fc-ground-surface2 {
   background: linear-gradient(
     180deg,
@@ -19,10 +10,6 @@
     /* Middle: the section's own ground. */
     var(--ground-2) 40%,
     var(--ground-2) 62%,
-    /* Bottom: ends on --surface, which is what BatteriesIncluded below
-       sits on. It used to stop flat at --ground-2 and meet that
-       --surface as a step, so fixing the top boundary just moved the
-       visible line down one section. */
     color-mix(in srgb, var(--surface) 30%, var(--ground-2)) 76%,
     color-mix(in srgb, var(--surface) 70%, var(--ground-2)) 90%,
     var(--surface) 100%
@@ -46,10 +33,6 @@
 
 .fc-how__grid {
   @apply grid gap-7;
-  /* Equal columns. Step 02 used to take 1.18fr because the schema was the
-     argument and needed the weight — but the hero now carries that, at
-     full width, so these are three peers in a sequence rather than one
-     step with two supporting it. */
   grid-template-columns: repeat(3, 1fr);
 }
 
@@ -58,16 +41,6 @@
    left divider; keeping the card here because these sit on a tinted
    ground where a bare column would have nothing to hold it, but the
    corners, the lift and the hover come from the same system. */
-/* No padding of its own, and a flex column.
-   The card used to be `p-5.5` with three stacked children, which caused
-   all three problems at once: the header's rule stopped 22px short of
-   each edge and read as an underline rather than a division; the code
-   block floated inside the padding; and because each body is a
-   different length, the three code blocks started at three different
-   heights, leaving a ragged line across the row.
-   Padding now lives on the rows that need it, so a full-bleed child can
-   reach the card's edges. `overflow-hidden` lets the code block inherit
-   the bottom corners. */
 .fc-how__step {
   @apply relative flex flex-col overflow-hidden;
   @apply border border-fc-rule rounded-lg;

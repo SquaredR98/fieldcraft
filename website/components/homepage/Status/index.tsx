@@ -21,12 +21,6 @@ export function Status({
           comes from the changelog, not from this page.
         </p>
         <div className="fc-status__grid">
-          {/* The corner bracket is gone. It was an 11px square at -1px,
-              built for a square box — against the grid's radius the
-              corner curves inward while the bracket stays put, so it
-              detaches and floats outside, exactly as it did on the demo
-              panel. The lead card is already weighted by its --lead-plate
-              ground, its wider column and its teal label. */}
           <div className="fc-status__card fc-status__card--lead">
             <div className="fc-status__label">Latest release</div>
             <div className="fc-status__version">

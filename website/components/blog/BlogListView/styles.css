@@ -69,11 +69,6 @@
   filter: blur(44px);
 }
 
-/* pt-22 sm:pt-32 clears the floating header, whose --fc-nav-space is
-   5.25rem (84px) — the old py-20 was 80px, so the masthead started
-   above where the bar ends. max-w-310 is the site container; every
-   blog section previously used an arbitrary max-w-[1280px], which is
-   40px wider and so misaligned with the nav above it. */
 .fc-blog-page__inner {
   @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
   @apply pt-22 sm:pt-32 pb-20;

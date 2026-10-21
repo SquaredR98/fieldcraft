@@ -1,27 +1,5 @@
 import './styles.css';
 
-/*
- * Four behaviours that are tedious to build by hand, each shown as the
- * line of schema that turns it on.
- *
- * Re-verified against source 2026-10-17, and the pass found TWO code
- * examples on this page that would not have worked if copied:
- *
- *   drafts      — settings.allowDraftSave is opt-OUT (`!== false`),
- *                 create-engine.ts:542. Auto-save is an ENGINE OPTION,
- *                 read at create-engine.ts:547 as
- *                 options.autoSaveIntervalMs — it was shown here bare,
- *                 beside a settings key, so it read as schema.
- *   prefill     — PrefillConfig takes `source: "props" | "url" | "both"`
- *                 (settings.ts:79). The card showed `{ fromUrl: true }`,
- *                 a property that does not exist.
- *   validation  — validateSchema() runs at create-engine.ts:480, before
- *                 any render.
- *   expressions — utils/expression-parser.ts is a tokeniser plus RPN
- *                 evaluator with no eval. Its functions are abs, ceil,
- *                 floor, max, min, round — the card advertised `if`,
- *                 which is not among them.
- */
 
 type Feature = {
   n: string;
@@ -31,20 +9,6 @@ type Feature = {
   code: { k: string; v?: string }[];
 };
 
-/*
- * Each card is TITLE, BADGE, CODE — nothing else.
- *
- * It used to carry a two-to-three line body and a "what you'd write
- * instead" line as well, five elements per card across four cards. The
- * body was prose paraphrasing the code line directly beneath it, which
- * is slower to read than the thing it describes. The title says what the
- * behaviour is, the badge says its default, and the code says how to
- * reach it — so the reader scans four cards in the time the old version
- * took to read one.
- *
- * Titles do the work the body used to: "Safe expressions" became
- * "Expressions, never eval", which carries its own point.
- */
 const features: Feature[] = [
   {
     n: '01',

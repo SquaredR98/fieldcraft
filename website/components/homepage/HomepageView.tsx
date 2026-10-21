@@ -45,40 +45,17 @@ export function HomepageView({
   return (
     <>
       <Hero version={latestVersion} />
-      {/* Quick start leads. The hero shows THAT it works; this answers
-          the question it leaves open — what you actually type.
+      {/* Quick start leads: the hero shows THAT it works, this shows
+          what you actually type.
 
-          DataFlow and TrustStrip were here and are gone. DataFlow argued
-          data sovereignty ("most form tools put themselves in the path"),
-          which is not a differentiator for an npm library — every library
-          a developer installs works that way, so claiming it suggests we
-          think they do not know what a library is. It is a real argument
-          for a hosted product, and belongs there if SaaS ships.
-          TrustStrip went with it: its heading was "Don't take the last
-          section on faith", so it was the audit trail for exactly that
-          claim, and its four points (no endpoint of ours, telemetry off
-          by default, MIT) are the same baseline-not-USP problem. */}
-      {/* No ScrollReveal. Every section was wrapped in it, which is the
-          opposite of strategic: eight fade-and-rise animations firing
-          one after another as you scroll turns reading the page into
-          waiting for it. A reveal is worth something when ONE thing
-          earns the emphasis; applied to everything it emphasises
-          nothing and taxes the whole page.
-
-          It also hid each section behind a bare `opacity: 0` that only
-          its IntersectionObserver could undo — so with JavaScript off,
-          blocked, or still loading, the entire page below the hero was
-          invisible. Removing the wrapper fixes that too.
-
-          The component is kept on disk: per-section reveals are planned,
-          and that is a different design from wrapping the lot. */}
+          No ScrollReveal wrapper. It hid each section behind a bare
+          `opacity: 0` that only its IntersectionObserver could undo,
+          so with JS off or still loading the page below the hero was
+          invisible. */}
       <HowItWorks />
       <BatteriesIncluded />
       <LiveDemos />
       <Architecture />
-      {/* FormBuilderTeaser removed: Pro is hidden from the site until the
-          OSS stands on its own. The component is kept, not deleted, so it
-          can come back when Pro is ready. */}
       <TemplateShowcase templates={showcaseTemplates} total={templateCount} />
       <KnownGaps />
       <Status

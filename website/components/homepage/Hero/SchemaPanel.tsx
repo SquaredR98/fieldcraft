@@ -15,27 +15,6 @@ import { CodeBlock } from '@/components/shared/CodeBlock';
  * A schema shown on a page that invites readers to count from source has
  * to actually validate.
  */
-/*
- * Formatted normally: one key per line, two-space indent.
- *
- * An earlier pass hand-compacted this to fight the pane's HEIGHT — the
- * schema is only shown beside a form and 64 lines made the panel very
- * tall. That traded a vertical problem for a worse horizontal one: lines
- * reached 89 characters in a column about 540px wide, so the pane
- * scrolled sideways and the JSON ran off the edge.
- *
- * Vertical scroll in a code pane is ordinary; horizontal scroll is a
- * defect. The pane caps its height and scrolls, which is the right place
- * for the constraint to live.
- *
- * Every property is real API, not illustrative:
- *   `showIf` with operator "eq"   core/src/types/conditions.ts
- *   `allowDraftSave`              core/src/types/settings.ts (opt-OUT —
- *                                 the engine treats !== false as on)
- * The equivalent object was run through validateSchema() from the
- * published core and passes — it failed the first time, on an empty
- * `questions` array, which is why asserting beats assuming.
- */
 const heroSchema = `{
   "id": "event-registration",
   "settings": {

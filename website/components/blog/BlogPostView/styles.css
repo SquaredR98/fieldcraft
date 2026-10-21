@@ -80,13 +80,6 @@
   grid-template-columns: minmax(0, 1fr) 220px;
 }
 
-/* ── The article plate ──
-   A contained surface on the page backdrop, matching the window on
-   /blog and the card on /templates/[id].
-
-   The body text is capped at a reading measure inside this (see
-   BlogPostBody): the column itself used to be ~1000px wide, far past
-   comfortable measure, because it was simply 1fr of a 1280px grid. */
 .fc-blog-post {
   @apply min-w-0 overflow-hidden;
   @apply px-5 pt-8 pb-14 sm:px-9 sm:pt-10 sm:pb-16 lg:px-12 lg:pb-20;
@@ -103,13 +96,6 @@
   }
 }
 
-/* ── Mobile: no plate ──
-   The border, radius, shadow and horizontal padding cost roughly 40px
-   of width on a phone, inside a page that already has its own px-4
-   gutter — so the text was inset twice. The plate earns its keep on
-   desktop where there is width to spare; here it is pure cost.
-
-   Vertical padding stays: that is rhythm, not decoration. */
 @media (max-width: 639px) {
   .fc-blog-post {
     @apply px-0 border-0 overflow-visible;

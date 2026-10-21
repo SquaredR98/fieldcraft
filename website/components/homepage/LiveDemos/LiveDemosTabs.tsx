@@ -9,17 +9,6 @@ import { ComputedDemo } from './demos/ComputedDemo';
 type Tab = 'multistep' | 'conditional' | 'validation' | 'computed';
 
 /*
- * Tabs. A pass replaced them with three preview cards under the panel,
- * each describing its demo — better on a wide screen, where a bare label
- * gives no reason to click. But that was chosen without costing mobile:
- * stacked, it put the panel plus three full-width cards on a phone,
- * where four labels in a row had fitted anywhere.
- *
- * One pattern that works everywhere beats a better one that only works
- * on desktop. The teaser lines survive as each tab's `title`, so the
- * explanation is still reachable without taking vertical space.
- */
-/*
  * Icons are inline paths rather than an icon library: the site imports
  * none, and four 14px glyphs do not justify adding one. Each draws its
  * own behaviour — steps as a progression, a branch that forks, a tick
@@ -58,12 +47,6 @@ const teasers: Record<
 
 const tabOrder: Tab[] = ['multistep', 'conditional', 'validation', 'computed'];
 
-/*
- * Code lines are split into key/value so they can be syntax-coloured
- * like every other code surface on the site. They were plain strings,
- * which made the one genuinely technical detail in the section read as
- * body copy.
- */
 type CodeLine = { k: string; v?: string };
 
 const explanations: Record<

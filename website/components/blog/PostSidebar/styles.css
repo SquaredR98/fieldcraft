@@ -1,18 +1,5 @@
 @reference "../../../app/globals.css";
 
-/* ── Sticky sidebar ──
-   The offset is the nav token, not a literal. It was `top-[62px]`,
-   measured against the old welded header — the floating bar needs
-   --fc-nav-space (5.25rem = 84px), so the TOC was sliding 22px under
-   it.
-
-   max-height + overflow is what was missing: a post with many
-   headings ran its TOC past the bottom of the viewport with no way to
-   reach the end. Now the list scrolls inside the sticky box.
-
-   This works only because no ancestor sets `overflow: hidden` —
-   .fc-blog-post-layout deliberately has none, and the article's
-   overflow is on the article itself, which is a sibling. */
 .fc-blog-sidebar {
   @apply sticky pt-2;
   top: calc(var(--fc-nav-space) + 0.5rem);
@@ -24,9 +11,6 @@
    rule here would read as a second edge next to it. */
 
 @media (max-width: 1023px) {
-  /* Replaced by the MobileToc disclosure inside the article, which
-     keeps the title as the first thing on the page. This used to be
-     `-order-1`, rendering the heading list ABOVE the article. */
   .fc-blog-sidebar {
     @apply hidden;
   }

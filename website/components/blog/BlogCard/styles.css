@@ -1,17 +1,5 @@
 @reference "../../../app/globals.css";
 
-/* ── A post row ──
-   Horizontal at EVERY width: illustration left, content right. The
-   previous version was a vertical card with a fixed 168px letterbox
-   image band, three to a row — which made the image a thin strip on
-   desktop and the title secondary to it everywhere.
-
-   A row is a cell of the window: no border, no radius, no shadow. The
-   container owns all three and the 1px gap is the divider, so thirteen
-   posts read as one publication rather than thirteen plates.
-
-   The inset is the row's OWN padding rather than a wrapper's, which is
-   what lets the row's ground run edge to edge. */
 .fc-blog-card {
   @apply grid no-underline text-inherit cursor-pointer;
   @apply items-center gap-6 p-6 sm:gap-7 sm:p-7;
@@ -65,9 +53,6 @@
   @apply flex items-center gap-2.5 mb-3;
 }
 
-/* A pill on a teal mix, matching the template cells, the detail page
-   badge and the quick-start steps. It was square on --wash, which in
-   dark is a green-tinted surface reading as a different material. */
 .fc-blog-card__tag {
   @apply font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
   @apply px-2.5 py-[3px] border border-fc-teal-border leading-[1.3];
@@ -89,11 +74,6 @@
   @apply font-mono uppercase text-fc-2xs tracking-fc-mono-sm text-fc-muted;
 }
 
-/* In a row the title is the primary element, where in a 3-up grid it
-   competed with the image above it. Mobile steps down to 15.5px and
-   medium weight: at 18px semibold beside a 92px thumbnail the title
-   was the heaviest thing on the screen, and a list of them read as a
-   wall rather than as scannable rows. */
 .fc-blog-card__title {
   @apply font-display font-medium sm:font-semibold m-0;
   @apply text-[15.5px] sm:text-xl tracking-fc-subhead leading-[1.35] text-fc-ink-strong;

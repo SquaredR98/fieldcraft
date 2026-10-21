@@ -1,19 +1,5 @@
 @reference "../../../app/globals.css";
 
-/* ── Article Body ──
-   No measure cap: everything runs the full width of the plate.
-
-   A 44rem cap was tried and removed. Capping prose while code blocks
-   and tables spanned the full row made the article look ragged — two
-   different column widths alternating down the page reads as a bug
-   rather than as typography. The plate's own padding plus the
-   narrower column on desktop keeps the line length reasonable.
-
-   Size is 15.5px, down from 17px. The blog was running 2px larger
-   than docs (15px) in the stronger --ink rather than --muted, which
-   is what made it read heavy against the rest of the site. The ink
-   colour STAYS: docs is scanned, an article is read start to finish
-   and wants the stronger value. */
 .fc-blog-post__content {
   @apply mt-8 font-body text-fc-body-lg leading-[1.75] text-fc-ink;
 }
@@ -77,11 +63,6 @@
   @apply text-fc-muted;
 }
 
-/* --- Code — Inline (exclude fenced blocks inside <pre>) ---
-   --radius-sm (10px) is the docs convention for content-level
-   elements; the full --radius is reserved for page containers. Every
-   bordered element in this file was square, dating from when --radius
-   was 0 site-wide. */
 .fc-blog-post__content code:not(pre code) {
   @apply font-mono text-sm px-1.5 py-0.5 bg-fc-wash text-fc-teal border border-fc-wash-rule;
   border-radius: var(--radius-sm);
@@ -225,11 +206,6 @@
   border-radius: var(--radius-sm);
 }
 
-/* --- Responsive ---
-   No font-size override. This used to bump to 16px, which made sense
-   when the desktop body was 17px and mobile wanted a step DOWN. With
-   the body now at 15.5px it would be a step UP, undoing the weight
-   fix on exactly the screens with least room. */
 @media (max-width: 768px) {
   .fc-blog-post__content h2 {
     font-size: 21px;

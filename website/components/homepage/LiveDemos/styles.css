@@ -6,19 +6,6 @@
    ground, a bracketed lead plate around the working form, and a live
    pip that says the thing is actually running. */
 
-/* ── Blending into its neighbours ──
-   The section used to start and stop hard: `.fc-ground-bg` paints a flat
-   --bg with an inset shadow, so there was a visible step at both edges,
-   and `border-b` drew a 1px rule on top of that.
-
-   Both neighbours (BatteriesIncluded above, Architecture below) sit on
-   --surface, so the ground is now a gradient that BEGINS at --surface,
-   sinks to --bg through the middle, and returns — there is no edge left
-   to see. Overriding the shared class here rather than changing it,
-   because Status also uses it and sits between different neighbours.
-
-   `overflow-hidden` is gone too: it clipped anything reaching toward the
-   boundary, which is the opposite of blending. */
 .fc-demos.fc-ground-bg {
   @apply relative;
   /* The fade needs DISTANCE. A first pass used 14%/86% stops, about
@@ -180,11 +167,6 @@
   background: color-mix(in srgb, var(--teal) 55%, var(--rule));
 }
 
-/* NOT overflow-x-auto. That was added as a mobile fallback and applied
-   at every width, so the strip scrolled on desktop where there was
-   ample room — and worse, it created a clipping context that cut off
-   the active tab's bottom-border cover. Four tabs fit because the
-   inactive ones drop their labels on a phone. */
 .fc-demos__tabs {
   @apply flex items-center gap-1 min-w-0;
 }
@@ -349,15 +331,7 @@
   box-shadow: var(--inset);
 }
 
-/* ── Buttons ──
-   Only the outline button survives in markup: the demos render the real
-   FormEngineRenderer, which supplies its own controls. The hand-built
-   card/input/stepper styles that used to live here were dead — the demos
-   stopped being mockups when they were switched to the real renderer. */
 
-/* Same restraint as .fc-v2-btn: plate stays, border warms, label
-   follows. It was transparent with a heavy ink border, which read as a
-   different button system to the rest of the page. */
 .fc-demos__btn-outline {
   @apply border border-fc-rule;
   @apply px-4.5 py-2.5 text-[13.5px] text-fc-ink;
@@ -387,16 +361,6 @@
   @apply w-full;
 }
 
-/* The radius sweep that was here — `.fc-demos__live-form * {
-   border-radius: 0 !important }` — is gone. It forced every input,
-   button, select and checkbox in a live demo square while the page
-   around them was rounded, and it would have overridden the theme no
-   matter what the theme said.
-
-   Shape now comes from the theme prop (lib/drafting-teal-theme.ts),
-   which the engine turns into --fc-radius-* properties its own
-   components read. That is the supported path, and it means the demo
-   demonstrates the theming system rather than fighting it. */
 
 /* Root flex container — tighten gap */
 .fc-demos__live-form .flex.flex-col.gap-8 {
@@ -720,11 +684,6 @@
   letter-spacing: 0;
 }
 
-/* The tab stagger that lived here is gone with the tabs. Not re-added
-   for the preview cards: it hid them behind a bare `opacity: 0` that
-   only ScrollReveal could undo, so with JavaScript off the controls
-   were invisible — and these cards are now the section's only
-   navigation, which makes that failure much more expensive. */
 
 @media (prefers-reduced-motion: reduce) {
   .fc-demos__live-dot {

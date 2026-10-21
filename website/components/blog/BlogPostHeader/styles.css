@@ -43,10 +43,6 @@
 
 /* --- Responsive --- */
 @media (max-width: 768px) {
-  /* 26px, down from 32. A 32px semibold display heading fills most of
-     a phone screen before the article starts, and against a 15.5px
-     body it was a far bigger jump than the desktop pairing. Leading
-     opens slightly because a wrapped heading at this size needs it. */
   .fc-blog-post__title {
     font-size: 26px;
     line-height: 1.18;

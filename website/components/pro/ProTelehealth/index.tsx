@@ -42,11 +42,6 @@ export function ProTelehealth() {
           <h2 className="fc-pro-h2" style={{ maxWidth: 600 }}>
             Validated clinical instruments, already scored
           </h2>
-          {/* NOT included with Pro — it is a separate $99 add-on with its
-              own FCTH-* licence key that also requires a Pro key. The
-              previous copy said "Included with every Pro licence", which
-              was false. Not yet published: blocked on instrument
-              licensing (see fieldcraft-pro/.plan/roadmap.md Track 1B). */}
           <div className="fc-pro-telehealth__included">
             Separate add-on &middot; coming soon
           </div>

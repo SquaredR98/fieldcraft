@@ -2,15 +2,6 @@
 
 /* ── Architecture section ── */
 
-/* No border-b: the section below sits on the same --surface, so a rule
-   here draws a line between two identical grounds.
-
-   `background-color: var(--bg)` is gone too — it never applied, since
-   `section.fc-ground-surface` (0,2,0) outranks `.fc-arch` (0,1,0), and
-   leaving a losing declaration in place only misleads the next reader.
-
-   The drafting grid stays but is masked to fade at both edges, so it
-   does not start and stop on a hard line the way it used to. */
 .fc-arch {
   @apply relative;
 }
@@ -129,12 +120,6 @@
 
 /* ── Right column: hairline-stacked list ── */
 
-/* Bordered and rounded, matching the layer boxes opposite.
-   This was `gap-px` over a rule ground — the shared-border cell
-   pattern, which gives dividers BETWEEN items but no outer edge, so the
-   column floated while the left-hand boxes were fully bordered. The
-   internal hairlines stay; the column now has an edge of its own.
-   `overflow-hidden` lets the first and last items inherit the corners. */
 .fc-arch__sidebar {
   @apply grid gap-px bg-fc-rule overflow-hidden;
   @apply border border-fc-rule rounded-lg;

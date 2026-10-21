@@ -71,13 +71,12 @@
   filter: blur(44px);
 }
 
-/* pt-22 sm:pt-32, not py-20. 80px is LESS than --fc-nav-space
-   (5.25rem = 84px), the clearance the floating header needs — which
-   is why the card slid under the bar on mobile. Matches the hero and
-   the /templates masthead. */
+/* py-20 is 80px, just under --fc-nav-space (84px) on its own — the
+   card's mt-6 sm:mt-8 makes up the difference, so the visible gap
+   below the floating header is 104-112px. */
 .fc-tpl-detail__inner {
   @apply relative max-w-310 mx-auto px-4 sm:px-6 lg:px-0;
-  @apply py-20 ;
+  @apply py-20;
 }
 
 /* ── The card ──
@@ -130,9 +129,6 @@
   @apply text-fc-teal;
 }
 
-/* A pill on a teal mix, matching the badges on the template cells and
-   the quick-start steps. It was square on --wash, which in dark is a
-   green-tinted surface that reads as a different material. */
 .fc-tpl-detail__badge {
   @apply inline-block font-mono uppercase text-fc-2xs tracking-fc-mono text-fc-teal;
   @apply px-2.5 py-[3px] border border-fc-teal-border leading-[1.3] mb-4;
@@ -213,9 +209,6 @@
   flex: none;
 }
 
-/* ── Display mode toggle ──
-   rounded-full rather than the old literal 3px, which predated
-   --radius and was the last square control on the page. */
 .fc-tpl-detail__mode-toggle {
   @apply flex gap-0 border border-fc-rule overflow-hidden rounded-full;
 }
@@ -260,9 +253,6 @@
 
 /* ── Mobile ── */
 @media (max-width: 1023px) {
-  /* pb only. This used to be py-12, whose 48px top was well under the
-     84px the floating header needs — the actual cause of the card
-     sliding behind the bar on mobile. The pt-22 above now stands. */
   .fc-tpl-detail__inner {
     @apply px-5 pb-12;
   }
@@ -299,9 +289,6 @@
     @apply flex-none overflow-x-auto;
   }
 
-  /* The panel bodies carry the inset on mobile, so the label needs it
-     too — it was flush at px-0 because a panel border used to supply
-     the edge. */
   /* Height released: one panel shows at a time here, so there is no
      sibling to align with, and the toggle wraps below the label on
      narrow screens — a fixed 46px would clip it. */
